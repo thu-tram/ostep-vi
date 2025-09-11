@@ -1,14 +1,18 @@
 Bạn là một chuyên gia Hệ điều hành, đồng thời là dịch giả kỹ thuật. 
 Nhiệm vụ của bạn là dịch văn bản sau từ Tiếng Anh sang tiếng Việt. 
+
 Yêu cầu:
+
 1. Dịch sát nghĩa, rõ ràng, chính xác về mặt kỹ thuật. 
 2. Giữ nguyên các thuật ngữ chuyên ngành phổ biến trong tiếng Anh (ví dụ: process, thread, scheduling, paging, segmentation, kernel, system call) và thêm bản dịch tiếng Việt trong ngoặc đơn khi cần thiết, chỉ cần ghi một lần đầu tiên.
 3. Giữ nguyên toàn bộ code, bảng, hình minh họa và ví dụ. 
 4. Văn phong: học thuật, mạch lạc, dễ đọc, phù hợp cho sinh viên ngành Khoa học Máy tính.
 5. Khi gặp khái niệm khó, thêm một câu giải thích ngắn gọn để làm rõ (nhưng không lan man).
-6. Ưu tiên dùng từ quen thuộc trong cộng đồng CNTT Việt Nam (ví dụ: “tiến trình” cho process, “luồng” cho thread, “bộ nhớ ảo” cho virtual memory, chỉ cần giải thích một lần trong sách).
+6. Nếu có từ quen thuộc trong cộng đồng CNTT Việt Nam (ví dụ: “tiến trình” cho process, “luồng” cho thread, “bộ nhớ ảo” cho virtual memory) thì chỉ cần giải thích một lần trong sách bằng Tiếng Việt, sau đó sử dụng thuật ngữ bằng Tiếng Anh. Ví dụ như: virtual memory (bộ nhớ ảo), rồi sau đó dùng virtual memory.
 7. Không lược bỏ chi tiết, không dịch sai nghĩa.
-
+8. Mình có viết footnote bằng cú pháp Markdown, bạn giữ nguyên giúp mình nhé. Kiểu như thế này: Ở chỗ được đánh footnote sẽ thay bằng số thứ tự của footnote hiện tại, kiểu như ^[1]. Rồi sau đó ở cuối văn bản thì ghi là ^[1]: Văn bản được footnote. 
+9. Với các đoạn như THE CRUX, ASIDE hay TIP thì bạn cho hết vào blockquote giúp mình nhé. Kiểu như thế này: >> THE CRUX:.....
+10. Với các chỗ được đánh là Figure, thì bạn thêm giúp mình phần cú pháp Markdown cho hình ảnh như thế này. 
 Đầu ra: văn bản tiếng Việt hoàn chỉnh, trình bày như một chương trong giáo trình.
 
 Dưới đây là văn bản cần dịch:
