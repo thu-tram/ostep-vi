@@ -100,7 +100,7 @@ Dưới đây là tóm tắt cơ bản những gì `fsck` thực hiện:
 
 [^2]: `fsck` là viết tắt của *file system check*, một tiện ích trong UNIX dùng để kiểm tra và sửa chữa sự không nhất quán của hệ thống tệp.  
 
-Như bạn có thể thấy, việc xây dựng một `fsck` hoạt động hiệu quả đòi hỏi kiến thức sâu rộng và chi tiết về file system (hệ thống tệp); đảm bảo rằng đoạn mã như vậy hoạt động đúng trong mọi trường hợp là một thách thức không nhỏ [G+08]. Tuy nhiên, `fsck` (và các phương pháp tương tự) còn gặp một vấn đề lớn hơn, và có lẽ mang tính nền tảng hơn: chúng quá chậm.  
+Như bạn có thể thấy, việc xây dựng một `fsck` hoạt động hiệu quả đòi hỏi kiến thức sâu rộng và chi tiết về file system (hệ thống tệp); đảm bảo rằng đoạn code như vậy hoạt động đúng trong mọi trường hợp là một thách thức không nhỏ [G+08]. Tuy nhiên, `fsck` (và các phương pháp tương tự) còn gặp một vấn đề lớn hơn, và có lẽ mang tính nền tảng hơn: chúng quá chậm.  
 
 Với một ổ đĩa dung lượng rất lớn, việc quét toàn bộ đĩa để tìm tất cả các block đã được cấp phát và đọc toàn bộ cây thư mục có thể mất nhiều phút, thậm chí hàng giờ. Khi dung lượng đĩa tăng và RAID trở nên phổ biến, hiệu năng của `fsck` trở nên không thể chấp nhận được (mặc dù đã có những cải tiến gần đây [M+13]).
 
@@ -121,7 +121,7 @@ Bây giờ, chúng ta sẽ mô tả cách Linux ext3 — một file system journ
 
 Do đó, một file system ext2 (không có journaling) sẽ trông như sau:
 
-![Figure: Cấu trúc ext2 không có journaling](figure-ext2-no-journaling.png)  
+...
 
 Giả sử journal (nhật ký) được đặt trong cùng một file system image (ảnh hệ thống tệp) — mặc dù đôi khi nó được đặt trên một thiết bị riêng biệt, hoặc như một file bên trong file system — thì một file system ext3 có journal sẽ trông như sau:
 
@@ -302,13 +302,15 @@ Trước khi kết thúc phần thảo luận về journaling, chúng ta sẽ t�
 
 Trong mỗi hình, thời gian tăng dần theo chiều từ trên xuống, và mỗi hàng trong hình thể hiện thời điểm logic mà một thao tác ghi có thể được phát lệnh hoặc có thể hoàn tất. Ví dụ, trong giao thức **data journaling** (Hình 42.1), thao tác ghi **transaction begin block** (TxB) và nội dung của transaction có thể được phát lệnh đồng thời, và do đó có thể hoàn tất theo bất kỳ thứ tự nào; tuy nhiên, thao tác ghi **transaction end block** (TxE) **không** được phát lệnh cho đến khi các thao tác ghi trước đó hoàn tất. Tương tự, các thao tác checkpoint ghi dữ liệu và metadata block **không** thể bắt đầu cho đến khi transaction end block đã được commit. Các đường gạch ngang nằm ngang thể hiện các điểm mà yêu cầu về thứ tự ghi phải được tuân thủ.
 
+![](img/fig42_1.PNG)
+
 **Hình 42.1: Data Journaling Timeline**  
-![Figure 42.1: Data Journaling Timeline](figure-42-1-data-journaling-timeline.png)
 
 Một timeline tương tự được thể hiện cho giao thức **metadata journaling**. Lưu ý rằng thao tác ghi dữ liệu có thể được phát lệnh đồng thời với các thao tác ghi transaction begin và nội dung của journal; tuy nhiên, nó phải được phát lệnh và hoàn tất **trước** khi transaction end được phát lệnh.
 
+![](img/fig42_2.PNG)
+
 **Hình 42.2: Metadata Journaling Timeline**  
-![Figure 42.2: Metadata Journaling Timeline](figure-42-2-metadata-journaling-timeline.png)
 
 Cuối cùng, lưu ý rằng thời điểm hoàn tất được đánh dấu cho mỗi thao tác ghi trong các timeline là **tùy ý**. Trong một hệ thống thực tế, thời gian hoàn tất được quyết định bởi **I/O subsystem** (hệ thống con I/O), vốn có thể sắp xếp lại thứ tự ghi để cải thiện hiệu năng. Các đảm bảo duy nhất về thứ tự mà chúng ta có là những yêu cầu bắt buộc để đảm bảo tính đúng đắn của giao thức (và được thể hiện qua các đường gạch ngang trong hình).
 

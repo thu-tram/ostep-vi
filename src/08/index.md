@@ -63,6 +63,7 @@ Thuật toán điều chỉnh priority đầu tiên:
 
 ![](./img/fig8_2.PNG)
 
+
 **Hình 8.2:** Job chạy dài theo thời gian
 
 ### **Ví dụ 1: Một job chạy dài duy nhất**  
@@ -89,6 +90,7 @@ Từ ví dụ này, ta thấy: vì không biết job là ngắn hay dài, MLFQ *
 ### **Ví dụ 3: với I/O**
 
 Bây giờ, hãy xem một ví dụ có liên quan đến **I/O** (Input/Output – nhập/xuất). Như **Rule 4b** đã nêu ở trên, nếu một **process** (tiến trình) nhường CPU trước khi sử dụng hết **allotment** (phần thời gian được cấp ở một mức ưu tiên), chúng ta sẽ giữ nó ở cùng mức **priority** (ưu tiên). Ý tưởng của quy tắc này rất đơn giản: nếu một **interactive job** (công việc tương tác), ví dụ, thực hiện nhiều thao tác I/O (chẳng hạn chờ nhập liệu từ bàn phím hoặc chuột), nó sẽ nhường CPU trước khi allotment kết thúc; trong trường hợp này, chúng ta không muốn phạt job đó, và do đó giữ nguyên mức priority.
+
 
 **Hình 8.3 (bên phải)** minh họa cách hoạt động: một interactive job B (màu xám) chỉ cần CPU trong 1 ms trước khi thực hiện I/O, cạnh tranh CPU với một **batch job** chạy dài A (màu đen). Cách tiếp cận MLFQ giữ B ở mức priority cao nhất vì B liên tục nhường CPU; nếu B là một interactive job, MLFQ đạt được mục tiêu chạy nhanh các job tương tác.
 
@@ -154,6 +156,7 @@ Ví dụ, hầu hết các biến thể của MLFQ cho phép thay đổi độ d
 Hình 8.6 minh họa một ví dụ trong đó hai job chạy 20 ms ở hàng đợi cao nhất (với time slice 10 ms), 40 ms ở hàng giữa (time slice 20 ms), và với time slice 40 ms ở hàng thấp nhất.
 
 ![](./img/fig8_6.PNG)
+
 
 **Hình 8.6:** Mức ưu tiên thấp hơn, lượng thời gian (quanta) dài hơn.
 

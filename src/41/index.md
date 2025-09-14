@@ -193,6 +193,8 @@ Nếu một file `f` trong thư mục `dir` (tức `dir/f`) được mở, và t
 Nói cách khác, **metric khoảng cách** của chúng ta đo xem phải đi lên bao nhiêu cấp trong cây thư mục để tìm **tổ tiên chung** của hai file; chúng càng gần nhau trong cây, metric này càng nhỏ.
 
 
+![](img/fig41_1.PNG)
+
 **Hình 41.1: Tính cục bộ của FFS đối với SEER traces**
 
 Hình 41.1 cho thấy tính cục bộ quan sát được trong SEER traces trên tất cả các workstation trong cụm SEER, xét trên toàn bộ các trace.  
@@ -269,6 +271,8 @@ Về cơ bản, phương trình này nói rằng: nếu bạn truyền dữ li�
 Tương tự, bạn có thể tính kích thước **chunk** (phần dữ liệu) cần thiết để đạt **90% băng thông cực đại** (kết quả khoảng **3,6 MB**), hoặc thậm chí **99% băng thông cực đại** (**39,6 MB**!).  
 Như bạn thấy, càng muốn tiến gần đến mức cực đại, kích thước chunk càng phải lớn (xem **Hình 41.2** để thấy đồ thị các giá trị này).
 
+![](img/fig41_2.PNG)
+
 **Hình 41.2: Amortization – Chunk phải lớn đến mức nào? (Amortization: How Big Do Chunks Have To Be?)**
 
 
@@ -298,6 +302,8 @@ Nhờ đó, nếu bạn tạo một file nhỏ (ví dụ: 1 KB), nó sẽ chỉ 
 Khi file lớn dần, hệ thống tệp sẽ tiếp tục cấp phát các block 512 byte cho đến khi đạt đủ 4 KB dữ liệu.  
 Tại thời điểm đó, FFS sẽ tìm một block 4 KB, **sao chép các sub-block vào đó**, và giải phóng các sub-block để tái sử dụng.
 
+
+![](img/fig41_3.PNG)
 
 **Hình 41.3: FFS – So sánh bố trí chuẩn và bố trí tham số hóa (Standard Versus Parameterized Placement)**
 

@@ -2,6 +2,8 @@
 
 Một trong những ứng dụng đầu tiên của mô hình tính toán **client/server** phân tán là trong lĩnh vực **distributed file system** (hệ thống tệp phân tán). Trong môi trường như vậy, có một số máy client và một máy server (hoặc một vài máy); server lưu trữ dữ liệu trên các ổ đĩa của nó, và các client yêu cầu dữ liệu thông qua các thông điệp giao thức được định dạng chuẩn.  
 
+![](img/fig49_1.PNG)
+
 **Hình 49.1: Một hệ thống Client/Server tổng quát**
 
 Như bạn có thể thấy từ hình minh họa, server sở hữu các ổ đĩa, và các client gửi thông điệp qua mạng để truy cập thư mục và tệp trên các ổ đĩa đó.  
@@ -27,6 +29,8 @@ Bây giờ chúng ta sẽ nghiên cứu kiến trúc của một hệ thống t�
   Ví dụ, nếu client thực hiện một yêu cầu `read()`, client-side file system có thể gửi một thông điệp tới **server-side file system** (hay thường gọi là **file server**) để đọc một block cụ thể; file server sau đó sẽ đọc block từ đĩa (hoặc từ **in-memory cache** của nó), và gửi lại một thông điệp cho client chứa dữ liệu được yêu cầu.  
   Client-side file system sau đó sẽ sao chép dữ liệu vào **user buffer** được truyền cho system call `read()`, và yêu cầu sẽ hoàn tất.  
   Lưu ý rằng, một lần `read()` tiếp theo của cùng block đó trên client có thể được lấy từ bộ nhớ cache của client hoặc thậm chí từ đĩa cục bộ của client; trong trường hợp tốt nhất, sẽ **không cần** tạo ra lưu lượng mạng nào.
+
+![](img/fig49_2.PNG)
 
 **Hình 49.2: Kiến trúc Distributed File System**
 
@@ -62,7 +66,7 @@ Ví dụ: server không biết client nào đang cache block nào, hoặc file n
 
 
 Ví dụ về một giao thức **stateful** (có lưu trạng thái, tức là không stateless) là system call `open()`.  
-Với một **pathname**, `open()` trả về một **file descriptor** (một số nguyên). Descriptor này được sử dụng trong các lời gọi `read()` hoặc `write()` tiếp theo để truy cập các block dữ liệu của file, như trong đoạn mã ứng dụng sau (lưu ý: phần kiểm tra lỗi của system call được lược bỏ để tiết kiệm không gian):
+Với một **pathname**, `open()` trả về một **file descriptor** (một số nguyên). Descriptor này được sử dụng trong các call `read()` hoặc `write()` tiếp theo để truy cập các block dữ liệu của file, như trong đoạn code ứng dụng sau (lưu ý: phần kiểm tra lỗi của system call được lược bỏ để tiết kiệm không gian):
 
 ```c
 char buffer[MAX];
@@ -73,6 +77,8 @@ read(fd, buffer, MAX);          // đọc MAX byte lần nữa
 read(fd, buffer, MAX);          // đọc MAX byte lần nữa
 close(fd);                      // đóng file
 ```
+
+![](img/fig49_3.PNG)
 
 **Hình 49.3: Mã phía client – Đọc từ một file**
 
@@ -98,7 +104,7 @@ Không cần cơ chế khôi phục phức tạp; server chỉ cần khởi đ�
 Chúng ta đến với phần định nghĩa giao thức NFSv2. Bài toán đặt ra rất đơn giản:
 
 >> **THE CRUX: LÀM THẾ NÀO ĐỂ ĐỊNH NGHĨA MỘT FILE PROTOCOL THEO KIỂU STATELESS**  
->> Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động ở chế độ **stateless** (không lưu trạng thái)? Rõ ràng, các lời gọi **stateful** như `open()` không thể nằm trong phạm vi thảo luận (vì nó yêu cầu server phải theo dõi các file đang mở); tuy nhiên, ứng dụng phía client vẫn muốn gọi `open()`, `read()`, `write()`, `close()` và các lời gọi API chuẩn khác để truy cập file và thư mục. Do đó, câu hỏi chi tiết hơn là: làm thế nào để định nghĩa giao thức vừa **stateless** vừa hỗ trợ API hệ thống tệp **POSIX**?
+>> Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động ở chế độ **stateless** (không lưu trạng thái)? Rõ ràng, các call **stateful** như `open()` không thể nằm trong phạm vi thảo luận (vì nó yêu cầu server phải theo dõi các file đang mở); tuy nhiên, ứng dụng phía client vẫn muốn gọi `open()`, `read()`, `write()`, `close()` và các call API chuẩn khác để truy cập file và thư mục. Do đó, câu hỏi chi tiết hơn là: làm thế nào để định nghĩa giao thức vừa **stateless** vừa hỗ trợ API hệ thống tệp **POSIX**?
 
 
 Một yếu tố then chốt để hiểu thiết kế của giao thức NFS là **file handle**. **File handle** được dùng để mô tả duy nhất file hoặc thư mục mà một thao tác cụ thể sẽ thực hiện; do đó, nhiều yêu cầu giao thức sẽ bao gồm một file handle.
@@ -115,6 +121,8 @@ Kết hợp lại, ba thành phần này tạo thành một định danh duy nh�
 
 
 Dưới đây là tóm tắt một số thành phần quan trọng của giao thức; toàn bộ giao thức có thể tìm thấy ở nơi khác (xem sách của Callaghan để có cái nhìn chi tiết và xuất sắc về NFS [C00]).
+
+![](img/fig49_4.PNG)
 
 **Hình 49.4: Giao thức NFS – Ví dụ**
 
@@ -139,7 +147,9 @@ Hy vọng đến đây bạn đã hình dung được cách giao thức này đ�
 - **Server** chỉ đơn giản phản hồi các thông điệp giao thức, mỗi thông điệp chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu.
 
 
-Ví dụ, hãy xét một ứng dụng đơn giản đọc một file. Trong sơ đồ (**Hình 49.5**), chúng ta thấy các system call mà ứng dụng thực hiện, và cách client-side file system cùng file server xử lý các lời gọi này.
+Ví dụ, hãy xét một ứng dụng đơn giản đọc một file. Trong sơ đồ (**Hình 49.5**), chúng ta thấy các system call mà ứng dụng thực hiện, và cách client-side file system cùng file server xử lý các call này.
+
+![](img/fig49_5.PNG)
 
 **Hình 49.5: Đọc một file – Hoạt động của Client-side và File Server**
 
@@ -184,6 +194,8 @@ Trọng tâm của thiết kế **crash recovery** (khôi phục sau crash) tron
 - Thú vị hơn, **WRITE** cũng là idempotent. Nếu một WRITE thất bại, client có thể đơn giản gửi lại. Thông điệp WRITE chứa dữ liệu, số byte (count), và **offset chính xác** để ghi dữ liệu. Do đó, nó có thể được lặp lại với đảm bảo rằng kết quả của nhiều lần ghi giống hệt kết quả của một lần ghi.
 
 
+![](img/fig49_6.PNG)
+
 **Hình 49.6: Ba loại mất mát (The Three Types Of Loss)**
 
 Theo cách này, client có thể xử lý tất cả các timeout theo một cách thống nhất:  
@@ -208,7 +220,7 @@ Ví dụ: khi bạn tạo một thư mục đã tồn tại, bạn sẽ nhận t
 
 Câu trả lời, như bạn có thể đoán từ tiêu đề, là **client-side caching** (bộ nhớ đệm phía client). **NFS client-side file system** lưu trữ dữ liệu file (và metadata) mà nó đã đọc từ server trong bộ nhớ của client. Nhờ vậy, trong khi lần truy cập đầu tiên tốn kém (vì cần giao tiếp qua mạng), các lần truy cập sau được phục vụ rất nhanh từ bộ nhớ của client.
 
-Bộ nhớ đệm này cũng đóng vai trò như một bộ đệm tạm thời cho các thao tác ghi. Khi một ứng dụng client ghi vào file, dữ liệu sẽ được lưu tạm trong bộ nhớ của client (trong cùng bộ nhớ đệm với dữ liệu đọc từ file server) trước khi được ghi ra server. Cơ chế **write buffering** này hữu ích vì nó tách độ trễ của lời gọi `write()` trong ứng dụng khỏi hiệu năng ghi thực tế, tức là lời gọi `write()` của ứng dụng sẽ trả về ngay lập tức (chỉ đưa dữ liệu vào cache của client-side file system); dữ liệu chỉ được ghi ra file server sau đó.
+Bộ nhớ đệm này cũng đóng vai trò như một bộ đệm tạm thời cho các thao tác ghi. Khi một ứng dụng client ghi vào file, dữ liệu sẽ được lưu tạm trong bộ nhớ của client (trong cùng bộ nhớ đệm với dữ liệu đọc từ file server) trước khi được ghi ra server. Cơ chế **write buffering** này hữu ích vì nó tách độ trễ của call `write()` trong ứng dụng khỏi hiệu năng ghi thực tế, tức là call `write()` của ứng dụng sẽ trả về ngay lập tức (chỉ đưa dữ liệu vào cache của client-side file system); dữ liệu chỉ được ghi ra file server sau đó.
 
 Vậy là NFS client cache dữ liệu và hiệu năng thường rất tốt, xong rồi phải không? Đáng tiếc là chưa hẳn. Việc thêm cơ chế cache vào bất kỳ hệ thống nào có nhiều client cache sẽ dẫn đến một thách thức lớn và thú vị, gọi là **cache consistency problem** (vấn đề nhất quán bộ nhớ đệm).
 
@@ -219,6 +231,8 @@ Vấn đề này được minh họa rõ nhất với ba client và một server
 - Giả sử client **C1** đọc file **F** và giữ một bản sao trong cache cục bộ.  
 - Tiếp theo, một client khác, **C2**, ghi đè file **F**, thay đổi nội dung của nó; gọi phiên bản mới là **F[v2]** và phiên bản cũ là **F[v1]** (file vẫn cùng tên, chỉ khác nội dung).  
 - Cuối cùng, có một client thứ ba, **C3**, chưa từng truy cập file **F**.
+
+![](img/fig49_7.PNG)
 
 **Hình 49.7: Vấn đề nhất quán bộ nhớ đệm**
 

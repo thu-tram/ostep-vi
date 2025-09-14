@@ -16,6 +16,8 @@ Như bạn đã học trong chương về **RAID**, đĩa không hoàn hảo và
 
 ...
 
+![](img/fig45_1.PNG)
+
 **Hình 45.1: Tần suất xuất hiện của LSE và Block Corruption**
 
 **LSE** xảy ra khi một sector (hoặc nhóm sector) của đĩa bị hỏng theo một cách nào đó. Ví dụ, nếu **đầu đọc/ghi** của đĩa chạm vào bề mặt vì một lý do nào đó (**head crash** – sự cố đầu đọc, điều vốn không nên xảy ra trong vận hành bình thường), nó có thể làm hỏng bề mặt, khiến các bit không thể đọc được. **Tia vũ trụ** (cosmic rays) cũng có thể làm lật bit, dẫn đến nội dung sai. May mắn thay, **in-disk error correcting codes** (ECC – mã sửa lỗi tích hợp trong đĩa) được ổ đĩa sử dụng để xác định liệu các bit trên đĩa trong một block có đúng hay không, và trong một số trường hợp có thể sửa chúng; nếu dữ liệu không đúng và ổ đĩa không có đủ thông tin để sửa lỗi, ổ sẽ trả về lỗi khi có yêu cầu đọc.

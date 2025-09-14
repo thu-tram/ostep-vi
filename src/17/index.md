@@ -26,7 +26,7 @@ Vùng nhớ mà thư viện này quản lý được gọi là **heap**, và c�
 
 Chúng ta cũng giả định rằng mối quan tâm chính là **external fragmentation** như đã mô tả ở trên. Các allocator cũng có thể gặp vấn đề **internal fragmentation** (phân mảnh bên trong); nếu một allocator cấp phát khối bộ nhớ lớn hơn yêu cầu, phần dư thừa (không được yêu cầu và không sử dụng) trong khối đó được xem là internal fragmentation (vì lãng phí xảy ra bên trong đơn vị đã cấp phát) và cũng là một dạng lãng phí bộ nhớ. Tuy nhiên, để đơn giản và vì external fragmentation thú vị hơn, chúng ta sẽ tập trung chủ yếu vào external fragmentation.
 
-Chúng ta cũng giả định rằng một khi bộ nhớ đã được cấp phát cho client, nó không thể được di chuyển sang vị trí khác trong bộ nhớ. Ví dụ, nếu một chương trình gọi `malloc()` và nhận được một con trỏ tới một vùng trong heap, vùng nhớ đó về cơ bản được “sở hữu” bởi chương trình (và không thể bị thư viện di chuyển) cho đến khi chương trình trả lại nó thông qua lời gọi `free()` tương ứng. Do đó, không thể thực hiện **compaction** (gom khối) vùng trống, mặc dù đây là một kỹ thuật hữu ích để chống phân mảnh^[2]. Tuy nhiên, compaction có thể được OS sử dụng để xử lý phân mảnh khi triển khai segmentation (như đã bàn trong chương về segmentation).
+Chúng ta cũng giả định rằng một khi bộ nhớ đã được cấp phát cho client, nó không thể được di chuyển sang vị trí khác trong bộ nhớ. Ví dụ, nếu một chương trình gọi `malloc()` và nhận được một con trỏ tới một vùng trong heap, vùng nhớ đó về cơ bản được “sở hữu” bởi chương trình (và không thể bị thư viện di chuyển) cho đến khi chương trình trả lại nó thông qua call `free()` tương ứng. Do đó, không thể thực hiện **compaction** (gom khối) vùng trống, mặc dù đây là một kỹ thuật hữu ích để chống phân mảnh^[2]. Tuy nhiên, compaction có thể được OS sử dụng để xử lý phân mảnh khi triển khai segmentation (như đã bàn trong chương về segmentation).
 
 ^[1]: Tài liệu này dài gần 80 trang; bạn thực sự phải rất quan tâm mới đọc hết!  
 ^[2]: Khi bạn đưa một con trỏ tới một khối bộ nhớ cho chương trình C, thường rất khó để xác định tất cả các tham chiếu (pointer) tới vùng đó, vì chúng có thể được lưu trong các biến khác hoặc thậm chí trong thanh ghi tại một thời điểm thực thi. Điều này có thể không đúng với các ngôn ngữ có kiểu mạnh và thu gom rác (garbage-collected), vốn cho phép compaction như một kỹ thuật chống phân mảnh.
@@ -51,7 +51,7 @@ Free list cho heap này sẽ có hai phần tử. Một phần tử mô tả đo
 
 Như đã mô tả ở trên, một yêu cầu cấp phát lớn hơn 10 byte sẽ thất bại (trả về `NULL`), vì không có một khối bộ nhớ liên tục nào đủ lớn để đáp ứng. Một yêu cầu đúng bằng 10 byte có thể được đáp ứng dễ dàng bởi một trong hai khối trống. Nhưng điều gì xảy ra nếu yêu cầu nhỏ hơn 10 byte?
 
-Giả sử chúng ta có một yêu cầu chỉ lấy 1 byte bộ nhớ. Trong trường hợp này, allocator sẽ thực hiện một thao tác gọi là **splitting**: nó sẽ tìm một khối trống đủ lớn để đáp ứng yêu cầu và chia nó thành hai phần. Phần thứ nhất sẽ được trả về cho người gọi; phần thứ hai sẽ vẫn nằm trong free list. Trong ví dụ trên, nếu yêu cầu 1 byte được đưa ra và allocator quyết định sử dụng phần tử thứ hai trong danh sách để đáp ứng yêu cầu, lời gọi `malloc()` sẽ trả về địa chỉ 20 (địa chỉ của vùng 1 byte được cấp phát) và danh sách sẽ trở thành:
+Giả sử chúng ta có một yêu cầu chỉ lấy 1 byte bộ nhớ. Trong trường hợp này, allocator sẽ thực hiện một thao tác gọi là **splitting**: nó sẽ tìm một khối trống đủ lớn để đáp ứng yêu cầu và chia nó thành hai phần. Phần thứ nhất sẽ được trả về cho người gọi; phần thứ hai sẽ vẫn nằm trong free list. Trong ví dụ trên, nếu yêu cầu 1 byte được đưa ra và allocator quyết định sử dụng phần tử thứ hai trong danh sách để đáp ứng yêu cầu, call `malloc()` sẽ trả về địa chỉ 20 (địa chỉ của vùng 1 byte được cấp phát) và danh sách sẽ trở thành:
 
 ![](img/fig17_1_4.PNG)
 
@@ -83,6 +83,7 @@ Bạn có thể nhận thấy rằng giao diện `free(void *ptr)` không nhận
 
 ![Figure 17.1: An Allocated Region Plus Header](img/fig17_1.PNG)
 
+
 **Hình 17.1:** Một vùng đã cấp phát kèm header  
 
 Header tối thiểu sẽ chứa kích thước của vùng đã cấp phát (trong trường hợp này là 20); nó cũng có thể chứa các con trỏ bổ sung để tăng tốc giải phóng, một **magic number** (số đặc biệt) để kiểm tra tính toàn vẹn dữ liệu, và các thông tin khác. Giả sử một header đơn giản chỉ chứa kích thước vùng và magic number, như sau:
@@ -95,6 +96,7 @@ typedef struct {
 ```
 
 ![Figure 17.2: Specific Contents Of The Header](img/fig17_2.PNG)
+
 
 **Hình 17.2:** Nội dung cụ thể của header  
 
@@ -124,7 +126,7 @@ typedef struct __node_t {
 } node_t;
 ```
 
-Bây giờ, hãy xem một đoạn code khởi tạo heap và đặt phần tử đầu tiên của free list vào chính vùng trống đó. Chúng ta giả định rằng heap được xây dựng từ một vùng trống lấy được thông qua lời gọi **system call** `mmap()`; đây không phải là cách duy nhất để tạo heap, nhưng phù hợp cho ví dụ này. Đoạn code như sau:
+Bây giờ, hãy xem một đoạn code khởi tạo heap và đặt phần tử đầu tiên của free list vào chính vùng trống đó. Chúng ta giả định rằng heap được xây dựng từ một vùng trống lấy được thông qua call **system call** `mmap()`; đây không phải là cách duy nhất để tạo heap, nhưng phù hợp cho ví dụ này. Đoạn code như sau:
 
 ```c
 // mmap() trả về một con trỏ tới một vùng trống
@@ -137,9 +139,11 @@ head->next = NULL;
 ![Figure 17.3: A Heap With One Free Chunk](img/fig17_3.PNG)
 
 
+
 **Hình 17.3:** Một heap với một khối trống duy nhất  
 
 Sau khi chạy đoạn code này, trạng thái danh sách là: nó có một phần tử duy nhất, kích thước 4088 byte. Đúng, đây là một heap rất nhỏ, nhưng đủ để minh họa. Con trỏ `head` chứa địa chỉ bắt đầu của vùng này; giả sử nó là 16KB (mặc dù bất kỳ địa chỉ ảo nào cũng được). Trực quan, heap trông giống như trong **Hình 17.3**.
+
 
 
 **Hình 17.4:** Heap sau một lần cấp phát  
@@ -149,6 +153,7 @@ Bây giờ, giả sử có một yêu cầu cấp phát bộ nhớ, ví dụ 100
 
 ![Figure 17.5: Free Space With Three Chunks Allocated](img/fig17_5.PNG)
 
+
 **Hình 17.5:** Vùng trống khi đã cấp phát ba khối  
 
 Như vậy, với yêu cầu 100 byte, thư viện đã cấp phát 108 byte từ khối trống duy nhất, trả về một con trỏ (được đánh dấu `ptr` trong hình) tới vùng này, lưu thông tin header ngay trước vùng cấp phát để dùng khi `free()`, và thu nhỏ node trống duy nhất trong danh sách xuống còn 3980 byte (4088 trừ 108).
@@ -157,11 +162,13 @@ Bây giờ, hãy xem heap khi có **ba vùng đã cấp phát**, mỗi vùng 100
 
 ![Figure 17.6: Free Space With Two Chunks Allocated](img/fig17_6.PNG)
 
+
 **Hình 17.6:** Vùng trống khi còn hai khối đã cấp phát  
 
 Như bạn thấy, 324 byte đầu tiên của heap hiện đã được cấp phát, và ta thấy ba header trong vùng này cùng ba vùng 100 byte đang được chương trình sử dụng. Free list vẫn đơn giản: chỉ một node (được `head` trỏ tới), nhưng giờ chỉ còn 3764 byte sau ba lần chia. Nhưng điều gì xảy ra khi chương trình trả lại một phần bộ nhớ qua `free()`?
 
 Trong ví dụ này, ứng dụng trả lại **khối ở giữa** bằng cách gọi `free(16500)` (giá trị 16500 có được bằng cách cộng địa chỉ bắt đầu vùng nhớ 16384 với 108 byte của khối trước đó và 8 byte header của khối này). Giá trị này được thể hiện trong hình trước bởi con trỏ `sptr`.
+
 
 
 **Hình 17.7:** Free list không được coalescing  
@@ -178,7 +185,7 @@ Ví dụ cuối cùng: giả sử bây giờ hai khối đang sử dụng còn l
 
 Chúng ta nên thảo luận về một cơ chế cuối cùng thường xuất hiện trong nhiều thư viện cấp phát bộ nhớ. Cụ thể, bạn sẽ làm gì nếu **heap** (vùng nhớ động) hết chỗ? Cách tiếp cận đơn giản nhất là… thất bại. Trong một số trường hợp, đây là lựa chọn duy nhất, và việc trả về `NULL` là một cách xử lý “đường đường chính chính”. Đừng cảm thấy tệ! Bạn đã cố gắng, và dù thất bại, bạn vẫn đã “chiến đấu” hết mình.
 
-Hầu hết các **allocator** (bộ cấp phát) truyền thống bắt đầu với một heap có kích thước nhỏ, sau đó yêu cầu thêm bộ nhớ từ **OS** (hệ điều hành) khi hết chỗ. Thông thường, điều này có nghĩa là chúng sẽ thực hiện một lời gọi **system call** (lời gọi hệ thống) nào đó (ví dụ: `sbrk` trong hầu hết các hệ thống UNIX) để mở rộng heap, rồi cấp phát các khối mới từ đó. Để xử lý yêu cầu `sbrk`, OS sẽ tìm các **physical page** (trang bộ nhớ vật lý) còn trống, ánh xạ chúng vào **address space** (không gian địa chỉ) của **process** (tiến trình) yêu cầu, rồi trả về giá trị địa chỉ kết thúc của heap mới; tại thời điểm đó, một heap lớn hơn đã sẵn sàng, và yêu cầu cấp phát có thể được xử lý thành công.
+Hầu hết các **allocator** (bộ cấp phát) truyền thống bắt đầu với một heap có kích thước nhỏ, sau đó yêu cầu thêm bộ nhớ từ **OS** (hệ điều hành) khi hết chỗ. Thông thường, điều này có nghĩa là chúng sẽ thực hiện một call **system call** (call hệ thống) nào đó (ví dụ: `sbrk` trong hầu hết các hệ thống UNIX) để mở rộng heap, rồi cấp phát các khối mới từ đó. Để xử lý yêu cầu `sbrk`, OS sẽ tìm các **physical page** (trang bộ nhớ vật lý) còn trống, ánh xạ chúng vào **address space** (không gian địa chỉ) của **process** (tiến trình) yêu cầu, rồi trả về giá trị địa chỉ kết thúc của heap mới; tại thời điểm đó, một heap lớn hơn đã sẵn sàng, và yêu cầu cấp phát có thể được xử lý thành công.
 
 
 ## 17.3 Các chiến lược cơ bản (Basic Strategies)
@@ -259,6 +266,7 @@ Vì **coalescing** (gộp khối) là rất quan trọng đối với một allo
 Trong hệ thống này, bộ nhớ trống ban đầu được coi như một khối lớn có kích thước \( 2^N \). Khi có yêu cầu cấp phát, quá trình tìm kiếm sẽ chia đôi vùng trống một cách đệ quy cho đến khi tìm được một khối đủ lớn để đáp ứng yêu cầu (và nếu chia đôi thêm nữa sẽ tạo ra khối quá nhỏ). Tại thời điểm đó, khối được yêu cầu sẽ được trả về cho người dùng. Ví dụ dưới đây minh họa một vùng trống 64KB được chia nhỏ để tìm khối 7KB (**Hình 17.8**).
 
 ![Figure 17.8: Example Buddy-managed Heap](img/fig17_7_4.PNG)
+
 
 **Hình 17.8:** Ví dụ heap được quản lý bằng buddy  
 

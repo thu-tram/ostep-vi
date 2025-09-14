@@ -11,7 +11,7 @@ Ví dụ, giả sử critical section của chúng ta trông như sau — đây 
 balance = balance + 1;
 ```
 
-Tất nhiên, các critical section khác cũng có thể xảy ra, chẳng hạn như thêm một phần tử vào **linked list** (danh sách liên kết) hoặc các cập nhật phức tạp hơn đối với các cấu trúc dữ liệu chia sẻ, nhưng ở đây chúng ta sẽ giữ ví dụ đơn giản này. Để sử dụng lock, ta thêm một số đoạn mã bao quanh critical section như sau:
+Tất nhiên, các critical section khác cũng có thể xảy ra, chẳng hạn như thêm một phần tử vào **linked list** (danh sách liên kết) hoặc các cập nhật phức tạp hơn đối với các cấu trúc dữ liệu chia sẻ, nhưng ở đây chúng ta sẽ giữ ví dụ đơn giản này. Để sử dụng lock, ta thêm một số đoạn code bao quanh critical section như sau:
 
 ```c
 lock_t mutex; // một lock 'mutex' được cấp phát toàn cục
@@ -26,11 +26,11 @@ Một lock chỉ là một biến, do đó để sử dụng, bạn phải khai 
 **Ngữ nghĩa** của các hàm `lock()` và `unlock()` khá đơn giản:
 
 - Gọi hàm `lock()` sẽ cố gắng **acquire** (lấy) lock; nếu không có thread nào khác đang giữ lock (tức là lock đang free), thread sẽ lấy được lock và vào critical section; thread này đôi khi được gọi là **owner** (chủ sở hữu) của lock.
-- Nếu một thread khác gọi `lock()` trên cùng biến lock đó (`mutex` trong ví dụ này) khi lock đang bị giữ, lời gọi sẽ **không trả về** cho đến khi lock được thread đang giữ **release** (nhả) ra; theo cách này, các thread khác bị ngăn không cho vào critical section khi thread đầu tiên vẫn đang ở trong đó.
+- Nếu một thread khác gọi `lock()` trên cùng biến lock đó (`mutex` trong ví dụ này) khi lock đang bị giữ, call sẽ **không trả về** cho đến khi lock được thread đang giữ **release** (nhả) ra; theo cách này, các thread khác bị ngăn không cho vào critical section khi thread đầu tiên vẫn đang ở trong đó.
 
 Khi **owner** của lock gọi `unlock()`, lock sẽ trở lại trạng thái free. Nếu không có thread nào khác đang chờ lock (tức là không có thread nào gọi `lock()` và bị kẹt ở đó), trạng thái lock đơn giản được chuyển sang free. Nếu có các thread đang chờ (bị kẹt trong `lock()`), một trong số chúng sẽ (cuối cùng) nhận ra (hoặc được thông báo) về sự thay đổi trạng thái này, lấy lock và vào critical section.
 
-Lock cung cấp cho lập trình viên một mức độ kiểm soát tối thiểu đối với **scheduling** (lập lịch). Thông thường, chúng ta coi thread là các thực thể được lập trình viên tạo ra nhưng được OS lập lịch theo bất kỳ cách nào OS muốn. Lock trả lại một phần quyền kiểm soát đó cho lập trình viên; bằng cách đặt lock quanh một đoạn mã, lập trình viên có thể đảm bảo rằng không bao giờ có nhiều hơn một thread hoạt động trong đoạn mã đó. Nhờ vậy, lock giúp biến sự hỗn loạn của lập lịch truyền thống trong OS thành một hoạt động có kiểm soát hơn.
+Lock cung cấp cho lập trình viên một mức độ kiểm soát tối thiểu đối với **scheduling** (lập lịch). Thông thường, chúng ta coi thread là các thực thể được lập trình viên tạo ra nhưng được OS lập lịch theo bất kỳ cách nào OS muốn. Lock trả lại một phần quyền kiểm soát đó cho lập trình viên; bằng cách đặt lock quanh một đoạn code, lập trình viên có thể đảm bảo rằng không bao giờ có nhiều hơn một thread hoạt động trong đoạn code đó. Nhờ vậy, lock giúp biến sự hỗn loạn của lập lịch truyền thống trong OS thành một hoạt động có kiểm soát hơn.
 
 
 ## 28.2 Pthread Locks
@@ -44,7 +44,7 @@ balance = balance + 1;
 Pthread_mutex_unlock(&lock);
 ```
 
-Bạn cũng có thể nhận thấy rằng phiên bản POSIX truyền một biến vào hàm lock và unlock, vì chúng ta có thể dùng các lock khác nhau để bảo vệ các biến khác nhau. Cách làm này có thể **tăng concurrency** (tính đồng thời): thay vì dùng **một big lock** (khóa lớn) cho mọi critical section (chiến lược **coarse-grained locking** — khóa thô), người ta thường bảo vệ các dữ liệu và cấu trúc dữ liệu khác nhau bằng các lock khác nhau, cho phép nhiều thread cùng ở trong các đoạn mã đã khóa cùng lúc (**fine-grained locking** — khóa tinh).
+Bạn cũng có thể nhận thấy rằng phiên bản POSIX truyền một biến vào hàm lock và unlock, vì chúng ta có thể dùng các lock khác nhau để bảo vệ các biến khác nhau. Cách làm này có thể **tăng concurrency** (tính đồng thời): thay vì dùng **một big lock** (khóa lớn) cho mọi critical section (chiến lược **coarse-grained locking** — khóa thô), người ta thường bảo vệ các dữ liệu và cấu trúc dữ liệu khác nhau bằng các lock khác nhau, cho phép nhiều thread cùng ở trong các đoạn code đã khóa cùng lúc (**fine-grained locking** — khóa tinh).
 
 ## 28.3 Xây dựng một Lock (Building A Lock)
 
@@ -88,7 +88,7 @@ void unlock() {
 
 Giả sử chúng ta đang chạy trên một hệ thống đơn xử lý như vậy. Bằng cách tắt interrupt (sử dụng một lệnh phần cứng đặc biệt) trước khi vào critical section, chúng ta đảm bảo rằng mã bên trong critical section sẽ không bị ngắt, và do đó sẽ thực thi như thể nó là nguyên tử. Khi xong, chúng ta bật lại interrupt (cũng bằng lệnh phần cứng) và chương trình tiếp tục như bình thường.
 
-**Ưu điểm chính** của cách tiếp cận này là **đơn giản**. Bạn không cần phải suy nghĩ nhiều để hiểu tại sao nó hoạt động. Không có ngắt, một thread có thể chắc chắn rằng đoạn mã nó thực thi sẽ chạy trọn vẹn và không bị thread khác can thiệp.
+**Ưu điểm chính** của cách tiếp cận này là **đơn giản**. Bạn không cần phải suy nghĩ nhiều để hiểu tại sao nó hoạt động. Không có ngắt, một thread có thể chắc chắn rằng đoạn code nó thực thi sẽ chạy trọn vẹn và không bị thread khác can thiệp.
 
 **Nhược điểm**, đáng tiếc, lại nhiều:
 
@@ -129,6 +129,8 @@ void unlock(lock_t *mutex) {
 }
 ```
 
+![](img/fig28_1.PNG)
+
 **Hình 28.1: Nỗ lực đầu tiên: Một biến cờ đơn giản**
 
 Nếu một thread khác gọi `lock()` trong khi thread đầu tiên đang ở trong critical section, nó sẽ chỉ đơn giản **spin-wait** (chờ bận) trong vòng lặp `while` cho đến khi thread kia gọi `unlock()` và xóa `flag`. Khi thread đầu tiên làm vậy, thread đang chờ sẽ thoát khỏi vòng lặp `while`, đặt `flag` thành 1 cho chính nó, và tiếp tục vào critical section.
@@ -149,6 +151,8 @@ interrupt: switch to Thread 2
                           interrupt: switch to Thread 1
 flag = 1; // cũng đặt flag thành 1!
 ```
+
+![](img/fig28_2.PNG)
 
 **Hình 28.2: Trace: Không có Mutual Exclusion**
 
@@ -231,6 +235,8 @@ void unlock(lock_t *lock) {
 }
 ```
 
+![](img/fig28_3.PNG)
+
 **Hình 28.3: Một Spin Lock đơn giản sử dụng Test-and-Set**
 
 Hãy đảm bảo rằng chúng ta hiểu tại sao lock này hoạt động. Trước hết, tưởng tượng trường hợp một thread gọi `lock()` và không có thread nào khác đang giữ lock; khi đó, `flag` sẽ bằng 0. Khi thread gọi `TestAndSet(flag, 1)`, hàm sẽ trả về giá trị cũ của `flag` (0); do đó, thread gọi hàm — khi kiểm tra giá trị `flag` — sẽ không bị kẹt trong vòng lặp `while` và sẽ lấy được lock. Thread này cũng đồng thời đặt giá trị `flag` thành 1 một cách nguyên tử, biểu thị rằng lock hiện đang bị giữ. Khi thread hoàn tất critical section, nó gọi `unlock()` để đặt lại `flag` về 0.
@@ -271,6 +277,8 @@ int CompareAndSwap(int *ptr, int expected, int new) {
   return original;
 }
 ```
+
+![](img/fig28_4.PNG)
 
 **Hình 28.4: Compare-and-swap**
 
@@ -313,6 +321,8 @@ int StoreConditional(int *ptr, int value) {
 }
 ```
 
+![](img/fig28_5.PNG)
+
 **Hình 28.5: Load-linked và Store-conditional**
 
 `Load-linked` hoạt động gần giống như lệnh load thông thường, chỉ đơn giản là lấy giá trị từ bộ nhớ và đặt vào thanh ghi. Sự khác biệt chính nằm ở `store-conditional`, lệnh này chỉ thành công (và cập nhật giá trị tại địa chỉ vừa được load-linked) nếu **không có** thao tác store nào khác tới địa chỉ đó diễn ra trong khoảng thời gian từ lúc load-linked. Nếu thành công, `store-conditional` trả về 1 và cập nhật giá trị tại `ptr` thành `value`; nếu thất bại, giá trị tại `ptr` không thay đổi và trả về 0.
@@ -335,6 +345,8 @@ void unlock(lock_t *lock) {
 }
 ```
 
+
+![](img/fig28_6.PNG)
 
 **Hình 28.6: Sử dụng LL/SC để xây dựng một Lock**
 
@@ -392,6 +404,8 @@ void unlock(lock_t *lock) {
 }
 ```
 
+![](img/fig28_7.PNG)
+
 **Hình 28.7: Ticket Locks**
 
 Thay vì chỉ dùng một giá trị, giải pháp này sử dụng kết hợp hai biến `ticket` và `turn` để xây dựng lock. Cách hoạt động cơ bản khá đơn giản: khi một thread muốn lấy lock, nó thực hiện một thao tác `fetch-and-add` nguyên tử trên giá trị `ticket`; giá trị trả về được coi là “lượt” (`myturn`) của thread đó. Biến `lock->turn` dùng chung toàn cục sẽ xác định lượt của thread nào; khi (`myturn == turn`) đối với một thread, đó là lượt của thread đó để vào critical section. Việc unlock chỉ đơn giản là tăng `turn` để thread đang chờ tiếp theo (nếu có) có thể vào critical section.
@@ -429,9 +443,11 @@ void unlock() {
 }
 ```
 
+![](img/fig28_8.PNG)
+
 **Hình 28.8: Lock với Test-and-set và Yield**
 
-Trong cách tiếp cận này, chúng ta giả định có một **OS primitive** (nguyên thủy hệ điều hành) `yield()` mà một thread có thể gọi khi muốn nhường CPU và cho phép thread khác chạy. Một thread có thể ở một trong ba trạng thái (**running**, **ready**, hoặc **blocked**); `yield` đơn giản là một **system call** (lời gọi hệ thống) chuyển thread gọi hàm từ trạng thái running sang trạng thái ready, và do đó đưa một thread khác lên trạng thái running. Nói cách khác, thread gọi `yield` tự loại mình khỏi lịch chạy.
+Trong cách tiếp cận này, chúng ta giả định có một **OS primitive** (nguyên thủy hệ điều hành) `yield()` mà một thread có thể gọi khi muốn nhường CPU và cho phép thread khác chạy. Một thread có thể ở một trong ba trạng thái (**running**, **ready**, hoặc **blocked**); `yield` đơn giản là một **system call** (call hệ thống) chuyển thread gọi hàm từ trạng thái running sang trạng thái ready, và do đó đưa một thread khác lên trạng thái running. Nói cách khác, thread gọi `yield` tự loại mình khỏi lịch chạy.
 
 Hãy nghĩ về ví dụ với hai thread trên một CPU; trong trường hợp này, cách tiếp cận dựa trên yield hoạt động khá tốt. Nếu một thread gọi `lock()` và phát hiện lock đang bị giữ, nó sẽ đơn giản nhường CPU, và do đó thread còn lại sẽ chạy và hoàn tất critical section của nó. Trong trường hợp đơn giản này, cách tiếp cận yield hoạt động hiệu quả.
 
@@ -444,11 +460,13 @@ Tệ hơn, cách này không giải quyết được **starvation** (đói tài 
 
 Vấn đề thực sự với một số cách tiếp cận trước đây (ngoại trừ ticket lock) là chúng để quá nhiều thứ cho **may rủi**. **Scheduler** quyết định thread nào sẽ chạy tiếp theo; nếu scheduler chọn sai, một thread được chạy sẽ hoặc là spin chờ lock (cách tiếp cận đầu tiên của chúng ta), hoặc là yield CPU ngay lập tức (cách tiếp cận thứ hai). Dù theo cách nào, vẫn có khả năng lãng phí và không có cơ chế ngăn chặn starvation.
 
+![](img/fig28_9.PNG)
+
 **Hình 28.9: Lock với Queue, Test-and-set, Yield và Wakeup**
 
 Do đó, chúng ta phải **chủ động kiểm soát** thread nào sẽ được lấy lock tiếp theo sau khi thread hiện tại nhả lock. Để làm điều này, chúng ta cần thêm một chút hỗ trợ từ **OS** (hệ điều hành), cũng như một **queue** (hàng đợi) để theo dõi các thread đang chờ lấy lock.
 
-Để đơn giản, chúng ta sẽ sử dụng hỗ trợ do **Solaris** cung cấp, thông qua hai lời gọi:  
+Để đơn giản, chúng ta sẽ sử dụng hỗ trợ do **Solaris** cung cấp, thông qua hai call:  
 - `park()` để đưa thread gọi hàm vào trạng thái ngủ (**sleep**),  
 - `unpark(threadID)` để đánh thức một thread cụ thể được chỉ định bởi `threadID`.  
 
@@ -476,7 +494,7 @@ Bạn cũng có thể thấy rằng trong `lock()`, khi một thread không th�
 
 Bạn cũng có thể nhận thấy rằng `flag` **không** được đặt lại về 0 khi một thread khác được đánh thức. Tại sao? Đây không phải lỗi, mà là **bắt buộc**! Khi một thread được đánh thức, nó sẽ như thể đang quay lại từ `park()`; tuy nhiên, tại thời điểm đó nó **không giữ** `guard` và do đó không thể đặt `flag` thành 1. Vì vậy, chúng ta chỉ đơn giản **chuyển lock trực tiếp** từ thread nhả lock sang thread tiếp theo lấy lock; `flag` không được đặt về 0 ở giữa.
 
-Cuối cùng, bạn có thể nhận thấy một race condition tiềm ẩn trong giải pháp, ngay trước lời gọi `park()`. Nếu thời điểm không may, một thread chuẩn bị park, giả định rằng nó sẽ ngủ cho đến khi lock được nhả. Nếu lúc đó chuyển sang một thread khác (ví dụ: thread đang giữ lock) và thread này nhả lock, thì lần park tiếp theo của thread đầu tiên có thể ngủ mãi mãi — vấn đề này gọi là **wakeup/waiting race**.
+Cuối cùng, bạn có thể nhận thấy một race condition tiềm ẩn trong giải pháp, ngay trước call `park()`. Nếu thời điểm không may, một thread chuẩn bị park, giả định rằng nó sẽ ngủ cho đến khi lock được nhả. Nếu lúc đó chuyển sang một thread khác (ví dụ: thread đang giữ lock) và thread này nhả lock, thì lần park tiếp theo của thread đầu tiên có thể ngủ mãi mãi — vấn đề này gọi là **wakeup/waiting race**.
 
 Solaris giải quyết vấn đề này bằng cách thêm một system call thứ ba: `setpark()`. Khi gọi hàm này, thread báo rằng nó sắp park. Nếu sau đó nó bị ngắt và một thread khác gọi `unpark` trước khi `park` thực sự được gọi, thì lần `park` tiếp theo sẽ trả về ngay lập tức thay vì ngủ. Việc sửa code trong `lock()` là rất nhỏ:
 
@@ -493,21 +511,23 @@ Một giải pháp khác là truyền `guard` vào kernel. Khi đó, kernel có 
 
 Cho đến giờ, chúng ta đã thấy một dạng hỗ trợ mà OS có thể cung cấp để xây dựng một lock hiệu quả hơn trong thư viện thread. Các OS khác cũng cung cấp hỗ trợ tương tự; chi tiết có thể khác nhau.
 
-Ví dụ, **Linux** cung cấp một cơ chế gọi là **futex** (fast userspace mutex), tương tự như giao diện của Solaris nhưng cung cấp nhiều chức năng hơn trong kernel. Cụ thể, mỗi futex gắn với một vị trí bộ nhớ vật lý cụ thể, cũng như một hàng đợi trong kernel cho mỗi futex. Các thread có thể dùng các lời gọi futex (mô tả bên dưới) để ngủ và thức khi cần.
+Ví dụ, **Linux** cung cấp một cơ chế gọi là **futex** (fast userspace mutex), tương tự như giao diện của Solaris nhưng cung cấp nhiều chức năng hơn trong kernel. Cụ thể, mỗi futex gắn với một vị trí bộ nhớ vật lý cụ thể, cũng như một hàng đợi trong kernel cho mỗi futex. Các thread có thể dùng các call futex (mô tả bên dưới) để ngủ và thức khi cần.
 
-Cụ thể, có hai lời gọi:  
-- `futex_wait(address, expected)` đưa thread gọi hàm vào trạng thái ngủ, giả sử giá trị tại địa chỉ `address` bằng `expected`. Nếu không bằng, lời gọi trả về ngay lập tức.  
+Cụ thể, có hai call:  
+- `futex_wait(address, expected)` đưa thread gọi hàm vào trạng thái ngủ, giả sử giá trị tại địa chỉ `address` bằng `expected`. Nếu không bằng, call trả về ngay lập tức.  
 - `futex_wake(address)` đánh thức một thread đang chờ trong hàng đợi.
 
-Cách sử dụng các lời gọi này trong một **Linux mutex** được minh họa trong **Hình 28.10** (trang 19).
+Cách sử dụng các call này trong một **Linux mutex** được minh họa trong **Hình 28.10** (trang 19).
+
+![](img/fig28_10.PNG)
 
 **Hình 28.10: Linux-based Futex Locks**
 
-Đoạn mã này trích từ tệp `lowlevellock.h` trong thư viện **nptl** (một phần của thư viện **gnu libc**) [L09] thú vị ở một vài điểm.  
+Đoạn code này trích từ tệp `lowlevellock.h` trong thư viện **nptl** (một phần của thư viện **gnu libc**) [L09] thú vị ở một vài điểm.  
 
 Thứ nhất, nó sử dụng **một số nguyên duy nhất** để theo dõi cả việc lock đang bị giữ hay không (**bit cao** của số nguyên) và số lượng **waiter** (thread đang chờ lock) (**các bit còn lại**). Do đó, nếu giá trị của lock là **số âm**, điều đó có nghĩa là lock đang bị giữ (vì bit cao được đặt và bit này quyết định dấu của số nguyên).
 
-Thứ hai, đoạn mã này cho thấy cách **tối ưu hóa cho trường hợp phổ biến**, cụ thể là khi **không có tranh chấp** lock; với chỉ một thread thực hiện acquire và release lock, lượng công việc thực hiện là rất ít (một thao tác nguyên tử `test-and-set` để lock và một phép cộng nguyên tử để release lock).
+Thứ hai, đoạn code này cho thấy cách **tối ưu hóa cho trường hợp phổ biến**, cụ thể là khi **không có tranh chấp** lock; với chỉ một thread thực hiện acquire và release lock, lượng công việc thực hiện là rất ít (một thao tác nguyên tử `test-and-set` để lock và một phép cộng nguyên tử để release lock).
 
 Hãy thử tự phân tích phần còn lại của lock “thực tế” này để hiểu cách nó hoạt động. Hãy làm điều đó và trở thành **bậc thầy về Linux locking**, hoặc ít nhất là một người biết lắng nghe khi sách bảo bạn làm gì[^3].
 

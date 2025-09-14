@@ -21,6 +21,8 @@ Trong nghiên cứu, các tác giả xem xét các lỗi đồng thời đã đ�
 
 Hình dưới đây (Hình 32.1) tóm tắt các lỗi mà Lu và cộng sự đã nghiên cứu. Từ bảng, ta thấy có tổng cộng **105 lỗi**, trong đó **74 lỗi là non-deadlock** và **31 lỗi là deadlock**. Ngoài ra, số lượng lỗi ở mỗi ứng dụng cũng khác nhau: OpenOffice chỉ có 8 lỗi đồng thời, trong khi Mozilla có gần 60.
 
+![](img/fig32_1.PNG)
+
 **Hình 32.1: Các lỗi trong ứng dụng hiện đại**  
 | Application | Chức năng         | Non-Deadlock | Deadlock |
 | :---------- | :---------------- | :----------- | :------- |
@@ -47,6 +49,8 @@ Lu và cộng sự chỉ ra hai loại lỗi non-deadlock chính:
 
 Loại lỗi đầu tiên là **atomicity violation**. Dưới đây là một ví dụ đơn giản được tìm thấy trong MySQL. Trước khi đọc lời giải thích, hãy thử tìm lỗi.
 
+![](img/fig32_2.PNG)
+
 **Hình 32.2: Atomicity Violation (atomicity.c)**
 
 Trong ví dụ này, hai **thread** (luồng) khác nhau truy cập trường `proc_info` trong cấu trúc `thd`.  
@@ -56,13 +60,15 @@ Trong ví dụ này, hai **thread** (luồng) khác nhau truy cập trường `p
 Rõ ràng, nếu thread thứ nhất kiểm tra xong nhưng bị ngắt trước khi gọi `fputs`, thì thread thứ hai có thể chạy xen vào và đặt con trỏ thành NULL. Khi thread thứ nhất tiếp tục, nó sẽ bị crash vì `fputs` sẽ dereference một con trỏ NULL.
 
 **Định nghĩa chính thức** của atomicity violation theo Lu et al.:  
-> “Tính tuần tự mong muốn giữa nhiều truy cập bộ nhớ bị vi phạm (tức là một đoạn mã được dự định là nguyên tử, nhưng tính nguyên tử không được đảm bảo khi thực thi).”
+> “Tính tuần tự mong muốn giữa nhiều truy cập bộ nhớ bị vi phạm (tức là một đoạn code được dự định là nguyên tử, nhưng tính nguyên tử không được đảm bảo khi thực thi).”
 
-Trong ví dụ trên, đoạn mã giả định rằng việc kiểm tra `proc_info` khác NULL và việc sử dụng `proc_info` trong `fputs()` là nguyên tử. Khi giả định này sai, chương trình sẽ không hoạt động như mong muốn.
+Trong ví dụ trên, đoạn code giả định rằng việc kiểm tra `proc_info` khác NULL và việc sử dụng `proc_info` trong `fputs()` là nguyên tử. Khi giả định này sai, chương trình sẽ không hoạt động như mong muốn.
 
 **Cách sửa:**  
 Giải pháp thường (nhưng không phải luôn) khá đơn giản: thêm **lock** (khóa) quanh các truy cập biến chia sẻ.  
-Trong ví dụ sửa (Hình 32.3), ta thêm khóa `proc_info_lock` để đảm bảo rằng khi bất kỳ thread nào truy cập `proc_info`, nó phải giữ khóa này. Tất nhiên, mọi đoạn mã khác truy cập cấu trúc này cũng phải lấy cùng khóa.
+Trong ví dụ sửa (Hình 32.3), ta thêm khóa `proc_info_lock` để đảm bảo rằng khi bất kỳ thread nào truy cập `proc_info`, nó phải giữ khóa này. Tất nhiên, mọi đoạn code khác truy cập cấu trúc này cũng phải lấy cùng khóa.
+
+![](img/fig32_3.PNG)
 
 **Hình 32.3: Atomicity Violation Fixed (atomicity_fixed.c)**
 
@@ -71,10 +77,14 @@ Trong ví dụ sửa (Hình 32.3), ta thêm khóa `proc_info_lock` để đảm 
 
 Loại lỗi non-deadlock phổ biến thứ hai là **order violation**. Đây là một ví dụ khác; hãy thử tìm lỗi.
 
+![](img/fig32_4.PNG)
+
 **Hình 32.4: Ordering Bug (ordering.c)**
 
 Như bạn có thể đoán, mã trong Thread 2 giả định rằng biến `mThread` đã được khởi tạo (và khác NULL). Tuy nhiên, nếu Thread 2 chạy ngay sau khi được tạo, `mThread` vẫn chưa được gán giá trị khi được truy cập trong `mMain()` của Thread 2, dẫn đến crash do dereference con trỏ NULL.  
 Giả sử `mThread` ban đầu là NULL; nếu không, lỗi còn có thể nghiêm trọng hơn khi truy cập vào vùng nhớ tùy ý.
+
+![](img/fig32_5.PNG)
 
 **Hình 32.5: Fixing The Ordering Violation (ordering_fixed.c)**
 
@@ -104,7 +114,7 @@ Tuy nhiên, không phải tất cả các lỗi đều dễ sửa như các ví 
 
 ## 32.3 Deadlock Bugs
 
-Ngoài các lỗi đồng thời đã đề cập ở trên, một vấn đề kinh điển thường xuất hiện trong nhiều hệ thống đồng thời với giao thức khóa (locking protocol) phức tạp được gọi là **deadlock** (bế tắc). Deadlock xảy ra, ví dụ, khi một **thread** (luồng) — giả sử Thread 1 — đang giữ một khóa (L1) và chờ một khóa khác (L2); không may, **thread** khác (Thread 2) đang giữ L2 lại chờ L1 được giải phóng. Dưới đây là một đoạn mã minh họa khả năng xảy ra deadlock như vậy:
+Ngoài các lỗi đồng thời đã đề cập ở trên, một vấn đề kinh điển thường xuất hiện trong nhiều hệ thống đồng thời với giao thức khóa (locking protocol) phức tạp được gọi là **deadlock** (bế tắc). Deadlock xảy ra, ví dụ, khi một **thread** (luồng) — giả sử Thread 1 — đang giữ một khóa (L1) và chờ một khóa khác (L2); không may, **thread** khác (Thread 2) đang giữ L2 lại chờ L1 được giải phóng. Dưới đây là một đoạn code minh họa khả năng xảy ra deadlock như vậy:
 
 **Thread 1:**
 ```c
@@ -118,9 +128,13 @@ pthread_mutex_lock(L2);
 pthread_mutex_lock(L1);
 ```
 
+![](img/fig32_6.PNG)
+
 **Hình 32.6: Simple Deadlock (deadlock.c)**
 
-Lưu ý rằng khi chạy đoạn mã này, deadlock không nhất thiết xảy ra; nó chỉ xảy ra nếu, ví dụ, Thread 1 lấy được L1 trước, sau đó xảy ra **context switch** (chuyển ngữ cảnh) sang Thread 2. Lúc này, Thread 2 lấy L2 và cố gắng lấy L1. Kết quả là chúng ta có deadlock, vì mỗi thread đang chờ thread kia và không thread nào có thể tiếp tục chạy. Xem **Hình 32.7** để thấy minh họa trực quan; sự xuất hiện của một chu trình (cycle) trong đồ thị là dấu hiệu của deadlock.
+Lưu ý rằng khi chạy đoạn code này, deadlock không nhất thiết xảy ra; nó chỉ xảy ra nếu, ví dụ, Thread 1 lấy được L1 trước, sau đó xảy ra **context switch** (chuyển ngữ cảnh) sang Thread 2. Lúc này, Thread 2 lấy L2 và cố gắng lấy L1. Kết quả là chúng ta có deadlock, vì mỗi thread đang chờ thread kia và không thread nào có thể tiếp tục chạy. Xem **Hình 32.7** để thấy minh họa trực quan; sự xuất hiện của một chu trình (cycle) trong đồ thị là dấu hiệu của deadlock.
+
+![](img/fig32_7.PNG)
 
 **Hình 32.7: The Deadlock Dependency Graph**
 
@@ -199,7 +213,7 @@ Như bạn có thể hình dung, cả **total ordering** và **partial ordering*
 
 
 
-Bằng cách trước tiên lấy **lock** `prevention`, đoạn mã này đảm bảo rằng sẽ không có sự chuyển đổi **thread** (luồng) không đúng thời điểm xảy ra trong quá trình lấy lock, và do đó deadlock (bế tắc) một lần nữa có thể được tránh. Tất nhiên, điều này yêu cầu rằng bất cứ khi nào một thread muốn lấy một lock nào đó, nó phải lấy lock toàn cục `prevention` trước. Ví dụ, nếu một thread khác đang cố lấy các lock L1 và L2 theo một thứ tự khác, điều đó vẫn ổn, vì nó sẽ giữ lock `prevention` trong khi thực hiện.
+Bằng cách trước tiên lấy **lock** `prevention`, đoạn code này đảm bảo rằng sẽ không có sự chuyển đổi **thread** (luồng) không đúng thời điểm xảy ra trong quá trình lấy lock, và do đó deadlock (bế tắc) một lần nữa có thể được tránh. Tất nhiên, điều này yêu cầu rằng bất cứ khi nào một thread muốn lấy một lock nào đó, nó phải lấy lock toàn cục `prevention` trước. Ví dụ, nếu một thread khác đang cố lấy các lock L1 và L2 theo một thứ tự khác, điều đó vẫn ổn, vì nó sẽ giữ lock `prevention` trong khi thực hiện.
 
 Lưu ý rằng giải pháp này có một số vấn đề. Giống như trước đây, **encapsulation** (đóng gói) lại gây bất lợi: khi gọi một routine (hàm/thủ tục), cách tiếp cận này yêu cầu chúng ta phải biết chính xác những lock nào cần giữ và lấy chúng trước. Kỹ thuật này cũng có khả năng làm giảm **concurrency** (mức độ đồng thời), vì tất cả lock phải được lấy sớm (cùng lúc) thay vì chỉ khi thực sự cần.
 
@@ -214,58 +228,88 @@ Giao diện này có thể được sử dụng như sau để xây dựng một
 ...
 ```
 
-Lưu ý rằng một thread khác có thể tuân theo cùng giao thức nhưng lấy lock theo thứ tự ngược lại (L2 rồi L1) và chương trình vẫn không bị deadlock. Tuy nhiên, một vấn đề mới có thể phát sinh: **livelock**. Có khả năng (dù có thể hiếm) rằng hai thread đều liên tục thử thực hiện chuỗi thao tác này và liên tục thất bại trong việc lấy cả hai lock. Trong trường hợp này, cả hai hệ thống đều chạy qua đoạn mã này lặp đi lặp lại (và do đó không phải deadlock), nhưng không có tiến triển nào được thực hiện, vì vậy mới có tên là livelock. Có những giải pháp cho vấn đề livelock, ví dụ: thêm một khoảng trễ ngẫu nhiên trước khi quay lại vòng lặp và thử lại toàn bộ, từ đó giảm khả năng xung đột lặp lại giữa các thread cạnh tranh.
+Lưu ý rằng một thread khác có thể tuân theo cùng giao thức nhưng lấy lock theo thứ tự ngược lại (L2 rồi L1) và chương trình vẫn không bị deadlock. Tuy nhiên, một vấn đề mới có thể phát sinh: **livelock**. Có khả năng (dù có thể hiếm) rằng hai thread đều liên tục thử thực hiện chuỗi thao tác này và liên tục thất bại trong việc lấy cả hai lock. Trong trường hợp này, cả hai hệ thống đều chạy qua đoạn code này lặp đi lặp lại (và do đó không phải deadlock), nhưng không có tiến triển nào được thực hiện, vì vậy mới có tên là livelock. Có những giải pháp cho vấn đề livelock, ví dụ: thêm một khoảng trễ ngẫu nhiên trước khi quay lại vòng lặp và thử lại toàn bộ, từ đó giảm khả năng xung đột lặp lại giữa các thread cạnh tranh.
 
-Một điểm cần lưu ý về giải pháp này: nó né tránh những phần khó của việc sử dụng phương pháp `trylock`. Vấn đề đầu tiên có thể xuất hiện lại là do **encapsulation**: nếu một trong các lock này nằm sâu bên trong một routine được gọi, việc quay lại từ đầu trở nên phức tạp hơn để triển khai. Nếu đoạn mã đã lấy một số tài nguyên khác (ngoài L1) trong quá trình, nó phải đảm bảo giải phóng chúng cẩn thận; ví dụ, nếu sau khi lấy L1, đoạn mã đã cấp phát một vùng bộ nhớ, thì phải giải phóng vùng nhớ đó khi không lấy được L2, trước khi quay lại đầu để thử lại toàn bộ chuỗi. Tuy nhiên, trong một số trường hợp hạn chế (ví dụ: phương thức `Vector.AddAll()` trong Java được đề cập trước đó), cách tiếp cận này có thể hoạt động tốt.
+Một điểm cần lưu ý về giải pháp này: nó né tránh những phần khó của việc sử dụng phương pháp `trylock`. Vấn đề đầu tiên có thể xuất hiện lại là do **encapsulation**: nếu một trong các lock này nằm sâu bên trong một routine được gọi, việc quay lại từ đầu trở nên phức tạp hơn để triển khai. Nếu đoạn code đã lấy một số tài nguyên khác (ngoài L1) trong quá trình, nó phải đảm bảo giải phóng chúng cẩn thận; ví dụ, nếu sau khi lấy L1, đoạn code đã cấp phát một vùng bộ nhớ, thì phải giải phóng vùng nhớ đó khi không lấy được L2, trước khi quay lại đầu để thử lại toàn bộ chuỗi. Tuy nhiên, trong một số trường hợp hạn chế (ví dụ: phương thức `Vector.AddAll()` trong Java được đề cập trước đó), cách tiếp cận này có thể hoạt động tốt.
 
 Bạn cũng có thể nhận thấy rằng cách tiếp cận này thực ra không bổ sung **preemption** (hành động cưỡng bức lấy lock từ một thread đang giữ nó), mà thay vào đó sử dụng phương pháp `trylock` để cho phép lập trình viên **tự từ bỏ quyền sở hữu lock** (tức là tự preempt quyền sở hữu của mình) một cách an toàn. Tuy nhiên, đây là một cách tiếp cận thực tiễn, và vì vậy chúng tôi đưa nó vào đây, dù nó chưa hoàn hảo ở khía cạnh này.
 
 
 #### Mutual Exclusion
 
-Kỹ thuật phòng ngừa cuối cùng là tránh hoàn toàn nhu cầu **mutual exclusion** (loại trừ lẫn nhau). Nói chung, chúng ta biết điều này là khó, vì đoạn mã mà chúng ta muốn chạy thực sự có các **critical section** (vùng găng). Vậy chúng ta có thể làm gì?
+Kỹ thuật phòng ngừa cuối cùng là tránh hoàn toàn nhu cầu **mutual exclusion** (loại trừ lẫn nhau). Nói chung, chúng ta biết điều này là khó, vì đoạn code mà chúng ta muốn chạy thực sự có các **critical section** (vùng găng). Vậy chúng ta có thể làm gì?
 
 Herlihy đã đưa ra ý tưởng rằng có thể thiết kế nhiều cấu trúc dữ liệu **không dùng lock** [H91, H93]. Ý tưởng đằng sau các phương pháp **lock-free** (không khóa) và liên quan là **wait-free** (không chờ) này khá đơn giản: sử dụng các lệnh phần cứng mạnh mẽ, bạn có thể xây dựng các cấu trúc dữ liệu theo cách không cần khóa tường minh.
 
 Ví dụ đơn giản, giả sử chúng ta có một lệnh **`compare-and-swap`**, mà như bạn có thể nhớ, đây là một lệnh nguyên tử (atomic instruction) do phần cứng cung cấp, thực hiện như sau:
 
-(TODO)
-
-
-
+```c
+int CompareAndSwap(int *address, int expected, int new) {
+    if (*address == expected) {
+        *address = new;
+        return 1; // success
+    }
+    return 0; // failure
+}
+```
 
 Giả sử bây giờ chúng ta muốn **tăng một giá trị một cách nguyên tử** (atomically increment) thêm một lượng nhất định, sử dụng lệnh `compare-and-swap`. Chúng ta có thể thực hiện điều đó với hàm đơn giản sau:
 
-```
-...
-```
-
-Thay vì lấy một **lock**, thực hiện cập nhật, rồi giải phóng lock, chúng ta xây dựng một cách tiếp cận khác: liên tục thử cập nhật giá trị lên giá trị mới và sử dụng `compare-and-swap` để thực hiện. Theo cách này, không có lock nào được lấy, và do đó không thể xảy ra **deadlock** (bế tắc) (mặc dù **livelock** vẫn có thể xảy ra, và vì vậy một giải pháp vững chắc sẽ phức tạp hơn đoạn mã đơn giản ở trên).
-
-
-Hãy xem xét một ví dụ phức tạp hơn một chút: **chèn phần tử vào danh sách** (list insertion). Dưới đây là đoạn mã chèn một phần tử vào đầu danh sách:
-
-```
-...
+```c
+void AtomicIncrement(int *value, int amount) {
+    do {
+        int old = *value;
+    } while (CompareAndSwap(value, old, old + amount) == 0);
+}
 ```
 
-Đoạn mã này thực hiện một phép chèn đơn giản, nhưng nếu được gọi bởi nhiều **thread** (luồng) “cùng lúc”, sẽ xuất hiện **race condition** (điều kiện tranh chấp). Bạn có thể tìm ra lý do không? (Hãy vẽ một sơ đồ về những gì có thể xảy ra với danh sách nếu hai phép chèn đồng thời diễn ra, giả sử như thường lệ rằng có một sự xen kẽ lịch trình (scheduling interleaving) bất lợi).  
-Tất nhiên, chúng ta có thể giải quyết vấn đề này bằng cách bao quanh đoạn mã với thao tác lấy lock và giải phóng lock:
+Thay vì lấy một **lock**, thực hiện cập nhật, rồi giải phóng lock, chúng ta xây dựng một cách tiếp cận khác: liên tục thử cập nhật giá trị lên giá trị mới và sử dụng `compare-and-swap` để thực hiện. Theo cách này, không có lock nào được lấy, và do đó không thể xảy ra **deadlock** (bế tắc) (mặc dù **livelock** vẫn có thể xảy ra, và vì vậy một giải pháp vững chắc sẽ phức tạp hơn đoạn code đơn giản ở trên).
 
+
+Hãy xem xét một ví dụ phức tạp hơn một chút: **chèn phần tử vào danh sách** (list insertion). Dưới đây là đoạn code chèn một phần tử vào đầu danh sách:
+
+```c
+void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n->value = value;
+    n->next = head;
+    head = n;
+}
 ```
-...
+
+Đoạn code này thực hiện một phép chèn đơn giản, nhưng nếu được gọi bởi nhiều **thread** (luồng) “cùng lúc”, sẽ xuất hiện **race condition** (điều kiện tranh chấp). Bạn có thể tìm ra lý do không? (Hãy vẽ một sơ đồ về những gì có thể xảy ra với danh sách nếu hai phép chèn đồng thời diễn ra, giả sử như thường lệ rằng có một sự xen kẽ lịch trình (scheduling interleaving) bất lợi).  
+Tất nhiên, chúng ta có thể giải quyết vấn đề này bằng cách bao quanh đoạn code với thao tác lấy lock và giải phóng lock:
+
+```c
+void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n->value = value;
+    pthread_mutex_lock(listlock); // begin critical section
+    n->next = head;
+    head = n;
+    pthread_mutex_unlock(listlock); // end critical section
+}
 ```
 
 Trong giải pháp này, chúng ta đang sử dụng lock theo cách truyền thống². Thay vào đó, hãy thử thực hiện phép chèn này theo cách **lock-free** (không dùng khóa) chỉ với lệnh `compare-and-swap`. Dưới đây là một cách tiếp cận khả thi:
 
+```c
+void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n->value = value;
+    do {
+        n->next = head;
+    } while (CompareAndSwap(&head, n->next, n) == 0);
+}
 ```
-...
-```
 
-²Người đọc tinh ý có thể sẽ hỏi tại sao chúng ta lại lấy lock muộn như vậy, thay vì ngay khi bước vào hàm `insert()`; bạn có thể, với sự tinh ý, tìm ra lý do tại sao điều đó có khả năng là đúng không? Ví dụ, đoạn mã đưa ra giả định gì về lời gọi `malloc()`?
+²Người đọc tinh ý có thể sẽ hỏi tại sao chúng ta lại lấy lock muộn như vậy, thay vì ngay khi bước vào hàm `insert()`; bạn có thể, với sự tinh ý, tìm ra lý do tại sao điều đó có khả năng là đúng không? Ví dụ, đoạn code đưa ra giả định gì về call `malloc()`?
 
 
-Trong đoạn mã này, con trỏ `next` của nút mới được cập nhật để trỏ tới phần tử đầu hiện tại, sau đó cố gắng hoán đổi (swap) nút mới vào vị trí đầu danh sách bằng `compare-and-swap`. Tuy nhiên, thao tác này sẽ thất bại nếu một thread khác đã thành công trong việc hoán đổi một nút mới vào đầu danh sách trong khoảng thời gian đó, khiến thread này phải thử lại với phần tử đầu mới.
+Trong đoạn code này, con trỏ `next` của nút mới được cập nhật để trỏ tới phần tử đầu hiện tại, sau đó cố gắng hoán đổi (swap) nút mới vào vị trí đầu danh sách bằng `compare-and-swap`. Tuy nhiên, thao tác này sẽ thất bại nếu một thread khác đã thành công trong việc hoán đổi một nút mới vào đầu danh sách trong khoảng thời gian đó, khiến thread này phải thử lại với phần tử đầu mới.
 
 Tất nhiên, việc xây dựng một danh sách hữu ích đòi hỏi nhiều hơn là chỉ thao tác chèn; và không ngạc nhiên khi việc xây dựng một danh sách có thể chèn, xóa và tìm kiếm theo cách lock-free là **không hề đơn giản**. Hãy đọc thêm các tài liệu nghiên cứu phong phú về **lock-free** và **wait-free synchronization** (đồng bộ hóa không khóa và không chờ) để tìm hiểu thêm [H01, H91, H93].
 

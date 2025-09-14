@@ -14,12 +14,13 @@ Một trong những cấu trúc dữ liệu đơn giản nhất là **counter** 
 
 ### Đơn giản nhưng không mở rộng được (Simple But Not Scalable)
 
-Như bạn thấy, bộ đếm **non-synchronized** (không đồng bộ) là một cấu trúc dữ liệu rất đơn giản, chỉ cần một lượng mã nhỏ để triển khai. Giờ chúng ta có thách thức tiếp theo: làm thế nào để khiến đoạn mã này **thread safe**? **Hình 29.2** cho thấy cách chúng ta thực hiện điều đó.
+Như bạn thấy, bộ đếm **non-synchronized** (không đồng bộ) là một cấu trúc dữ liệu rất đơn giản, chỉ cần một lượng mã nhỏ để triển khai. Giờ chúng ta có thách thức tiếp theo: làm thế nào để khiến đoạn code này **thread safe**? **Hình 29.2** cho thấy cách chúng ta thực hiện điều đó.
+
+![](img/fig29_1.PNG)
 
 **Hình 29.1:** Bộ đếm không có khóa  
-![Figure 29.1: A Counter Without Locks](#)
 
-Bộ đếm đồng thời này đơn giản và hoạt động đúng. Thực tế, nó tuân theo một **mẫu thiết kế** (design pattern) phổ biến đối với các cấu trúc dữ liệu đồng thời cơ bản nhất: chỉ cần thêm một **lock duy nhất**, được **acquire** (chiếm giữ) khi gọi một hàm thao tác trên cấu trúc dữ liệu, và **release** (giải phóng) khi trả về từ lời gọi hàm. Theo cách này, nó tương tự như một cấu trúc dữ liệu được xây dựng với **monitor** [BH73], nơi khóa được tự động chiếm giữ và giải phóng khi bạn gọi và trả về từ các phương thức của đối tượng.
+Bộ đếm đồng thời này đơn giản và hoạt động đúng. Thực tế, nó tuân theo một **mẫu thiết kế** (design pattern) phổ biến đối với các cấu trúc dữ liệu đồng thời cơ bản nhất: chỉ cần thêm một **lock duy nhất**, được **acquire** (chiếm giữ) khi gọi một hàm thao tác trên cấu trúc dữ liệu, và **release** (giải phóng) khi trả về từ call hàm. Theo cách này, nó tương tự như một cấu trúc dữ liệu được xây dựng với **monitor** [BH73], nơi khóa được tự động chiếm giữ và giải phóng khi bạn gọi và trả về từ các phương thức của đối tượng.
 
 Tại thời điểm này, bạn đã có một cấu trúc dữ liệu đồng thời hoạt động được. Vấn đề bạn có thể gặp phải là **hiệu năng**. Nếu cấu trúc dữ liệu của bạn quá chậm, bạn sẽ phải làm nhiều hơn là chỉ thêm một khóa duy nhất; các tối ưu hóa như vậy, nếu cần, sẽ là chủ đề của phần còn lại của chương này. Lưu ý rằng nếu cấu trúc dữ liệu không quá chậm, bạn đã xong! Không cần làm gì phức tạp nếu giải pháp đơn giản đã hiệu quả.
 
@@ -28,8 +29,9 @@ Tại thời điểm này, bạn đã có một cấu trúc dữ liệu đồng 
 
 Từ đường trên cùng trong hình (được gắn nhãn “Precise”), bạn có thể thấy hiệu năng của bộ đếm **synchronized** (đồng bộ hóa) mở rộng rất kém. Trong khi một thread có thể hoàn thành một triệu lần cập nhật bộ đếm trong thời gian rất ngắn (khoảng 0,03 giây), thì khi có hai thread cùng cập nhật bộ đếm một triệu lần mỗi thread **đồng thời**, thời gian thực hiện tăng vọt (lên hơn 5 giây!). Và tình hình chỉ tệ hơn khi có nhiều thread hơn.
 
+![](img/fig29_2.PNG)
+
 **Hình 29.2:** Bộ đếm có khóa  
-![Figure 29.2: A Counter With Locks](#)
 
 Lý tưởng nhất, bạn muốn các thread hoàn thành nhanh như trên nhiều bộ xử lý cũng giống như một thread trên một bộ xử lý. Đạt được điều này được gọi là **perfect scaling** (mở rộng hoàn hảo); mặc dù có nhiều công việc hơn, nhưng nó được thực hiện song song, và do đó thời gian hoàn thành nhiệm vụ không tăng lên.
 
@@ -51,24 +53,26 @@ Tần suất thực hiện việc chuyển từ local sang global này được 
 
 Để làm rõ, hãy xem một ví dụ (**Hình 29.3**). Trong ví dụ này, ngưỡng S được đặt là 5, và có các thread trên mỗi trong bốn CPU đang cập nhật local counter L1 ... L4. Giá trị của global counter (G) cũng được hiển thị trong **trace**, với thời gian tăng dần từ trên xuống. Ở mỗi bước thời gian, một local counter có thể được tăng; nếu giá trị local đạt ngưỡng S, giá trị local sẽ được chuyển sang global counter và local counter được đặt lại.
 
-**Hình 29.3:** Theo dõi hoạt động của approximate counter  
-![Figure 29.3: Tracing the Approximate Counters](#)
+![](img/fig29_3.PNG)
 
+**Hình 29.3:** Theo dõi hoạt động của approximate counter  
 
 ^[1]: Chúng ta cần local lock vì giả định rằng có thể có nhiều hơn một thread trên mỗi core. Nếu chỉ có một thread chạy trên mỗi core, sẽ không cần local lock.
 
 
 Đường dưới trong **Hình 29.5** (được gắn nhãn “Approximate”, ở trang 6) cho thấy hiệu năng của approximate counter với ngưỡng S = 1024. Hiệu năng rất tốt; thời gian để cập nhật bộ đếm bốn triệu lần trên bốn bộ xử lý hầu như không cao hơn thời gian để cập nhật một triệu lần trên một bộ xử lý.
 
+![](img/fig29_4.PNG)
+
 **Hình 29.4:** Triển khai approximate counter  
-![Figure 29.4: Approximate Counter Implementation](#)
+
+![](img/fig29_5.PNG)
 
 **Hình 29.5:** Hiệu năng của bộ đếm truyền thống so với approximate counter  
-![Figure 29.5: Performance of Traditional vs. Approximate Counters](#)
+
+![](img/fig29_6.PNG)
 
 **Hình 29.6:** Khả năng mở rộng của approximate counter  
-![Figure 29.6: Scaling Approximate Counters](#)
-
 
 **Hình 29.6** cho thấy tầm quan trọng của giá trị ngưỡng S, với bốn thread mỗi thread tăng bộ đếm 1 triệu lần trên bốn CPU. Nếu S thấp, hiệu năng kém (nhưng giá trị global luôn khá chính xác); nếu S cao, hiệu năng rất tốt, nhưng giá trị global bị trễ (tối đa bằng số CPU nhân với S). Đây chính là sự đánh đổi giữa **độ chính xác** và **hiệu năng** mà approximate counter mang lại.
 
@@ -82,8 +86,9 @@ Một phiên bản sơ khai của approximate counter được thể hiện tron
 
 Tiếp theo, chúng ta sẽ xem xét một cấu trúc phức tạp hơn: **linked list** (danh sách liên kết). Hãy bắt đầu lại với một cách tiếp cận cơ bản. Để đơn giản, chúng ta sẽ bỏ qua một số hàm hiển nhiên mà một danh sách như vậy thường có, và chỉ tập trung vào thao tác **insert** (chèn) và **lookup** (tìm kiếm) đồng thời; phần **delete** (xóa) và các thao tác khác sẽ để bạn đọc tự suy nghĩ. **Hình 29.7** cho thấy mã nguồn của cấu trúc dữ liệu sơ khai này.
 
+![](img/fig29_7.PNG)
+
 **Hình 29.7:** Danh sách liên kết đồng thời  
-![Figure 29.7: Concurrent Linked List](#)
 
 Như bạn thấy trong mã nguồn, hàm `insert` đơn giản là **acquire** (chiếm giữ) một **lock** khi bắt đầu, và **release** (giải phóng) nó khi kết thúc. Một vấn đề nhỏ nhưng tinh vi có thể xảy ra nếu `malloc()` thất bại (một trường hợp hiếm); trong tình huống này, mã nguồn cũng phải giải phóng khóa trước khi kết thúc thao tác chèn.
 
@@ -96,9 +101,9 @@ Câu trả lời, trong trường hợp này, là **có**. Cụ thể, chúng ta
 
 Đối với hàm `lookup`, đây là một phép biến đổi mã đơn giản: thoát khỏi vòng lặp tìm kiếm chính và đi đến một đường trả về duy nhất. Làm như vậy giúp giảm số lần acquire/release lock trong mã, và do đó giảm khả năng vô tình tạo ra lỗi (chẳng hạn quên `unlock` trước khi `return`).
 
-**Hình 29.8:** Danh sách liên kết đồng thời: Phiên bản viết lại  
-![Figure 29.8: Concurrent Linked List: Rewritten](#)
+![](img/fig29_8.PNG)
 
+**Hình 29.8:** Danh sách liên kết đồng thời: Phiên bản viết lại  
 
 ### Mở rộng khả năng của linked list (Scaling Linked Lists)
 
@@ -117,10 +122,11 @@ Như bạn đã biết, luôn có một phương pháp tiêu chuẩn để biế
 
 Thay vào đó, chúng ta sẽ xem xét một hàng đợi đồng thời hơn một chút, được thiết kế bởi Michael và Scott [MS98]. Cấu trúc dữ liệu và mã nguồn được sử dụng cho hàng đợi này được thể hiện trong **Hình 29.9** (trang 11).
 
-**Hình 29.9:** Hàng đợi đồng thời của Michael và Scott  
-![Figure 29.9: Michael and Scott Concurrent Queue](#)
+![](img/fig29_9.PNG)
 
-Nếu bạn nghiên cứu kỹ đoạn mã này, bạn sẽ nhận thấy có **hai khóa**: một cho **head** (đầu hàng đợi) và một cho **tail** (đuôi hàng đợi). Mục tiêu của hai khóa này là cho phép các thao tác **enqueue** (thêm phần tử vào đuôi) và **dequeue** (lấy phần tử từ đầu) diễn ra đồng thời. Trong trường hợp phổ biến, hàm `enqueue` chỉ truy cập **tail lock**, và `dequeue` chỉ truy cập **head lock**.
+**Hình 29.9:** Hàng đợi đồng thời của Michael và Scott  
+
+Nếu bạn nghiên cứu kỹ đoạn code này, bạn sẽ nhận thấy có **hai khóa**: một cho **head** (đầu hàng đợi) và một cho **tail** (đuôi hàng đợi). Mục tiêu của hai khóa này là cho phép các thao tác **enqueue** (thêm phần tử vào đuôi) và **dequeue** (lấy phần tử từ đầu) diễn ra đồng thời. Trong trường hợp phổ biến, hàm `enqueue` chỉ truy cập **tail lock**, và `dequeue` chỉ truy cập **head lock**.
 
 Một thủ thuật được Michael và Scott sử dụng là thêm một **dummy node** (nút giả, được cấp phát trong mã khởi tạo hàng đợi); nút giả này cho phép tách biệt các thao tác ở head và tail. Hãy nghiên cứu mã nguồn, hoặc tốt hơn, gõ lại, chạy thử và đo đạc để hiểu sâu hơn cách nó hoạt động.
 
@@ -131,15 +137,18 @@ Hàng đợi được sử dụng phổ biến trong các ứng dụng **multi-t
 
 Chúng ta kết thúc phần thảo luận với một cấu trúc dữ liệu đồng thời đơn giản và có tính ứng dụng rộng rãi: **hash table** (bảng băm). Chúng ta sẽ tập trung vào một bảng băm đơn giản **không thay đổi kích thước**; việc xử lý thay đổi kích thước cần thêm một chút công việc, và chúng tôi để lại như một bài tập cho bạn đọc.
 
+![](img/fig29_10.PNG)
+
 **Hình 29.10:** Bảng băm đồng thời  
-![Figure 29.10: A Concurrent Hash Table](#)
 
 Bảng băm đồng thời này (**Hình 29.10**) khá trực quan, được xây dựng bằng cách sử dụng các **concurrent list** (danh sách đồng thời) mà chúng ta đã phát triển trước đó, và hoạt động rất hiệu quả. Lý do cho hiệu năng tốt của nó là thay vì có một khóa duy nhất cho toàn bộ cấu trúc, nó sử dụng **một khóa cho mỗi hash bucket** (mỗi bucket được biểu diễn bởi một danh sách). Cách làm này cho phép nhiều thao tác đồng thời diễn ra.
 
+
 **Hình 29.11** (trang 13) cho thấy hiệu năng của bảng băm khi thực hiện các cập nhật đồng thời (từ 10.000 đến 50.000 cập nhật đồng thời từ mỗi trong bốn thread, trên cùng một máy iMac với bốn CPU). Cũng được hiển thị, để so sánh, là hiệu năng của một linked list (với một khóa duy nhất).
 
+![](img/fig29_11.PNG)
+
 **Hình 29.11:** Khả năng mở rộng của bảng băm  
-![Figure 29.11: Scaling Hash Tables](#)
 
 Như bạn thấy từ biểu đồ, bảng băm đồng thời đơn giản này mở rộng rất tốt; ngược lại, linked list thì không.
 

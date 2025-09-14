@@ -8,6 +8,7 @@ Trong chương này, chúng ta giới thiệu một abstraction mới cho một 
 
 Một khác biệt lớn khác giữa thread và process liên quan đến **stack**. Trong mô hình đơn giản về address space của một process cổ điển (mà giờ ta có thể gọi là **single-threaded process** — tiến trình đơn luồng), chỉ có một stack, thường nằm ở cuối address space (*Figure 26.1*, bên trái). Tuy nhiên, trong một **multi-threaded process**, mỗi thread chạy độc lập và tất nhiên có thể gọi vào nhiều **routine** (hàm con) khác nhau để thực hiện công việc. Thay vì một stack duy nhất trong address space, sẽ có **một stack cho mỗi thread**. Giả sử chúng ta có một multi-threaded process với hai thread; address space kết quả sẽ khác (*Figure 26.1*, bên phải).
 
+![](img/fig26_1.PNG)
 **Figure 26.1: Single-Threaded And Multi-Threaded Address Spaces**  
 *(Không gian địa chỉ của tiến trình đơn luồng và đa luồng)*
 
@@ -32,6 +33,7 @@ Tất nhiên, trong cả hai trường hợp trên, bạn **có thể** dùng nh
 
 Bây giờ chúng ta đi vào một số chi tiết. Giả sử chúng ta muốn chạy một chương trình tạo ra hai **thread** (luồng), mỗi thread thực hiện một công việc độc lập, trong trường hợp này là in ra “A” hoặc “B”. Mã nguồn được thể hiện trong *Figure 26.2* (trang 4).
 
+![](img/fig26_2.PNG)
 **Figure 26.2: Simple Thread Creation Code (t0.c)**
 
 Chương trình **main** tạo ra hai thread (gọi là T1 và T2), mỗi thread sẽ chạy hàm `mythread()`, nhưng với các đối số khác nhau (chuỗi “A” hoặc “B”). Ngay khi một thread được tạo, nó có thể bắt đầu chạy ngay lập tức (tùy thuộc vào quyết định của **scheduler** — bộ lập lịch); hoặc nó có thể được đưa vào trạng thái “ready” (sẵn sàng) nhưng chưa “running” (đang chạy) và do đó chưa thực thi. Tất nhiên, trên một hệ thống **multiprocessor** (đa bộ xử lý), các thread thậm chí có thể chạy đồng thời, nhưng tạm thời chúng ta chưa xét đến khả năng này.
@@ -40,14 +42,17 @@ Sau khi tạo hai thread, **main thread** gọi `pthread_join()`, hàm này sẽ
 
 Hãy xem xét các khả năng sắp xếp thứ tự thực thi của chương trình nhỏ này. Trong sơ đồ thực thi (*Figure 26.3*, trang 5), thời gian tăng dần theo chiều từ trên xuống, và mỗi cột thể hiện thời điểm một thread khác nhau (main, Thread 1 hoặc Thread 2) đang chạy.
 
+![](img/fig26_3.PNG)
 **Figure 26.3: Thread Trace (1)**
 
 Tuy nhiên, cần lưu ý rằng thứ tự này không phải là thứ tự duy nhất có thể xảy ra. Thực tế, với một chuỗi lệnh, có khá nhiều khả năng, tùy thuộc vào việc scheduler quyết định chạy thread nào tại một thời điểm nhất định. Ví dụ, ngay khi một thread được tạo, nó có thể chạy ngay lập tức, dẫn đến thứ tự thực thi như trong *Figure 26.4* (trang 5).
 
+![](img/fig26_4.PNG)
 **Figure 26.4: Thread Trace (2)**
 
 Chúng ta thậm chí có thể thấy “B” được in trước “A”, nếu scheduler quyết định chạy Thread 2 trước, mặc dù Thread 1 được tạo trước; không có lý do gì để giả định rằng thread được tạo trước sẽ chạy trước. *Figure 26.5* (trang 6) cho thấy thứ tự thực thi này, với việc Thread 2 chạy trước Thread 1.
 
+![](img/fig26_5.PNG)
 **Figure 26.5: Thread Trace (3)**
 
 Như bạn có thể thấy, một cách để hình dung việc tạo thread là nó giống như gọi một hàm; tuy nhiên, thay vì thực thi hàm trước rồi mới quay lại hàm gọi, hệ thống sẽ tạo ra một **thread of execution** (luồng thực thi) mới cho routine được gọi, và nó chạy độc lập với hàm gọi, có thể trước khi `create` trả về, hoặc có thể muộn hơn nhiều. Thread nào chạy tiếp theo được quyết định bởi OS scheduler, và mặc dù scheduler có thể triển khai một thuật toán hợp lý, nhưng rất khó để biết chính xác thread nào sẽ chạy tại một thời điểm bất kỳ.
@@ -61,6 +66,7 @@ Ví dụ thread đơn giản ở trên hữu ích để minh họa cách tạo t
 
 Hãy tưởng tượng một ví dụ đơn giản, nơi hai thread muốn cập nhật một biến toàn cục dùng chung. Mã nguồn được nghiên cứu nằm trong *Figure 26.6* (trang 7).
 
+![](img/fig26_6.PNG)
 **Figure 26.6: Sharing Data: Uh Oh (t1.c)**
 
 Một vài ghi chú về mã nguồn:  
@@ -111,7 +117,7 @@ Không chỉ mỗi lần chạy đều **sai**, mà kết quả còn **khác nha
 
 > **TIP: KNOW AND USE YOUR TOOLS**  
 > (Biết và sử dụng thành thạo công cụ của bạn)  
-> Bạn nên luôn học các công cụ mới giúp viết, gỡ lỗi và hiểu hệ thống máy tính. Ở đây, chúng ta sử dụng một công cụ hữu ích gọi là **disassembler** (trình dịch ngược mã máy sang assembly). Khi bạn chạy một disassembler trên một tệp thực thi (**executable**), nó sẽ hiển thị các lệnh **assembly** tạo nên chương trình. Ví dụ, nếu chúng ta muốn hiểu đoạn mã cấp thấp dùng để cập nhật biến `counter` (như trong ví dụ), ta chạy `objdump` (trên Linux) để xem mã assembly:  
+> Bạn nên luôn học các công cụ mới giúp viết, gỡ lỗi và hiểu hệ thống máy tính. Ở đây, chúng ta sử dụng một công cụ hữu ích gọi là **disassembler** (trình dịch ngược mã máy sang assembly). Khi bạn chạy một disassembler trên một tệp thực thi (**executable**), nó sẽ hiển thị các lệnh **assembly** tạo nên chương trình. Ví dụ, nếu chúng ta muốn hiểu đoạn code cấp thấp dùng để cập nhật biến `counter` (như trong ví dụ), ta chạy `objdump` (trên Linux) để xem mã assembly:  
 > ```
 > prompt> objdump -d main
 > ```  
@@ -133,17 +139,17 @@ Ví dụ này giả định rằng biến `counter` nằm tại địa chỉ `0x
 - Sau đó, lệnh `add` được thực hiện, cộng 1 (`0x1`) vào nội dung của thanh ghi `eax`.  
 - Cuối cùng, nội dung của `eax` được lưu trở lại bộ nhớ tại cùng địa chỉ.
 
-Hãy tưởng tượng một trong hai thread (Thread 1) đi vào đoạn mã này, và chuẩn bị tăng `counter` lên một. Nó nạp giá trị của `counter` (giả sử ban đầu là 50) vào thanh ghi `eax`. Do đó, `eax = 50` đối với Thread 1. Sau đó, nó cộng thêm 1 vào thanh ghi; do đó `eax = 51`.
+Hãy tưởng tượng một trong hai thread (Thread 1) đi vào đoạn code này, và chuẩn bị tăng `counter` lên một. Nó nạp giá trị của `counter` (giả sử ban đầu là 50) vào thanh ghi `eax`. Do đó, `eax = 50` đối với Thread 1. Sau đó, nó cộng thêm 1 vào thanh ghi; do đó `eax = 51`.
 
 Bây giờ, một điều không may xảy ra: một **timer interrupt** (ngắt định thời) được kích hoạt; do đó, OS lưu trạng thái của thread đang chạy (PC, các thanh ghi bao gồm `eax`, v.v.) vào **TCB** (thread control block) của thread đó.
 
-Tiếp theo, một điều tệ hơn xảy ra: Thread 2 được chọn để chạy, và nó cũng đi vào cùng đoạn mã này. Nó cũng thực hiện lệnh đầu tiên, lấy giá trị của `counter` và đưa vào `eax` của nó (lưu ý: mỗi thread khi chạy có tập thanh ghi riêng; các thanh ghi này được “ảo hóa” bởi mã context switch lưu và khôi phục chúng). Giá trị của `counter` lúc này vẫn là 50, do đó Thread 2 có `eax = 50`. Giả sử Thread 2 thực hiện hai lệnh tiếp theo, tăng `eax` lên 1 (`eax = 51`), rồi lưu nội dung của `eax` vào `counter` (địa chỉ `0x8049a1c`). Như vậy, biến toàn cục `counter` giờ có giá trị 51.
+Tiếp theo, một điều tệ hơn xảy ra: Thread 2 được chọn để chạy, và nó cũng đi vào cùng đoạn code này. Nó cũng thực hiện lệnh đầu tiên, lấy giá trị của `counter` và đưa vào `eax` của nó (lưu ý: mỗi thread khi chạy có tập thanh ghi riêng; các thanh ghi này được “ảo hóa” bởi mã context switch lưu và khôi phục chúng). Giá trị của `counter` lúc này vẫn là 50, do đó Thread 2 có `eax = 50`. Giả sử Thread 2 thực hiện hai lệnh tiếp theo, tăng `eax` lên 1 (`eax = 51`), rồi lưu nội dung của `eax` vào `counter` (địa chỉ `0x8049a1c`). Như vậy, biến toàn cục `counter` giờ có giá trị 51.
 
 Cuối cùng, một **context switch** khác xảy ra, và Thread 1 tiếp tục chạy. Nhớ rằng nó vừa thực hiện xong lệnh `mov` và `add`, và giờ chuẩn bị thực hiện lệnh `mov` cuối cùng. Cũng nhớ rằng `eax = 51`. Do đó, lệnh `mov` cuối cùng được thực thi, lưu giá trị vào bộ nhớ; `counter` được đặt thành 51 một lần nữa.
 
-Nói ngắn gọn, điều đã xảy ra là: đoạn mã tăng `counter` đã được chạy **hai lần**, nhưng `counter`, vốn bắt đầu ở 50, giờ chỉ bằng 51. Một phiên bản “đúng” của chương trình này lẽ ra phải khiến `counter` bằng 52.
+Nói ngắn gọn, điều đã xảy ra là: đoạn code tăng `counter` đã được chạy **hai lần**, nhưng `counter`, vốn bắt đầu ở 50, giờ chỉ bằng 51. Một phiên bản “đúng” của chương trình này lẽ ra phải khiến `counter` bằng 52.
 
-Hãy xem một **execution trace** (vết thực thi) chi tiết để hiểu rõ hơn vấn đề. Giả sử, trong ví dụ này, đoạn mã trên được nạp tại địa chỉ 100 trong bộ nhớ, như chuỗi sau (lưu ý cho những ai quen với các tập lệnh dạng RISC: x86 có lệnh độ dài biến đổi; lệnh `mov` này chiếm 5 byte bộ nhớ, và lệnh `add` chỉ chiếm 3 byte):
+Hãy xem một **execution trace** (vết thực thi) chi tiết để hiểu rõ hơn vấn đề. Giả sử, trong ví dụ này, đoạn code trên được nạp tại địa chỉ 100 trong bộ nhớ, như chuỗi sau (lưu ý cho những ai quen với các tập lệnh dạng RISC: x86 có lệnh độ dài biến đổi; lệnh `mov` này chiếm 5 byte bộ nhớ, và lệnh `add` chỉ chiếm 3 byte):
 
 ```
 100 mov 0x8049a1c, %eax
@@ -151,16 +157,17 @@ Hãy xem một **execution trace** (vết thực thi) chi tiết để hiểu r�
 108 mov %eax, 0x8049a1c
 ```
 
+![](img/fig26_7.PNG)
 **Figure 26.7: The Problem: Up Close and Personal**  
 *(Vấn đề: Cận cảnh và chi tiết)*
 
 Với các giả định này, những gì xảy ra được minh họa trong **Hình 26.7** (trang 10). Giả sử biến `counter` bắt đầu với giá trị 50, và hãy lần theo ví dụ này để đảm bảo bạn hiểu điều gì đang diễn ra.
 
-Những gì chúng ta vừa minh họa được gọi là **race condition** (điều kiện tranh chấp) — cụ thể hơn là **data race** (tranh chấp dữ liệu): kết quả phụ thuộc vào thời điểm thực thi của đoạn mã. Với một chút “xui xẻo” (tức là **context switch** xảy ra tại những điểm không thuận lợi trong quá trình thực thi), chúng ta sẽ nhận kết quả sai. Thực tế, mỗi lần chạy có thể cho ra kết quả khác nhau; do đó, thay vì một phép tính **deterministic** (xác định) như chúng ta thường mong đợi từ máy tính, ta gọi kết quả này là **indeterminate** (không xác định), tức là không biết trước đầu ra sẽ là gì và rất có thể sẽ khác nhau giữa các lần chạy.
+Những gì chúng ta vừa minh họa được gọi là **race condition** (điều kiện tranh chấp) — cụ thể hơn là **data race** (tranh chấp dữ liệu): kết quả phụ thuộc vào thời điểm thực thi của đoạn code. Với một chút “xui xẻo” (tức là **context switch** xảy ra tại những điểm không thuận lợi trong quá trình thực thi), chúng ta sẽ nhận kết quả sai. Thực tế, mỗi lần chạy có thể cho ra kết quả khác nhau; do đó, thay vì một phép tính **deterministic** (xác định) như chúng ta thường mong đợi từ máy tính, ta gọi kết quả này là **indeterminate** (không xác định), tức là không biết trước đầu ra sẽ là gì và rất có thể sẽ khác nhau giữa các lần chạy.
 
-Bởi vì nhiều **thread** cùng thực thi đoạn mã này có thể dẫn đến race condition, chúng ta gọi đoạn mã này là một **critical section** (vùng tới hạn). Critical section là một đoạn mã truy cập một biến chia sẻ (hoặc nói chung hơn là một tài nguyên chia sẻ) và **không được phép** thực thi đồng thời bởi nhiều hơn một thread.
+Bởi vì nhiều **thread** cùng thực thi đoạn code này có thể dẫn đến race condition, chúng ta gọi đoạn code này là một **critical section** (vùng tới hạn). Critical section là một đoạn code truy cập một biến chia sẻ (hoặc nói chung hơn là một tài nguyên chia sẻ) và **không được phép** thực thi đồng thời bởi nhiều hơn một thread.
 
-Điều chúng ta thực sự muốn cho đoạn mã này là **mutual exclusion** (loại trừ lẫn nhau). Tính chất này đảm bảo rằng nếu một thread đang thực thi bên trong critical section, các thread khác sẽ bị ngăn không cho làm điều đó.
+Điều chúng ta thực sự muốn cho đoạn code này là **mutual exclusion** (loại trừ lẫn nhau). Tính chất này đảm bảo rằng nếu một thread đang thực thi bên trong critical section, các thread khác sẽ bị ngăn không cho làm điều đó.
 
 Hầu như tất cả các thuật ngữ này, nhân tiện, đều được đặt ra bởi **Edsger Dijkstra**, một nhà tiên phong trong lĩnh vực này và đã giành giải **Turing Award** nhờ công trình này và các công trình khác; hãy xem bài báo năm 1968 của ông “Cooperating Sequential Processes” [D68] để có một mô tả cực kỳ rõ ràng về vấn đề. Chúng ta sẽ còn nhắc đến Dijkstra nhiều hơn trong phần này của sách.
 
@@ -213,7 +220,7 @@ Do đó, trong các chương tiếp theo, chúng ta sẽ không chỉ nghiên c�
 > **CRITICAL SECTION, RACE CONDITION, INDETERMINATE, MUTUAL EXCLUSION**  
 >  
 > Bốn thuật ngữ này quan trọng đến mức chúng tôi muốn nêu rõ chúng ở đây. Xem một số công trình ban đầu của **Dijkstra** [D65, D68] để biết thêm chi tiết.  
-> - **Critical section**: một đoạn mã truy cập một tài nguyên chia sẻ, thường là một biến hoặc cấu trúc dữ liệu.  
+> - **Critical section**: một đoạn code truy cập một tài nguyên chia sẻ, thường là một biến hoặc cấu trúc dữ liệu.  
 > - **Race condition** (hay **data race** [NM92]): xảy ra nếu nhiều thread cùng đi vào critical section gần như cùng lúc; cả hai đều cố gắng cập nhật cấu trúc dữ liệu chia sẻ, dẫn đến kết quả bất ngờ (và có thể không mong muốn).  
 > - **Indeterminate program**: chương trình chứa một hoặc nhiều race condition; đầu ra của chương trình thay đổi giữa các lần chạy, tùy thuộc vào thread nào chạy khi nào. Kết quả vì thế không **deterministic** (xác định), điều mà chúng ta thường kỳ vọng ở hệ thống máy tính.  
 > - Để tránh các vấn đề này, thread nên sử dụng một dạng **mutual exclusion primitive**; điều này đảm bảo rằng chỉ một thread duy nhất được vào critical section tại một thời điểm, tránh race condition và tạo ra kết quả xác định.
@@ -229,6 +236,6 @@ Ví dụ, hãy tưởng tượng trường hợp có hai process đang chạy. G
 - Thay đổi kích thước tệp để phản ánh kích thước mới lớn hơn  
 (và một số thao tác khác; chúng ta sẽ tìm hiểu thêm về tệp trong phần ba của sách).  
 
-Vì **interrupt** (ngắt) có thể xảy ra bất kỳ lúc nào, đoạn mã cập nhật các cấu trúc chia sẻ này (ví dụ: **bitmap** cho việc cấp phát, hoặc inode của tệp) là **critical section**; do đó, các nhà thiết kế OS, ngay từ khi khái niệm interrupt được giới thiệu, đã phải lo lắng về cách OS cập nhật các cấu trúc nội bộ. Một interrupt xảy ra không đúng lúc sẽ gây ra tất cả các vấn đề đã mô tả ở trên.  
+Vì **interrupt** (ngắt) có thể xảy ra bất kỳ lúc nào, đoạn code cập nhật các cấu trúc chia sẻ này (ví dụ: **bitmap** cho việc cấp phát, hoặc inode của tệp) là **critical section**; do đó, các nhà thiết kế OS, ngay từ khi khái niệm interrupt được giới thiệu, đã phải lo lắng về cách OS cập nhật các cấu trúc nội bộ. Một interrupt xảy ra không đúng lúc sẽ gây ra tất cả các vấn đề đã mô tả ở trên.  
 
 Không có gì ngạc nhiên khi **page table**, **process list**, cấu trúc của file system, và hầu như mọi **kernel data structure** (cấu trúc dữ liệu của nhân) đều phải được truy cập một cách cẩn thận, với các synchronization primitive phù hợp, để hoạt động chính xác.

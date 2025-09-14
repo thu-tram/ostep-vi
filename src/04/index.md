@@ -58,6 +58,7 @@ Mặc dù chúng ta sẽ hoãn việc bàn chi tiết về một API process th�
 
 ![](./img/fig4_1.PNG)
 
+
 **Hình 4.1: Quá trình load – Từ Chương trình thành Process**
 
 ## 4.3 Tạo Process: Chi tiết hơn một chút
@@ -71,7 +72,7 @@ Trong các hệ điều hành đơn giản (hoặc đời đầu), quá trình l
 Khi mã lệnh và static data đã được load vào bộ nhớ, hệ điều hành còn phải làm thêm một số việc trước khi process có thể chạy:
 
 * **Cấp phát bộ nhớ cho ngăn xếp (stack):** Các chương trình C sử dụng stack để lưu biến cục bộ, tham số hàm và địa chỉ trả về. Hệ điều hành sẽ cấp phát vùng nhớ này và gán nó cho process. Ngoài ra, nó còn khởi tạo stack với tham số đầu vào, cụ thể là các giá trị truyền cho hàm `main()`, tức là `argc` và mảng `argv`.
-* **Cấp phát bộ nhớ cho heap:** Trong C, heap được dùng để lưu trữ dữ liệu được cấp phát động (dynamic memory). Chương trình yêu cầu vùng nhớ này thông qua lời gọi `malloc()`, và giải phóng nó bằng `free()`. Heap thường nhỏ ban đầu, nhưng có thể mở rộng khi chương trình chạy và yêu cầu thêm bộ nhớ; lúc đó hệ điều hành có thể cấp thêm. Heap thường dùng cho các cấu trúc dữ liệu phức tạp như danh sách liên kết, bảng băm, cây, v.v.
+* **Cấp phát bộ nhớ cho heap:** Trong C, heap được dùng để lưu trữ dữ liệu được cấp phát động (dynamic memory). Chương trình yêu cầu vùng nhớ này thông qua call `malloc()`, và giải phóng nó bằng `free()`. Heap thường nhỏ ban đầu, nhưng có thể mở rộng khi chương trình chạy và yêu cầu thêm bộ nhớ; lúc đó hệ điều hành có thể cấp thêm. Heap thường dùng cho các cấu trúc dữ liệu phức tạp như danh sách liên kết, bảng băm, cây, v.v.
 * **Khởi tạo I/O:** Ví dụ, trong các hệ thống UNIX, mỗi process mặc định có 3 *file descriptor* (bộ mô tả tệp) mở sẵn: chuẩn nhập (stdin), chuẩn xuất (stdout), và chuẩn lỗi (stderr). Nhờ đó, chương trình có thể dễ dàng đọc dữ liệu từ terminal và in kết quả ra màn hình.
 
 Sau khi load mã lệnh và static data, tạo stack, chuẩn bị heap, và thiết lập I/O, hệ điều hành đã sẵn sàng để process bắt đầu excecute. Bước cuối cùng là chuyển quyền điều khiển CPU sang chương trình tại điểm vào (entry point), thường là hàm `main()`. Bằng cách “nhảy” đến `main()` (thông qua một cơ chế đặc biệt sẽ được bàn trong chương tiếp theo), hệ điều hành đã chính thức khởi động process.
@@ -89,6 +90,7 @@ Trong một mô hình đơn giản, process có thể ở một trong ba trạng
 
 ![](./img/fig4_2.PNG)
 
+
 **Hình 4.2: Các trạng thái của Process và sự chuyển đổi**
 
 Trong sơ đồ trạng thái (Hình 4.2), bạn có thể thấy process được chuyển qua lại giữa trạng thái *ready* và *running* dưới sự điều phối của hệ điều hành.
@@ -102,11 +104,13 @@ Ví dụ: giả sử có hai process chạy, cả hai chỉ dùng CPU (không I/
 
 ![](./img/fig4_3.PNG)
 
+
 **Hình 4.3: Dấu vết trạng thái process – chỉ dùng CPU**
 
 Trong ví dụ tiếp theo, một process thực hiện I/O sau một thời gian chạy. Khi đó nó chuyển sang trạng thái *blocked*, nhường CPU cho process còn lại. Dấu vết tình huống này được thể hiện ở Hình 4.4.
 
 ![](./img/fig4_4.PNG)
+
 
 **Hình 4.4: Dấu vết trạng thái process – CPU và I/O**
 
@@ -181,7 +185,7 @@ Bạn cũng có thể thấy từ hình minh họa rằng một process (process
 
 *(Giải thích: Trạng thái này được gọi là "zombie" vì process đã "chết" - tức là đã kết thúc excecute - nhưng thông tin về nó vẫn còn tồn tại trong bảng process, chưa được "chôn cất" hay dọn dẹp hoàn toàn.)*
 
-Trạng thái cuối này có thể hữu ích vì nó cho phép các process khác (thường là process cha đã tạo ra process này) kiểm tra mã trả về (return code) của process và xem liệu process vừa hoàn thành có excecute thành công hay không (thường thì các chương trình trong hệ thống dựa trên UNIX trả về giá trị 0 khi chúng đã hoàn thành tác vụ thành công, và khác 0 trong trường hợp ngược lại). Khi xong việc, process cha sẽ thực hiện một lời gọi cuối cùng (ví dụ, `wait()`) để chờ đợi sự hoàn thành của process con, và cũng để báo cho OS rằng nó có thể dọn dẹp bất kỳ cấu trúc dữ liệu nào liên quan đến process đã không còn tồn tại này.
+Trạng thái cuối này có thể hữu ích vì nó cho phép các process khác (thường là process cha đã tạo ra process này) kiểm tra mã trả về (return code) của process và xem liệu process vừa hoàn thành có excecute thành công hay không (thường thì các chương trình trong hệ thống dựa trên UNIX trả về giá trị 0 khi chúng đã hoàn thành tác vụ thành công, và khác 0 trong trường hợp ngược lại). Khi xong việc, process cha sẽ thực hiện một call cuối cùng (ví dụ, `wait()`) để chờ đợi sự hoàn thành của process con, và cũng để báo cho OS rằng nó có thể dọn dẹp bất kỳ cấu trúc dữ liệu nào liên quan đến process đã không còn tồn tại này.
 
 > **TẢN MẠN: CẤU TRÚC DỮ LIỆU — DANH SÁCH TIẾN TRÌNH**
 >
@@ -194,7 +198,7 @@ Chúng ta đã giới thiệu khái niệm trừu tượng hóa cơ bản nhất
 > **TẢN MẠN: CÁC THUẬT NGỮ CHÍNH VỀ TIẾN TRÌNH**
 >
 > * **Tiến trình (process)** là khái niệm trừu tượng hóa chính của hệ điều hành về một chương trình đang chạy. Tại bất kỳ thời điểm nào, process có thể được mô tả bởi trạng thái của nó: nội dung bộ nhớ trong không gian địa chỉ (address space) của nó, nội dung của các thanh ghi CPU (bao gồm bộ đếm chương trình - program counter và con trỏ ngăn xếp - stack pointer, cùng nhiều thanh ghi khác), và thông tin về I/O (chẳng hạn như các tập tin đang mở có thể được đọc hoặc ghi).
-> * **API process** bao gồm các lời gọi mà chương trình có thể thực hiện liên quan đến process. Thông thường, điều này bao gồm việc tạo (creation), hủy (destruction), và các lời gọi hữu ích khác.
+> * **API process** bao gồm các call mà chương trình có thể thực hiện liên quan đến process. Thông thường, điều này bao gồm việc tạo (creation), hủy (destruction), và các call hữu ích khác.
 > * Các process tồn tại ở một trong nhiều **trạng thái process** khác nhau, bao gồm **đang chạy (running)**, **sẵn sàng chạy (ready to run)**, và **bị chặn (blocked)**. Các sự kiện khác nhau (ví dụ: được lập lịch để chạy hoặc bị rút khỏi CPU, hoặc chờ một thao tác I/O hoàn tất) sẽ chuyển một process từ trạng thái này sang trạng thái khác.
 > * Một **danh sách process (process list)** chứa thông tin về tất cả các process trong hệ thống. Mỗi mục nhập được tìm thấy trong một cấu trúc đôi khi được gọi là **khối quản lý process (process control block - PCB)**, thực chất chỉ là một cấu trúc chứa thông tin về một process cụ thể.
 

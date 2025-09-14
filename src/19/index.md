@@ -128,7 +128,7 @@ Các kiến trúc hiện đại hơn (ví dụ: MIPS R10k [H93] hoặc Sun’s S
 
 
 Hãy thảo luận một vài chi tiết quan trọng:  
-- Thứ nhất, **return-from-trap instruction** (lệnh quay lại từ trap) cần khác một chút so với return-from-trap mà ta đã thấy khi xử lý **system call**. Trong trường hợp system call, return-from-trap sẽ tiếp tục thực thi tại lệnh ngay sau trap vào OS, giống như việc quay lại từ một lời gọi thủ tục sẽ tiếp tục tại lệnh ngay sau lời gọi.  
+- Thứ nhất, **return-from-trap instruction** (lệnh quay lại từ trap) cần khác một chút so với return-from-trap mà ta đã thấy khi xử lý **system call**. Trong trường hợp system call, return-from-trap sẽ tiếp tục thực thi tại lệnh ngay sau trap vào OS, giống như việc quay lại từ một call thủ tục sẽ tiếp tục tại lệnh ngay sau call.  
 - Trong trường hợp trap do TLB miss, khi return-from-trap, phần cứng phải tiếp tục thực thi tại **chính lệnh gây ra trap**; lần thử lại này sẽ khiến lệnh chạy lại, và lần này sẽ là TLB hit. Do đó, tùy thuộc vào nguyên nhân gây ra trap hoặc exception, phần cứng phải lưu **PC** (program counter) khác nhau khi trap vào OS, để có thể khôi phục đúng khi cần.
 
 > **ASIDE: RISC VS. CISC**  

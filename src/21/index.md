@@ -47,11 +47,12 @@ Nhớ rằng phần cứng trước tiên trích xuất **VPN** (virtual page nu
 
 Nếu VPN không có trong TLB (**TLB miss**), phần cứng sẽ tìm **page table** (bảng trang) trong bộ nhớ (sử dụng **page table base register**) và tra cứu **PTE** (page-table entry) cho page này bằng VPN làm chỉ số. Nếu page hợp lệ và có mặt trong physical memory, phần cứng trích xuất PFN từ PTE, nạp nó vào TLB, và thực thi lại lệnh, lần này tạo ra TLB hit; mọi thứ vẫn ổn.
 
-Tuy nhiên, nếu muốn cho phép page được hoán đổi ra đĩa, chúng ta phải bổ sung thêm cơ chế. Cụ thể, khi phần cứng tra cứu PTE, nó có thể phát hiện page không có trong physical memory. Cách phần cứng (hoặc OS, trong trường hợp **software-managed TLB**) xác định điều này là thông qua một thông tin mới trong mỗi PTE, gọi là **present bit** (
+Nếu chúng ta muốn cho phép các **page** được **swapped** ra **disk**, thì cần bổ sung thêm nhiều cơ chế hỗ trợ. Cụ thể, khi phần cứng truy cập vào **PTE** (page-table entry – mục nhập bảng trang), nó có thể phát hiện rằng page đó **không hiện diện** trong **physical memory** (bộ nhớ vật lý). Cách mà phần cứng (hoặc **OS**, trong trường hợp **software-managed TLB** – TLB do phần mềm quản lý) xác định điều này là thông qua một thông tin mới trong mỗi PTE, gọi là **present bit** (bit hiện diện).  
 
-(TODO)
+- Nếu **present bit** được đặt bằng 1, điều đó có nghĩa là page đang hiện diện trong physical memory và mọi thao tác tiếp tục diễn ra như bình thường.  
+- Nếu **present bit** được đặt bằng 0, page không nằm trong bộ nhớ mà đang được lưu trữ ở đâu đó trên disk.  
 
-
+*(Giải thích thêm: present bit là một cờ (flag) quan trọng giúp phân biệt giữa page đang ở trong RAM và page đã bị hoán đổi ra bộ nhớ phụ, từ đó OS có thể quyết định hành động tiếp theo như nạp lại page từ disk.)*
 
 > **ASIDE: SWAPPING TERMINOLOGY AND OTHER THINGS**  
 > (Thuật ngữ hoán đổi và một số vấn đề khác)  
@@ -60,7 +61,7 @@ Tuy nhiên, nếu muốn cho phép page được hoán đổi ra đĩa, chúng t
 > Chúng tôi cho rằng lý do hành vi này được gọi là “fault” liên quan đến cơ chế trong OS để xử lý nó. Khi có điều gì bất thường xảy ra, tức là khi phần cứng gặp một tình huống mà nó không biết cách xử lý, phần cứng sẽ đơn giản chuyển quyền điều khiển cho OS, hy vọng OS có thể xử lý tốt hơn. Trong trường hợp này, một page mà process muốn truy cập bị thiếu trong bộ nhớ; phần cứng chỉ có thể làm một việc duy nhất là phát sinh **exception** (ngoại lệ), và OS tiếp quản từ đó. Vì điều này giống hệt với những gì xảy ra khi một process làm điều gì đó bất hợp pháp, nên không có gì ngạc nhiên khi chúng ta gọi hoạt động này là một “fault”.
 
 
-Hành động truy cập một page không nằm trong physical memory thường được gọi là **page fault**. Khi xảy ra page fault, OS sẽ được gọi để xử lý. Một đoạn mã cụ thể, gọi là **page-fault handler** (trình xử lý lỗi trang), sẽ chạy và phải xử lý page fault, như chúng ta sẽ mô tả dưới đây.
+Hành động truy cập một page không nằm trong physical memory thường được gọi là **page fault**. Khi xảy ra page fault, OS sẽ được gọi để xử lý. Một đoạn code cụ thể, gọi là **page-fault handler** (trình xử lý lỗi trang), sẽ chạy và phải xử lý page fault, như chúng ta sẽ mô tả dưới đây.
 
 
 ## 21.3 The Page Fault  
@@ -102,13 +103,19 @@ Với tất cả kiến thức này, chúng ta có thể phác thảo sơ bộ l
 **Figure 21.3: Page-Fault Control Flow Algorithm (Software)**  
 *(Thuật toán luồng điều khiển lỗi trang — phần mềm)*
 
-Từ sơ đồ luồng điều khiển phần cứng trong *Figure 21.2*, lưu ý rằng hiện có ba trường hợp quan trọng cần hiểu khi xảy ra TLB miss:  
-1. Page vừa **present** vừa **valid** (Dòng 18–21); trong trường hợp này, **TLB miss handler** chỉ cần lấy PFN từ PTE, thực thi lại lệnh (lần này sẽ là TLB hit), và tiếp tục như đã mô tả trước đó.  
-2. **Page fault handler** phải chạy (Dòng 22–23); mặc dù đây là page hợp lệ để process truy cập (valid), nhưng nó không hiện diện trong physical memory.  
-3. Truy cập tới một page **invalid** (kh
+Từ sơ đồ **hardware control flow** trong *Figure 21.2*, có thể thấy rằng hiện có ba trường hợp quan trọng cần hiểu khi xảy ra **TLB miss**.  
 
-(TODO)
+Thứ nhất, page vừa **present** vừa **valid** (Lines 18–21); trong trường hợp này, **TLB miss handler** chỉ cần lấy **PFN** từ **PTE**, thực hiện lại lệnh (lần này sẽ dẫn đến **TLB hit**) và tiếp tục như đã mô tả nhiều lần trước đó.  
 
+Thứ hai (Lines 22–23), **page fault handler** phải được kích hoạt; mặc dù đây là một page hợp lệ để process truy cập (nó **valid**), nhưng nó không **present** trong **physical memory**.  
+
+Thứ ba (và cuối cùng), truy cập có thể hướng tới một page **invalid**, ví dụ do lỗi trong chương trình (Lines 13–14). Trong trường hợp này, các bit khác trong PTE không còn ý nghĩa; phần cứng sẽ **trap** truy cập không hợp lệ này, và **OS trap handler** sẽ chạy, nhiều khả năng sẽ chấm dứt process vi phạm.  
+
+Từ sơ đồ **software control flow** trong *Figure 21.3*, có thể thấy OS cần thực hiện những bước cơ bản nào để xử lý **page fault**. Trước tiên, OS phải tìm một **physical frame** để chứa page sắp được nạp vào; nếu không có frame trống, cần chờ **replacement algorithm** chạy và loại bỏ một số page khỏi bộ nhớ, giải phóng chúng để sử dụng. Khi đã có physical frame, **handler** sẽ gửi yêu cầu **I/O** để đọc page từ **swap space**. Cuối cùng, khi thao tác chậm này hoàn tất, OS sẽ cập nhật **page table** và thực hiện lại lệnh. Lần thực hiện lại này sẽ dẫn đến một **TLB miss**, và sau đó, khi thực hiện lại thêm lần nữa, sẽ là **TLB hit**, lúc này phần cứng có thể truy cập dữ liệu mong muốn.  
+
+## 21.6 When Replacements Really Occur  
+
+Cho đến nay, cách chúng ta mô tả việc **replacement** xảy ra giả định rằng OS sẽ chờ cho đến khi bộ nhớ đầy hoàn toàn, và chỉ khi đó mới **replace** (hoặc **evict**) một page để tạo chỗ cho page khác. Tuy nhiên, như bạn có thể hình dung, điều này hơi thiếu thực tế, và có nhiều lý do để OS chủ động giữ một phần nhỏ bộ nhớ trống sẵn sàng.  
 
 Để giữ một lượng nhỏ bộ nhớ trống, hầu hết các **operating system** (hệ điều hành) đều có một cơ chế **high watermark** (HW — ngưỡng cao) và **low watermark** (LW — ngưỡng thấp) để quyết định khi nào bắt đầu **evicting pages** (loại bỏ các trang) khỏi bộ nhớ. Cách hoạt động như sau: khi OS phát hiện số lượng page trống ít hơn LW, một **background thread** (luồng nền) chịu trách nhiệm giải phóng bộ nhớ sẽ chạy. Luồng này sẽ loại bỏ các page cho đến khi số lượng page trống đạt HW. Background thread này, đôi khi được gọi là **swap daemon** hoặc **page daemon**[^1], sau đó sẽ chuyển sang trạng thái ngủ, hài lòng vì đã giải phóng được một lượng bộ nhớ để các process đang chạy và OS có thể sử dụng.
 

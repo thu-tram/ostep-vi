@@ -18,6 +18,8 @@ sem_t s;
 sem_init(&s, 0, 1);
 ```
 
+![](img/fig31_1.PNG)
+
 **Hình 31.1: Khởi tạo một Semaphore**
 
 Trong hình, chúng ta khai báo một semaphore `s` và khởi tạo nó với giá trị 1 (tham số thứ ba). Tham số thứ hai của `sem_init()` sẽ được đặt là 0 trong tất cả các ví dụ chúng ta sẽ thấy; điều này cho biết semaphore được chia sẻ giữa các thread trong cùng một **process** (tiến trình). Xem trang **man** để biết chi tiết các cách sử dụng khác của semaphore (ví dụ: đồng bộ hóa giữa các process khác nhau), khi đó tham số thứ hai sẽ có giá trị khác.
@@ -44,6 +46,8 @@ int sem_post(sem_t *s) {
 }
 ```
 
+![](img/fig31_2.PNG)
+
 **Hình 31.2: Semaphore – Định nghĩa Wait và Post**
 
 Đừng lo (vội) về các **race condition** có thể xảy ra bên trong semaphore; giả định rằng các thao tác này được thực hiện **atomically** (nguyên tử). Chúng ta sẽ sớm dùng lock và condition variable để đảm bảo điều này.
@@ -63,11 +67,15 @@ sem_wait(&m);
 sem_post(&m);
 ```
 
+![](img/fig31_3.PNG)
+
 **Hình 31.3: Binary Semaphore (tức là Lock)**
 
 Nhìn lại định nghĩa của `sem_wait()` và `sem_post()` ở trên, ta thấy giá trị khởi tạo nên là **1**.
 
 Để làm rõ, hãy tưởng tượng kịch bản với hai thread. Thread đầu tiên (Thread 0) gọi `sem_wait()`; nó sẽ giảm giá trị của semaphore xuống 0. Sau đó, nó sẽ chỉ chờ nếu giá trị nhỏ hơn 0. Vì giá trị là 0, `sem_wait()` sẽ trả về ngay và thread gọi tiếp tục; Thread 0 giờ được vào critical section. Nếu không có thread nào khác cố lấy lock khi Thread 0 đang ở trong critical section, khi nó gọi `sem_post()`, giá trị semaphore sẽ được khôi phục về 1 (và không đánh thức thread nào vì không có ai đang chờ). **Hình 31.4** sẽ cho thấy vết thực thi (trace) của kịch bản này.
+
+![](img/fig31_4.PNG)
 
 **Hình 31.4: Vết thực thi của luồng – Một luồng sử dụng Semaphore**
 
@@ -76,7 +84,10 @@ Một trường hợp thú vị hơn xảy ra khi **Thread 0** “giữ lock” 
 Trong trường hợp này, **Thread 1** sẽ giảm giá trị của semaphore xuống **-1**, và do đó sẽ phải **wait** (tự đưa mình vào trạng thái ngủ và nhường CPU). Khi **Thread 0** chạy lại, nó sẽ gọi `sem_post()`, tăng giá trị của semaphore trở lại **0**, và sau đó đánh thức luồng đang chờ (**Thread 1**). Lúc này, **Thread 1** sẽ có thể tự acquire lock. Khi **Thread 1** hoàn tất, nó sẽ lại tăng giá trị của semaphore, khôi phục nó về **1**.
 
 
+![](img/fig31_5.PNG)
+
 **Hình 31.5: Vết thực thi của luồng – Hai luồng sử dụng Semaphore**
+
 
 **Hình 31.5** minh họa vết thực thi của ví dụ này. Ngoài các hành động của luồng, hình còn cho thấy **trạng thái scheduler** của mỗi luồng:  
 - **Run** (luồng đang chạy)  
@@ -114,6 +125,8 @@ Tuy nhiên, điều này dẫn đến câu hỏi: **giá trị khởi tạo củ
 (Một lần nữa, hãy thử suy nghĩ trước khi đọc tiếp)
 
 
+![](img/fig31_6.PNG)
+
 **Hình 31.6: Parent chờ Child**
 
 Câu trả lời, tất nhiên, là giá trị của semaphore nên được đặt là **0**. Có hai trường hợp cần xem xét:
@@ -122,7 +135,11 @@ Câu trả lời, tất nhiên, là giá trị của semaphore nên được đ�
 
    Parent chạy, giảm giá trị semaphore xuống **-1**, rồi **wait** (ngủ). Khi child cuối cùng chạy, nó sẽ gọi `sem_post()`, tăng giá trị semaphore lên **0**, và đánh thức parent, lúc này sẽ return từ `sem_wait()` và kết thúc chương trình.
 
+![](img/fig31_7.PNG)
+
 **Hình 31.7: Vết thực thi luồng – Parent chờ Child (Trường hợp 1)**  
+
+![](img/fig31_8.PNG)
 
 **Hình 31.8: Vết thực thi luồng – Parent chờ Child (Trường hợp 2)**  
 
@@ -144,6 +161,8 @@ Vấn đề tiếp theo mà chúng ta sẽ gặp trong chương này được g�
 
 Trong lần thử đầu tiên để giải quyết vấn đề, chúng ta giới thiệu hai semaphore: `empty` và `full`, mà các thread sẽ dùng để biểu thị khi một ô trong buffer đã được làm rỗng hoặc đã được lấp đầy. Code cho các hàm `put` và `get` nằm trong **Hình 31.9**, và cách chúng ta thử giải quyết bài toán producer/consumer nằm trong **Hình 31.10** (trang 8).  
 
+![](img/fig31_9.PNG)
+
 **Hình 31.10: Thêm điều kiện Full và Empty**
 
 Trong ví dụ này, **producer** trước tiên sẽ chờ cho đến khi một buffer rỗng để đặt dữ liệu vào, và **consumer** tương tự sẽ chờ cho đến khi một buffer đầy trước khi sử dụng nó.  
@@ -151,7 +170,7 @@ Trong ví dụ này, **producer** trước tiên sẽ chờ cho đến khi một
 Trước hết, hãy giả sử `MAX=1` (chỉ có một buffer trong mảng), và xem điều này có hoạt động không.  
 
 
-Giả sử có hai thread: một producer và một consumer. Hãy xét một kịch bản cụ thể trên một CPU đơn. Giả sử consumer chạy trước. Khi đó, consumer sẽ đến dòng C1 trong **Hình 31.10**, gọi `sem_wait(&full)`. Vì `full` được khởi tạo với giá trị **0**, lời gọi này sẽ giảm `full` xuống **-1**, chặn consumer lại, và chờ một thread khác gọi `sem_post()` trên `full`, đúng như mong muốn.  
+Giả sử có hai thread: một producer và một consumer. Hãy xét một kịch bản cụ thể trên một CPU đơn. Giả sử consumer chạy trước. Khi đó, consumer sẽ đến dòng C1 trong **Hình 31.10**, gọi `sem_wait(&full)`. Vì `full` được khởi tạo với giá trị **0**, call này sẽ giảm `full` xuống **-1**, chặn consumer lại, và chờ một thread khác gọi `sem_post()` trên `full`, đúng như mong muốn.  
 
 Giả sử producer sau đó chạy. Nó sẽ đến dòng P1, gọi `sem_wait(&empty)`. Không giống consumer, producer sẽ tiếp tục qua dòng này, vì `empty` được khởi tạo với giá trị `MAX` (trong trường hợp này là **1**). Do đó, `empty` sẽ bị giảm xuống **0** và producer sẽ đặt một giá trị dữ liệu vào ô đầu tiên của `buffer` (dòng P2). Producer sau đó tiếp tục đến P3 và gọi `sem_post(&full)`, thay đổi giá trị của semaphore `full` từ **-1** lên **0** và đánh thức consumer (ví dụ: chuyển nó từ trạng thái **blocked** sang **ready**).  
 
@@ -175,6 +194,8 @@ OK, hãy phân tích vấn đề. Giả sử có hai producer (Pa và Pb) cùng 
 
 Như bạn thấy, điều chúng ta quên ở đây là **mutual exclusion** (loại trừ lẫn nhau). Việc ghi dữ liệu vào buffer và tăng chỉ số `fill` là một **critical section** và do đó phải được bảo vệ cẩn thận. Vì vậy, hãy dùng **binary semaphore** như một **lock**. **Hình 31.11** cho thấy cách chúng ta thử áp dụng.
 
+![](img/fig31_10.PNG)
+
 **Hình 31.11: Thêm Mutual Exclusion (Sai cách)**  
 
 Giờ đây, chúng ta đã thêm một số **lock** bao quanh toàn bộ phần `put()/get()` của code, như được đánh dấu bởi các chú thích **NEW LINE**. Nghe có vẻ là một ý tưởng đúng, nhưng thực tế lại **không hoạt động**. Tại sao? **Deadlock**.  
@@ -184,7 +205,7 @@ Vì sao deadlock xảy ra? Hãy dành chút thời gian suy nghĩ; thử tìm m�
 
 ### Tránh Deadlock
 
-OK, bây giờ khi bạn đã tìm ra, đây là câu trả lời. Hãy tưởng tượng có hai **thread**, một **producer** và một **consumer**. Consumer chạy trước. Nó acquire **mutex** (dòng C0), sau đó gọi `sem_wait()` trên semaphore `full` (dòng C1); vì chưa có dữ liệu nào, lời gọi này khiến consumer bị block và nhường CPU; quan trọng là, consumer **vẫn đang giữ lock**.
+OK, bây giờ khi bạn đã tìm ra, đây là câu trả lời. Hãy tưởng tượng có hai **thread**, một **producer** và một **consumer**. Consumer chạy trước. Nó acquire **mutex** (dòng C0), sau đó gọi `sem_wait()` trên semaphore `full` (dòng C1); vì chưa có dữ liệu nào, call này khiến consumer bị block và nhường CPU; quan trọng là, consumer **vẫn đang giữ lock**.
 
 Sau đó, producer chạy. Nó có dữ liệu để sản xuất và nếu có thể chạy, nó sẽ đánh thức consumer và mọi thứ sẽ ổn. Nhưng đáng tiếc, việc đầu tiên nó làm là gọi `sem_wait()` trên semaphore nhị phân `mutex` (dòng P0). Lock này đã bị giữ. Do đó, producer cũng bị kẹt chờ.
 
@@ -196,6 +217,8 @@ Sau đó, producer chạy. Nó có dữ liệu để sản xuất và nếu có 
 Để giải quyết vấn đề này, chúng ta chỉ cần **giảm phạm vi của lock**. **Hình 31.12** (trang 10) cho thấy giải pháp đúng. Như bạn thấy, chúng ta chỉ cần di chuyển phần acquire và release mutex để bao quanh đúng **critical section**; phần code `wait` và `signal` trên `full` và `empty` được để bên ngoài[^2].  
 
 Kết quả là một bounded buffer đơn giản và hoạt động đúng — một mẫu thường được sử dụng trong các chương trình đa luồng. Hiểu nó ngay bây giờ; dùng nó sau này. Bạn sẽ cảm ơn chúng tôi trong nhiều năm tới. Hoặc ít nhất, bạn sẽ cảm ơn khi câu hỏi tương tự xuất hiện trong kỳ thi cuối kỳ, hoặc trong một buổi phỏng vấn xin việc.
+
+![](img/fig31_11.PNG)
 
 **Hình 31.12: Thêm Mutual Exclusion (Đúng cách)**  
 
@@ -210,6 +233,8 @@ Ví dụ: hãy tưởng tượng có nhiều thao tác đồng thời trên mộ
 
 Loại lock đặc biệt mà chúng ta sẽ phát triển để hỗ trợ kiểu hoạt động này được gọi là **reader-writer lock** [CHP71]. Code cho loại lock này được thể hiện trong **Hình 31.13** (trang 12).
 
+
+![](img/fig31_12.PNG)
 
 **Hình 31.13: Một Reader-Writer Lock đơn giản**
 
@@ -244,6 +269,8 @@ Một trong những bài toán concurrency nổi tiếng nhất được Dijkstr
 
 Bối cảnh cơ bản của bài toán như sau (**Hình 31.14**): giả sử có **năm “triết gia”** ngồi quanh một bàn tròn. Giữa mỗi cặp triết gia là một chiếc **nĩa** (fork) — tổng cộng năm chiếc. Mỗi triết gia có những khoảng thời gian **suy nghĩ** (không cần nĩa) và những khoảng thời gian **ăn**. Để ăn, một triết gia cần **hai chiếc nĩa**: một bên trái và một bên phải. Sự tranh chấp các chiếc nĩa này, và các vấn đề đồng bộ hóa phát sinh, chính là lý do bài toán này được nghiên cứu trong lập trình đồng thời.
 
+![](img/fig31_13.PNG)
+
 **Hình 31.14: The Dining Philosophers**
 
 Dưới đây là vòng lặp cơ bản của mỗi triết gia, giả sử mỗi người có một **thread identifier** (ID luồng) duy nhất `p` từ 0 đến 4 (bao gồm):
@@ -269,6 +296,8 @@ sem_t forks[5];
 
 Chúng ta thử giải pháp đầu tiên cho vấn đề. Giả sử ta khởi tạo mỗi semaphore (trong mảng `forks`) với giá trị **1**. Giả sử thêm rằng mỗi triết gia biết số thứ tự của mình (`p`). Khi đó, ta có thể viết các hàm `get_forks()` và `put_forks()` (**Hình 31.15**, trang 15).
 
+![](img/fig31_14.PNG)
+
 **Hình 31.15: Các hàm get_forks() và put_forks()**
 
 Trực giác đằng sau giải pháp (sai) này như sau: để lấy nĩa, ta chỉ cần “giữ lock” trên từng cái: trước tiên là cái bên trái, sau đó là cái bên phải. Khi ăn xong, ta nhả chúng ra. Nghe có vẻ đơn giản, đúng không? Đáng tiếc, trong trường hợp này, “đơn giản” lại đồng nghĩa với “sai”. Bạn có thấy vấn đề phát sinh không? Hãy suy nghĩ.
@@ -279,6 +308,8 @@ Vấn đề ở đây là **deadlock**. Nếu mỗi triết gia tình cờ lấy
 ### Một giải pháp: Phá vỡ sự phụ thuộc (Breaking The Dependency)
 
 Cách đơn giản nhất để giải quyết vấn đề này là thay đổi cách lấy nĩa của ít nhất một triết gia; thực tế, đây chính là cách Dijkstra đã giải quyết vấn đề. Cụ thể, giả sử triết gia số 4 (người có số thứ tự cao nhất) sẽ lấy nĩa theo thứ tự khác với những người còn lại (**Hình 31.16**); code `put_forks()` vẫn giữ nguyên.
+
+![](img/fig31_15.PNG)
 
 **Hình 31.16: Phá vỡ sự phụ thuộc trong get_forks()**
 
@@ -299,6 +330,8 @@ Một semaphore đơn giản có thể giải quyết vấn đề này. Bằng c
 ## 31.8 Cách triển khai Semaphore
 
 Cuối cùng, hãy sử dụng các **synchronization primitive** (nguyên thủy đồng bộ hóa) cấp thấp của chúng ta — **lock** và **condition variable** — để xây dựng phiên bản semaphore của riêng mình, gọi là... (trống đánh...) **Zemaphores**. Nhiệm vụ này khá đơn giản, như bạn có thể thấy trong **Hình 31.17** (trang 17).
+
+![](img/fig31_16.PNG)
 
 **Hình 31.17: Triển khai Zemaphore bằng Locks và Condition Variables**
 

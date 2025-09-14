@@ -43,7 +43,7 @@ Khi trả lời những câu hỏi này, chúng ta sẽ hiểu rõ hơn những 
 
 >> **Ghi chú:** *Vì sao system call trông giống như procedure call?*
 >> 
->> Bạn có thể thắc mắc tại sao lời gọi tới một **system call** (lời gọi hệ thống), như `open()` hoặc `read()`, lại trông giống hệt một lời gọi hàm thông thường trong C. Nếu giống hệt procedure call, làm sao hệ thống biết đó là system call và xử lý đúng?  
+>> Bạn có thể thắc mắc tại sao call tới một **system call** (call hệ thống), như `open()` hoặc `read()`, lại trông giống hệt một lời gọi hàm thông thường trong C. Nếu giống hệt procedure call, làm sao hệ thống biết đó là system call và xử lý đúng?  
 >> 
 >> Lý do đơn giản: nó thực sự là một procedure call, nhưng bên trong có chứa **trap instruction** (lệnh bẫy). Cụ thể:
 >> 
@@ -96,28 +96,28 @@ Phần cứng cần cẩn trọng khi thực thi một **trap** (cơ chế bẫy
 Ví dụ, trên kiến trúc **x86**, bộ xử lý sẽ **push** (đẩy) **program counter** (bộ đếm lệnh), **flags** (các cờ trạng thái) và một số thanh ghi khác vào **kernel stack** (ngăn xếp nhân) riêng cho từng **process** (tiến trình). Khi thực hiện **return-from-trap**, các giá trị này sẽ được **pop** (lấy ra) khỏi stack và tiếp tục thực thi chương trình ở **user mode** (chế độ người dùng). (Xem chi tiết trong tài liệu hệ thống của Intel [I11]). Các hệ thống phần cứng khác có thể dùng quy ước khác, nhưng khái niệm cơ bản là tương tự trên nhiều nền tảng.
 
 
-Có một chi tiết quan trọng: làm sao trap biết được đoạn mã nào trong OS cần được thực thi? Rõ ràng, process gọi trap không thể chỉ định trực tiếp địa chỉ để nhảy tới (như khi gọi một hàm thông thường). Nếu cho phép, chương trình có thể nhảy tới bất kỳ đâu trong kernel — đây rõ ràng là một **Very Bad Idea** (ý tưởng cực kỳ tồi tệ) [^1]. Vì vậy, kernel phải kiểm soát chặt chẽ đoạn mã nào sẽ chạy khi xảy ra trap.
+Có một chi tiết quan trọng: làm sao trap biết được đoạn code nào trong OS cần được thực thi? Rõ ràng, process gọi trap không thể chỉ định trực tiếp địa chỉ để nhảy tới (như khi gọi một hàm thông thường). Nếu cho phép, chương trình có thể nhảy tới bất kỳ đâu trong kernel — đây rõ ràng là một **Very Bad Idea** (ý tưởng cực kỳ tồi tệ) [^1]. Vì vậy, kernel phải kiểm soát chặt chẽ đoạn code nào sẽ chạy khi xảy ra trap.
 
-Kernel thực hiện điều này bằng cách thiết lập một **trap table** (bảng bẫy) khi khởi động máy (**boot time**). Khi máy khởi động, nó ở **kernel mode** (chế độ nhân, đặc quyền cao nhất), do đó có thể cấu hình phần cứng tùy ý. Một trong những việc đầu tiên OS thực hiện là thông báo cho phần cứng biết đoạn mã nào cần chạy khi xảy ra các sự kiện đặc biệt (**exceptional events**), ví dụ:
+Kernel thực hiện điều này bằng cách thiết lập một **trap table** (bảng bẫy) khi khởi động máy (**boot time**). Khi máy khởi động, nó ở **kernel mode** (chế độ nhân, đặc quyền cao nhất), do đó có thể cấu hình phần cứng tùy ý. Một trong những việc đầu tiên OS thực hiện là thông báo cho phần cứng biết đoạn code nào cần chạy khi xảy ra các sự kiện đặc biệt (**exceptional events**), ví dụ:
 
 - Khi có **hard disk interrupt** (ngắt từ ổ cứng).
 - Khi có **keyboard interrupt** (ngắt từ bàn phím).
-- Khi một chương trình thực hiện **system call** (lời gọi hệ thống).
+- Khi một chương trình thực hiện **system call** (call hệ thống).
 
 ![](./img/fig6_2.PNG)
 
-OS thông báo vị trí của các **trap handler** (trình xử lý trap) này cho phần cứng, thường thông qua một lệnh đặc biệt (**privileged instruction** – lệnh đặc quyền). Sau khi được cấu hình, phần cứng sẽ ghi nhớ vị trí các handler này cho đến khi máy được khởi động lại, và sẽ biết phải làm gì (tức là nhảy tới đoạn mã nào) khi xảy ra system call hoặc các sự kiện đặc biệt khác.
+OS thông báo vị trí của các **trap handler** (trình xử lý trap) này cho phần cứng, thường thông qua một lệnh đặc biệt (**privileged instruction** – lệnh đặc quyền). Sau khi được cấu hình, phần cứng sẽ ghi nhớ vị trí các handler này cho đến khi máy được khởi động lại, và sẽ biết phải làm gì (tức là nhảy tới đoạn code nào) khi xảy ra system call hoặc các sự kiện đặc biệt khác.
 
-[^1] Ví dụ: tưởng tượng việc nhảy vào đoạn mã truy cập tệp nhưng ngay sau bước kiểm tra quyền truy cập; khả năng này có thể cho phép lập trình viên tinh ranh khiến kernel chạy các chuỗi lệnh tùy ý [S07]. Nói chung, hãy tránh những **Very Bad Ideas** như vậy.
+[^1] Ví dụ: tưởng tượng việc nhảy vào đoạn code truy cập tệp nhưng ngay sau bước kiểm tra quyền truy cập; khả năng này có thể cho phép lập trình viên tinh ranh khiến kernel chạy các chuỗi lệnh tùy ý [S07]. Nói chung, hãy tránh những **Very Bad Ideas** như vậy.
 
 
 > **TIP**: Cẩn trọng với dữ liệu đầu vào của người dùng trong hệ thống bảo mật
 >
-> Mặc dù chúng ta đã rất nỗ lực bảo vệ OS trong quá trình thực hiện system call (bằng cách thêm cơ chế trap phần cứng và đảm bảo mọi lời gọi vào OS đều đi qua cơ chế này), vẫn còn nhiều khía cạnh khác để xây dựng một hệ điều hành an toàn.  
+> Mặc dù chúng ta đã rất nỗ lực bảo vệ OS trong quá trình thực hiện system call (bằng cách thêm cơ chế trap phần cứng và đảm bảo mọi call vào OS đều đi qua cơ chế này), vẫn còn nhiều khía cạnh khác để xây dựng một hệ điều hành an toàn.  
 >
-> Một trong số đó là xử lý **arguments** (tham số) tại ranh giới system call; OS phải kiểm tra dữ liệu mà người dùng truyền vào và đảm bảo chúng hợp lệ, nếu không thì từ chối lời gọi.
+> Một trong số đó là xử lý **arguments** (tham số) tại ranh giới system call; OS phải kiểm tra dữ liệu mà người dùng truyền vào và đảm bảo chúng hợp lệ, nếu không thì từ chối call.
 >
-> Ví dụ: với system call `write()`, người dùng chỉ định một địa chỉ bộ đệm (**buffer**) làm nguồn dữ liệu để ghi. Nếu người dùng (vô tình hoặc cố ý) truyền vào một địa chỉ “xấu” (ví dụ: nằm trong vùng địa chỉ của kernel), OS phải phát hiện và từ chối lời gọi. Nếu không, người dùng có thể đọc toàn bộ bộ nhớ của kernel; mà bộ nhớ kernel (virtual memory – bộ nhớ ảo) thường ánh xạ toàn bộ bộ nhớ vật lý của hệ thống, nên lỗi này sẽ cho phép đọc bộ nhớ của bất kỳ process nào khác.
+> Ví dụ: với system call `write()`, người dùng chỉ định một địa chỉ bộ đệm (**buffer**) làm nguồn dữ liệu để ghi. Nếu người dùng (vô tình hoặc cố ý) truyền vào một địa chỉ “xấu” (ví dụ: nằm trong vùng địa chỉ của kernel), OS phải phát hiện và từ chối call. Nếu không, người dùng có thể đọc toàn bộ bộ nhớ của kernel; mà bộ nhớ kernel (virtual memory – bộ nhớ ảo) thường ánh xạ toàn bộ bộ nhớ vật lý của hệ thống, nên lỗi này sẽ cho phép đọc bộ nhớ của bất kỳ process nào khác.
 >
 > Nói chung, một hệ thống an toàn phải luôn **nghi ngờ** dữ liệu đầu vào từ người dùng. Nếu không, phần mềm sẽ dễ bị tấn công, lập trình viên OS sẽ mất việc, và thế giới sẽ trở nên nguy hiểm hơn.
 
@@ -126,7 +126,7 @@ OS thông báo vị trí của các **trap handler** (trình xử lý trap) này
 
 1. Kiểm tra số hiệu.
 2. Đảm bảo nó hợp lệ.
-3. Nếu hợp lệ, thực thi đoạn mã tương ứng.
+3. Nếu hợp lệ, thực thi đoạn code tương ứng.
 
 Cách gián tiếp này giúp bảo vệ hệ thống: mã người dùng không thể chỉ định địa chỉ nhảy trực tiếp, mà chỉ có thể yêu cầu dịch vụ thông qua số hiệu.
 
@@ -147,7 +147,7 @@ Giao thức LDE có hai giai đoạn:
    - Kernel chuẩn bị một số thứ (ví dụ: cấp phát node trong process list, cấp phát bộ nhớ).  
    - Sử dụng lệnh **return-from-trap** để bắt đầu thực thi process (chuyển CPU sang user mode).  
    - Khi process muốn thực hiện system call, nó trap vào OS, OS xử lý và trả quyền điều khiển lại bằng return-from-trap.  
-   - Khi process kết thúc (return từ `main()`), nó thường quay về một đoạn mã stub để thoát chương trình đúng cách (ví dụ: gọi system call `exit()` để trap vào OS).  
+   - Khi process kết thúc (return từ `main()`), nó thường quay về một đoạn code stub để thoát chương trình đúng cách (ví dụ: gọi system call `exit()` để trap vào OS).  
    - OS dọn dẹp và kết thúc.
 
 ## 6.3 Vấn đề #2: Chuyển đổi giữa các process
@@ -156,13 +156,13 @@ Vấn đề tiếp theo của **direct execution** là làm sao chuyển đổi 
 
 >> **Cốt lõi: Làm sao OS giành lại quyền điều khiển CPU để chuyển đổi process?**
 
-## Một phương pháp hợp tác: Chờ **system call** (lời gọi hệ thống)
+## Một phương pháp hợp tác: Chờ **system call** (call hệ thống)
 
 Một phương pháp mà một số hệ thống trong quá khứ đã áp dụng (ví dụ: các phiên bản đầu tiên của hệ điều hành Macintosh [M11], hoặc hệ thống Xerox Alto cũ [A79]) được gọi là **phương pháp hợp tác** (*cooperative approach*). Trong mô hình này, **OS** (hệ điều hành) tin tưởng các **process** (tiến trình) trong hệ thống sẽ hoạt động một cách hợp lý. Các process chạy quá lâu được giả định là sẽ định kỳ nhường lại **CPU** để OS có thể quyết định chạy một tác vụ khác.  
 
 Vậy, bạn có thể hỏi: trong “thế giới lý tưởng” này, một process “thân thiện” sẽ nhường CPU như thế nào? Thực tế, hầu hết các process thường xuyên chuyển quyền điều khiển CPU cho OS bằng cách thực hiện **system call** — ví dụ: mở một tệp và sau đó đọc nó, gửi một thông điệp tới một máy khác, hoặc tạo một process mới.  
 
-Các hệ thống kiểu này thường bao gồm một **yield system call** (lời gọi hệ thống `yield`) — vốn không làm gì ngoài việc chuyển quyền điều khiển sang OS để nó có thể chạy các process khác.  
+Các hệ thống kiểu này thường bao gồm một **yield system call** (call hệ thống `yield`) — vốn không làm gì ngoài việc chuyển quyền điều khiển sang OS để nó có thể chạy các process khác.  
 
 Ứng dụng cũng sẽ chuyển quyền điều khiển cho OS khi chúng thực hiện một hành vi bất hợp pháp. Ví dụ: nếu một ứng dụng thực hiện phép chia cho 0, hoặc cố gắng truy cập vào vùng bộ nhớ mà nó không được phép, nó sẽ tạo ra một **trap** (ngắt bẫy) tới OS. Khi đó, OS sẽ giành lại quyền điều khiển CPU (và nhiều khả năng sẽ chấm dứt process vi phạm).  
 
@@ -180,7 +180,7 @@ Nếu không có sự hỗ trợ bổ sung từ phần cứng, hóa ra OS hầu 
 
 Câu trả lời hóa ra lại đơn giản và đã được nhiều người xây dựng hệ thống máy tính phát hiện từ nhiều năm trước: **timer interrupt** (ngắt định thời) [M+63].   Một thiết bị **timer** có thể được lập trình để phát sinh một **interrupt** (ngắt) sau mỗi một khoảng thời gian tính bằng mili-giây; khi ngắt xảy ra, **process** (tiến trình) đang chạy sẽ bị tạm dừng, và một **interrupt handler** (trình xử lý ngắt) đã được cấu hình sẵn trong **OS** (Operating System – hệ điều hành) sẽ được thực thi.   Tại thời điểm này, OS đã giành lại quyền điều khiển **CPU**, và do đó có thể làm bất cứ điều gì cần thiết: dừng process hiện tại và khởi chạy một process khác.
 
-Như đã thảo luận trước đây với **system call** (lời gọi hệ thống), OS phải thông báo cho phần cứng biết đoạn mã nào cần chạy khi xảy ra timer interrupt; vì vậy, trong quá trình **boot** (khởi động), OS sẽ thực hiện việc này.  
+Như đã thảo luận trước đây với **system call** (call hệ thống), OS phải thông báo cho phần cứng biết đoạn code nào cần chạy khi xảy ra timer interrupt; vì vậy, trong quá trình **boot** (khởi động), OS sẽ thực hiện việc này.  
 
 Tiếp theo, cũng trong quá trình khởi động, OS phải khởi chạy timer — đây tất nhiên là một **privileged operation** (thao tác đặc quyền). Khi timer đã bắt đầu, OS có thể yên tâm rằng quyền điều khiển sẽ sớm quay trở lại, và do đó OS có thể tự do chạy các chương trình người dùng. Timer cũng có thể bị tắt (cũng là thao tác đặc quyền), điều này sẽ được bàn đến sau khi chúng ta tìm hiểu chi tiết hơn về **concurrency** (tính đồng thời).
 
@@ -199,7 +199,7 @@ Khi OS đã giành lại quyền điều khiển — dù là hợp tác thông q
 
 Quyết định này được thực hiện bởi một thành phần của OS gọi là **scheduler** (bộ lập lịch). Chúng ta sẽ bàn chi tiết về các chính sách **scheduling** trong những chương tiếp theo.
 
-Nếu quyết định chuyển đổi, OS sẽ thực thi một đoạn mã mức thấp gọi là **context switch** (chuyển đổi ngữ cảnh).  
+Nếu quyết định chuyển đổi, OS sẽ thực thi một đoạn code mức thấp gọi là **context switch** (chuyển đổi ngữ cảnh).  
 
 Về mặt khái niệm, context switch khá đơn giản:
 
@@ -216,7 +216,7 @@ Cụ thể, để lưu ngữ cảnh của process đang chạy, OS sẽ thực t
 
 Sau đó, OS khôi phục các giá trị này cho process sắp chạy và chuyển sang kernel stack của process đó.  
 
-Việc chuyển stack cho phép kernel bắt đầu lời gọi tới mã chuyển đổi trong ngữ cảnh của process bị ngắt, và kết thúc trong ngữ cảnh của process sắp chạy. Khi OS thực hiện return-from-trap, process sắp chạy trở thành process đang chạy. **Context switch hoàn tất.**
+Việc chuyển stack cho phép kernel bắt đầu call tới mã chuyển đổi trong ngữ cảnh của process bị ngắt, và kết thúc trong ngữ cảnh của process sắp chạy. Khi OS thực hiện return-from-trap, process sắp chạy trở thành process đang chạy. **Context switch hoàn tất.**
 
 >> **TIP: Sử dụng Timer Interrupt để giành lại quyền điều khiển**
 >> 

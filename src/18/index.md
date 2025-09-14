@@ -18,25 +18,24 @@ Thách thức đặt ra là:
 ## 18.1 Ví dụ đơn giản và tổng quan
 
 Để làm rõ hơn cách tiếp cận này, hãy minh họa bằng một ví dụ đơn giản.  
+
 **Hình 18.1** trình bày một ví dụ về một address space rất nhỏ, chỉ có tổng cộng 64 byte, với bốn page 16 byte (các virtual page 0, 1, 2 và 3).  
 Trong thực tế, address space thường lớn hơn nhiều, phổ biến là 32-bit (tương đương 4 GB address space), hoặc thậm chí 64-bit^[1]. Trong sách này, chúng ta sẽ thường dùng các ví dụ nhỏ để dễ tiếp thu.
 
 ^[1]: Một address space 64-bit rất khó hình dung vì nó cực kỳ lớn. Một phép so sánh: nếu address space 32-bit có kích thước bằng một sân tennis, thì address space 64-bit có kích thước xấp xỉ cả châu Âu (!).
 
+![Figure 18.1: A Simple 64-byte Address Space](img/fig18_1.PNG)
 
 **Hình 18.1: A Simple 64-byte Address Space**  
-![Figure 18.1: A Simple 64-byte Address Space](figure18_1.png)
-
 
 Physical memory, như thể hiện trong **Hình 18.2**, cũng bao gồm một số ô có kích thước cố định, trong trường hợp này là tám page frame (tổng cộng 128 byte physical memory – cũng rất nhỏ).  
 Như bạn thấy trong sơ đồ, các page của virtual address space được đặt tại các vị trí khác nhau trong physical memory; sơ đồ cũng cho thấy OS sử dụng một phần physical memory cho chính nó.
 
 Paging, như chúng ta sẽ thấy, có nhiều ưu điểm so với các cách tiếp cận trước đây. Có lẽ cải tiến quan trọng nhất là **tính linh hoạt**: với một cơ chế paging hoàn chỉnh, hệ thống có thể hỗ trợ trừu tượng hóa address space một cách hiệu quả, bất kể process sử dụng address space như thế nào; ví dụ, chúng ta không cần giả định heap và stack sẽ phát triển theo hướng nào hoặc được dùng ra sao.
 
+![](img/fig18_2.PNG)
 
 **Hình 18.2: A 64-Byte Address Space In A 128-Byte Physical Memory**  
-![Figure 18.2: A 64-Byte Address Space In A 128-Byte Physical Memory](figure18_2.png)
-
 
 Một ưu điểm khác là **sự đơn giản trong quản lý vùng trống** mà paging mang lại.  
 Ví dụ, khi OS muốn đặt address space 64 byte của chúng ta vào physical memory 8 page, nó chỉ cần tìm 4 page trống; có thể OS duy trì một **free list** (danh sách trang trống) và chỉ việc lấy 4 page đầu tiên từ danh sách này.  
@@ -94,13 +93,13 @@ Phân tích địa chỉ này, ta thấy:
 Tra VPN trong page table, ta thấy virtual page 1 nằm ở physical frame 7 (PFN = 7, nhị phân `111`).  
 Do đó, ta dịch địa chỉ ảo này bằng cách thay VPN bằng PFN, rồi thực hiện load từ physical memory.
 
+![](img/fig18_3.PNG)
 
 **Hình 18.3: The Address Translation Process**  
-![Figure 18.3: The Address Translation Process](figure18_3.png)
 
+![](img/fig18_4.PNG)
 
 **Hình 18.4: Example: Page Table in Kernel Physical Memory**  
-![Figure 18.4: Example: Page Table in Kernel Physical Memory](figure18_4.png)
 
 Lưu ý rằng **offset** (độ lệch) vẫn giữ nguyên (tức là không được dịch), vì offset chỉ cho biết byte nào **bên trong** page (trang) mà chúng ta muốn truy cập. Địa chỉ vật lý (physical address) cuối cùng của chúng ta là `1110101` (117 ở hệ thập phân), và đây chính xác là nơi mà lệnh load sẽ lấy dữ liệu (xem **Hình 18.2**, trang 2).
 
@@ -123,6 +122,7 @@ Bây giờ, hãy tưởng tượng có 100 process đang chạy: điều này c�
 
 Vì page table quá lớn, chúng ta không lưu chúng trong phần cứng on-chip đặc biệt của MMU (Memory Management Unit – đơn vị quản lý bộ nhớ) để chứa page table của process đang chạy. Thay vào đó, page table của mỗi process được lưu **trong bộ nhớ** ở đâu đó.  
 Tạm thời, hãy giả định rằng page table nằm trong physical memory do OS quản lý; sau này chúng ta sẽ thấy rằng phần lớn bộ nhớ của OS cũng có thể được ảo hóa, và do đó page table có thể được lưu trong virtual memory của OS (thậm chí được swap ra đĩa), nhưng điều này hiện tại sẽ gây rối, nên ta sẽ bỏ qua.  
+
 **Hình 18.4** (trang 5) minh họa một page table trong bộ nhớ của OS; bạn có thấy tập hợp nhỏ các ánh xạ ở đó không?
 
 
@@ -136,10 +136,9 @@ Về nội dung của mỗi PTE, có một số bit quan trọng cần hiểu:
 - **Valid bit**: cho biết ánh xạ này có hợp lệ hay không. Ví dụ, khi một chương trình bắt đầu chạy, nó sẽ có code và heap ở một đầu của address space, và stack ở đầu kia. Tất cả không gian chưa dùng ở giữa sẽ được đánh dấu **invalid**. Nếu process cố truy cập vùng bộ nhớ này, nó sẽ tạo ra một trap (ngắt) tới OS, và OS có thể sẽ chấm dứt process đó.  
   Valid bit rất quan trọng để hỗ trợ **sparse address space** (không gian địa chỉ thưa thớt); bằng cách đánh dấu invalid cho tất cả các page chưa dùng, chúng ta không cần cấp phát physical frame cho chúng, từ đó tiết kiệm đáng kể bộ nhớ.
 
+![](img/fig18_5.PNG)
 
 **Hình 18.5: An x86 Page Table Entry (PTE)**  
-![Figure 18.5: An x86 Page Table Entry (PTE)](figure18_5.png)
-
 
 Ngoài ra, còn có **protection bits** (bit bảo vệ), cho biết page có thể được đọc, ghi hoặc thực thi hay không. Truy cập page theo cách không được phép bởi các bit này sẽ tạo ra trap tới OS.
 
@@ -147,6 +146,7 @@ Một số bit khác cũng quan trọng nhưng tạm thời chúng ta chưa bàn
 - **Present bit**: cho biết page này đang ở physical memory hay đã được lưu trên đĩa (swapped out). Cơ chế này sẽ được tìm hiểu kỹ hơn khi chúng ta học về **swap** – kỹ thuật di chuyển một phần address space ra đĩa để hỗ trợ address space lớn hơn physical memory. Swapping cho phép OS giải phóng physical memory bằng cách chuyển các page ít dùng ra đĩa.  
 - **Dirty bit**: cho biết page đã bị sửa đổi kể từ khi được nạp vào bộ nhớ hay chưa.  
 - **Reference bit** (hay **accessed bit**): cho biết page đã được truy cập hay chưa, hữu ích để xác định page nào được dùng thường xuyên và nên giữ lại trong bộ nhớ. Thông tin này rất quan trọng trong **page replacement** (thay thế trang), một chủ đề sẽ được nghiên cứu chi tiết ở các chương sau.
+
 
 **Hình 18.5** cho thấy một ví dụ về PTE trong kiến trúc x86 [I09]. Nó bao gồm:  
 - Present bit (P)  
@@ -158,11 +158,14 @@ Một số bit khác cũng quan trọng nhưng tạm thời chúng ta chưa bàn
 
 Bạn có thể đọc **Intel Architecture Manuals** [I09] để biết thêm chi tiết về hỗ trợ paging trong x86. Tuy nhiên, cần lưu ý: đọc các tài liệu này, dù rất hữu ích (và chắc chắn cần thiết cho những ai viết code để dùng page table trong OS), có thể khá khó khăn lúc đầu. Cần một chút kiên nhẫn và nhiều quyết tâm.
 
-> **ASIDE: WHY NO VALID BIT?**  
+> **ASIDE: TẠI SAO KHÔNG CÓ BIT VALID?**  
 > Bạn có thể nhận thấy trong ví dụ của Intel, không có valid bit riêng biệt, mà chỉ có present bit (P). Nếu bit này được đặt (P=1), nghĩa là page vừa **present** vừa **valid**. Nếu không (P=0), nghĩa là page có thể không có trong bộ nhớ (nhưng vẫn valid), hoặc có thể không valid.  
-> Truy cập một page với P=0 sẽ kích hoạt trap tới OS; OS sẽ dùng
-
-(TODO)
+> 
+> Khi có một truy cập tới page với P = 0, phần cứng sẽ kích hoạt một **trap** (bẫy) tới **OS** (Operating System – hệ điều hành). Lúc này, OS phải sử dụng các cấu trúc dữ liệu bổ sung mà nó duy trì để xác định xem page đó có **valid** (hợp lệ) hay không. Nếu hợp lệ, có thể page này cần được **swapped back in** (nạp lại từ bộ nhớ phụ vào bộ nhớ chính). Nếu không hợp lệ, điều đó có nghĩa là chương trình đang cố gắng truy cập vào vùng bộ nhớ trái phép.  
+> 
+> Cách thiết kế tiết kiệm này khá phổ biến trong phần cứng, vốn thường chỉ cung cấp **tập hợp tối thiểu các tính năng** để OS có thể xây dựng nên một hệ thống dịch vụ đầy đủ.  
+>
+> *(Giải thích thêm: Trong kiến trúc Intel, việc gộp hai khái niệm “valid” và “present” vào một bit giúp giảm độ phức tạp phần cứng, nhưng yêu cầu OS phải xử lý logic phân biệt khi xảy ra lỗi truy cập bộ nhớ.)*  
 
 ## 18.4 Paging: Cũng Quá Chậm
 
@@ -227,12 +230,10 @@ Mặc dù paging có vẻ là một giải pháp tuyệt vời cho nhu cầu **m
 ```
 
 **Hình 18.6: Accessing Memory With Paging**  
-![Figure 18.6: Accessing Memory With Paging](figure18_6.png)
-
 
 ## 18.5 A Memory Trace (Dấu vết truy cập bộ nhớ)
 
-Trước khi kết thúc, chúng ta sẽ lần theo một ví dụ truy cập bộ nhớ đơn giản để minh họa tất cả các truy cập bộ nhớ phát sinh khi sử dụng **paging** (phân trang). Đoạn mã (viết bằng C, trong tệp `array.c`) mà chúng ta quan tâm như sau:
+Trước khi kết thúc, chúng ta sẽ lần theo một ví dụ truy cập bộ nhớ đơn giản để minh họa tất cả các truy cập bộ nhớ phát sinh khi sử dụng **paging** (phân trang). Đoạn code (viết bằng C, trong tệp `array.c`) mà chúng ta quan tâm như sau:
 
 ```c
 int array[1000];
@@ -248,7 +249,7 @@ prompt> gcc -o array array.c -Wall -O
 prompt> ./array
 ```
 
-Tất nhiên, để thực sự hiểu được đoạn mã này (vốn chỉ khởi tạo một mảng) sẽ tạo ra những truy cập bộ nhớ nào, chúng ta cần biết (hoặc giả định) thêm một số thông tin.  
+Tất nhiên, để thực sự hiểu được đoạn code này (vốn chỉ khởi tạo một mảng) sẽ tạo ra những truy cập bộ nhớ nào, chúng ta cần biết (hoặc giả định) thêm một số thông tin.  
 Trước hết, chúng ta cần **disassemble** (dịch ngược) tệp nhị phân kết quả (sử dụng `objdump` trên Linux hoặc `otool` trên Mac) để xem các lệnh assembly được dùng để khởi tạo mảng trong vòng lặp. Kết quả thu được như sau:
 
 ```
@@ -258,20 +259,20 @@ Trước hết, chúng ta cần **disassemble** (dịch ngược) tệp nhị ph
 1036 jne 1024
 ```
 
-Nếu bạn biết một chút về **x86**, đoạn mã này khá dễ hiểu^[2].  
+Nếu bạn biết một chút về **x86**, đoạn code này khá dễ hiểu^[2].  
 - Lệnh đầu tiên (`movl $0x0,(%edi,%eax,4)`) ghi giá trị 0 (`$0x0`) vào địa chỉ bộ nhớ ảo của phần tử mảng; địa chỉ này được tính bằng cách lấy giá trị trong `%edi` cộng với `%eax` nhân 4. Như vậy, `%edi` giữ **địa chỉ cơ sở** của mảng, còn `%eax` giữ **chỉ số mảng** (`i`). Chúng ta nhân với 4 vì mảng là mảng số nguyên (integer), mỗi phần tử có kích thước 4 byte.  
 - Lệnh thứ hai (`incl %eax`) tăng chỉ số mảng trong `%eax`.  
 - Lệnh thứ ba (`cmpl $0x03e8,%eax`) so sánh giá trị trong `%eax` với `0x03e8` (thập phân là 1000).  
 - Nếu hai giá trị chưa bằng nhau (điều mà lệnh `jne` kiểm tra), lệnh thứ tư (`jne 1024`) sẽ nhảy về đầu vòng lặp.
 
-Để hiểu các truy cập bộ nhớ mà chuỗi lệnh này tạo ra (ở cả mức địa chỉ ảo và địa chỉ vật lý), chúng ta cần giả định một số điều về vị trí của đoạn mã và mảng trong **virtual memory** (bộ nhớ ảo), cũng như nội dung và vị trí của **page table** (bảng trang).
+Để hiểu các truy cập bộ nhớ mà chuỗi lệnh này tạo ra (ở cả mức địa chỉ ảo và địa chỉ vật lý), chúng ta cần giả định một số điều về vị trí của đoạn code và mảng trong **virtual memory** (bộ nhớ ảo), cũng như nội dung và vị trí của **page table** (bảng trang).
 
 Trong ví dụ này, giả sử **virtual address space** (không gian địa chỉ ảo) có kích thước 64KB (rất nhỏ so với thực tế). Chúng ta cũng giả định **page size** (kích thước trang) là 1KB.
 
 Điều tiếp theo cần biết là nội dung của page table và vị trí của nó trong **physical memory** (bộ nhớ vật lý). Giả sử chúng ta có một page table tuyến tính (linear, dạng mảng) và nó được đặt tại địa chỉ vật lý 1KB (1024).
 
 Về nội dung, chỉ có một vài **virtual page** (trang ảo) cần quan tâm trong ví dụ này:  
-- Trước hết là virtual page chứa đoạn mã. Vì page size là 1KB, địa chỉ ảo 1024 nằm trên trang thứ hai của virtual address space (VPN = 1, vì VPN = 0 là trang đầu tiên). Giả sử virtual page này ánh xạ tới **physical frame** 4 (VPN 1 → PFN 4).  
+- Trước hết là virtual page chứa đoạn code. Vì page size là 1KB, địa chỉ ảo 1024 nằm trên trang thứ hai của virtual address space (VPN = 1, vì VPN = 0 là trang đầu tiên). Giả sử virtual page này ánh xạ tới **physical frame** 4 (VPN 1 → PFN 4).  
 - Tiếp theo là mảng. Mảng có kích thước 4000 byte (1000 số nguyên), và giả sử nó nằm tại các địa chỉ ảo từ 40000 đến 44000 (không bao gồm byte cuối). Các virtual page cho dải địa chỉ này là VPN = 39 … VPN = 42. Giả sử ánh xạ virtual-to-physical như sau:  
   - VPN 39 → PFN 7  
   - VPN 40 → PFN 8  
@@ -280,10 +281,9 @@ Về nội dung, chỉ có một vài **virtual page** (trang ảo) cần quan t
 
 ^[2]: Ở đây chúng ta đơn giản hóa một chút, giả định mỗi lệnh có kích thước 4 byte; thực tế, lệnh x86 có kích thước thay đổi.
 
+![](img/fig18_7.PNG)
 
 **Hình 18.7: A Virtual (And Physical) Memory Trace**  
-![Figure 18.7: A Virtual (And Physical) Memory Trace](figure18_7.png)
-
 
 Bây giờ chúng ta đã sẵn sàng để theo dõi các truy cập bộ nhớ của chương trình.  
 Khi chạy, mỗi **instruction fetch** (nạp lệnh) sẽ tạo ra **hai** truy cập bộ nhớ:  
@@ -321,6 +321,3 @@ Vì vậy, chúng ta cần suy nghĩ kỹ hơn để xây dựng một hệ th�
 May mắn thay, hai chương tiếp theo sẽ cho chúng ta thấy cách thực hiện điều đó.
 
 ^[3]: Thực ra chúng tôi không thật sự xin lỗi. Nhưng chúng tôi xin lỗi vì… không xin lỗi, nếu điều đó có thể hiểu được.
-
-
-Nếu bạn muốn, mình có thể tiếp tục dịch sang tiếng Việt **chương 19** về **Translation Lookaside Buffer (TLB)** – kỹ thuật tăng tốc paging – để nối tiếp mạch nội dung này. Điều đó sẽ giúp bạn có một bộ tài liệu hoàn chỉnh và liền mạch hơn. Bạn có muốn mình làm tiếp không?

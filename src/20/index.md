@@ -32,6 +32,7 @@ Nhiều năm trước, những người tạo ra hệ thống **Multics** (đặ
 ![](img/fig20_1.PNG)
 
 **Figure 20.1: A 16KB Address Space With 1KB Pages**  
+
 *(Không gian địa chỉ 16KB với page 1KB)*
 
 ![](img/fig20_2.PNG)
@@ -67,11 +68,24 @@ Khi đó, virtual address sẽ như sau:
 Seg      VPN      Offset
 ```
 
-Trong phần cứng, giả sử có ba cặp base/bounds, mỗi cặp cho code, heap, stack. Khi process chạy, base register của mỗi segment chứa địa chỉ vật lý của linear page table
+Trong phần cứng, giả sử rằng tồn tại ba cặp **base/bounds** (địa chỉ cơ sở/giới hạn), mỗi cặp dành riêng cho **code**, **heap** và **stack**. Khi một **process** (tiến trình) đang chạy, thanh ghi **base** của mỗi segment (đoạn) sẽ chứa địa chỉ vật lý của một **linear page table** (bảng trang tuyến tính) dành cho segment đó; do đó, mỗi process trong hệ thống hiện có ba page table liên kết với nó. Khi xảy ra **context switch** (chuyển ngữ cảnh), các thanh ghi này phải được thay đổi để phản ánh vị trí của các page table thuộc process mới được chuyển sang chạy.  
 
-(TODO)
+Khi xảy ra **TLB miss** (trượt TLB – tình huống khi địa chỉ cần tìm không có trong Translation Lookaside Buffer), giả sử đây là **hardware-managed TLB** (TLB được phần cứng quản lý, tức phần cứng chịu trách nhiệm xử lý TLB miss), phần cứng sẽ sử dụng các bit **segment** (SN) để xác định cặp base/bounds nào cần dùng. Sau đó, phần cứng lấy địa chỉ vật lý trong thanh ghi base tương ứng và kết hợp nó với **VPN** (Virtual Page Number – số trang ảo) như sau để tạo ra địa chỉ của **page table entry** (PTE – mục nhập bảng trang):  
 
-Điểm khác biệt then chốt trong mô hình **hybrid** (lai) của chúng ta là sự tồn tại của một **bounds register** (thanh ghi giới hạn) cho mỗi **segment** (đoạn). Mỗi bounds register lưu giá trị của **page** (trang) hợp lệ lớn nhất trong segment đó. Ví dụ, nếu **code segment** (đoạn mã) đang sử dụng ba page đầu tiên (0, 1 và 2), thì **page table** (bảng trang) của code segment sẽ chỉ có ba entry được cấp phát và bounds register sẽ được đặt là 3; mọi truy cập bộ nhớ vượt quá cuối segment sẽ tạo ra một **exception** (ngoại lệ) và nhiều khả năng dẫn đến việc chấm dứt **process** (tiến trình). Theo cách này, mô hình hybrid của chúng ta tiết kiệm đáng kể bộ nhớ so với **linear page table** (bảng trang tuyến tính); các page chưa cấp phát giữa **stack** và **heap** sẽ không còn chiếm chỗ trong page table (chỉ để đánh dấu là không hợp lệ).
+```
+SN      = (VirtualAddress & SEG_MASK) >> SN_SHIFT
+VPN     = (VirtualAddress & VPN_MASK) >> VPN_SHIFT
+AddressOfPTE = Base[SN] + (VPN * sizeof(PTE))
+```
+
+Chuỗi thao tác này có thể trông quen thuộc; nó gần như giống hệt với những gì chúng ta đã thấy trước đây khi làm việc với **linear page table**. Điểm khác biệt duy nhất, tất nhiên, là việc sử dụng một trong ba thanh ghi base của segment thay vì chỉ một thanh ghi base của page table duy nhất.  
+
+>> **TIP: USE HYBRIDS**  
+>>  
+>> Khi bạn có hai ý tưởng tốt nhưng dường như đối lập nhau, bạn nên xem xét khả năng kết hợp chúng thành một **hybrid** (lai ghép) để tận dụng được ưu điểm của cả hai. Ví dụ, các giống ngô lai được biết là khỏe mạnh và bền bỉ hơn bất kỳ giống ngô tự nhiên nào. Tất nhiên, không phải mọi hybrid đều là ý tưởng hay; hãy xem loài **Zeedonk** (hay **Zonkey**), là kết quả lai giữa **Zebra** (ngựa vằn) và **Donkey** (lừa). Nếu bạn không tin rằng sinh vật này tồn tại, hãy tra cứu và chuẩn bị để ngạc nhiên.  
+
+
+Điểm khác biệt then chốt trong mô hình **hybrid** (lai) của chúng ta là sự tồn tại của một **bounds register** (thanh ghi giới hạn) cho mỗi **segment** (đoạn). Mỗi bounds register lưu giá trị của **page** (trang) hợp lệ lớn nhất trong segment đó. Ví dụ, nếu **code segment** (đoạn code) đang sử dụng ba page đầu tiên (0, 1 và 2), thì **page table** (bảng trang) của code segment sẽ chỉ có ba entry được cấp phát và bounds register sẽ được đặt là 3; mọi truy cập bộ nhớ vượt quá cuối segment sẽ tạo ra một **exception** (ngoại lệ) và nhiều khả năng dẫn đến việc chấm dứt **process** (tiến trình). Theo cách này, mô hình hybrid của chúng ta tiết kiệm đáng kể bộ nhớ so với **linear page table** (bảng trang tuyến tính); các page chưa cấp phát giữa **stack** và **heap** sẽ không còn chiếm chỗ trong page table (chỉ để đánh dấu là không hợp lệ).
 
 Tuy nhiên, như bạn có thể nhận thấy, cách tiếp cận này không phải không có vấn đề. Thứ nhất, nó vẫn yêu cầu chúng ta sử dụng segmentation; như đã thảo luận trước đây, segmentation không linh hoạt như mong muốn, vì nó giả định một mô hình sử dụng address space nhất định; nếu chúng ta có một heap lớn nhưng sử dụng thưa thớt, chẳng hạn, ta vẫn có thể gặp nhiều lãng phí trong page table. Thứ hai, mô hình hybrid này khiến **external fragmentation** (phân mảnh bên ngoài) xuất hiện trở lại. Trong khi phần lớn bộ nhớ được quản lý theo đơn vị kích thước page, thì các page table giờ đây có thể có kích thước tùy ý (theo bội số của PTE). Do đó, việc tìm không gian trống cho chúng trong bộ nhớ trở nên phức tạp hơn. Vì những lý do này, các nhà thiết kế hệ thống tiếp tục tìm kiếm những cách tốt hơn để triển khai các page table nhỏ hơn.
 

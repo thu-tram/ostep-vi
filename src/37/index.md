@@ -19,6 +19,8 @@ Có một số giả định mà hầu hết các **client** (thành phần sử
 - Thông thường, có thể giả định rằng việc truy cập hai **block**¹ gần nhau trong không gian địa chỉ của ổ đĩa sẽ nhanh hơn so với truy cập hai block ở xa nhau.  
 - Cũng thường có thể giả định rằng việc truy cập các block liền kề (tức là đọc hoặc ghi tuần tự – sequential read/write) là chế độ truy cập nhanh nhất, và thường nhanh hơn nhiều so với bất kỳ mẫu truy cập ngẫu nhiên nào.
 
+![](img/fig37_1.PNG)
+
 **Hình 37.1: Ổ đĩa với chỉ một track**
 
 
@@ -31,6 +33,8 @@ Tất cả các platter được gắn chung quanh **spindle** (trục quay), tr
 Dữ liệu được mã hóa trên mỗi surface thành các vòng tròn đồng tâm của các sector; mỗi vòng tròn như vậy được gọi là một **track**. Một surface duy nhất chứa hàng nghìn track, được xếp sát nhau, với hàng trăm track có thể nằm gọn trong bề rộng của một sợi tóc người.
 
 Để đọc và ghi từ surface, chúng ta cần một cơ chế cho phép **cảm nhận** (read) các mẫu từ tính trên đĩa hoặc **tạo ra thay đổi** (write) chúng. Quá trình đọc và ghi này được thực hiện bởi **disk head** (đầu đọc/ghi đĩa); mỗi surface của ổ đĩa có một đầu đọc/ghi. Đầu đọc/ghi được gắn vào một **disk arm** (cần đĩa), di chuyển ngang qua surface để định vị đầu đọc/ghi trên track mong muốn.
+
+![](img/fig37_2.PNG)
 
 **Hình 37.2: Một track đơn và một đầu đọc/ghi**
 
@@ -70,6 +74,8 @@ Thời gian ổn định thường khá đáng kể, ví dụ từ 0,5 đến 2 
 
 Sau khi seek, cần đĩa đã đưa đầu đọc/ghi đến đúng track. Minh họa seek được thể hiện trong **Hình 37.3** (bên phải).
 
+![](img/fig37_3.PNG)
+
 **Hình 37.3: Ba track và một đầu đọc/ghi (phải: với seek)**
 
 Như ta thấy, trong quá trình seek, cần đĩa đã di chuyển tới track mong muốn, và platter tất nhiên vẫn quay — trong ví dụ này là khoảng 3 sector. Do đó, sector 9 sắp đi qua dưới đầu đọc/ghi, và chúng ta chỉ cần chịu một độ trễ quay ngắn để hoàn tất việc truyền dữ liệu.
@@ -82,6 +88,8 @@ Khi sector 11 đi qua dưới đầu đọc/ghi, giai đoạn cuối của I/O s
 Mặc dù chúng ta sẽ không đi quá sâu, nhưng có một số chi tiết thú vị khác về cách ổ đĩa cứng hoạt động:
 
 - Nhiều ổ đĩa sử dụng một dạng **track skew** (độ lệch track) để đảm bảo rằng các thao tác đọc tuần tự (sequential read) có thể được phục vụ chính xác ngay cả khi vượt qua ranh giới giữa các track. Trong ổ đĩa ví dụ đơn giản của chúng ta, điều này có thể trông như trong **Hình 37.4**.
+
+![](img/fig37_4.PNG)
 
 **Hình 37.4: Ba track với track skew bằng 2**
 
@@ -151,6 +159,8 @@ R_{I/O} = \frac{Size_{Transfer}}{T_{I/O}} \tag{37.2}
 
 Chi tiết của cả hai được thể hiện trong **Hình 37.5**.
 
+![](img/fig37_5.PNG)
+
 **Hình 37.5: Thông số ổ đĩa – SCSI so với SATA**
 
 
@@ -172,6 +182,8 @@ Bây giờ hãy xem **sequential workload**. Ở đây, ta có thể giả đị
 
 > **TIP: SỬ DỤNG Ổ ĐĨA THEO TUẦN TỰ**  
 > Khi có thể, hãy truyền dữ liệu tới và từ ổ đĩa theo cách tuần tự. Nếu không thể tuần tự, ít nhất hãy nghĩ đến việc truyền dữ liệu theo các khối lớn: càng lớn càng tốt. Nếu I/O được thực hiện thành các mảnh nhỏ ngẫu nhiên, hiệu năng I/O sẽ giảm nghiêm trọng. Người dùng sẽ chịu khổ. Và bạn cũng sẽ chịu khổ, khi biết rằng mình đã gây ra nỗi khổ đó với những thao tác I/O ngẫu nhiên bất cẩn.
+
+![](img/fig37_6.PNG)
 
 **Hình 37.6: Hiệu năng ổ đĩa – SCSI so với SATA**  
 |                   | Cheetah       | Barracuda |
@@ -224,6 +236,8 @@ Không giống như **job scheduling** (lập lịch công việc), nơi thời 
 Một phương pháp lập lịch đĩa sớm được biết đến là **shortest-seek-time-first** (SSTF) (còn gọi là **shortest-seek-first** hoặc **SSF**). SSTF sắp xếp hàng đợi các yêu cầu I/O theo track, chọn các yêu cầu trên track gần nhất để hoàn thành trước.  
 Ví dụ: giả sử vị trí hiện tại của đầu đọc/ghi (head) đang ở track trong cùng, và chúng ta có các yêu cầu cho sector 21 (track giữa) và sector 2 (track ngoài cùng), khi đó ta sẽ xử lý yêu cầu tới sector 21 trước, chờ hoàn tất, rồi mới xử lý yêu cầu tới sector 2 (**Hình 37.7**).
 
+![](img/fig37_7.PNG)
+
 **Hình 37.7: SSTF – Lập lịch các yêu cầu 21 và 2**
 
 SSTF hoạt động tốt trong ví dụ này, tìm tới track giữa trước rồi tới track ngoài cùng. Tuy nhiên, SSTF không phải là “thuốc chữa bách bệnh”, vì các lý do sau:
@@ -260,6 +274,8 @@ Trong ví dụ, head hiện đang ở sector 30 trên track trong cùng. Bộ l�
 Câu trả lời, tất nhiên, là **“còn tùy”**. Trong kỹ thuật, “còn tùy” gần như luôn là câu trả lời, phản ánh rằng các đánh đổi (trade-off) là một phần tất yếu trong công việc của kỹ sư; đây cũng là một câu trả lời “an toàn” khi bạn chưa biết câu trả lời cho câu hỏi của sếp. Tuy nhiên, gần như luôn tốt hơn nếu biết **tại sao** lại “còn tùy”, và đó là điều chúng ta sẽ bàn ở đây.
 
 Điều mà nó “tùy” ở đây là **tương quan giữa thời gian seek và thời gian quay**. Nếu, trong ví dụ này, thời gian seek lớn hơn nhiều so với độ trễ quay, thì SSTF (và các biến thể) là đủ tốt. Tuy nhiên, hãy tưởng tượng nếu seek nhanh hơn đáng kể so với rotation. Khi đó, trong ví dụ này, sẽ hợp lý hơn nếu seek xa hơn để phục vụ yêu cầu 8 trên track ngoài cùng, thay vì thực hiện seek ngắn hơn tới track giữa để phục vụ yêu cầu 16, vốn phải quay gần như cả vòng mới đi qua dưới đầu đọc/ghi.
+
+![](img/fig37_8.PNG)
 
 **Hình 37.8: SSTF – Đôi khi là chưa đủ tốt**
 

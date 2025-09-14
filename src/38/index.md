@@ -77,6 +77,8 @@ Hình thức striping đơn giản nhất sẽ phân bố các block trên các 
 
 ...
 
+![](img/fig38_1.PNG)
+
 **Hình 38.1: RAID-0 – Striping đơn giản**
 
 Từ **Hình 38.1**, bạn có thể thấy ý tưởng cơ bản: phân tán các block của mảng dữ liệu lên các ổ đĩa theo kiểu **round-robin** (xoay vòng). Cách tiếp cận này được thiết kế để khai thác tối đa khả năng **song song** của mảng khi có các yêu cầu truy cập tới các khối dữ liệu liên tiếp (ví dụ: một thao tác đọc tuần tự lớn).  
@@ -86,6 +88,8 @@ Trong ví dụ này, chúng ta đã đơn giản hóa bằng cách giả định
 Ví dụ, chúng ta có thể sắp xếp các block trên các ổ đĩa như trong **Hình 38.2**:
 
 ...
+
+![](img/fig38_2.PNG)
 
 **Hình 38.2: Striping với kích thước chunk lớn hơn**
 
@@ -212,6 +216,8 @@ Cấp RAID đầu tiên vượt ra ngoài striping được gọi là **RAID Lev
 
 ...
 
+![](img/fig38_3.PNG)
+
 **Hình 38.3: RAID-1 đơn giản – Mirroring**
 
 Trong một hệ thống **mirrored** (nhân bản) điển hình, chúng ta giả định rằng với mỗi **logical block** (block logic), RAID sẽ lưu giữ **hai bản sao vật lý** của nó. Ví dụ: trong minh họa, **disk 0** và **disk 1** có nội dung giống hệt nhau, và **disk 2** và **disk 3** cũng vậy; dữ liệu được **striped** (phân dải) trên các cặp mirror này.  
@@ -299,6 +305,8 @@ Như chúng ta sẽ thấy ngay sau đây, đạt được **một nửa băng t
 Chúng ta sẽ giới thiệu một phương pháp khác để bổ sung **redundancy** (dữ liệu dự phòng) cho một mảng đĩa, được gọi là **parity** (bit chẵn lẻ). Các phương pháp dựa trên parity cố gắng sử dụng ít dung lượng hơn, từ đó khắc phục nhược điểm lớn về dung lượng mà các hệ thống **mirrored** (nhân bản) phải trả. Tuy nhiên, chúng phải đánh đổi một yếu tố: **hiệu năng**.
 
 
+![](img/fig38_4.PNG)
+
 **Hình 38.4: RAID-4 với Parity (RAID-4 With Parity)**
 
 Dưới đây là ví dụ về một hệ thống RAID-4 gồm 5 ổ đĩa (**Hình 38.4**). Với mỗi **stripe** (dải dữ liệu), chúng ta thêm một **parity block** (block chẵn lẻ) lưu trữ thông tin dự phòng cho stripe đó.  
@@ -341,6 +349,8 @@ Như bạn thấy từ hình minh họa, parity được tính cho từng bit c�
 
 - **Về độ tin cậy (Reliability)**: RAID-4 có thể chịu được **1 lỗi ổ đĩa** và không hơn. Nếu mất nhiều hơn một ổ đĩa, sẽ **không có cách nào** để tái tạo dữ liệu đã mất.
 
+
+![](img/fig38_5.PNG)
 
 **Hình 38.5: Ghi full-stripe trong RAID-4 (Full-stripe Writes In RAID-4)**
 
@@ -424,6 +434,8 @@ Bây giờ, giả sử có rất nhiều yêu cầu ghi được gửi tới RAI
 Để hiểu điều này, hãy cùng xem lại **bố trí RAID-4** (**Hình 38.6**).
 
 
+![](img/fig38_6.PNG)
+
 **Hình 38.6: Ví dụ – Ghi vào block 4, 13 và các block parity tương ứng**
 
 Giờ hãy tưởng tượng có **2 thao tác ghi nhỏ** được gửi tới RAID-4 gần như cùng lúc, tới các block 4 và 13 (được đánh dấu ∗ trong sơ đồ).  
@@ -451,6 +463,8 @@ Như bạn đã biết, một thao tác đọc đơn (giả sử không có lỗ
 
 Để giải quyết **small-write problem** (ít nhất là một phần), Patterson, Gibson và Katz đã giới thiệu **RAID-5**.  
 RAID-5 hoạt động gần như giống hệt RAID-4, ngoại trừ việc **xoay vòng (rotate)** block parity qua các ổ đĩa (**Hình 38.7**).
+
+![](img/fig38_7.PNG)
 
 **Hình 38.7: RAID-5 với parity xoay vòng (RAID-5 With Rotated Parity)**
 
@@ -496,6 +510,8 @@ Ngoài ra, khi cập nhật ổ parity trong RAID-4/5:
 - Nhưng lần ghi thứ hai của parity chỉ gây ra **quay**  
 
 Cuối cùng, **I/O tuần tự** tới RAID mirrored chịu **mức phạt hiệu năng gấp đôi (2×)** so với các phương pháp khác[^1].
+
+![](img/fig38_8.PNG)
 
 **Hình 38.8: Dung lượng, độ tin cậy và hiệu năng của RAID (RAID Capacity, Reliability, and Performance)**
 

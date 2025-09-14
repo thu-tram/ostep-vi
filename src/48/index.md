@@ -33,13 +33,18 @@ Một cách đơn giản là: **chúng ta không xử lý nó**. Bởi vì một
 
 Một ví dụ điển hình của tầng không đáng tin cậy như vậy là **UDP/IP networking stack** (ngăn xếp mạng UDP/IP) hiện có trên hầu hết các hệ thống hiện đại. Để sử dụng **UDP**, một **process** (tiến trình) sử dụng **sockets API** để tạo một **communication endpoint** (điểm cuối giao tiếp); các tiến trình trên máy khác (hoặc trên cùng một máy) gửi **UDP datagram** (gói tin UDP – một thông điệp có kích thước cố định tới một giới hạn tối đa) tới tiến trình ban đầu.
 
+
 **Hình 48.1** và **Hình 48.2** minh họa một client và server đơn giản được xây dựng trên nền UDP/IP. Client có thể gửi một thông điệp tới server, và server sẽ phản hồi lại. Chỉ với một lượng mã nhỏ như vậy, bạn đã có tất cả những gì cần để bắt đầu xây dựng hệ thống phân tán!
 
 ...
 
+![](img/fig48_1.PNG)
+
 **Hình 48.1: Ví dụ mã UDP (client.c, server.c)**
 
 ...
+
+![](img/fig48_2.PNG)
 
 **Hình 48.2: Một thư viện UDP đơn giản (udp.c)**
 
@@ -59,6 +64,8 @@ Tuy nhiên, vì nhiều ứng dụng chỉ đơn giản muốn gửi dữ liệu
 
 Kỹ thuật mà chúng ta sẽ sử dụng được gọi là **acknowledgment** (xác nhận), hay viết tắt là **ack**. Ý tưởng rất đơn giản: phía gửi gửi một thông điệp tới phía nhận; phía nhận sau đó gửi lại một thông điệp ngắn để xác nhận đã nhận được. **Hình 48.3** minh họa quá trình này.
 
+![](img/fig48_3.PNG)
+
 **Hình 48.3: Thông điệp và xác nhận (Message Plus Acknowledgment)**
 
 Khi phía gửi nhận được **acknowledgment** cho thông điệp, nó có thể yên tâm rằng phía nhận thực sự đã nhận được thông điệp gốc. Tuy nhiên, điều gì sẽ xảy ra nếu phía gửi **không** nhận được acknowledgment?
@@ -67,12 +74,16 @@ Khi phía gửi nhận được **acknowledgment** cho thông điệp, nó có t
 
 Để cách tiếp cận này hoạt động, phía gửi phải giữ lại một bản sao của thông điệp, phòng khi cần gửi lại. Sự kết hợp giữa **timeout** và **retry** khiến một số người gọi phương pháp này là **timeout/retry**; khá thông minh, phải không? **Hình 48.4** minh họa một ví dụ.
 
+![](img/fig48_4.PNG)
+
 **Hình 48.4: Thông điệp và xác nhận – Yêu cầu bị rơi (Message Plus Acknowledgment: Dropped Request)**
 
 
 Thật không may, cơ chế **timeout/retry** (hết thời gian chờ/thử lại) ở dạng này vẫn chưa đủ. **Hình 48.5** minh họa một ví dụ về mất gói tin (**packet loss**) có thể gây ra rắc rối. Trong ví dụ này, không phải thông điệp gốc bị mất, mà là **acknowledgment** (gói tin xác nhận).  
 
 Từ góc nhìn của phía gửi, tình huống có vẻ giống nhau: không nhận được ack, và do đó cần thực hiện timeout và retry. Nhưng từ góc nhìn của phía nhận, lại hoàn toàn khác: cùng một thông điệp đã được nhận **hai lần**! Mặc dù có thể có những trường hợp điều này không gây hại, nhưng nhìn chung thì không ổn; hãy tưởng tượng điều gì sẽ xảy ra khi bạn đang tải xuống một tệp và các gói tin thừa bị lặp lại trong quá trình tải. Do đó, khi chúng ta hướng tới một tầng thông điệp đáng tin cậy (**reliable message layer**), chúng ta thường muốn đảm bảo rằng **mỗi thông điệp chỉ được nhận đúng một lần** bởi phía nhận.
+
+![](img/fig48_5.PNG)
 
 **Hình 48.5: Thông điệp và xác nhận – Phản hồi bị rơi (Message Plus Acknowledgment: Dropped Reply)**
 
@@ -111,7 +122,7 @@ Một vấn đề khác là hiệu năng. Khi viết mã, người ta thường 
 
 Trong khi các **OS abstractions** tỏ ra là lựa chọn kém hiệu quả để xây dựng hệ thống phân tán, các **programming language (PL) abstractions** (trừu tượng của ngôn ngữ lập trình) lại hợp lý hơn nhiều. Trừu tượng chiếm ưu thế nhất dựa trên ý tưởng **remote procedure call** (gọi thủ tục từ xa), hay viết tắt là **RPC** [BN84][^1].
 
-Các gói RPC đều có một mục tiêu đơn giản: làm cho quá trình thực thi mã trên một máy từ xa trở nên đơn giản và trực quan như việc gọi một hàm cục bộ. Do đó, từ góc nhìn của **client**, một lời gọi thủ tục được thực hiện, và một thời gian sau, kết quả được trả về. **Server** chỉ cần định nghĩa một số **routine** (thủ tục) mà nó muốn xuất ra. Phần “ma thuật” còn lại được xử lý bởi hệ thống RPC, vốn thường có hai thành phần chính:  
+Các gói RPC đều có một mục tiêu đơn giản: làm cho quá trình thực thi mã trên một máy từ xa trở nên đơn giản và trực quan như việc gọi một hàm cục bộ. Do đó, từ góc nhìn của **client**, một call thủ tục được thực hiện, và một thời gian sau, kết quả được trả về. **Server** chỉ cần định nghĩa một số **routine** (thủ tục) mà nó muốn xuất ra. Phần “ma thuật” còn lại được xử lý bởi hệ thống RPC, vốn thường có hai thành phần chính:  
 - **Stub generator** (trình tạo stub, đôi khi gọi là **protocol compiler** – trình biên dịch giao thức)  
 - **Run-time library** (thư viện thời gian chạy)  
 
@@ -124,7 +135,7 @@ Chúng ta sẽ xem xét chi tiết từng thành phần này ngay sau đây.
 
 Nhiệm vụ của **stub generator** khá đơn giản: loại bỏ phần khó khăn trong việc đóng gói (packing) các tham số và kết quả của hàm vào thông điệp bằng cách tự động hóa quá trình này. Cách tiếp cận này mang lại nhiều lợi ích: giúp tránh được những lỗi đơn giản thường gặp khi viết mã thủ công; hơn nữa, một **stub compiler** (trình biên dịch stub) có thể tối ưu mã này và cải thiện hiệu năng.
 
-**Đầu vào** của trình biên dịch này đơn giản là tập hợp các lời gọi hàm mà **server** muốn xuất ra cho **client**. Về mặt khái niệm, nó có thể đơn giản như sau:
+**Đầu vào** của trình biên dịch này đơn giản là tập hợp các call hàm mà **server** muốn xuất ra cho **client**. Về mặt khái niệm, nó có thể đơn giản như sau:
 
 ```c
 interface {
@@ -137,12 +148,12 @@ interface {
 - **Phía client**: sinh ra **client stub**, chứa mỗi hàm được định nghĩa trong interface; một chương trình client muốn sử dụng dịch vụ RPC này sẽ liên kết (link) với client stub và gọi vào đó để thực hiện các RPC.
 
 Bên trong, mỗi hàm trong client stub sẽ thực hiện toàn bộ công việc cần thiết để thực hiện **remote procedure call**.  
-Từ góc nhìn của client, mã chỉ đơn giản là một lời gọi hàm (ví dụ: client gọi `func1(x)`); nhưng bên trong, mã trong client stub cho `func1()` sẽ thực hiện:
+Từ góc nhìn của client, mã chỉ đơn giản là một call hàm (ví dụ: client gọi `func1(x)`); nhưng bên trong, mã trong client stub cho `func1()` sẽ thực hiện:
 
 * **Tạo bộ đệm thông điệp (message buffer).** Thông thường, đây chỉ là một mảng byte liên tiếp có kích thước nhất định.
 * **Đóng gói thông tin cần thiết vào message buffer.** Thông tin này bao gồm một định danh (identifier) cho hàm cần gọi, cũng như tất cả các tham số mà hàm cần (ví dụ: trong trường hợp trên, một số nguyên cho `func1`). Quá trình đưa toàn bộ thông tin này vào một bộ đệm liên tiếp được gọi là **marshaling** (đóng gói tham số) hoặc **serialization** (tuần tự hóa thông điệp).
 * **Gửi thông điệp tới RPC server đích.** Việc giao tiếp với RPC server và tất cả các chi tiết cần thiết để hoạt động đúng được xử lý bởi **RPC run-time library** (thư viện thời gian chạy RPC), sẽ được mô tả chi tiết hơn bên dưới.
-* **Chờ phản hồi.** Vì lời gọi hàm thường là đồng bộ (**synchronous**), lời gọi sẽ chờ cho đến khi hoàn tất.
+* **Chờ phản hồi.** Vì call hàm thường là đồng bộ (**synchronous**), call sẽ chờ cho đến khi hoàn tất.
 * **Giải nén mã trả về và các tham số khác.** Nếu hàm chỉ trả về một mã kết quả duy nhất, quá trình này khá đơn giản; tuy nhiên, các hàm phức tạp hơn có thể trả về kết quả phức tạp (ví dụ: một danh sách), và do đó stub có thể cần giải nén chúng. Bước này còn được gọi là **unmarshaling** hoặc **deserialization**.
 * **Trả kết quả về cho hàm gọi.** Cuối cùng, trả kết quả từ client stub về mã client.
 
@@ -163,13 +174,13 @@ Có một số vấn đề quan trọng khác cần xem xét trong **stub compil
   - Gắn chú thích (annotation) vào cấu trúc dữ liệu với thông tin bổ sung, cho phép compiler biết byte nào cần được **serialize**.
 
 - **Tổ chức server liên quan đến concurrency (tính đồng thời)**:  
-  Một server đơn giản chỉ chờ yêu cầu trong một vòng lặp và xử lý từng yêu cầu một. Tuy nhiên, như bạn có thể đoán, điều này rất kém hiệu quả; nếu một lời gọi RPC bị chặn (ví dụ: do I/O), tài nguyên server sẽ bị lãng phí.  
+  Một server đơn giản chỉ chờ yêu cầu trong một vòng lặp và xử lý từng yêu cầu một. Tuy nhiên, như bạn có thể đoán, điều này rất kém hiệu quả; nếu một call RPC bị chặn (ví dụ: do I/O), tài nguyên server sẽ bị lãng phí.  
   Do đó, hầu hết server được xây dựng theo một dạng **concurrent** nào đó. Một mô hình phổ biến là **thread pool** (bể luồng). Trong mô hình này:
   - Một tập hữu hạn các **thread** được tạo khi server khởi động.
-  - Khi một thông điệp đến, nó được phân phối tới một trong các **worker thread**, luồng này sẽ thực hiện công việc của lời gọi RPC và cuối cùng phản hồi.
+  - Khi một thông điệp đến, nó được phân phối tới một trong các **worker thread**, luồng này sẽ thực hiện công việc của call RPC và cuối cùng phản hồi.
   - Trong thời gian đó, **main thread** tiếp tục nhận các yêu cầu khác và có thể phân phối chúng cho các worker khác.
 
-Cách tổ chức này cho phép thực thi đồng thời trong server, tăng mức sử dụng tài nguyên; tuy nhiên, chi phí tiêu chuẩn cũng xuất hiện, chủ yếu là độ phức tạp lập trình, vì các lời gọi RPC giờ đây có thể cần sử dụng **lock** và các **synchronization primitives** (cơ chế đồng bộ hóa) khác để đảm bảo hoạt động đúng.
+Cách tổ chức này cho phép thực thi đồng thời trong server, tăng mức sử dụng tài nguyên; tuy nhiên, chi phí tiêu chuẩn cũng xuất hiện, chủ yếu là độ phức tạp lập trình, vì các call RPC giờ đây có thể cần sử dụng **lock** và các **synchronization primitives** (cơ chế đồng bộ hóa) khác để đảm bảo hoạt động đúng.
 
 
 ### Thư viện thời gian chạy (Run-Time Library)
@@ -189,9 +200,9 @@ Vì lý do này, nhiều gói RPC được xây dựng trên các tầng giao ti
 
 ### Các vấn đề khác (Other Issues)
 
-Có một số vấn đề khác mà **RPC run-time** cũng phải xử lý. Ví dụ: điều gì xảy ra khi một lời gọi từ xa mất nhiều thời gian để hoàn tất? Với cơ chế timeout, một lời gọi từ xa chạy lâu có thể bị client coi là lỗi, dẫn đến việc retry, và do đó cần xử lý cẩn thận. Một giải pháp là sử dụng **explicit acknowledgment** (xác nhận rõ ràng từ phía nhận gửi tới phía gửi) khi phản hồi chưa được tạo ngay; điều này cho client biết rằng server đã nhận yêu cầu. Sau đó, sau một khoảng thời gian, client có thể định kỳ hỏi xem server vẫn đang xử lý yêu cầu hay không; nếu server liên tục trả lời “có”, client nên tiếp tục chờ (suy cho cùng, đôi khi một lời gọi thủ tục có thể mất nhiều thời gian để hoàn tất).
+Có một số vấn đề khác mà **RPC run-time** cũng phải xử lý. Ví dụ: điều gì xảy ra khi một call từ xa mất nhiều thời gian để hoàn tất? Với cơ chế timeout, một call từ xa chạy lâu có thể bị client coi là lỗi, dẫn đến việc retry, và do đó cần xử lý cẩn thận. Một giải pháp là sử dụng **explicit acknowledgment** (xác nhận rõ ràng từ phía nhận gửi tới phía gửi) khi phản hồi chưa được tạo ngay; điều này cho client biết rằng server đã nhận yêu cầu. Sau đó, sau một khoảng thời gian, client có thể định kỳ hỏi xem server vẫn đang xử lý yêu cầu hay không; nếu server liên tục trả lời “có”, client nên tiếp tục chờ (suy cho cùng, đôi khi một call thủ tục có thể mất nhiều thời gian để hoàn tất).
 
-Run-time cũng phải xử lý các lời gọi thủ tục có tham số lớn, vượt quá kích thước có thể chứa trong một gói tin duy nhất. Một số giao thức mạng tầng thấp cung cấp chức năng **fragmentation** (phân mảnh phía gửi – chia gói lớn thành nhiều gói nhỏ) và **reassembly** (tái hợp phía nhận – ghép các phần nhỏ thành một khối logic lớn hơn); nếu không, RPC run-time có thể phải tự triển khai chức năng này. Xem chi tiết trong bài báo của Birrell và Nelson [BN84].
+Run-time cũng phải xử lý các call thủ tục có tham số lớn, vượt quá kích thước có thể chứa trong một gói tin duy nhất. Một số giao thức mạng tầng thấp cung cấp chức năng **fragmentation** (phân mảnh phía gửi – chia gói lớn thành nhiều gói nhỏ) và **reassembly** (tái hợp phía nhận – ghép các phần nhỏ thành một khối logic lớn hơn); nếu không, RPC run-time có thể phải tự triển khai chức năng này. Xem chi tiết trong bài báo của Birrell và Nelson [BN84].
 
 
 >> **ASIDE: LẬP LUẬN END-TO-END (THE END-TO-END ARGUMENT)**  
@@ -215,7 +226,7 @@ Do đó, sự khác biệt về endianness có thể gây ra một chi phí hi�
 
 
 Một vấn đề cuối cùng là liệu có nên **phơi bày bản chất bất đồng bộ (asynchronous)** của giao tiếp cho client hay không, từ đó cho phép một số tối ưu hóa hiệu năng.  
-Cụ thể, RPC thông thường được thực hiện **đồng bộ** (synchronous), tức là khi client thực hiện lời gọi thủ tục, nó phải chờ cho đến khi lời gọi trả về trước khi tiếp tục. Vì thời gian chờ này có thể dài, và vì client có thể có những công việc khác cần làm, một số gói RPC cho phép gọi RPC **bất đồng bộ** (asynchronous).  
+Cụ thể, RPC thông thường được thực hiện **đồng bộ** (synchronous), tức là khi client thực hiện call thủ tục, nó phải chờ cho đến khi call trả về trước khi tiếp tục. Vì thời gian chờ này có thể dài, và vì client có thể có những công việc khác cần làm, một số gói RPC cho phép gọi RPC **bất đồng bộ** (asynchronous).  
 
 Khi một RPC bất đồng bộ được thực hiện, gói RPC sẽ gửi yêu cầu và trả về ngay lập tức; client sau đó có thể tự do làm việc khác, chẳng hạn gọi các RPC khác hoặc thực hiện các tính toán hữu ích khác.  
 Tại một thời điểm nào đó, client sẽ muốn xem kết quả của RPC bất đồng bộ; khi đó nó sẽ gọi lại vào tầng RPC, yêu cầu chờ cho đến khi các RPC đang chờ hoàn tất, và lúc này các tham số trả về mới có thể được truy cập.
@@ -226,6 +237,6 @@ Tại một thời điểm nào đó, client sẽ muốn xem kết quả của R
 Chúng ta đã được giới thiệu một chủ đề mới: **hệ thống phân tán** (distributed systems), và vấn đề lớn nhất của nó: **xử lý lỗi** (failure) – điều giờ đây đã trở thành chuyện thường ngày. Như người ta vẫn nói ở Google: khi bạn chỉ có một máy tính để bàn, lỗi là hiếm; nhưng khi bạn ở trong một **data center** với hàng nghìn máy, lỗi xảy ra **liên tục**.  
 **Chìa khóa** của bất kỳ hệ thống phân tán nào là cách bạn xử lý những lỗi đó.
 
-Chúng ta cũng đã thấy rằng **giao tiếp** là trái tim của mọi hệ thống phân tán. Một trừu tượng phổ biến của giao tiếp này là **remote procedure call (RPC)**, cho phép client thực hiện các lời gọi từ xa tới server; gói RPC xử lý tất cả các chi tiết phức tạp, bao gồm **timeout/retry** và **acknowledgment**, để cung cấp một dịch vụ gần giống nhất với lời gọi thủ tục cục bộ.
+Chúng ta cũng đã thấy rằng **giao tiếp** là trái tim của mọi hệ thống phân tán. Một trừu tượng phổ biến của giao tiếp này là **remote procedure call (RPC)**, cho phép client thực hiện các call từ xa tới server; gói RPC xử lý tất cả các chi tiết phức tạp, bao gồm **timeout/retry** và **acknowledgment**, để cung cấp một dịch vụ gần giống nhất với call thủ tục cục bộ.
 
 Cách tốt nhất để thực sự hiểu một gói RPC tất nhiên là **tự mình sử dụng nó**. Hệ thống RPC của Sun, sử dụng trình biên dịch stub `rpcgen`, là một ví dụ cũ; **gRPC** của Google và **Apache Thrift** là những phiên bản hiện đại hơn của cùng ý tưởng. Hãy thử một trong số chúng và tự trải nghiệm để hiểu tại sao chúng lại được quan tâm đến vậy.

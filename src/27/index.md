@@ -23,7 +23,7 @@ Khai báo này có thể trông hơi phức tạp (đặc biệt nếu bạn ch�
 
 - Tham số thứ nhất, `thread`, là một con trỏ tới cấu trúc kiểu `pthread_t`; chúng ta sẽ dùng cấu trúc này để tương tác với thread, và do đó cần truyền nó vào `pthread_create()` để khởi tạo.
 
-- Tham số thứ hai, `attr`, được dùng để chỉ định các **attribute** (thuộc tính) mà thread này có thể có. Ví dụ: thiết lập kích thước stack hoặc thông tin về **scheduling priority** (độ ưu tiên lập lịch) của thread. Một attribute được khởi tạo bằng một lời gọi riêng tới `pthread_attr_init()`; xem trang **manual** để biết chi tiết. Tuy nhiên, trong hầu hết các trường hợp, giá trị mặc định là đủ; trong trường hợp này, chúng ta chỉ cần truyền giá trị `NULL`.
+- Tham số thứ hai, `attr`, được dùng để chỉ định các **attribute** (thuộc tính) mà thread này có thể có. Ví dụ: thiết lập kích thước stack hoặc thông tin về **scheduling priority** (độ ưu tiên lập lịch) của thread. Một attribute được khởi tạo bằng một call riêng tới `pthread_attr_init()`; xem trang **manual** để biết chi tiết. Tuy nhiên, trong hầu hết các trường hợp, giá trị mặc định là đủ; trong trường hợp này, chúng ta chỉ cần truyền giá trị `NULL`.
 
 - Tham số thứ ba là phức tạp nhất, nhưng thực chất chỉ là câu hỏi: **thread này sẽ bắt đầu chạy ở hàm nào?** Trong C, đây là một function pointer, và ở đây nó cho biết điều sau: một tên hàm (`start_routine`), hàm này nhận một đối số duy nhất kiểu `void *` (như được chỉ ra trong dấu ngoặc đơn sau `start_routine`), và trả về một giá trị kiểu `void *` (tức là một con trỏ void).
 
@@ -48,9 +48,11 @@ int pthread_create(..., // hai tham số đầu giống nhau
 Hãy xem một ví dụ trong **Hình 27.1**. Ở đây, chúng ta chỉ tạo một thread được truyền hai đối số, được đóng gói vào một kiểu dữ liệu do chúng ta tự định nghĩa (`myarg_t`). Thread, khi được tạo, có thể đơn giản **cast** (ép kiểu) đối số của nó sang kiểu mong đợi và giải nén các đối số theo ý muốn.
 
 
+![](img/fig27_1.PNG)
+
 **Hình 27.1: Tạo một Thread**
 
-Và đó là nó! Khi bạn tạo một thread, bạn thực sự đã có thêm một thực thể đang thực thi độc lập, với **call stack** (ngăn xếp lời gọi hàm) riêng của nó, chạy trong cùng **address space** (không gian địa chỉ) với tất cả các thread hiện có trong chương trình. Và từ đây, “cuộc vui” bắt đầu!
+Và đó là nó! Khi bạn tạo một thread, bạn thực sự đã có thêm một thực thể đang thực thi độc lập, với **call stack** (ngăn xếp call hàm) riêng của nó, chạy trong cùng **address space** (không gian địa chỉ) với tất cả các thread hiện có trong chương trình. Và từ đây, “cuộc vui” bắt đầu!
 
 
 ## 27.2 Hoàn thành Thread (Thread Completion)
@@ -92,6 +94,8 @@ int main(int argc, char *argv[]) {
 }
 ```
 
+![](img/fig27_2.PNG)
+
 **Hình 27.2: Chờ Thread hoàn thành**
 
 Một vài điểm cần lưu ý về ví dụ này:
@@ -117,6 +121,8 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 ```
+
+![](img/fig27_3.PNG)
 
 **Hình 27.3: Truyền đối số đơn giản hơn cho Thread**
 
@@ -150,16 +156,16 @@ int pthread_mutex_lock(pthread_mutex_t *mutex);
 int pthread_mutex_unlock(pthread_mutex_t *mutex);
 ```
 
-Các hàm này khá dễ hiểu và sử dụng. Khi bạn có một đoạn mã là critical section, và do đó cần được bảo vệ để đảm bảo hoạt động đúng, lock là công cụ rất hữu ích. Bạn có thể hình dung đoạn code như sau:
+Các hàm này khá dễ hiểu và sử dụng. Khi bạn có một đoạn code là critical section, và do đó cần được bảo vệ để đảm bảo hoạt động đúng, lock là công cụ rất hữu ích. Bạn có thể hình dung đoạn code như sau:
 
 ```c
 pthread_mutex_t lock;
 pthread_mutex_lock(&lock);
-x = x + 1; // hoặc bất kỳ đoạn mã nào thuộc critical section
+x = x + 1; // hoặc bất kỳ đoạn code nào thuộc critical section
 pthread_mutex_unlock(&lock);
 ```
 
-Ý tưởng của đoạn code này như sau: nếu không có thread nào khác đang giữ lock khi `pthread_mutex_lock()` được gọi, thread sẽ **acquire** (giành) được lock và đi vào critical section. Nếu một thread khác đang giữ lock, thread đang cố lấy lock sẽ **không trả về** từ lời gọi hàm cho đến khi nó giành được lock (ngụ ý rằng thread đang giữ lock đã **release** nó thông qua lời gọi `unlock`). Tất nhiên, có thể có nhiều thread bị kẹt chờ bên trong hàm lấy lock tại cùng một thời điểm; tuy nhiên, chỉ thread đang giữ lock mới được phép gọi `unlock`.
+Ý tưởng của đoạn code này như sau: nếu không có thread nào khác đang giữ lock khi `pthread_mutex_lock()` được gọi, thread sẽ **acquire** (giành) được lock và đi vào critical section. Nếu một thread khác đang giữ lock, thread đang cố lấy lock sẽ **không trả về** từ call hàm cho đến khi nó giành được lock (ngụ ý rằng thread đang giữ lock đã **release** nó thông qua call `unlock`). Tất nhiên, có thể có nhiều thread bị kẹt chờ bên trong hàm lấy lock tại cùng một thời điểm; tuy nhiên, chỉ thread đang giữ lock mới được phép gọi `unlock`.
 
 Đáng tiếc, đoạn code trên **bị lỗi** ở hai điểm quan trọng.
 
@@ -186,7 +192,7 @@ assert(rc == 0); // luôn kiểm tra thành công!
 Tham số thứ nhất của hàm này là địa chỉ của lock, tham số thứ hai là một tập **attribute** (thuộc tính) tùy chọn. Bạn có thể tự tìm hiểu thêm về các thuộc tính này; truyền `NULL` sẽ dùng giá trị mặc định. Cả hai cách đều hoạt động, nhưng thông thường chúng ta dùng cách khởi tạo động (cách thứ hai). Lưu ý rằng khi không còn dùng lock, bạn nên gọi hàm `pthread_mutex_destroy()` để giải phóng; xem trang manual để biết chi tiết.
 
 
-**Vấn đề thứ hai** là **không kiểm tra mã lỗi** khi gọi `lock` và `unlock`. Giống như hầu hết các hàm thư viện trong hệ thống UNIX, các hàm này **có thể thất bại**! Nếu code của bạn không kiểm tra mã lỗi, lỗi sẽ xảy ra một cách âm thầm, và trong trường hợp này có thể cho phép nhiều thread cùng vào critical section. Tối thiểu, hãy dùng **wrapper** để đảm bảo hàm thực thi thành công, như minh họa trong **Hình 27.4** (trang 7); các chương trình phức tạp hơn (không phải chương trình minh họa đơn giản) — vốn không thể chỉ đơn giản thoát khi có lỗi — nên kiểm tra thất bại và xử lý phù hợp khi lời gọi không thành công.
+**Vấn đề thứ hai** là **không kiểm tra mã lỗi** khi gọi `lock` và `unlock`. Giống như hầu hết các hàm thư viện trong hệ thống UNIX, các hàm này **có thể thất bại**! Nếu code của bạn không kiểm tra mã lỗi, lỗi sẽ xảy ra một cách âm thầm, và trong trường hợp này có thể cho phép nhiều thread cùng vào critical section. Tối thiểu, hãy dùng **wrapper** để đảm bảo hàm thực thi thành công, như minh họa trong **Hình 27.4** (trang 7); các chương trình phức tạp hơn (không phải chương trình minh họa đơn giản) — vốn không thể chỉ đơn giản thoát khi có lỗi — nên kiểm tra thất bại và xử lý phù hợp khi call không thành công.
 
 ```c
 // Giữ code gọn gàng; chỉ dùng nếu exit() là chấp nhận được khi lỗi
@@ -195,6 +201,8 @@ void Pthread_mutex_lock(pthread_mutex_t *mutex) {
   assert(rc == 0);
 }
 ```
+
+![](img/fig27_4.PNG)
 
 **Hình 27.4: Ví dụ về Wrapper**
 
@@ -207,7 +215,7 @@ int pthread_mutex_timedlock(pthread_mutex_t *mutex,
                             struct timespec *abs_timeout);
 ```
 
-Hai lời gọi này được dùng để **acquire lock** (lấy khóa):
+Hai call này được dùng để **acquire lock** (lấy khóa):
 
 - Phiên bản `trylock` sẽ trả về lỗi nếu lock đang được giữ.
 - Phiên bản `timedlock` sẽ trả về sau khi hết thời gian chờ (**timeout**) hoặc sau khi lấy được lock, tùy điều kiện nào xảy ra trước. Do đó, `timedlock` với thời gian chờ bằng 0 sẽ tương đương với `trylock`.
@@ -306,7 +314,7 @@ Lưu ý: API là tập hợp hàm/giao ước của thư viện; hiểu đúng s
 >>  
 >> Có một số điều nhỏ nhưng quan trọng cần ghi nhớ khi bạn dùng POSIX thread library (thư viện POSIX threads/Pthreads) — hoặc thực ra là bất kỳ thread library nào — để xây dựng chương trình multi-threaded. Chúng bao gồm:  
 >>  
->> - **Keep it simple:** Trên hết, mọi đoạn mã để lock hoặc signal giữa các thread nên càng đơn giản càng tốt. Các tương tác luồng rắc rối thường dẫn đến lỗi.  
+>> - **Keep it simple:** Trên hết, mọi đoạn code để lock hoặc signal giữa các thread nên càng đơn giản càng tốt. Các tương tác luồng rắc rối thường dẫn đến lỗi.  
 >> - **Minimize thread interactions:** Cố gắng giảm thiểu số cách mà các thread tương tác với nhau. Mỗi tương tác nên được suy xét cẩn thận và xây dựng bằng các cách tiếp cận đã được kiểm nghiệm (nhiều trong số đó chúng ta sẽ học ở các chương sau).  
 >> - **Initialize locks and condition variables:** Không khởi tạo sẽ dẫn đến mã có lúc chạy được, có lúc thất bại theo những cách rất kỳ quặc.  
 >> - **Check your return codes:** Trong mọi lập trình C và UNIX, bạn nên kiểm tra mọi giá trị trả về; ở đây cũng vậy. Không làm vậy sẽ dẫn đến hành vi khó hiểu, khiến bạn có thể (a) hét lên, (b) bứt tóc, hoặc (c) cả hai.  

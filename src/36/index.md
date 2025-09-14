@@ -13,11 +13,15 @@ I/O tất nhiên là cực kỳ quan trọng đối với hệ thống máy tín
 
 Để bắt đầu, hãy xem một sơ đồ “kinh điển” của một hệ thống điển hình (**Hình 36.1**). Sơ đồ cho thấy một CPU đơn được kết nối với bộ nhớ chính (main memory) của hệ thống thông qua một loại **memory bus** hoặc **interconnect** nào đó. Một số thiết bị được kết nối với hệ thống thông qua một **I/O bus** tổng quát, mà trong nhiều hệ thống hiện đại sẽ là **PCI** (hoặc một trong nhiều biến thể của nó); card đồ họa và một số thiết bị I/O hiệu năng cao khác thường nằm ở đây. Cuối cùng, ở mức thấp hơn là một hoặc nhiều **peripheral bus** (bus ngoại vi), chẳng hạn như **SCSI**, **SATA** hoặc **USB**. Các bus này kết nối các thiết bị chậm với hệ thống, bao gồm đĩa cứng, chuột và bàn phím.
 
+![](img/fig36_1.PNG)
+
 **Hình 36.1: Kiến trúc hệ thống nguyên mẫu (Prototypical System Architecture)**
 
 Một câu hỏi đặt ra: tại sao chúng ta cần một cấu trúc phân cấp như vậy? Nói ngắn gọn: **vật lý** và **chi phí**. Bus càng nhanh thì chiều dài của nó càng phải ngắn; do đó, một **memory bus** hiệu năng cao không có nhiều chỗ để cắm thêm thiết bị. Ngoài ra, việc thiết kế một bus hiệu năng cao là rất tốn kém. Vì vậy, các nhà thiết kế hệ thống đã áp dụng cách tiếp cận phân cấp này, trong đó các thành phần đòi hỏi hiệu năng cao (như card đồ họa) được đặt gần CPU hơn. Các thành phần hiệu năng thấp hơn được đặt xa hơn. Lợi ích của việc đặt đĩa và các thiết bị chậm khác trên **peripheral bus** là rất nhiều; đặc biệt, bạn có thể kết nối số lượng lớn thiết bị vào đó.
 
 Tất nhiên, các hệ thống hiện đại ngày càng sử dụng **chipset** chuyên dụng và các kết nối **point-to-point** nhanh hơn để cải thiện hiệu năng. **Hình 36.2** cho thấy sơ đồ gần đúng của **Intel Z270 Chipset** [H17]. Ở phía trên, CPU kết nối trực tiếp nhất với hệ thống bộ nhớ, nhưng cũng có một kết nối hiệu năng cao tới card đồ họa (và do đó là màn hình) để hỗ trợ chơi game (ồ, thật khủng khiếp!) và các ứng dụng đòi hỏi đồ họa cao.
+
+![](img/fig36_2.PNG)
 
 **Hình 36.2: Kiến trúc hệ thống hiện đại (Modern System Architecture)**
 
@@ -29,6 +33,8 @@ CPU kết nối với một chip I/O thông qua **DMI** (Direct Media Interface)
 Bây giờ, hãy xem xét một **thiết bị chuẩn** (không phải thiết bị thực), và sử dụng nó để tìm hiểu một số cơ chế cần thiết nhằm làm cho việc tương tác với thiết bị trở nên hiệu quả. Từ **Hình 36.3**, ta thấy một thiết bị có hai thành phần quan trọng:
 
 1. **Giao diện phần cứng** (hardware interface) mà nó cung cấp cho phần còn lại của hệ thống. Giống như một phần mềm, phần cứng cũng phải cung cấp một loại giao diện nào đó cho phép phần mềm hệ thống điều khiển hoạt động của nó. Do đó, tất cả các thiết bị đều có một giao diện và giao thức (protocol) được xác định để tương tác điển hình.
+
+![](img/fig36_3.PNG)
 
 **Hình 36.3: Một thiết bị chuẩn (A Canonical Device)**
 
@@ -76,7 +82,7 @@ Giao thức cơ bản này có ưu điểm là **đơn giản** và **hoạt đ�
 
 Phát minh mà nhiều kỹ sư đã tìm ra từ nhiều năm trước để cải thiện tương tác này là một thứ mà chúng ta đã gặp: **interrupt** (ngắt).  
 Thay vì polling thiết bị liên tục, OS có thể gửi yêu cầu, đưa **process** gọi I/O vào trạng thái ngủ (**sleep**), và **context switch** sang một tác vụ khác. Khi thiết bị hoàn tất thao tác, nó sẽ phát ra một **hardware interrupt** (ngắt phần cứng), khiến CPU nhảy vào OS tại một **interrupt service routine** (ISR) – hay đơn giản hơn là **interrupt handler**.  
-Interrupt handler chỉ là một đoạn mã trong hệ điều hành, có nhiệm vụ hoàn tất yêu cầu (ví dụ: đọc dữ liệu và có thể cả mã lỗi từ thiết bị) và đánh thức process đang chờ I/O, để nó tiếp tục thực thi.
+Interrupt handler chỉ là một đoạn code trong hệ điều hành, có nhiệm vụ hoàn tất yêu cầu (ví dụ: đọc dữ liệu và có thể cả mã lỗi từ thiết bị) và đánh thức process đang chờ I/O, để nó tiếp tục thực thi.
 
 Interrupts cho phép **chồng lấp** (overlap) giữa tính toán và I/O, đây là yếu tố then chốt để cải thiện mức sử dụng tài nguyên. Dưới đây là sơ đồ thời gian minh họa vấn đề:
 
@@ -170,6 +176,8 @@ Vấn đề này được giải quyết bằng kỹ thuật lâu đời: **abst
 
 Hãy xem abstraction này giúp ích cho thiết kế và triển khai OS như thế nào bằng cách xem xét **ngăn xếp phần mềm file system** của Linux. **Hình 36.4** là một mô tả gần đúng về tổ chức phần mềm của Linux.
 
+![](img/fig36_4.PNG)
+
 **Hình 36.4: Ngăn xếp file system (The File System Stack)**
 
 Như bạn thấy từ sơ đồ, một file system (và chắc chắn là cả ứng dụng ở tầng trên) hoàn toàn không cần biết nó đang sử dụng loại ổ đĩa nào; nó chỉ đơn giản gửi các yêu cầu đọc/ghi block tới **generic block layer** (lớp khối tổng quát), lớp này sẽ định tuyến chúng tới **device driver** phù hợp, driver này sẽ xử lý chi tiết việc gửi yêu cầu cụ thể. Mặc dù sơ đồ đã được đơn giản hóa, nó cho thấy cách mà các chi tiết có thể được ẩn khỏi phần lớn OS.
@@ -184,6 +192,8 @@ Lưu ý rằng encapsulation như trên cũng có nhược điểm. Ví dụ, n�
 ## 36.8 Nghiên cứu tình huống: Một IDE Disk Driver đơn giản
 
 Để tìm hiểu sâu hơn, hãy xem nhanh một thiết bị thực: **IDE disk drive** [L94]. Chúng ta sẽ tóm tắt giao thức như được mô tả trong tài liệu [W10]; đồng thời xem qua mã nguồn **xv6** để có ví dụ đơn giản về một IDE driver hoạt động [CK+08].
+
+![](img/fig36_5.PNG)
 
 **Hình 36.5: Giao diện IDE (The IDE Interface)**
 
@@ -204,6 +214,8 @@ Hầu hết giao thức này được tìm thấy trong **xv6 IDE driver** (**H�
 2. **`ide_start_request()`**: Gửi một yêu cầu (và có thể cả dữ liệu, nếu là ghi) tới đĩa; các lệnh x86 `in` và `out` được gọi để đọc và ghi các device register tương ứng.  
 3. **`ide_wait_ready()`**: Được `start_request` sử dụng để đảm bảo ổ đĩa sẵn sàng trước khi gửi yêu cầu.  
 4. **`ide_intr()`**: Được gọi khi xảy ra interrupt; đọc dữ liệu từ thiết bị (nếu yêu cầu là đọc), đánh thức process đang chờ I/O hoàn tất, và nếu còn yêu cầu trong hàng đợi I/O, sẽ khởi động yêu cầu tiếp theo thông qua `ide_start_request()`.
+
+![](img/fig36_6.PNG)
 
 **Hình 36.6: Trình điều khiển đĩa IDE trong xv6 (đơn giản hóa)**
 

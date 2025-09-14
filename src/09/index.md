@@ -93,6 +93,7 @@ while (current) {
 // 'current' là process thắng: lập lịch cho nó...
 ```
 
+
 **Hình 9.1:** Mã quyết định lập lịch kiểu Lottery
 
 ## 9.3 Implementation
@@ -115,6 +116,7 @@ Với ví dụ ticket thắng là 300, quá trình diễn ra như sau:
 ^[2]: Thật bất ngờ, như Björn Lindberg đã chỉ ra, việc này có thể khó thực hiện đúng; xem thêm chi tiết tại: http://stackoverflow.com/questions/2509679/how-to-generate-a-random-number-from-within-a-range  
 
 ![](./img/fig9_2.PNG)
+
 
 **Hình 9.2:** Nghiên cứu tính công bằng của Lottery Scheduling  
 
@@ -161,6 +163,7 @@ Ví dụ: ban đầu A, B, C đều có pass = 0. Giả sử chọn A, pass củ
 
 ![](./img/fig9_3.PNG)
 
+
 **Hình 9.3:** Dấu vết hoạt động của Stride Scheduling  
 
 Kết quả: C chạy 5 lần, A chạy 2 lần, B chạy 1 lần — đúng tỷ lệ ticket 250:100:50. Lottery đạt tỷ lệ theo xác suất, stride đạt chính xác sau mỗi chu kỳ.  
@@ -175,6 +178,7 @@ Dù có các nghiên cứu trước về fair-share scheduling, Linux hiện t�
 Mục tiêu: giảm tối đa thời gian đưa ra quyết định lập lịch, nhờ thiết kế và cấu trúc dữ liệu phù hợp. Nghiên cứu tại Google cho thấy, ngay cả sau tối ưu mạnh, lập lịch vẫn chiếm ~5% CPU của toàn bộ datacenter [K+15]. Giảm overhead này là mục tiêu quan trọng.
 
 ![](./img/fig9_4.PNG)
+
 
 **Hình 9.4:** Ví dụ đơn giản về CFS  
 
@@ -244,6 +248,7 @@ Ví dụ: giả sử có 10 job với giá trị vruntime lần lượt: 1, 5, 9
 [^3]: Vâng, chúng tôi cố tình dùng ngữ pháp “sai” ở đây, xin đừng gửi báo lỗi. Vì sao? Chỉ là một ám chỉ nhẹ đến *Chúa tể những chiếc nhẫn* và nhân vật phản anh hùng Gollum yêu thích của chúng tôi, không có gì nghiêm trọng.
 
 ![](img/fig9_5.PNG)
+
 
 **Hình 9.5:** Cây Red-Black trong CFS
 

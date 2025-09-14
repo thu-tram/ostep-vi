@@ -24,10 +24,12 @@ Như người Hy Lạp cổ đại từng nói, lưu trữ một bit (hoặc và
 
 Một **bank** được truy cập theo hai đơn vị kích thước khác nhau: **block** (đôi khi gọi là **erase block**), thường có kích thước 128 KB hoặc 256 KB, và **page**, có kích thước vài KB (ví dụ: 4 KB). Bên trong mỗi bank có rất nhiều block; bên trong mỗi block lại có nhiều page. Khi nói về flash, bạn phải nhớ thuật ngữ mới này, vốn khác với **block** mà chúng ta đề cập trong ổ đĩa và RAID, và khác với **page** mà chúng ta nói đến trong **virtual memory** (bộ nhớ ảo).
 
+
 **Hình 44.1** cho thấy một ví dụ về **flash plane** với các block và page; trong ví dụ đơn giản này có ba block, mỗi block chứa bốn page. Chúng ta sẽ thấy bên dưới lý do tại sao cần phân biệt giữa block và page; hóa ra sự phân biệt này là rất quan trọng đối với các thao tác trên flash như đọc và ghi, và còn quan trọng hơn đối với hiệu năng tổng thể của thiết bị. Điều quan trọng (và kỳ lạ) nhất mà bạn sẽ học được là: để ghi vào một page trong một block, trước tiên bạn phải xóa toàn bộ block; chi tiết phức tạp này khiến việc xây dựng một SSD dựa trên flash trở thành một thách thức thú vị và đáng để nghiên cứu, và sẽ là nội dung của nửa sau chương này.
 
+![](img/fig44_1.PNG)
+
 **Hình 44.1: Một chip flash đơn giản: Các page bên trong block**  
-![Figure 44.1: A Simple Flash Chip: Pages Within Blocks](figure-44-1-simple-flash-chip.png)
 
 ## 44.3 Các thao tác cơ bản trên Flash (Basic Flash Operations)
 
@@ -69,6 +71,8 @@ Tóm lại, việc đọc một **page** là đơn giản: chỉ cần đọc pa
 
 Việc ghi một page thì phức tạp hơn; toàn bộ **block** phải được xóa trước (đảm bảo rằng mọi dữ liệu quan trọng đã được di chuyển sang vị trí khác), sau đó mới **program** (lập trình) page mong muốn. Điều này không chỉ tốn kém, mà việc lặp lại chu kỳ **program/erase** thường xuyên có thể dẫn đến vấn đề độ tin cậy lớn nhất của chip flash: **wear out** (hao mòn). Khi thiết kế một hệ thống lưu trữ sử dụng flash, hiệu năng và độ tin cậy của thao tác ghi là trọng tâm cần chú ý. Chúng ta sẽ sớm tìm hiểu cách các SSD hiện đại giải quyết những vấn đề này, mang lại hiệu năng và độ tin cậy cao bất chấp các giới hạn nói trên.
 
+![](img/fig44_2.PNG)
+
 **Hình 44.2: Đặc tính hiệu năng của flash thô (Raw Flash Performance Characteristics)**
 
 
@@ -94,6 +98,8 @@ Một vấn đề độ tin cậy khác trong chip flash được gọi là **di
 Với hiểu biết cơ bản về chip flash, chúng ta đối mặt với nhiệm vụ tiếp theo: **làm thế nào để biến một tập hợp chip flash cơ bản thành một thiết bị lưu trữ giống như các thiết bị lưu trữ thông thường**. Giao diện lưu trữ tiêu chuẩn là giao diện **dựa trên block** đơn giản, trong đó các block (sector) có kích thước 512 byte (hoặc lớn hơn) có thể được đọc hoặc ghi khi biết địa chỉ block. Nhiệm vụ của SSD dựa trên flash là cung cấp giao diện block tiêu chuẩn này trên nền các chip flash thô bên trong.
 
 Bên trong, một SSD bao gồm một số chip flash (dùng cho lưu trữ bền vững – persistent storage). SSD cũng chứa một lượng bộ nhớ **volatile** (không bền vững, ví dụ: SRAM); loại bộ nhớ này hữu ích cho việc **caching** (lưu đệm) và **buffering** (đệm) dữ liệu, cũng như cho các bảng ánh xạ (mapping tables) mà chúng ta sẽ tìm hiểu bên dưới. Cuối cùng, SSD chứa **control logic** (mạch điều khiển) để điều phối hoạt động của thiết bị. Xem Agrawal và cộng sự [A+08] để biết chi tiết; **Hình 44.3** minh họa sơ đồ khối logic đơn giản của một SSD dựa trên flash.
+
+![](img/fig44_3.PNG)
 
 **Hình 44.3: SSD dựa trên Flash – Sơ đồ logic**
 
@@ -289,6 +295,8 @@ Trước khi kết thúc, hãy xem xét hiệu năng và chi phí của các SSD
 Không giống như ổ đĩa cứng, **SSD** dựa trên flash không có thành phần cơ khí, và trên thực tế, ở nhiều khía cạnh chúng giống **DRAM** hơn, vì chúng là các thiết bị **random access** (truy cập ngẫu nhiên). Sự khác biệt lớn nhất về hiệu năng, so với ổ đĩa cứng, thể hiện rõ khi thực hiện các thao tác đọc và ghi ngẫu nhiên; trong khi một ổ đĩa cứng thông thường chỉ có thể thực hiện vài trăm I/O ngẫu nhiên mỗi giây, SSD có thể làm tốt hơn nhiều. Ở đây, chúng ta sử dụng một số dữ liệu từ các SSD hiện đại để thấy SSD thực sự nhanh hơn bao nhiêu; chúng ta đặc biệt quan tâm đến việc **FTL** (Flash Translation Layer – lớp dịch địa chỉ flash) che giấu các vấn đề hiệu năng của chip flash thô tốt đến mức nào.
 
 **Bảng 44.4** cho thấy một số dữ liệu hiệu năng của ba SSD khác nhau và một ổ đĩa cứng cao cấp; dữ liệu được lấy từ một số nguồn trực tuyến [S13, T15]. Hai cột bên trái thể hiện hiệu năng I/O ngẫu nhiên, và hai cột bên phải thể hiện hiệu năng tuần tự; ba hàng đầu tiên là dữ liệu của ba SSD khác nhau (từ Samsung, Seagate và Intel), và hàng cuối cùng là hiệu năng của một ổ đĩa cứng (HDD), trong trường hợp này là một ổ Seagate cao cấp.
+
+![](img/fig44_4.PNG)
 
 **Hình 44.4: So sánh hiệu năng giữa SSD và HDD (SSDs And Hard Drives: Performance Comparison)**
 

@@ -13,7 +13,7 @@ Có một tập hợp phần mềm chịu trách nhiệm cho việc này: giúp 
 
 Cách chủ yếu mà hệ điều hành làm điều đó là thông qua một kỹ thuật chung gọi là **ảo hóa (virtualization)**. Nói cách khác, OS lấy một tài nguyên vật lý (chẳng hạn như bộ xử lý, bộ nhớ, hay đĩa) và biến nó thành một dạng “ảo” tổng quát hơn, mạnh mẽ hơn và dễ dùng hơn. Chính vì thế, đôi khi chúng ta gọi hệ điều hành là một **máy ảo (virtual machine)**.
 
-Tất nhiên, để cho phép người dùng ra lệnh cho hệ điều hành (và nhờ đó sử dụng các tính năng của máy ảo — như chạy một chương trình, cấp phát bộ nhớ, hay truy cập tệp), OS cung cấp một số **interface (API)** mà bạn có thể gọi. Một hệ điều hành điển hình thực sự cung cấp vài trăm **system call (lời gọi hệ thống)** sẵn sàng cho ứng dụng sử dụng. Vì OS cung cấp các lời gọi này để chạy chương trình, truy cập bộ nhớ và thiết bị, và các thao tác liên quan khác, nên đôi khi ta cũng nói rằng OS cung cấp một **thư viện chuẩn (standard library)** cho ứng dụng.
+Tất nhiên, để cho phép người dùng ra lệnh cho hệ điều hành (và nhờ đó sử dụng các tính năng của máy ảo — như chạy một chương trình, cấp phát bộ nhớ, hay truy cập tệp), OS cung cấp một số **interface (API)** mà bạn có thể gọi. Một hệ điều hành điển hình thực sự cung cấp vài trăm **system call (lời gọi hệ thống)** sẵn sàng cho ứng dụng sử dụng. Vì OS cung cấp các call này để chạy chương trình, truy cập bộ nhớ và thiết bị, và các thao tác liên quan khác, nên đôi khi ta cũng nói rằng OS cung cấp một **thư viện chuẩn (standard library)** cho ứng dụng.
 
 Cuối cùng, vì ảo hóa cho phép nhiều chương trình chạy (chia sẻ CPU), nhiều chương trình đồng thời truy cập lệnh và dữ liệu riêng (chia sẻ bộ nhớ), và nhiều chương trình truy cập thiết bị (chia sẻ đĩa, v.v.), nên OS đôi khi còn được gọi là một **bộ quản lý tài nguyên (resource manager)**. CPU, bộ nhớ, và đĩa đều là tài nguyên của hệ thống; do đó vai trò của OS là quản lý những tài nguyên đó — một cách hiệu quả, công bằng, hay theo nhiều mục tiêu khác nhau. Để hiểu rõ hơn về vai trò của OS, hãy cùng xem qua một vài ví dụ.
 
@@ -264,7 +264,7 @@ Final value  : 137298
 
 Trong lần chạy này, khi ta truyền vào `loops = 100000`, thay vì nhận được kết quả đúng là `200000`, ta lại nhận giá trị `143012`. Khi chạy lại, không chỉ giá trị lại sai, mà còn khác với lần trước. Thực tế, nếu chạy chương trình nhiều lần với giá trị `loops` lớn, đôi khi bạn có thể nhận được kết quả đúng, nhưng hầu hết là sai. Vậy tại sao lại xảy ra hiện tượng này?
 
-Nguyên nhân nằm ở cách lệnh được excecute: từng lệnh một. Đoạn mã quan trọng trong chương trình trên — chỗ tăng biến counter chia sẻ — thực ra cần đến **ba lệnh**:
+Nguyên nhân nằm ở cách lệnh được excecute: từng lệnh một. Đoạn code quan trọng trong chương trình trên — chỗ tăng biến counter chia sẻ — thực ra cần đến **ba lệnh**:
 
 1. Nạp giá trị counter từ bộ nhớ vào một thanh ghi.
 2. Tăng giá trị đó.
@@ -272,7 +272,7 @@ Nguyên nhân nằm ở cách lệnh được excecute: từng lệnh một. Đo
 
 Vì ba lệnh này **không được excecute một cách nguyên tử (atomically, tức tất cả cùng một lúc)**, nên có thể xảy ra xung đột, dẫn đến kết quả kỳ lạ. Chính vấn đề concurrency này sẽ được chúng ta nghiên cứu chi tiết trong phần thứ hai của cuốn sách.
 
-[^6]: Lời gọi thực tế là `pthread_create()` viết thường; phiên bản viết hoa trong sách là một hàm bao (wrapper) của tác giả, gọi `pthread_create()` và kiểm tra mã trả về để chắc chắn rằng lời gọi đã thành công. Xem mã nguồn để biết chi tiết.
+[^6]: Lời gọi thực tế là `pthread_create()` viết thường; phiên bản viết hoa trong sách là một hàm bao (wrapper) của tác giả, gọi `pthread_create()` và kiểm tra mã trả về để chắc chắn rằng call đã thành công. Xem mã nguồn để biết chi tiết.
 
 
 > **THE CRUX OF THE PROBLEM: HOW TO BUILD CORRECT CONCURRENT PROGRAMS**
@@ -310,9 +310,10 @@ int main(int argc, char *argv[]) {
 }
 ```
 
+
 **Hình 2.6: Một chương trình thực hiện I/O (io.c)**
 
-Để hiểu rõ hơn, hãy xem đoạn mã trên. Chương trình này tạo một file (`/tmp/file`) và ghi vào đó chuỗi `"hello world"`. Để thực hiện, chương trình gọi ba **system call (lời gọi hệ thống)**:
+Để hiểu rõ hơn, hãy xem đoạn code trên. Chương trình này tạo một file (`/tmp/file`) và ghi vào đó chuỗi `"hello world"`. Để thực hiện, chương trình gọi ba **system call (lời gọi hệ thống)**:
 
 * `open()` để mở và tạo file.
 * `write()` để ghi dữ liệu vào file.

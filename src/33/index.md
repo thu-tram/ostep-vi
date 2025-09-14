@@ -31,7 +31,7 @@ Tuy nhiên, phần thảo luận này để lại cho chúng ta một câu hỏi
 
 ## 33.2 Một API quan trọng: `select()` (hoặc `poll()`)
 
-Với *event loop* (vòng lặp sự kiện) cơ bản đã được đề cập, bước tiếp theo chúng ta cần giải quyết là câu hỏi: làm thế nào để nhận các sự kiện? Trong hầu hết các hệ thống, một API cơ bản có sẵn thông qua *system call* (lời gọi hệ thống) `select()` hoặc `poll()`.
+Với *event loop* (vòng lặp sự kiện) cơ bản đã được đề cập, bước tiếp theo chúng ta cần giải quyết là câu hỏi: làm thế nào để nhận các sự kiện? Trong hầu hết các hệ thống, một API cơ bản có sẵn thông qua *system call* (call hệ thống) `select()` hoặc `poll()`.
 
 Những interface (giao diện lập trình) này cho phép một chương trình thực hiện một việc đơn giản: kiểm tra xem có I/O (nhập/xuất) đến nào cần được xử lý hay không. Ví dụ, hãy tưởng tượng một ứng dụng mạng (chẳng hạn như web server) muốn kiểm tra xem có gói tin mạng nào đã đến để xử lý hay chưa. Các *system call* này cho phép bạn làm chính xác điều đó.
 
@@ -47,15 +47,15 @@ int select(int nfds,
 
 > **ASIDE: BLOCKING VS. NON-BLOCKING INTERFACES**  
 > *Blocking* (hay *synchronous* – đồng bộ) interfaces thực hiện toàn bộ công việc của chúng trước khi trả quyền điều khiển về cho hàm gọi; *non-blocking* (hay *asynchronous* – bất đồng bộ) interfaces bắt đầu một công việc nhưng trả về ngay lập tức, cho phép phần công việc còn lại được thực hiện ở chế độ nền.  
-> Thủ phạm phổ biến nhất gây ra blocking là một dạng I/O nào đó. Ví dụ, nếu một lời gọi hàm cần đọc dữ liệu từ đĩa để hoàn tất, nó có thể bị block, chờ cho đến khi yêu cầu I/O gửi đến đĩa hoàn thành và trả dữ liệu về.  
-> *Non-blocking interfaces* có thể được sử dụng trong bất kỳ phong cách lập trình nào (ví dụ: với threads), nhưng là yếu tố thiết yếu trong phương pháp *event-based*, vì một lời gọi bị block sẽ làm dừng toàn bộ tiến trình xử lý.
+> Thủ phạm phổ biến nhất gây ra blocking là một dạng I/O nào đó. Ví dụ, nếu một call hàm cần đọc dữ liệu từ đĩa để hoàn tất, nó có thể bị block, chờ cho đến khi yêu cầu I/O gửi đến đĩa hoàn thành và trả dữ liệu về.  
+> *Non-blocking interfaces* có thể được sử dụng trong bất kỳ phong cách lập trình nào (ví dụ: với threads), nhưng là yếu tố thiết yếu trong phương pháp *event-based*, vì một call bị block sẽ làm dừng toàn bộ tiến trình xử lý.
 
 Mô tả thực tế từ *man page*: `select()` kiểm tra các tập hợp *I/O descriptor* (bộ mô tả I/O) có địa chỉ được truyền vào `readfds`, `writefds` và `errorfds` để xem liệu một số descriptor trong đó có sẵn sàng để đọc, sẵn sàng để ghi, hoặc đang có một điều kiện bất thường đang chờ xử lý hay không. `select()` sẽ kiểm tra các descriptor từ `0` đến `nfds-1` trong mỗi tập hợp. Khi trả về, `select()` thay thế các tập hợp descriptor đã cho bằng các tập hợp con chỉ bao gồm những descriptor sẵn sàng cho thao tác được yêu cầu. `select()` trả về tổng số descriptor sẵn sàng trong tất cả các tập hợp.
 
 Một vài điểm cần lưu ý về `select()`:
 
 - Thứ nhất, `select()` cho phép bạn kiểm tra xem descriptor có thể đọc được hay ghi được. Khả năng đọc cho phép server xác định rằng một gói tin mới đã đến và cần được xử lý, trong khi khả năng ghi cho phép server biết khi nào có thể gửi phản hồi (tức là hàng đợi gửi đi chưa đầy).
-- Thứ hai, lưu ý đối số `timeout`. Một cách sử dụng phổ biến là đặt `timeout` thành `NULL`, khiến `select()` block vô thời hạn cho đến khi một descriptor sẵn sàng. Tuy nhiên, các server mạnh mẽ hơn thường chỉ định một loại timeout nào đó; một kỹ thuật phổ biến là đặt timeout bằng 0, từ đó khiến lời gọi `select()` trả về ngay lập tức.
+- Thứ hai, lưu ý đối số `timeout`. Một cách sử dụng phổ biến là đặt `timeout` thành `NULL`, khiến `select()` block vô thời hạn cho đến khi một descriptor sẵn sàng. Tuy nhiên, các server mạnh mẽ hơn thường chỉ định một loại timeout nào đó; một kỹ thuật phổ biến là đặt timeout bằng 0, từ đó khiến call `select()` trả về ngay lập tức.
 
 *System call* `poll()` khá giống với `select()`. Xem *man page* của nó hoặc tài liệu của Stevens và Rago [SR05] để biết chi tiết.
 
@@ -66,16 +66,16 @@ Dù sử dụng cách nào, các primitive (nguyên thủy) cơ bản này cung 
 
 Để làm rõ hơn, hãy xem cách sử dụng `select()` để xác định những *network descriptor* (bộ mô tả mạng) nào có thông điệp đến. **Hình 33.1** dưới đây minh họa một ví dụ đơn giản.
 
-![Figure 33.1: Ví dụ đơn giản sử dụng select() để kiểm tra các network descriptor có dữ liệu đến](#)
+![Figure 33.1: Ví dụ đơn giản sử dụng select() để kiểm tra các network descriptor có dữ liệu đến](img/fig33_1.PNG)
 
-## Hình 33.1: Mã nguồn đơn giản sử dụng `select()`
+*Hình 33.1: Mã nguồn đơn giản sử dụng `select()`*
 
 Mã nguồn này thực tế khá dễ hiểu. Sau một số bước khởi tạo, server đi vào một vòng lặp vô hạn. Bên trong vòng lặp, nó sử dụng macro `FD_ZERO()` để xóa tập hợp *file descriptor* (bộ mô tả tệp) hiện tại, sau đó dùng `FD_SET()` để thêm tất cả các *file descriptor* từ `minFD` đến `maxFD` vào tập hợp. Tập hợp các descriptor này có thể đại diện, ví dụ, cho tất cả các *network socket* (socket mạng) mà server đang theo dõi. Cuối cùng, server gọi `select()` để kiểm tra kết nối nào có dữ liệu sẵn sàng. Sau đó, bằng cách sử dụng `FD_ISSET()` trong một vòng lặp, *event server* (máy chủ dựa trên sự kiện) có thể xác định descriptor nào đã sẵn sàng dữ liệu và xử lý dữ liệu đến.
 
 Tất nhiên, một server thực tế sẽ phức tạp hơn nhiều, và cần thêm logic để xử lý việc gửi thông điệp, thực hiện *disk I/O* (I/O đĩa), và nhiều chi tiết khác. Để biết thêm thông tin, xem Stevens và Rago [SR05] để tìm hiểu về API, hoặc Pai et al. và Welsh et al. để có cái nhìn tổng quan về luồng xử lý của các *event-based server* [PDZ99, WCB01].
 
 > **TIP: ĐỪNG ĐỂ BLOCK TRONG EVENT-BASED SERVER**  
-> *Event-based server* cho phép kiểm soát chi tiết việc *scheduling* (lập lịch) các tác vụ. Tuy nhiên, để duy trì khả năng kiểm soát này, tuyệt đối không được thực hiện bất kỳ lời gọi nào khiến tiến trình của hàm gọi bị block; vi phạm nguyên tắc này sẽ dẫn đến việc *event-based server* bị treo, khách hàng (client) bị gián đoạn, và khiến người khác nghi ngờ liệu bạn có thực sự đọc phần này của sách hay không.
+> *Event-based server* cho phép kiểm soát chi tiết việc *scheduling* (lập lịch) các tác vụ. Tuy nhiên, để duy trì khả năng kiểm soát này, tuyệt đối không được thực hiện bất kỳ call nào khiến tiến trình của hàm gọi bị block; vi phạm nguyên tắc này sẽ dẫn đến việc *event-based server* bị treo, khách hàng (client) bị gián đoạn, và khiến người khác nghi ngờ liệu bạn có thực sự đọc phần này của sách hay không.
 
 
 ## 33.4 Tại sao đơn giản hơn? Không cần Locks
@@ -85,13 +85,13 @@ Với một CPU đơn và một ứng dụng *event-based*, các vấn đề th�
 
 ## 33.5 Một vấn đề: Blocking System Calls
 
-Cho đến giờ, lập trình *event-based* nghe có vẻ rất tuyệt, đúng không? Bạn lập trình một vòng lặp đơn giản và xử lý các sự kiện khi chúng xuất hiện. Bạn thậm chí không cần nghĩ đến việc dùng lock! Nhưng có một vấn đề: điều gì xảy ra nếu một sự kiện yêu cầu bạn thực hiện một *system call* (lời gọi hệ thống) có thể bị block?
+Cho đến giờ, lập trình *event-based* nghe có vẻ rất tuyệt, đúng không? Bạn lập trình một vòng lặp đơn giản và xử lý các sự kiện khi chúng xuất hiện. Bạn thậm chí không cần nghĩ đến việc dùng lock! Nhưng có một vấn đề: điều gì xảy ra nếu một sự kiện yêu cầu bạn thực hiện một *system call* (call hệ thống) có thể bị block?
 
-Ví dụ, hãy tưởng tượng một yêu cầu từ client gửi đến server để đọc một tệp từ đĩa và trả nội dung về cho client (giống như một yêu cầu HTTP đơn giản). Để xử lý yêu cầu này, một *event handler* (trình xử lý sự kiện) cuối cùng sẽ phải gọi *system call* `open()` để mở tệp, sau đó là một loạt lời gọi `read()` để đọc tệp. Khi tệp đã được đọc vào bộ nhớ, server có thể bắt đầu gửi kết quả về cho client.
+Ví dụ, hãy tưởng tượng một yêu cầu từ client gửi đến server để đọc một tệp từ đĩa và trả nội dung về cho client (giống như một yêu cầu HTTP đơn giản). Để xử lý yêu cầu này, một *event handler* (trình xử lý sự kiện) cuối cùng sẽ phải gọi *system call* `open()` để mở tệp, sau đó là một loạt call `read()` để đọc tệp. Khi tệp đã được đọc vào bộ nhớ, server có thể bắt đầu gửi kết quả về cho client.
 
 Cả `open()` và `read()` đều có thể gửi yêu cầu I/O đến hệ thống lưu trữ (nếu metadata hoặc dữ liệu cần thiết chưa có sẵn trong bộ nhớ), và do đó có thể mất nhiều thời gian để hoàn tất. Với một *thread-based server* (máy chủ dựa trên luồng), điều này không phải vấn đề: trong khi thread thực hiện yêu cầu I/O bị treo (chờ I/O hoàn tất), các thread khác vẫn có thể chạy, cho phép server tiếp tục xử lý. Thực tế, sự chồng lấp tự nhiên giữa I/O và tính toán khác chính là lý do khiến lập trình đa luồng trở nên tự nhiên và dễ hiểu.
 
-Tuy nhiên, với phương pháp *event-based*, không có thread nào khác để chạy: chỉ có vòng lặp sự kiện chính. Điều này có nghĩa là nếu một *event handler* thực hiện một lời gọi bị block, toàn bộ server sẽ bị block cho đến khi lời gọi đó hoàn tất. Khi *event loop* bị block, hệ thống sẽ ngồi chờ, gây lãng phí tài nguyên nghiêm trọng. Vì vậy, chúng ta có một nguyên tắc bắt buộc trong hệ thống *event-based*: **không được phép có lời gọi blocking**.
+Tuy nhiên, với phương pháp *event-based*, không có thread nào khác để chạy: chỉ có vòng lặp sự kiện chính. Điều này có nghĩa là nếu một *event handler* thực hiện một call bị block, toàn bộ server sẽ bị block cho đến khi call đó hoàn tất. Khi *event loop* bị block, hệ thống sẽ ngồi chờ, gây lãng phí tài nguyên nghiêm trọng. Vì vậy, chúng ta có một nguyên tắc bắt buộc trong hệ thống *event-based*: **không được phép có call blocking**.
 
 
 ## 33.6 Giải pháp: Asynchronous I/O
@@ -148,11 +148,11 @@ rc = write(sd, buffer, size);
 
 Như bạn thấy, trong một chương trình *multi-threaded* (đa luồng), việc thực hiện công việc kiểu này là rất đơn giản; khi `read()` trả về, mã nguồn ngay lập tức biết socket nào cần ghi dữ liệu vào vì thông tin đó đã có sẵn trên *stack* của thread (trong biến `sd`).
 
-Trong một hệ thống *event-based*, mọi thứ không đơn giản như vậy. Để thực hiện cùng một tác vụ, trước tiên chúng ta sẽ thực hiện thao tác đọc bất đồng bộ, sử dụng các lời gọi AIO đã mô tả ở trên. Giả sử sau đó chúng ta định kỳ kiểm tra việc đọc đã hoàn tất hay chưa bằng lời gọi `aio_error()`; khi lời gọi này thông báo rằng việc đọc đã hoàn tất, làm thế nào để *event-based server* biết cần phải làm gì tiếp theo?
+Trong một hệ thống *event-based*, mọi thứ không đơn giản như vậy. Để thực hiện cùng một tác vụ, trước tiên chúng ta sẽ thực hiện thao tác đọc bất đồng bộ, sử dụng các call AIO đã mô tả ở trên. Giả sử sau đó chúng ta định kỳ kiểm tra việc đọc đã hoàn tất hay chưa bằng call `aio_error()`; khi call này thông báo rằng việc đọc đã hoàn tất, làm thế nào để *event-based server* biết cần phải làm gì tiếp theo?
 
 > **ASIDE: UNIX SIGNALS**  
-> Một hạ tầng lớn và thú vị được gọi là *signals* (tín hiệu) tồn tại trong tất cả các biến thể UNIX hiện đại. Ở mức đơn giản nhất, *signal* cung cấp một cách để giao tiếp với một *process* (tiến trình). Cụ thể, một *signal* có thể được gửi đến một ứng dụng; khi đó ứng dụng sẽ tạm dừng những gì nó đang làm để chạy một *signal handler* (trình xử lý tín hiệu), tức là một đoạn mã trong ứng dụng để xử lý tín hiệu đó. Khi hoàn tất, tiến trình sẽ tiếp tục hành vi trước đó.  
-> Mỗi *signal* có một tên, chẳng hạn như `HUP` (*hang up*), `INT` (*interrupt*), `SEGV` (*segmentation violation*), v.v.; xem *man page* để biết chi tiết. Thú vị là đôi khi chính *kernel* (nhân hệ điều hành) sẽ gửi tín hiệu. Ví dụ, khi chương trình của bạn gặp lỗi *segmentation violation*, OS sẽ gửi cho nó một `SIGSEGV` (thêm tiền tố `SIG` vào tên tín hiệu là cách đặt tên phổ biến); nếu chương trình của bạn được cấu hình để bắt tín hiệu đó, bạn có thể chạy một đoạn mã để phản hồi hành vi lỗi này (hữu ích cho việc gỡ lỗi). Khi một tín hiệu được gửi đến một tiến trình không được cấu hình để xử lý tín hiệu đó, hành vi mặc định sẽ được thực thi; với `SEGV`, tiến trình sẽ bị kết thúc.  
+> Một hạ tầng lớn và thú vị được gọi là *signals* (tín hiệu) tồn tại trong tất cả các biến thể UNIX hiện đại. Ở mức đơn giản nhất, *signal* cung cấp một cách để giao tiếp với một *process* (tiến trình). Cụ thể, một *signal* có thể được gửi đến một ứng dụng; khi đó ứng dụng sẽ tạm dừng những gì nó đang làm để chạy một *signal handler* (trình xử lý tín hiệu), tức là một đoạn code trong ứng dụng để xử lý tín hiệu đó. Khi hoàn tất, tiến trình sẽ tiếp tục hành vi trước đó.  
+> Mỗi *signal* có một tên, chẳng hạn như `HUP` (*hang up*), `INT` (*interrupt*), `SEGV` (*segmentation violation*), v.v.; xem *man page* để biết chi tiết. Thú vị là đôi khi chính *kernel* (nhân hệ điều hành) sẽ gửi tín hiệu. Ví dụ, khi chương trình của bạn gặp lỗi *segmentation violation*, OS sẽ gửi cho nó một `SIGSEGV` (thêm tiền tố `SIG` vào tên tín hiệu là cách đặt tên phổ biến); nếu chương trình của bạn được cấu hình để bắt tín hiệu đó, bạn có thể chạy một đoạn code để phản hồi hành vi lỗi này (hữu ích cho việc gỡ lỗi). Khi một tín hiệu được gửi đến một tiến trình không được cấu hình để xử lý tín hiệu đó, hành vi mặc định sẽ được thực thi; với `SEGV`, tiến trình sẽ bị kết thúc.  
 > Dưới đây là một chương trình đơn giản chạy vòng lặp vô hạn, nhưng trước đó đã thiết lập một *signal handler* để bắt `SIGHUP`:  
 > ```c
 > void handle(int arg) {
@@ -166,7 +166,7 @@ Trong một hệ thống *event-based*, mọi thứ không đơn giản như v�
 >     return 0;
 > }
 > ```
-> Bạn có thể gửi tín hiệu đến chương trình này bằng công cụ dòng lệnh `kill` (đúng, đây là một tên khá “mạnh bạo”). Việc này sẽ ngắt vòng lặp `while` chính trong chương trình và chạy đoạn mã xử lý `handle()`:  
+> Bạn có thể gửi tín hiệu đến chương trình này bằng công cụ dòng lệnh `kill` (đúng, đây là một tên khá “mạnh bạo”). Việc này sẽ ngắt vòng lặp `while` chính trong chương trình và chạy đoạn code xử lý `handle()`:  
 > ```bash
 > prompt> ./main &
 > 36705
@@ -190,7 +190,7 @@ Một vấn đề khác với phương pháp *event-based* là nó không tích 
 
 Vấn đề thứ ba là mã nguồn *event-based* có thể khó bảo trì theo thời gian, vì ngữ nghĩa chính xác của các hàm có thể thay đổi [A+02]. Ví dụ, nếu một hàm thay đổi từ *non-blocking* sang *blocking*, *event handler* gọi hàm đó cũng phải thay đổi để thích ứng với bản chất mới của nó, bằng cách tách mã thành hai phần. Vì *blocking* gây hậu quả nghiêm trọng cho *event-based server*, lập trình viên phải luôn cảnh giác với những thay đổi về ngữ nghĩa của API mà mỗi sự kiện sử dụng.
 
-Cuối cùng, mặc dù *asynchronous disk I/O* hiện đã khả dụng trên hầu hết các nền tảng, nhưng phải mất một thời gian dài mới đạt được [PDZ99], và nó chưa bao giờ tích hợp hoàn toàn với *asynchronous network I/O* theo cách đơn giản và thống nhất như mong muốn. Ví dụ, mặc dù lý tưởng là chỉ cần sử dụng interface `select()` để quản lý tất cả các I/O đang chờ, nhưng trên thực tế thường phải kết hợp `select()` cho mạng và các lời gọi AIO cho *disk I/O*.
+Cuối cùng, mặc dù *asynchronous disk I/O* hiện đã khả dụng trên hầu hết các nền tảng, nhưng phải mất một thời gian dài mới đạt được [PDZ99], và nó chưa bao giờ tích hợp hoàn toàn với *asynchronous network I/O* theo cách đơn giản và thống nhất như mong muốn. Ví dụ, mặc dù lý tưởng là chỉ cần sử dụng interface `select()` để quản lý tất cả các I/O đang chờ, nhưng trên thực tế thường phải kết hợp `select()` cho mạng và các call AIO cho *disk I/O*.
 
 
 ## 33.9 Tóm tắt

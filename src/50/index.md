@@ -14,6 +14,8 @@ AFS cũng khác với NFS ở chỗ ngay từ đầu, **hành vi hợp lý ở g
 
 Chúng ta sẽ thảo luận về hai phiên bản của AFS [H+88, S+85]. Phiên bản đầu tiên (mà chúng ta sẽ gọi là **AFSv1**, nhưng thực tế hệ thống gốc được gọi là **ITC distributed file system** [S+85]) đã có một số thiết kế cơ bản, nhưng không mở rộng được như mong muốn, dẫn đến việc thiết kế lại và hình thành giao thức cuối cùng (mà chúng ta sẽ gọi là **AFSv2**, hoặc đơn giản là **AFS**) [H+88]. Sau đây là phần mô tả phiên bản đầu tiên.
 
+![](img/fig50_1.PNG)
+
 **Hình 50.1: Các điểm nổi bật của giao thức AFSv1**
 
 Một trong những nguyên tắc cơ bản của tất cả các phiên bản AFS là **whole-file caching** (bộ nhớ đệm toàn bộ file) trên **local disk** (đĩa cục bộ) của máy client đang truy cập file. Khi bạn gọi `open()` một file, toàn bộ file (nếu tồn tại) sẽ được lấy từ server và lưu thành một file trên đĩa cục bộ của bạn. Các thao tác `read()` và `write()` tiếp theo của ứng dụng sẽ được chuyển hướng tới **local file system** (hệ thống tệp cục bộ) nơi file được lưu; do đó, các thao tác này **không cần giao tiếp mạng** và rất nhanh. Cuối cùng, khi `close()`, file (nếu đã bị sửa đổi) sẽ được ghi trả lại server.  
@@ -25,7 +27,7 @@ Lưu ý sự khác biệt rõ rệt với NFS, vốn cache theo **block** (khôn
 - Thông điệp `Fetch` sẽ truyền toàn bộ **pathname** của file mong muốn (ví dụ: `/home/remzi/notes.txt`) tới **file server** (nhóm server này được gọi là **Vice**), server sẽ duyệt qua pathname, tìm file mong muốn và gửi toàn bộ file về cho client.  
 - Mã phía client sau đó sẽ cache file này trên đĩa cục bộ của client (bằng cách ghi nó xuống local disk).  
 
-Như đã nói ở trên, các lời gọi `read()` và `write()` tiếp theo trong AFS hoàn toàn là **local** (không có giao tiếp với server); chúng chỉ được chuyển hướng tới bản sao cục bộ của file. Vì các lời gọi `read()` và `write()` hoạt động giống như trên một local file system, khi một block được truy cập, nó cũng có thể được cache trong bộ nhớ của client. Do đó, AFS cũng sử dụng bộ nhớ của client để cache các block mà nó đã lưu trên đĩa cục bộ.  
+Như đã nói ở trên, các call `read()` và `write()` tiếp theo trong AFS hoàn toàn là **local** (không có giao tiếp với server); chúng chỉ được chuyển hướng tới bản sao cục bộ của file. Vì các call `read()` và `write()` hoạt động giống như trên một local file system, khi một block được truy cập, nó cũng có thể được cache trong bộ nhớ của client. Do đó, AFS cũng sử dụng bộ nhớ của client để cache các block mà nó đã lưu trên đĩa cục bộ.  
 
 Cuối cùng, khi hoàn tất, AFS client sẽ kiểm tra xem file có bị sửa đổi hay không (tức là nó đã được mở để ghi); nếu có, nó sẽ ghi phiên bản mới trở lại server bằng thông điệp giao thức **`Store`**, gửi toàn bộ file và pathname tới server để lưu trữ lâu dài.
 
@@ -84,6 +86,8 @@ Nếu một client truy cập file `/home/remzi/notes.txt`, và `home` là thư 
 
 Xem **Hình 50.2** để biết tóm tắt.
 
+![](img/fig50_2.PNG)
+
 **Hình 50.2: Đọc một file – Hoạt động của Client-side và File Server**
 
 
@@ -131,6 +135,8 @@ Lưu ý sự khác biệt so với giao thức dựa trên block như NFS:
 - Trong nhiều trường hợp, một file bị trộn như vậy sẽ không hợp lý, ví dụ: một ảnh JPEG bị hai client chỉnh sửa từng phần; kết quả trộn các ghi này có thể không tạo thành một JPEG hợp lệ.
 
 
+![](img/fig50_3.PNG)
+
 **Hình 50.3: Dòng thời gian tính nhất quán bộ nhớ đệm (Cache Consistency Timeline)**
 
 Hình này minh họa một số kịch bản khác nhau. Các cột thể hiện hành vi của hai process (P1 và P2) trên Client1 và trạng thái cache của nó, một process (P3) trên Client2 và trạng thái cache của nó, và server (Server), tất cả cùng thao tác trên một file duy nhất tên là F.  
@@ -162,6 +168,8 @@ Một **server crash** là một sự kiện lớn, vì cần đảm bảo rằn
 
 Như bạn thấy, việc xây dựng một mô hình cache hợp lý và có khả năng mở rộng hơn phải trả giá; với NFS, client hầu như không nhận thấy khi server crash.
 
+
+![](img/fig50_4.PNG)
 
 **Hình 50.4: So sánh AFS và NFS (Comparison: AFS vs. NFS)**
 

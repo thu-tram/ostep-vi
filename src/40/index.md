@@ -31,12 +31,12 @@ Các hệ thống tệp đầu tiên mà chúng ta sẽ thấy (bao gồm cả *
 > - Điều gì xảy ra khi một **process** mở một file?  
 > - Những cấu trúc nào trên đĩa được truy cập trong quá trình đọc hoặc ghi?  
 >  
-> Bằng cách làm việc và cải thiện mental model của mình, bạn sẽ phát triển một sự hiểu biết trừu tượng về những gì đang diễn ra, thay vì chỉ cố gắng hiểu các chi tiết cụ thể của một đoạn mã hệ thống tệp nào đó (mặc dù điều đó cũng hữu ích, tất nhiên!).
+> Bằng cách làm việc và cải thiện mental model của mình, bạn sẽ phát triển một sự hiểu biết trừu tượng về những gì đang diễn ra, thay vì chỉ cố gắng hiểu các chi tiết cụ thể của một đoạn code hệ thống tệp nào đó (mặc dù điều đó cũng hữu ích, tất nhiên!).
 
 Trong khi đó, các hệ thống tệp tinh vi hơn, như **SGI’s XFS**, sử dụng các cấu trúc dạng cây (**tree-based structures**) phức tạp hơn [S+96].
 
 **Khía cạnh thứ hai** của một hệ thống tệp là **các phương thức truy cập** (**access methods**).  
-Hệ thống tệp ánh xạ các lời gọi (**system call**) do một process thực hiện, chẳng hạn như `open()`, `read()`, `write()`, v.v., vào các cấu trúc của nó như thế nào?  
+Hệ thống tệp ánh xạ các call (**system call**) do một process thực hiện, chẳng hạn như `open()`, `read()`, `write()`, v.v., vào các cấu trúc của nó như thế nào?  
 Những cấu trúc nào được đọc trong quá trình thực thi một system call cụ thể?  
 Những cấu trúc nào được ghi?  
 Tất cả các bước này được thực hiện hiệu quả đến mức nào?
@@ -238,6 +238,8 @@ Do đó, với một số lượng nhỏ **direct pointer** (12 là con số đi
 Xem nghiên cứu gần đây của **Agrawal et al.** [A+07]; **Hình 40.2** tóm tắt các kết quả đó.
 
 
+![](img/fig40_1.PNG)
+
 **Hình 40.2: Tóm tắt đo lường hệ thống tệp (File System Measurement Summary)**
 
 Tất nhiên, trong không gian thiết kế inode, còn rất nhiều khả năng khác; suy cho cùng, inode chỉ là một **cấu trúc dữ liệu**, và bất kỳ cấu trúc dữ liệu nào lưu trữ thông tin liên quan và có thể truy vấn hiệu quả đều là đủ.  
@@ -323,6 +325,8 @@ Hiểu được điều gì xảy ra trên **đường truy cập** (access path
 Trong các ví dụ sau, giả sử rằng hệ thống tệp đã được **mount** (gắn kết) và do đó **superblock** đã nằm trong bộ nhớ.  
 Mọi thứ khác (ví dụ: inode, thư mục) vẫn nằm trên đĩa.
 
+![](img/fig40_2.PNG)
+
 **Hình 40.3: Dòng thời gian đọc file (File Read Timeline – thời gian tăng dần từ trên xuống)**
 
 ### Đọc một tệp từ đĩa (Reading A File From Disk)
@@ -370,7 +374,7 @@ Khi đã mở, chương trình có thể gọi system call `read()` để đọc
 
 Tới một thời điểm nào đó, file sẽ được đóng (close). Công việc ở đây ít hơn nhiều; rõ ràng file descriptor cần được giải phóng (deallocate), nhưng tạm thời đó là tất cả những gì FS cần làm. Không có I/O đĩa nào diễn ra.
 
-Toàn bộ quá trình này được minh họa trong Hình 40.3 (trang 11); thời gian tăng dần từ trên xuống trong hình. Trong hình, lời gọi open dẫn đến nhiều lần đọc để cuối cùng tìm ra inode của file. Sau đó, mỗi lần đọc block yêu cầu file system trước hết tham chiếu inode, rồi đọc block, và sau đó cập nhật trường thời gian truy cập lần cuối (last-accessed-time) của inode bằng một lần ghi (write). Hãy dành thời gian để hiểu kỹ điều gì đang diễn ra.
+Toàn bộ quá trình này được minh họa trong Hình 40.3 (trang 11); thời gian tăng dần từ trên xuống trong hình. Trong hình, call open dẫn đến nhiều lần đọc để cuối cùng tìm ra inode của file. Sau đó, mỗi lần đọc block yêu cầu file system trước hết tham chiếu inode, rồi đọc block, và sau đó cập nhật trường thời gian truy cập lần cuối (last-accessed-time) của inode bằng một lần ghi (write). Hãy dành thời gian để hiểu kỹ điều gì đang diễn ra.
 
 Cũng lưu ý rằng lượng I/O phát sinh bởi open tỉ lệ với độ dài của pathname (đường dẫn). Với mỗi thư mục bổ sung trong đường dẫn, chúng ta phải đọc inode của nó cũng như dữ liệu của nó. Tệ hơn nữa là sự hiện diện của các thư mục lớn; ở đây, chúng ta chỉ phải đọc một block để lấy nội dung của một thư mục, trong khi với một thư mục lớn, chúng ta có thể phải đọc nhiều data block để tìm được entry mong muốn. Đúng vậy, việc đọc một file có thể khá “đau đớn”; và như bạn sắp thấy, việc ghi một file (đặc biệt là tạo mới) thậm chí còn tệ hơn.
 
@@ -393,6 +397,8 @@ Vì vậy, **mỗi thao tác ghi** vào một tệp về mặt logic sẽ tạo 
 5. **Ghi block dữ liệu thực tế**  
 
 
+![](img/fig40_3.PNG)
+
 **Hình 40.4: Dòng thời gian tạo tệp (File Creation Timeline – thời gian tăng dần từ trên xuống)**
 
 
@@ -411,6 +417,7 @@ Tất cả những điều đó chỉ để **tạo một tệp**!
 
 
 Hãy xem một ví dụ cụ thể, khi tệp `/foo/bar` được tạo và **ba block** được ghi vào nó.  
+
 **Hình 40.4** (trang 13) cho thấy điều gì xảy ra trong quá trình `open()` (tạo tệp) và trong mỗi lần ghi 4KB.
 
 Trong hình, các thao tác đọc và ghi xuống đĩa được nhóm theo **system call** nào đã gây ra chúng, và thứ tự thực hiện xấp xỉ được sắp xếp từ trên xuống dưới.  
