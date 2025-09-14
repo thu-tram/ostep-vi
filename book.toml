@@ -7,3 +7,6 @@ title = "OS Bí truyền thư - OSTEP in Vietnamese"
 
 [build]
 build-dir = "public"
+
+[output.html]
+mathjax-support = true
