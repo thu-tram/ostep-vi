@@ -1,0 +1,375 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Paging: Faster Translations (TLBs) - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html" class="active"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="19-paging-faster-translations-tlbs"><a class="header" href="#19-paging-faster-translations-tlbs"><strong>19. Paging: Faster Translations (TLBs)</strong></a></h1>
+<p>(Paging: Dịch địa chỉ nhanh hơn với TLB)</p>
+<p>Việc sử dụng <strong>paging</strong> (phân trang) như cơ chế cốt lõi để hỗ trợ <strong>virtual memory</strong> (bộ nhớ ảo) có thể dẫn đến chi phí hiệu năng cao. Bằng cách chia nhỏ <strong>address space</strong> (không gian địa chỉ) thành các đơn vị nhỏ, kích thước cố định (tức là <strong>page</strong>), paging đòi hỏi một lượng lớn thông tin ánh xạ. Vì thông tin ánh xạ này thường được lưu trong <strong>physical memory</strong> (bộ nhớ vật lý), nên về mặt logic, paging yêu cầu một lần truy cập bộ nhớ bổ sung cho mỗi <strong>virtual address</strong> (địa chỉ ảo) được chương trình tạo ra. Việc phải truy cập bộ nhớ để lấy thông tin dịch địa chỉ trước mỗi lần nạp lệnh (<strong>instruction fetch</strong>) hoặc mỗi thao tác load/store rõ ràng là quá chậm. Và đây chính là vấn đề của chúng ta:</p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO SPEED UP ADDRESS TRANSLATION</strong><br />
+Làm thế nào để tăng tốc quá trình dịch địa chỉ, và nói chung là tránh được lần truy cập bộ nhớ bổ sung mà paging dường như yêu cầu? Cần hỗ trợ phần cứng gì? OS cần tham gia ở mức nào?</p>
+</blockquote>
+<p>Khi muốn tăng tốc, OS thường cần sự hỗ trợ. Và sự hỗ trợ này thường đến từ “người bạn cũ” của OS: <strong>hardware</strong> (phần cứng). Để tăng tốc dịch địa chỉ, chúng ta sẽ bổ sung một thành phần gọi là (vì lý do lịch sử [CP78]) <strong>translation-lookaside buffer</strong> hay <strong>TLB</strong> [CG68, C95]. <strong>TLB</strong> là một phần của <strong>memory-management unit</strong> (MMU — đơn vị quản lý bộ nhớ) trên chip, và đơn giản là một <strong>hardware cache</strong> (bộ nhớ đệm phần cứng) lưu trữ các ánh xạ <strong>virtual-to-physical address translations</strong> (dịch địa chỉ từ ảo sang vật lý) được sử dụng thường xuyên; vì vậy, một tên gọi chính xác hơn sẽ là <strong>address-translation cache</strong>.</p>
+<p>Mỗi khi có một <strong>virtual memory reference</strong> (tham chiếu bộ nhớ ảo), phần cứng sẽ kiểm tra TLB trước để xem bản dịch mong muốn có ở đó không; nếu có, quá trình dịch sẽ được thực hiện (nhanh chóng) mà không cần truy vấn <strong>page table</strong> (bảng trang — chứa toàn bộ các bản dịch). Do tác động lớn đến hiệu năng, TLB thực sự là yếu tố khiến virtual memory khả thi [C95].</p>
+<pre><code>VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; SHIFT
+(Success, TlbEntry) = TLB_Lookup(VPN)
+if (Success == True)
+  // TLB Hit
+  if (CanAccess(TlbEntry.ProtectBits) == True)
+    Offset = VirtualAddress &amp; OFFSET_MASK
+    PhysAddr = (TlbEntry.PFN &lt;&lt; SHIFT) | Offset
+    Register = AccessMemory(PhysAddr)
+  else
+    RaiseException(PROTECTION_FAULT)
+else
+  // TLB Miss
+  PTEAddr = PTBR + (VPN * sizeof(PTE))
+  PTE = AccessMemory(PTEAddr)
+  if (PTE.Valid == False)
+    RaiseException(SEGMENTATION_FAULT)
+  else if (CanAccess(PTE.ProtectBits) == False)
+    RaiseException(PROTECTION_FAULT)
+  else
+    TLB_Insert(VPN, PTE.PFN, PTE.ProtectBits)
+    RetryInstruction()
+</code></pre>
+<p><strong>Figure 19.1: TLB Control Flow Algorithm</strong><br />
+<em>(Thuật toán luồng điều khiển của TLB)</em></p>
+<h2 id="191-tlb-basic-algorithm-thuật-toán-cơ-bản-của-tlb"><a class="header" href="#191-tlb-basic-algorithm-thuật-toán-cơ-bản-của-tlb"><strong>19.1 TLB Basic Algorithm</strong> (Thuật toán cơ bản của TLB)</a></h2>
+<p><em>Figure 19.1</em> minh họa sơ đồ cách phần cứng có thể xử lý một <strong>virtual address translation</strong> (dịch địa chỉ ảo), giả sử sử dụng <strong>linear page table</strong> (bảng trang tuyến tính — tức page table là một mảng) và <strong>hardware-managed TLB</strong> (TLB do phần cứng quản lý — phần cứng đảm nhiệm phần lớn việc truy cập page table; chúng ta sẽ giải thích thêm bên dưới).</p>
+<p>Thuật toán phần cứng thực hiện như sau:</p>
+<ul>
+<li>
+<p>Đầu tiên, trích xuất <strong>virtual page number</strong> (VPN — số trang ảo) từ virtual address (Dòng 1 trong <em>Figure 19.1</em>), và kiểm tra xem TLB có chứa bản dịch cho VPN này không (Dòng 2).</p>
+</li>
+<li>
+<p>Nếu có, đây là một <strong>TLB hit</strong> (trúng TLB), nghĩa là TLB đã có bản dịch. Thành công! Lúc này, ta trích xuất <strong>page frame number</strong> (PFN — số khung trang) từ entry tương ứng trong TLB, ghép nó với <strong>offset</strong> từ virtual address ban đầu, tạo thành <strong>physical address</strong> (PA — địa chỉ vật lý) mong muốn, và truy cập bộ nhớ (Dòng 5–7), giả sử <strong>protection checks</strong> (kiểm tra bảo vệ) không thất bại (Dòng 4).</p>
+</li>
+<li>
+<p>Nếu CPU không tìm thấy bản dịch trong TLB (<strong>TLB miss</strong>), sẽ cần thêm công việc. Trong ví dụ này, phần cứng truy cập page table để tìm bản dịch (Dòng 11–12), và giả sử <strong>virtual memory reference</strong> do <strong>process</strong> (tiến trình) tạo ra là hợp lệ và có thể truy cập (Dòng 13, 15), phần cứng sẽ cập nhật TLB với bản dịch này (Dòng 18). Các thao tác này tốn kém, chủ yếu vì cần một lần truy cập bộ nhớ bổ sung để lấy thông tin từ page table (Dòng 12). Cuối cùng, khi TLB đã được cập nhật, phần cứng sẽ thực thi lại lệnh; lần này, bản dịch được tìm thấy trong TLB và truy cập bộ nhớ diễn ra nhanh chóng.</p>
+</li>
+</ul>
+<p>Giống như mọi <strong>cache</strong>, TLB được xây dựng dựa trên giả định rằng trong hầu hết các trường hợp, bản dịch sẽ được tìm thấy trong cache (tức là hit). Nếu đúng, chi phí thêm vào là rất nhỏ, vì TLB nằm gần lõi xử lý và được thiết kế để rất nhanh. Khi xảy ra miss, chi phí cao của paging sẽ xuất hiện; page table phải được truy cập để tìm bản dịch, dẫn đến một lần truy cập bộ nhớ bổ sung (hoặc nhiều hơn nếu page table phức tạp). Nếu điều này xảy ra thường xuyên, chương trình sẽ chạy chậm thấy rõ; so với hầu hết các lệnh CPU, truy cập bộ nhớ là rất tốn kém, và <strong>TLB miss</strong> dẫn đến nhiều lần truy cập bộ nhớ hơn. Do đó, mục tiêu của chúng ta là tránh TLB miss càng nhiều càng tốt.</p>
+<h2 id="192-example-accessing-an-array-ví-dụ-truy-cập-một-mảng"><a class="header" href="#192-example-accessing-an-array-ví-dụ-truy-cập-một-mảng"><strong>19.2 Example: Accessing An Array</strong> (Ví dụ: Truy cập một mảng)</a></h2>
+<p>Để làm rõ cách TLB hoạt động, hãy xem xét một <strong>virtual address trace</strong> (dấu vết địa chỉ ảo) đơn giản và xem TLB có thể cải thiện hiệu năng như thế nào.</p>
+<p>Giả sử chúng ta có một mảng gồm 10 số nguyên 4 byte trong bộ nhớ, bắt đầu tại <strong>virtual address</strong> 100. Giả sử thêm rằng chúng ta có một <strong>virtual address space</strong> 8-bit nhỏ, với <strong>page size</strong> (kích thước trang) là 16 byte; do đó, một virtual address được chia thành <strong>VPN</strong> 4-bit (có 16 virtual pages) và <strong>offset</strong> 4-bit (mỗi page có 16 byte).</p>
+<p><em>Figure 19.2</em> (trang 4) cho thấy mảng được bố trí trên 16 page 16-byte của hệ thống. Như bạn thấy, phần tử đầu tiên của mảng (a) bắt đầu tại (VPN=06, offset=04); chỉ có ba số nguyên 4 byte nằm vừa trên page này. Mảng tiếp tục sang page tiếp theo (VPN=07), nơi chứa bốn phần tử tiếp theo (a ... a). Cuối cùng, ba phần tử còn lại của mảng 10 phần tử (a ... a) nằm trên page tiếp theo của address space (VPN=08).</p>
+<p>Xét một vòng lặp đơn giản truy cập từng phần tử mảng, ví dụ trong C:</p>
+<pre><code class="language-c">int i, sum = 0;
+for (i = 0; i &lt; 10; i++) {
+  sum += a[i];
+}
+</code></pre>
+<p>Để đơn giản, ta giả định rằng các truy cập bộ nhớ duy nhất mà vòng lặp tạo ra là tới mảng (bỏ qua biến <code>i</code> và <code>sum</code>, cũng như bản thân các lệnh). Khi phần tử đầu tiên (a) được truy cập, CPU sẽ thấy một lệnh load tới virtual address 100. Phần cứng trích xuất VPN từ địa chỉ này (VPN=06) và dùng nó để kiểm tra TLB xem có bản dịch hợp lệ không. Giả sử đây là lần đầu chương trình truy cập mảng, kết quả sẽ là <strong>TLB miss</strong>.</p>
+<p>Lần truy cập tiếp theo là tới a, và đây là tin tốt: <strong>TLB hit</strong>! Vì phần tử thứ hai nằm ngay cạnh phần tử đầu tiên, nó nằm trên cùng một page; và vì page này đã được truy cập khi lấy phần tử đầu tiên, bản dịch đã có trong TLB. Lần truy cập tới a tiếp theo cũng hit, vì nó cũng nằm trên cùng page với a và a.</p>
+<p><img src="img/fig19_2.PNG" alt="" /></p>
+<p><em>Figure 19.2: Ví dụ: Một mảng trong không gian địa chỉ nhỏ.</em></p>
+<p>Không may, khi chương trình truy cập a tiếp theo, ta gặp một <strong>TLB miss</strong> khác. Tuy nhiên, một lần nữa, các phần tử tiếp theo (a ... a) sẽ hit trong TLB, vì tất cả đều nằm trên cùng một page trong bộ nhớ.</p>
+<p>Cuối cùng, việc truy cập vào <strong>a</strong> gây ra một <code>TLB miss</code> (lỗi tra cứu TLB). Phần cứng một lần nữa tham chiếu đến <code>page table</code> (bảng trang) để xác định vị trí của <code>virtual page</code> (trang ảo) này trong <code>physical memory</code> (bộ nhớ vật lý), và cập nhật TLB tương ứng. Hai lần truy cập cuối cùng (a và a) được hưởng lợi từ việc cập nhật TLB này; khi phần cứng tra cứu TLB để tìm bản dịch địa chỉ, cả hai lần đều dẫn đến <strong>hit</strong> (trúng).</p>
+<p>Tóm tắt lại hoạt động của TLB trong mười lần truy cập vào mảng: <strong>miss, hit, hit, miss, hit, hit, hit, miss, hit, hit</strong>. Do đó, <code>TLB hit rate</code> (tỉ lệ trúng TLB) — được tính bằng số lần hit chia cho tổng số lần truy cập — là <strong>70%</strong>. Mặc dù con số này không quá cao (thực tế, chúng ta mong muốn tỉ lệ này tiệm cận 100%), nhưng nó khác 0, điều này có thể gây bất ngờ. Ngay cả khi đây là lần đầu tiên chương trình truy cập vào mảng, TLB vẫn cải thiện hiệu năng nhờ <code>spatial locality</code> (tính cục bộ không gian). Các phần tử của mảng được sắp xếp sát nhau trong các trang (tức là chúng gần nhau về mặt vị trí trong bộ nhớ), và vì vậy chỉ lần truy cập đầu tiên đến một phần tử trên một trang mới gây ra <code>TLB miss</code>.</p>
+<p>Cũng cần lưu ý vai trò của <code>page size</code> (kích thước trang) trong ví dụ này. Nếu <code>page size</code> chỉ đơn giản lớn gấp đôi (32 byte thay vì 16 byte), việc truy cập mảng sẽ gặp ít lỗi miss hơn nữa. Vì <code>page size</code> điển hình thường vào khoảng 4KB, nên các kiểu truy cập mảng dày đặc (dense, array-based accesses) như thế này đạt hiệu năng TLB rất tốt, chỉ gặp một lỗi miss cho mỗi trang được truy cập.</p>
+<blockquote>
+<p><strong>TIP: USE CACHING WHEN POSSIBLE</strong><br />
+<strong>(MẸO: SỬ DỤNG CƠ CHẾ CACHE KHI CÓ THỂ)</strong><br />
+<strong>Caching</strong> (bộ nhớ đệm) là một trong những kỹ thuật tối ưu hiệu năng cơ bản nhất trong hệ thống máy tính, được sử dụng lặp đi lặp lại để làm cho “trường hợp phổ biến chạy nhanh” [HP06]. Ý tưởng đằng sau <strong>hardware caches</strong> (bộ nhớ đệm phần cứng) là tận dụng <strong>locality</strong> (tính cục bộ) trong các tham chiếu lệnh và dữ liệu. Thông thường có hai loại locality: <strong>temporal locality</strong> (tính cục bộ theo thời gian) và <strong>spatial locality</strong> (tính cục bộ theo không gian).<br />
+Với temporal locality, ý tưởng là một lệnh hoặc dữ liệu vừa được truy cập gần đây thì nhiều khả năng sẽ được truy cập lại sớm trong tương lai. Hãy nghĩ đến các biến vòng lặp hoặc các lệnh trong vòng lặp; chúng được truy cập lặp đi lặp lại theo thời gian.<br />
+Với spatial locality, ý tưởng là nếu một chương trình truy cập bộ nhớ tại địa chỉ x, thì nhiều khả năng nó sẽ sớm truy cập bộ nhớ gần x. Hãy hình dung việc duyệt qua một mảng, truy cập một phần tử rồi đến phần tử tiếp theo.<br />
+Tất nhiên, các đặc tính này phụ thuộc vào bản chất cụ thể của chương trình, vì vậy chúng không phải là các quy luật tuyệt đối mà chỉ là các nguyên tắc kinh nghiệm.<br />
+Hardware caches, dù cho lệnh, dữ liệu, hay dịch địa chỉ (như TLB của chúng ta), đều tận dụng locality bằng cách giữ các bản sao dữ liệu trong <strong>on-chip memory</strong> (bộ nhớ trên chip) nhỏ và nhanh. Thay vì phải truy cập bộ nhớ (chậm) để đáp ứng yêu cầu, bộ xử lý có thể kiểm tra trước xem có bản sao gần đó trong cache không; nếu có, bộ xử lý có thể truy cập nhanh (chỉ vài chu kỳ CPU) và tránh mất thời gian tốn kém khi truy cập bộ nhớ (nhiều nanosecond).<br />
+Bạn có thể tự hỏi: nếu cache (như TLB) tuyệt vời như vậy, sao không làm cache lớn hơn và giữ toàn bộ dữ liệu trong đó? Tiếc là ở đây chúng ta gặp phải các giới hạn cơ bản như các định luật vật lý. Nếu muốn cache nhanh, nó phải nhỏ, vì các vấn đề như tốc độ ánh sáng và các ràng buộc vật lý khác trở nên quan trọng. Bất kỳ cache lớn nào, theo định nghĩa, sẽ chậm, và do đó phản tác dụng. Vì vậy, chúng ta buộc phải dùng cache nhỏ và nhanh; câu hỏi còn lại là làm thế nào để sử dụng chúng tốt nhất nhằm cải thiện hiệu năng.</p>
+</blockquote>
+<p>Một điểm cuối cùng về hiệu năng của <strong>TLB</strong>: nếu chương trình, ngay sau khi vòng lặp này kết thúc, truy cập lại mảng, chúng ta có thể thấy kết quả còn tốt hơn nữa, giả sử TLB đủ lớn để lưu các bản dịch cần thiết: hit, hit, hit, hit, hit, hit, hit, hit, hit, hit. Trong trường hợp này, <strong>TLB hit rate</strong> (tỉ lệ trúng TLB) sẽ cao nhờ <strong>temporal locality</strong>, tức là việc tham chiếu lại nhanh chóng các mục dữ liệu theo thời gian. Giống như mọi cache, TLB dựa vào cả <strong>spatial locality</strong> và <strong>temporal locality</strong> để đạt hiệu quả, đây là các đặc tính của chương trình. Nếu chương trình có các đặc tính này (và nhiều chương trình có), TLB hit rate sẽ cao.</p>
+<pre><code>VPN = (VirtualAddress &amp; VPN_MASK) &gt;&gt; SHIFT
+(Success, TlbEntry) = TLB_Lookup(VPN)
+if (Success == True) // TLB Hit
+  if (CanAccess(TlbEntry.ProtectBits) == True)
+    Offset = VirtualAddress &amp; OFFSET_MASK
+    PhysAddr = (TlbEntry.PFN &lt;&lt; SHIFT) | Offset
+    Register = AccessMemory(PhysAddr)
+  else
+    RaiseException(PROTECTION_FAULT)
+else
+  RaiseException(TLB_MISS) // TLB Miss
+</code></pre>
+<p><strong>Figure 19.3: TLB Control Flow Algorithm (OS Handled)</strong><br />
+<em>(Thuật toán luồng điều khiển TLB — do OS xử lý)</em></p>
+<h2 id="193-who-handles-the-tlb-miss"><a class="header" href="#193-who-handles-the-tlb-miss"><strong>19.3 Who Handles The TLB Miss?</strong></a></h2>
+<p>(Ai xử lý TLB miss?)</p>
+<p>Một câu hỏi cần trả lời: ai sẽ xử lý một <strong>TLB miss</strong>? Có hai khả năng: <strong>hardware</strong> (phần cứng) hoặc <strong>software</strong> (OS).</p>
+<p>Trong những ngày đầu, phần cứng có <strong>complex instruction sets</strong> (tập lệnh phức tạp, đôi khi gọi là <strong>CISC</strong> — <em>complex-instruction set computers</em>) và những người thiết kế phần cứng không mấy tin tưởng “đám OS” kia. Vì vậy, phần cứng sẽ xử lý toàn bộ TLB miss. Để làm được điều này, phần cứng phải biết chính xác <strong>page tables</strong> (bảng trang) nằm ở đâu trong bộ nhớ (thông qua <strong>page-table base register</strong>, được dùng ở Dòng 11 trong <em>Figure 19.1</em>), cũng như định dạng chính xác của chúng; khi xảy ra miss, phần cứng sẽ “walk” page table, tìm <strong>page-table entry</strong> đúng và trích xuất bản dịch mong muốn, cập nhật TLB với bản dịch đó, và thực thi lại lệnh.</p>
+<p>Một ví dụ về kiến trúc “cũ” có <strong>hardware-managed TLBs</strong> là kiến trúc Intel x86, sử dụng <strong>multi-level page table</strong> (bảng trang nhiều cấp) cố định (xem chi tiết ở chương sau); page table hiện tại được trỏ bởi thanh ghi CR3 [I09].</p>
+<p>Các kiến trúc hiện đại hơn (ví dụ: MIPS R10k [H93] hoặc Sun’s SPARC v9 [WG00], cả hai đều là <strong>RISC</strong> — <em>reduced-instruction set computers</em>) có cái gọi là <strong>software-managed TLB</strong>. Khi xảy ra TLB miss, phần cứng chỉ đơn giản phát sinh một <strong>exception</strong> (ngoại lệ) (Dòng 11 trong <em>Figure 19.3</em>), tạm dừng luồng lệnh hiện tại, nâng mức đặc quyền lên <strong>kernel mode</strong>, và nhảy tới một <strong>trap handler</strong>. Như bạn có thể đoán, trap handler này là mã trong OS được viết với mục đích xử lý TLB miss. Khi chạy, mã này sẽ tra cứu bản dịch trong page table, sử dụng các lệnh “đặc quyền” để cập nhật TLB, và quay lại từ trap; tại thời điểm này, phần cứng sẽ thực thi lại lệnh (dẫn đến TLB hit).</p>
+<p>Hãy thảo luận một vài chi tiết quan trọng:</p>
+<ul>
+<li>Thứ nhất, <strong>return-from-trap instruction</strong> (lệnh quay lại từ trap) cần khác một chút so với return-from-trap mà ta đã thấy khi xử lý <strong>system call</strong>. Trong trường hợp system call, return-from-trap sẽ tiếp tục thực thi tại lệnh ngay sau trap vào OS, giống như việc quay lại từ một lời gọi thủ tục sẽ tiếp tục tại lệnh ngay sau lời gọi.</li>
+<li>Trong trường hợp trap do TLB miss, khi return-from-trap, phần cứng phải tiếp tục thực thi tại <strong>chính lệnh gây ra trap</strong>; lần thử lại này sẽ khiến lệnh chạy lại, và lần này sẽ là TLB hit. Do đó, tùy thuộc vào nguyên nhân gây ra trap hoặc exception, phần cứng phải lưu <strong>PC</strong> (program counter) khác nhau khi trap vào OS, để có thể khôi phục đúng khi cần.</li>
+</ul>
+<blockquote>
+<p><strong>ASIDE: RISC VS. CISC</strong><br />
+Vào những năm 1980, một cuộc chiến lớn đã diễn ra trong cộng đồng kiến trúc máy tính. Một bên là phe <strong>CISC</strong> (<em>Complex Instruction Set Computing</em>), bên kia là <strong>RISC</strong> (<em>Reduced Instruction Set Computing</em>) [PS81]. Phe RISC được dẫn dắt bởi David Patterson tại Berkeley và John Hennessy tại Stanford (cũng là đồng tác giả của một số cuốn sách nổi tiếng [HP06]), mặc dù sau này John Cocke được trao giải Turing cho công trình tiên phong về RISC [CM00].<br />
+<strong>CISC instruction sets</strong> thường có rất nhiều lệnh, và mỗi lệnh tương đối mạnh. Ví dụ, có thể có một lệnh sao chép chuỗi, nhận hai con trỏ và một độ dài, rồi sao chép byte từ nguồn sang đích. Ý tưởng của CISC là các lệnh nên là các nguyên thủy cấp cao, giúp <strong>assembly language</strong> (ngôn ngữ hợp ngữ) dễ dùng hơn và mã nguồn gọn hơn.<br />
+<strong>RISC instruction sets</strong> thì hoàn toàn ngược lại. Một quan sát then chốt của RISC là tập lệnh thực chất là đích đến của <strong>compiler</strong> (trình biên dịch), và tất cả những gì compiler cần là một vài nguyên thủy đơn giản để tạo ra mã hiệu năng cao. Vì vậy, những người ủng hộ RISC lập luận rằng hãy loại bỏ càng nhiều phần cứng càng tốt (đặc biệt là <strong>microcode</strong>), và làm cho phần còn lại đơn giản, đồng nhất và nhanh.<br />
+Trong những ngày đầu, các chip RISC tạo ra tác động lớn, vì chúng nhanh hơn một cách rõ rệt [BC91]; nhiều bài báo khoa học đã được viết; một số công ty được thành lập (ví dụ: MIPS và Sun). Tuy nhiên, theo thời gian, các nhà sản xuất CISC như Intel đã tích hợp nhiều kỹ thuật của RISC vào lõi của bộ xử lý của họ, ví dụ bằng cách thêm các giai đoạn pipeline ban đầu để biến đổi các lệnh phức tạp thành các <strong>micro-instructions</strong> (vi lệnh) có thể được xử lý theo cách giống RISC. Những cải tiến này, cộng với số lượng transistor ngày càng tăng trên mỗi chip, đã giúp CISC duy trì khả năng cạnh tranh. Kết quả cuối cùng là cuộc tranh luận dần lắng xuống, và ngày nay cả hai loại bộ xử lý đều có thể được thiết kế để chạy nhanh.</p>
+</blockquote>
+<p>Thứ hai, khi chạy <code>TLB miss-handling code</code> (mã xử lý lỗi TLB miss), hệ điều hành (OS) cần đặc biệt cẩn trọng để không gây ra một chuỗi vô hạn các <code>TLB misses</code> (lỗi tra cứu TLB). Có nhiều giải pháp tồn tại; ví dụ, bạn có thể lưu <code>TLB miss handlers</code> (trình xử lý lỗi TLB miss) trong <code>physical memory</code> (bộ nhớ vật lý) — nơi chúng không được ánh xạ và không chịu sự chi phối của <code>address translation</code> (dịch địa chỉ), hoặc dành riêng một số mục (entry) trong TLB cho các bản dịch luôn hợp lệ (permanently-valid translations) và sử dụng một số slot dịch địa chỉ cố định này cho chính <code>handler code</code> (mã xử lý) đó; các <code>wired translations</code> (bản dịch cố định) này luôn cho kết quả hit trong TLB.</p>
+<blockquote>
+<p><strong>ASIDE: TLB VALID BIT != PAGE TABLE VALID BIT</strong><br />
+(<strong>Lưu ý: Bit hợp lệ trong TLB khác với bit hợp lệ trong page table</strong>)<br />
+Một lỗi phổ biến là nhầm lẫn giữa <strong>valid bit</strong> (bit hợp lệ) trong <strong>TLB</strong> và valid bit trong <strong>page table</strong> (bảng trang). Trong page table, khi một <strong>page-table entry</strong> (PTE — mục bảng trang) được đánh dấu <strong>invalid</strong> (không hợp lệ), điều đó có nghĩa là page chưa được <strong>process</strong> (tiến trình) cấp phát, và một chương trình hoạt động đúng sẽ không được phép truy cập vào page đó. Phản ứng thông thường khi truy cập một page không hợp lệ là phát sinh <strong>trap</strong> (bẫy) tới <strong>OS</strong> (hệ điều hành), và OS sẽ phản hồi bằng cách chấm dứt process đó.<br />
+Ngược lại, <strong>TLB valid bit</strong> chỉ đơn giản cho biết một entry trong TLB có chứa bản dịch hợp lệ hay không. Ví dụ, khi hệ thống khởi động, trạng thái ban đầu phổ biến của mỗi entry trong TLB là <strong>invalid</strong>, vì chưa có bản dịch địa chỉ nào được cache ở đó. Khi <strong>virtual memory</strong> (bộ nhớ ảo) được kích hoạt, và khi các chương trình bắt đầu chạy và truy cập <strong>virtual address space</strong> (không gian địa chỉ ảo) của chúng, TLB sẽ dần được lấp đầy, và các entry hợp lệ sẽ nhanh chóng xuất hiện trong TLB.<br />
+TLB valid bit cũng rất hữu ích khi thực hiện <strong>context switch</strong> (chuyển ngữ cảnh), như chúng ta sẽ thảo luận bên dưới. Bằng cách đặt tất cả các entry trong TLB về trạng thái invalid, hệ thống có thể đảm bảo rằng process sắp chạy sẽ không vô tình sử dụng một <strong>virtual-to-physical translation</strong> (bản dịch từ địa chỉ ảo sang địa chỉ vật lý) từ một process trước đó.</p>
+</blockquote>
+<p>Lợi thế chính của cách tiếp cận <strong>software-managed</strong> (TLB do phần mềm quản lý) là tính linh hoạt: OS có thể sử dụng bất kỳ <strong>data structure</strong> (cấu trúc dữ liệu) nào để triển khai page table, mà không cần thay đổi phần cứng. Một lợi thế khác là sự đơn giản, như thấy trong luồng điều khiển TLB (dòng 11 trong <em>Figure 19.3</em>, so với dòng 11–19 trong <em>Figure 19.1</em>). Phần cứng không làm nhiều khi xảy ra miss: chỉ cần phát sinh <strong>exception</strong> và để <strong>TLB miss handler</strong> của OS xử lý phần còn lại.</p>
+<h3 id="194-tlb-contents-whats-in-there"><a class="header" href="#194-tlb-contents-whats-in-there"><strong>19.4 TLB Contents: What’s In There?</strong></a></h3>
+<p>(Nội dung của TLB: Bên trong có gì?)</p>
+<p>Hãy xem chi tiết nội dung của <strong>hardware TLB</strong> (TLB phần cứng). Một TLB điển hình có thể có 32, 64 hoặc 128 entry và thuộc loại <strong>fully associative</strong> (hoàn toàn kết hợp). Điều này có nghĩa là bất kỳ bản dịch nào cũng có thể nằm ở bất kỳ vị trí nào trong TLB, và phần cứng sẽ tìm kiếm toàn bộ TLB song song để tìm bản dịch mong muốn. Một entry TLB có thể trông như sau:</p>
+<pre><code>VPN  |  PFN  |  other bits
+</code></pre>
+<p>Lưu ý rằng cả <strong>VPN</strong> (virtual page number — số trang ảo) và <strong>PFN</strong> (page frame number — số khung trang) đều có trong mỗi entry, vì bản dịch có thể nằm ở bất kỳ vị trí nào (trong thuật ngữ phần cứng, TLB được gọi là <strong>fully-associative cache</strong>). Phần cứng tìm kiếm song song các entry để xem có khớp hay không.</p>
+<p>Điều thú vị hơn là các “other bits” (các bit khác). Ví dụ, TLB thường có <strong>valid bit</strong> cho biết entry có chứa bản dịch hợp lệ hay không. Ngoài ra còn có <strong>protection bits</strong> (bit bảo vệ), xác định cách một page có thể được truy cập (giống như trong page table). Ví dụ, <strong>code pages</strong> có thể được đánh dấu <strong>read</strong> và <strong>execute</strong>, trong khi <strong>heap pages</strong> có thể được đánh dấu <strong>read</strong> và <strong>write</strong>. Ngoài ra có thể có một số trường khác, bao gồm <strong>address-space identifier</strong> (ASID — định danh không gian địa chỉ), <strong>dirty bit</strong> (bit bẩn), v.v.; xem thêm bên dưới để biết chi tiết.</p>
+<h3 id="195-tlb-issue-context-switches"><a class="header" href="#195-tlb-issue-context-switches"><strong>19.5 TLB Issue: Context Switches</strong></a></h3>
+<p>(Vấn đề TLB: Chuyển ngữ cảnh)</p>
+<p>Với TLB, các vấn đề mới nảy sinh khi chuyển đổi giữa các <strong>process</strong> (và do đó là giữa các <strong>address space</strong>). Cụ thể, TLB chứa các <strong>virtual-to-physical translations</strong> chỉ hợp lệ cho process đang chạy; các bản dịch này không có ý nghĩa với process khác. Do đó, khi chuyển từ process này sang process khác, phần cứng hoặc OS (hoặc cả hai) phải đảm bảo rằng process sắp chạy sẽ không vô tình sử dụng các bản dịch từ process trước đó.</p>
+<p>Để hiểu rõ hơn, hãy xem một ví dụ: Khi một process (P1) đang chạy, nó giả định rằng TLB có thể đang cache các bản dịch hợp lệ cho nó, tức là lấy từ page table của P1. Giả sử, trong ví dụ này, <strong>virtual page</strong> thứ 10 của P1 được ánh xạ tới <strong>physical frame</strong> 100. Giả sử có một process khác (P2), và OS sắp thực hiện <strong>context switch</strong> để chạy nó. Giả sử <strong>virtual page</strong> thứ 10 của P2 được ánh xạ tới <strong>physical frame</strong> 170. Nếu các entry của cả hai process đều có trong TLB, nội dung TLB sẽ là:</p>
+<div class="table-wrapper"><table><thead><tr><th>VPN</th><th>PFN</th><th>valid</th><th>prot</th></tr></thead><tbody>
+<tr><td>10</td><td>100</td><td>1</td><td>rwx</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td></tr>
+<tr><td>10</td><td>170</td><td>1</td><td>rwx</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td></tr>
+</tbody></table>
+</div>
+<p>Trong TLB trên, rõ ràng có vấn đề: VPN 10 có thể dịch thành PFN 100 (P1) hoặc PFN 170 (P2), nhưng phần cứng không thể phân biệt entry nào thuộc về process nào. Do đó, chúng ta cần làm thêm để TLB có thể hỗ trợ <strong>virtualization</strong> (ảo hóa) giữa nhiều process một cách đúng đắn và hiệu quả.</p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO MANAGE TLB CONTENTS ON A CONTEXT SWITCH</strong><br />
+Khi <strong>context-switching</strong> giữa các process, các bản dịch trong TLB của process trước không có ý nghĩa với process sắp chạy. Phần cứng hoặc OS nên làm gì để giải quyết vấn đề này?</p>
+</blockquote>
+<p>Có một số giải pháp khả thi:</p>
+<ul>
+<li>Một cách là <strong>flush</strong> (xóa) TLB khi context switch, làm trống nó trước khi chạy process tiếp theo. Trong hệ thống <strong>software-based</strong>, điều này có thể thực hiện bằng một lệnh phần cứng đặc quyền; với <strong>hardware-managed TLB</strong>, việc flush có thể được thực hiện khi <strong>page-table base register</strong> (PTBR) thay đổi (OS phải thay đổi PTBR khi context switch). Trong cả hai trường hợp, thao tác flush chỉ đơn giản là đặt tất cả valid bit về 0, xóa sạch nội dung TLB.</li>
+</ul>
+<p>Bằng cách flush TLB mỗi lần context switch, chúng ta có một giải pháp hoạt động, vì process sẽ không bao giờ gặp phải bản dịch sai trong TLB. Tuy nhiên, chi phí là: mỗi lần process chạy, nó sẽ gặp <strong>TLB miss</strong> khi truy cập dữ liệu và code pages của mình. Nếu OS chuyển đổi process thường xuyên, chi phí này có thể cao.</p>
+<p>Để giảm chi phí này, một số hệ thống bổ sung hỗ trợ phần cứng để cho phép chia sẻ TLB qua các lần context switch. Cụ thể, một số hệ thống phần cứng cung cấp trường <strong>address space identifier</strong> (ASID) trong TLB. Có thể coi ASID như một <strong>process identifier</strong> (PID), nhưng thường có ít bit hơn (ví dụ: 8 bit cho ASID so với 32 bit cho PID). Nếu thêm ASID vào ví dụ TLB ở trên, các process có thể chia sẻ TLB dễ dàng: chỉ cần trường ASID để phân biệt các bản dịch giống hệt nhau. Here is a depiction of a TLB with the added ASID field:</p>
+<div class="table-wrapper"><table><thead><tr><th>VPN</th><th>PFN</th><th>valid</th><th>prot</th><th>ASID</th></tr></thead><tbody>
+<tr><td>10</td><td>100</td><td>1</td><td>rwx</td><td>1</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td><td>—</td></tr>
+<tr><td>10</td><td>170</td><td>1</td><td>rwx</td><td>2</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td><td>—</td></tr>
+</tbody></table>
+</div>
+<p>Với <strong>address-space identifiers</strong>, TLB có thể chứa bản dịch từ các process khác nhau cùng lúc mà không bị nhầm lẫn. Tất nhiên, phần cứng cũng cần biết process nào đang chạy để thực hiện dịch địa chỉ, và do đó OS phải, khi context switch, thiết lập một <strong>privileged register</strong> (thanh ghi đặc quyền) tới ASID của process hiện tại.</p>
+<p>Ngoài ra, bạn có thể nghĩ đến một trường hợp khác khi hai entry trong TLB khá giống nhau. Trong ví dụ này, có hai entry cho hai process khác nhau với hai VPN khác nhau nhưng trỏ tới cùng một <strong>physical page</strong>:</p>
+<div class="table-wrapper"><table><thead><tr><th>VPN</th><th>PFN</th><th>valid</th><th>prot</th><th>ASID</th></tr></thead><tbody>
+<tr><td>10</td><td>101</td><td>1</td><td>r-x</td><td>1</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td><td>—</td></tr>
+<tr><td>50</td><td>101</td><td>1</td><td>r-x</td><td>2</td></tr>
+<tr><td>—</td><td>—</td><td>0</td><td>—</td><td>—</td></tr>
+</tbody></table>
+</div>
+<p>Tình huống này có thể xảy ra, ví dụ, khi hai process chia sẻ một page (ví dụ: <strong>code page</strong>). Trong ví dụ trên, P1 chia sẻ physical page 101 với P2; P1 ánh xạ page này vào page thứ 10 trong address space của nó, trong khi P2 ánh xạ nó vào page thứ 50 trong address space của nó. Việc chia sẻ code pages (trong các binary hoặc <strong>shared libraries</strong>) giúp giảm số lượng page vật lý đang được dùng, từ đó giảm memory overhead.</p>
+<h3 id="197-a-real-tlb-entry"><a class="header" href="#197-a-real-tlb-entry"><strong>19.7 A Real TLB Entry</strong></a></h3>
+<p>(Một entry TLB thực tế)</p>
+<p>Cuối cùng, hãy cùng xem nhanh một ví dụ TLB thực tế. Ví dụ này đến từ <strong>MIPS R4000</strong> [H93], một hệ thống hiện đại sử dụng <strong>software-managed TLBs</strong> (TLB do phần mềm quản lý); một entry TLB của MIPS đã được giản lược đôi chút có thể thấy trong <em>Figure 19.4</em>.</p>
+<p><img src="img/fig19_4.PNG" alt="" /></p>
+<p><strong>Figure 19.4: A MIPS TLB Entry</strong><br />
+<em>(Một entry TLB của MIPS)</em></p>
+<p>MIPS R4000 hỗ trợ <strong>address space</strong> (không gian địa chỉ) 32-bit với <strong>page</strong> 4KB. Do đó, trong một <strong>virtual address</strong> (địa chỉ ảo) điển hình, ta sẽ kỳ vọng có <strong>VPN</strong> (virtual page number — số trang ảo) 20-bit và <strong>offset</strong> 12-bit. Tuy nhiên, như bạn thấy trong TLB, chỉ có 19 bit cho VPN; lý do là <strong>user addresses</strong> (địa chỉ người dùng) chỉ chiếm một nửa address space (phần còn lại dành cho <strong>kernel</strong>), nên chỉ cần 19 bit VPN. VPN này được dịch sang tối đa <strong>PFN</strong> (physical frame number — số khung trang vật lý) 24-bit, do đó có thể hỗ trợ hệ thống với tối đa 64GB <strong>main memory</strong> (bộ nhớ chính vật lý) (2^24 page 4KB).</p>
+<p>Có một số bit thú vị khác trong MIPS TLB:</p>
+<ul>
+<li><strong>Global bit</strong> (G): dùng cho các page được <strong>globally-shared</strong> (chia sẻ toàn cục) giữa các <strong>process</strong> (tiến trình). Nếu global bit được bật, <strong>ASID</strong> sẽ bị bỏ qua. </li>
+<li><strong>ASID</strong> 8-bit: OS có thể dùng để phân biệt các address space (như đã mô tả ở trên). Câu hỏi đặt ra: OS nên làm gì nếu có hơn 256 (2^8) process chạy cùng lúc?</li>
+<li>3 bit <strong>Coherence</strong> (C): xác định cách phần cứng cache một page (vượt ngoài phạm vi ghi chú này).</li>
+<li><strong>Dirty bit</strong>: được đánh dấu khi page đã bị ghi (sẽ thấy cách sử dụng sau).</li>
+<li><strong>Valid bit</strong>: cho phần cứng biết entry có chứa bản dịch hợp lệ hay không.</li>
+<li><strong>Page mask field</strong> (không hiển thị): hỗ trợ nhiều kích thước page; sau này chúng ta sẽ thấy tại sao page lớn lại hữu ích.</li>
+<li>Một số bit trong tổng số 64 bit không được sử dụng (tô xám trong sơ đồ).</li>
+</ul>
+<blockquote>
+<p><strong>TIP: RAM ISN’T ALWAYS RAM (CULLER’S LAW)</strong><br />
+Thuật ngữ <strong>random-access memory</strong> (RAM — bộ nhớ truy cập ngẫu nhiên) ngụ ý rằng bạn có thể truy cập bất kỳ phần nào của RAM nhanh như nhau. Mặc dù nhìn chung nên nghĩ về RAM theo cách này, nhưng do các đặc tính phần cứng/OS như TLB, việc truy cập một page bộ nhớ cụ thể có thể tốn kém, đặc biệt nếu page đó hiện không được ánh xạ trong TLB. Vì vậy, luôn nên nhớ mẹo triển khai: RAM không phải lúc nào cũng là RAM. Đôi khi việc truy cập ngẫu nhiên address space của bạn, đặc biệt nếu số lượng page được truy cập vượt quá <strong>TLB coverage</strong> (phạm vi bao phủ của TLB), có thể dẫn đến suy giảm hiệu năng nghiêm trọng. Vì một trong các cố vấn của chúng tôi, David Culler, thường chỉ ra TLB là nguồn gốc của nhiều vấn đề hiệu năng, nên chúng tôi đặt tên định luật này để vinh danh ông: <strong>Culler’s Law</strong>.</p>
+</blockquote>
+<p>Thông thường, MIPS TLB có 32 hoặc 64 entry như vậy, phần lớn được dùng bởi <strong>user processes</strong> khi chúng chạy. Tuy nhiên, một số entry được dành riêng cho OS. Một <strong>wired register</strong> có thể được OS thiết lập để báo cho phần cứng biết cần dành bao nhiêu slot TLB cho OS; OS sử dụng các ánh xạ dự trữ này cho <strong>code</strong> và <strong>data</strong> mà nó muốn truy cập trong các thời điểm quan trọng, khi một <strong>TLB miss</strong> sẽ gây vấn đề (ví dụ: trong <strong>TLB miss handler</strong>).</p>
+<p>Vì MIPS TLB là <strong>software managed</strong>, cần có các lệnh để cập nhật TLB. MIPS cung cấp bốn lệnh như vậy:</p>
+<ul>
+<li><code>TLBP</code>: dò TLB để xem một bản dịch cụ thể có ở đó không.</li>
+<li><code>TLBR</code>: đọc nội dung một entry TLB vào các <strong>register</strong>.</li>
+<li><code>TLBWI</code>: thay thế một entry TLB cụ thể.</li>
+<li><code>TLBWR</code>: thay thế một entry TLB ngẫu nhiên.</li>
+</ul>
+<p>OS sử dụng các lệnh này để quản lý nội dung TLB. Tất nhiên, điều quan trọng là các lệnh này phải là <strong>privileged</strong> (đặc quyền); hãy tưởng tượng điều gì sẽ xảy ra nếu một <strong>user process</strong> có thể sửa nội dung TLB (gợi ý: gần như bất cứ điều gì, bao gồm chiếm quyền điều khiển máy, chạy “OS” độc hại của riêng nó, hoặc thậm chí “làm biến mất Mặt Trời”).</p>
+<h3 id="198-summary"><a class="header" href="#198-summary"><strong>19.8 Summary</strong></a></h3>
+<p>(Tóm tắt)</p>
+<p>Chúng ta đã thấy cách phần cứng có thể giúp tăng tốc <strong>address translation</strong> (dịch địa chỉ). Bằng cách cung cấp một <strong>on-chip TLB</strong> nhỏ, chuyên dụng như một <strong>address-translation cache</strong>, hầu hết các <strong>memory references</strong> (tham chiếu bộ nhớ) sẽ được xử lý mà không cần truy cập <strong>page table</strong> trong <strong>main memory</strong>. Do đó, trong trường hợp phổ biến, hiệu năng chương trình gần như không bị ảnh hưởng bởi việc bộ nhớ đang được <strong>virtualized</strong> (ảo hóa) — một thành tựu tuyệt vời cho <strong>operating system</strong> (hệ điều hành), và chắc chắn là yếu tố thiết yếu để sử dụng <strong>paging</strong> trong các hệ thống hiện đại.</p>
+<p>Tuy nhiên, TLB không phải lúc nào cũng mang lại “màu hồng” cho mọi chương trình. Đặc biệt, nếu số lượng page mà chương trình truy cập trong một khoảng thời gian ngắn vượt quá số page có thể chứa trong TLB, chương trình sẽ tạo ra nhiều <strong>TLB misses</strong> và chạy chậm hơn đáng kể. Hiện tượng này được gọi là <strong>exceeding the TLB coverage</strong> (vượt quá phạm vi bao phủ của TLB), và có thể là vấn đề nghiêm trọng với một số chương trình. Một giải pháp, như sẽ thảo luận ở chương sau, là hỗ trợ <strong>larger page sizes</strong> (kích thước page lớn hơn); bằng cách ánh xạ các <strong>data structures</strong> (cấu trúc dữ liệu) quan trọng vào các vùng của address space được ánh xạ bởi page lớn, <strong>coverage</strong> hiệu quả của TLB có thể được tăng lên. Hỗ trợ <strong>large pages</strong> thường được khai thác bởi các chương trình như <strong>database management system</strong> (DBMS — hệ quản trị cơ sở dữ liệu), vốn có một số cấu trúc dữ liệu vừa lớn vừa được truy cập ngẫu nhiên.</p>
+<p>Một vấn đề khác đáng nhắc tới: <strong>TLB access</strong> (truy cập TLB) có thể dễ dàng trở thành nút thắt cổ chai trong <strong>CPU pipeline</strong>, đặc biệt với loại <strong>physically-indexed cache</strong> (bộ nhớ đệm đánh chỉ số theo địa chỉ vật lý). Với loại cache này, address translation phải diễn ra trước khi cache được truy cập, điều này có thể làm chậm đáng kể. Vì vấn đề tiềm ẩn này, người ta đã nghiên cứu nhiều cách thông minh để truy cập cache bằng <strong>virtual addresses</strong>, tránh bước dịch địa chỉ tốn kém trong trường hợp <strong>cache hit</strong>. Loại <strong>virtually-indexed cache</strong> này giải quyết một số vấn đề hiệu năng, nhưng cũng đưa ra các thách thức mới trong <strong>hardware design</strong> (thiết kế phần cứng). Xem khảo sát của Wiggins [W03] để biết thêm chi tiết.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../18/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../20/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../18/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../20/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

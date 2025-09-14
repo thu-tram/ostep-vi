@@ -1,0 +1,251 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Mechanism: Address Translation - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html" class="active"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="153-dynamic-hardware-based-relocation--tái-định-vị-động-dựa-trên-phần-cứng"><a class="header" href="#153-dynamic-hardware-based-relocation--tái-định-vị-động-dựa-trên-phần-cứng">15.3 Dynamic (Hardware-based) Relocation — Tái định vị động (dựa trên phần cứng)</a></h2>
+<p>Để hiểu cơ chế dịch địa chỉ (address translation) dựa trên phần cứng, trước tiên chúng ta sẽ xem xét phiên bản đầu tiên của nó. Ý tưởng này xuất hiện trong các máy tính time-sharing (chia sẻ thời gian) đầu tiên vào cuối những năm 1950, được gọi là <strong>base and bounds</strong> (cơ chế thanh ghi cơ sở và giới hạn). Kỹ thuật này cũng được gọi là <strong>dynamic relocation</strong> (tái định vị động); trong chương này, chúng ta sẽ sử dụng hai thuật ngữ này thay thế cho nhau [SS74].</p>
+<p>Cụ thể, mỗi CPU sẽ cần hai thanh ghi phần cứng: một gọi là <strong>base register</strong> (thanh ghi cơ sở) và một gọi là <strong>bounds register</strong> (thanh ghi giới hạn, đôi khi gọi là limit register). Cặp base–bounds này cho phép chúng ta đặt <strong>address space</strong> (không gian địa chỉ) của process (tiến trình) ở bất kỳ vị trí nào trong <strong>physical memory</strong> (bộ nhớ vật lý), đồng thời đảm bảo process chỉ có thể truy cập vào không gian địa chỉ của chính nó.</p>
+<blockquote>
+<p><strong>ASIDE: SOFTWARE-BASED RELOCATION</strong><br />
+Trong giai đoạn đầu, trước khi có hỗ trợ phần cứng, một số hệ thống thực hiện tái định vị (relocation) ở dạng đơn giản hoàn toàn bằng phần mềm. Kỹ thuật cơ bản này được gọi là <strong>static relocation</strong> (tái định vị tĩnh), trong đó một phần mềm gọi là <strong>loader</strong> sẽ lấy một file thực thi (executable) sắp chạy và ghi lại (rewrite) các địa chỉ của nó sang một vị trí offset mong muốn trong physical memory.</p>
+<p>Ví dụ: nếu một lệnh là tải dữ liệu từ địa chỉ 1000 vào một thanh ghi (ví dụ: <code>movl 1000, %eax</code>), và không gian địa chỉ của chương trình được nạp bắt đầu tại địa chỉ 3000 (thay vì 0 như chương trình nghĩ), loader sẽ ghi lại lệnh này để cộng thêm offset 3000 vào mỗi địa chỉ (ví dụ: <code>movl 4000, %eax</code>). Bằng cách này, việc tái định vị tĩnh của không gian địa chỉ process được thực hiện.</p>
+<p>Tuy nhiên, static relocation có nhiều vấn đề. Quan trọng nhất là nó <strong>không cung cấp bảo vệ</strong> (protection), vì process có thể tạo ra các địa chỉ sai và truy cập trái phép vào bộ nhớ của process khác hoặc thậm chí bộ nhớ của OS. Nói chung, cần có hỗ trợ phần cứng để đạt được bảo vệ thực sự [WL+93]. Một nhược điểm khác là khi đã đặt xong, rất khó để di chuyển không gian địa chỉ sang vị trí khác [M65].</p>
+</blockquote>
+<p>Trong cơ chế này, mỗi chương trình được viết và biên dịch như thể nó được nạp tại địa chỉ 0. Tuy nhiên, khi chương trình bắt đầu chạy, OS sẽ quyết định vị trí trong physical memory để nạp nó và thiết lập base register bằng giá trị đó. Trong ví dụ ở trên, OS quyết định nạp process tại địa chỉ vật lý 32 KB và đặt base register bằng giá trị này.</p>
+<p>Khi process chạy, điều thú vị bắt đầu xảy ra. Mỗi khi process tạo ra một tham chiếu bộ nhớ, CPU sẽ dịch địa chỉ theo công thức:</p>
+<pre><code>physical address = virtual address + base
+</code></pre>
+<p>Mỗi tham chiếu bộ nhớ do process tạo ra là một <strong>virtual address</strong> (địa chỉ ảo); phần cứng sẽ cộng giá trị trong base register vào địa chỉ này để tạo ra <strong>physical address</strong> (địa chỉ vật lý) và gửi tới hệ thống bộ nhớ.</p>
+<p>Để hiểu rõ hơn, hãy theo dõi quá trình thực thi một lệnh. Cụ thể, xét lệnh sau từ ví dụ trước:</p>
+<pre><code>128: movl 0x0(%ebx), %eax
+</code></pre>
+<p><strong>Program Counter (PC)</strong> đang ở giá trị 128; khi phần cứng cần nạp lệnh này, nó sẽ cộng giá trị PC với base register (32 KB = 32768) để được địa chỉ vật lý 32896; sau đó phần cứng nạp lệnh từ địa chỉ vật lý này. Tiếp theo, CPU bắt đầu thực thi lệnh. Tại một thời điểm, process sẽ thực hiện:</p>
+<blockquote>
+<p><strong>TIP: HARDWARE-BASED DYNAMIC RELOCATION</strong><br />
+Với dynamic relocation, chỉ cần một chút phần cứng là có thể tạo ra hiệu quả lớn. Base register được dùng để biến đổi virtual address (do chương trình tạo ra) thành physical address. Bounds register (hoặc limit register) đảm bảo các địa chỉ này nằm trong phạm vi hợp lệ của address space. Kết hợp lại, chúng cung cấp một cơ chế ảo hóa bộ nhớ đơn giản và hiệu quả.</p>
+</blockquote>
+<p>Lệnh load từ virtual address 15 KB, CPU sẽ cộng giá trị này với base register (32 KB) để được physical address 47 KB và lấy dữ liệu mong muốn.</p>
+<p>Việc biến đổi virtual address thành physical address chính là kỹ thuật <strong>address translation</strong> (dịch địa chỉ). Vì quá trình này diễn ra khi chương trình đang chạy (runtime) và chúng ta có thể di chuyển address space ngay cả khi process đã chạy, nên kỹ thuật này được gọi là <strong>dynamic relocation</strong> [M65].</p>
+<p>Bạn có thể thắc mắc: bounds register ở đâu? Thực tế, bounds register được dùng để bảo vệ. CPU sẽ kiểm tra xem virtual address có nằm trong giới hạn hay không; trong ví dụ trên, bounds register sẽ được đặt là 16 KB. Nếu process tạo ra một virtual address lớn hơn hoặc bằng bounds, hoặc âm, CPU sẽ phát sinh <strong>exception</strong> và process có thể bị chấm dứt. Mục đích của bounds là đảm bảo tất cả địa chỉ do process tạo ra đều hợp lệ.</p>
+<p>Cần lưu ý rằng base và bounds register là các cấu trúc phần cứng nằm trên chip (mỗi CPU một cặp). Bộ phận của CPU hỗ trợ dịch địa chỉ thường được gọi là <strong>Memory Management Unit (MMU)</strong>; khi phát triển các kỹ thuật quản lý bộ nhớ phức tạp hơn, chúng ta sẽ bổ sung thêm mạch vào MMU.</p>
+<p>Một lưu ý nhỏ: bounds register có thể được định nghĩa theo hai cách. Cách thứ nhất (như ở trên) là lưu kích thước của address space, và phần cứng sẽ so sánh virtual address với giá trị này trước khi cộng base. Cách thứ hai là lưu địa chỉ vật lý của điểm kết thúc address space, và phần cứng sẽ cộng base trước rồi mới kiểm tra giới hạn. Cả hai cách là tương đương về mặt logic; để đơn giản, chúng ta thường giả định cách thứ nhất.</p>
+<h3 id="ví-dụ-dịch-địa-chỉ"><a class="header" href="#ví-dụ-dịch-địa-chỉ">Ví dụ dịch địa chỉ</a></h3>
+<p>Giả sử một process có address space kích thước 4 KB (rất nhỏ, chỉ để minh họa) được nạp tại địa chỉ vật lý 16 KB. Kết quả dịch địa chỉ sẽ như sau:</p>
+<p><em>(Bảng minh họa kết quả dịch địa chỉ — giữ nguyên như bản gốc)</em></p>
+<p>Như bạn thấy, chỉ cần cộng base address với virtual address (có thể coi như offset trong address space) là ra physical address. Chỉ khi virtual address quá lớn hoặc âm thì mới gây ra lỗi (fault) và phát sinh exception.</p>
+<h2 id="154-hardware-support-a-summary--tóm-tắt-hỗ-trợ-phần-cứng"><a class="header" href="#154-hardware-support-a-summary--tóm-tắt-hỗ-trợ-phần-cứng">15.4 Hardware Support: A Summary — Tóm tắt hỗ trợ phần cứng</a></h2>
+<p>Tóm tắt lại, phần cứng cần hỗ trợ những gì (xem thêm <em>Figure 15.3</em>, trang 9):</p>
+<ul>
+<li>
+<p>Như đã thảo luận trong chương về <strong>CPU virtualization</strong> (ảo hóa CPU), cần có hai chế độ CPU: <strong>privileged mode</strong> (kernel mode) — OS chạy ở chế độ này và có toàn quyền truy cập máy; và <strong>user mode</strong> — ứng dụng chạy ở chế độ này và bị giới hạn quyền. Một bit trong <strong>processor status word</strong> sẽ cho biết CPU đang ở chế độ nào; khi có sự kiện đặc biệt (ví dụ: system call, exception hoặc interrupt), CPU sẽ chuyển chế độ.</p>
+</li>
+<li>
+<p>Phần cứng phải cung cấp base và bounds register; mỗi CPU có một cặp, là một phần của MMU. Khi chương trình người dùng chạy, phần cứng sẽ dịch mỗi địa chỉ bằng cách cộng base với virtual address do chương trình tạo ra. Đồng thời, phần cứng phải kiểm tra tính hợp lệ của địa chỉ bằng bounds register và mạch logic trong CPU.</p>
+</li>
+<li>
+<p>Phần cứng cần cung cấp các lệnh đặc biệt để thay đổi base và bounds register, cho phép OS thay đổi chúng khi chuyển đổi process. Các lệnh này là <strong>privileged instructions</strong> (lệnh đặc quyền); chỉ ở kernel mode mới có thể thay đổi. Hãy tưởng tượng mức độ hỗn loạn mà một process có thể gây ra<sup class="footnote-reference"><a href="#1">1</a></sup> nếu nó có thể tùy ý thay đổi base register khi đang chạy. Nghĩ thôi cũng đủ thấy đây là cơn ác mộng.</p>
+</li>
+</ul>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Is there anything other than “havoc” that can be “wreaked”? [W17]</p>
+</div>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như yêu cầu.</p>
+<blockquote>
+<p><strong>ASIDE: DATA STRUCTURE — THE FREE LIST</strong><br />
+Hệ điều hành (OS) phải theo dõi những phần bộ nhớ trống (free memory) chưa được sử dụng, để có thể cấp phát bộ nhớ cho các process (tiến trình). Có thể sử dụng nhiều cấu trúc dữ liệu khác nhau cho nhiệm vụ này; cấu trúc đơn giản nhất (mà chúng ta giả định ở đây) là <strong>free list</strong> (danh sách vùng trống), đơn giản chỉ là một danh sách các khoảng (range) của physical memory (bộ nhớ vật lý) hiện chưa được sử dụng.</p>
+</blockquote>
+<p><strong>Figure 15.3: Dynamic Relocation — Hardware Requirements</strong><br />
+<em>(Yêu cầu phần cứng cho tái định vị động)</em></p>
+<p>Cuối cùng, CPU phải có khả năng tạo ra <strong>exception</strong> (ngoại lệ) trong các tình huống khi một chương trình người dùng cố gắng truy cập bộ nhớ trái phép (với một địa chỉ “out of bounds” — vượt ngoài giới hạn). Trong trường hợp này, CPU sẽ dừng việc thực thi chương trình người dùng và chuyển quyền điều khiển cho <strong>out-of-bounds exception handler</strong> (trình xử lý ngoại lệ vượt giới hạn) của OS. Trình xử lý này sẽ quyết định cách phản ứng, thường là chấm dứt process vi phạm.<br />
+Tương tự, nếu một chương trình người dùng cố gắng thay đổi giá trị của các thanh ghi đặc quyền (privileged) như base register và bounds register, CPU sẽ phát sinh exception và gọi <strong>handler</strong> xử lý tình huống “cố gắng thực hiện một thao tác đặc quyền khi đang ở user mode”. CPU cũng phải cung cấp một cơ chế để OS thông báo vị trí của các handler này; do đó cần thêm một số lệnh đặc quyền.</p>
+<h2 id="155-operating-system-issues--các-vấn-đề-của-hệ-điều-hành"><a class="header" href="#155-operating-system-issues--các-vấn-đề-của-hệ-điều-hành">15.5 Operating System Issues — Các vấn đề của Hệ điều hành</a></h2>
+<p>Cũng giống như phần cứng cung cấp các tính năng mới để hỗ trợ <strong>dynamic relocation</strong> (tái định vị động), OS cũng phải xử lý các vấn đề mới; sự kết hợp giữa hỗ trợ phần cứng và quản lý của OS dẫn đến việc triển khai một dạng <strong>virtual memory</strong> (bộ nhớ ảo) đơn giản. Cụ thể, có một số thời điểm quan trọng mà OS phải can thiệp để thực hiện cơ chế virtual memory dựa trên base-and-bounds.</p>
+<p><strong>Thứ nhất</strong>, OS phải hành động khi một process được tạo, tìm chỗ trống trong bộ nhớ để đặt address space của nó. Với giả định rằng mỗi address space (a) nhỏ hơn kích thước physical memory và (b) có cùng kích thước, việc này khá đơn giản: OS có thể coi physical memory như một mảng các slot (ô nhớ) và theo dõi trạng thái từng slot (trống hay đã dùng). Khi một process mới được tạo, OS sẽ tìm trong cấu trúc dữ liệu (thường gọi là free list) để tìm chỗ trống cho address space mới và đánh dấu là đã sử dụng. Nếu address space có kích thước thay đổi, việc quản lý sẽ phức tạp hơn — vấn đề này sẽ được bàn ở các chương sau.</p>
+<p><strong>Figure 15.4: Dynamic Relocation — Operating System Responsibilities</strong><br />
+<em>(Trách nhiệm của hệ điều hành trong tái định vị động)</em></p>
+<p>Ví dụ: Trong Figure 15.2 (trang 5), OS sử dụng slot đầu tiên của physical memory cho chính nó, và đã tái định vị process từ ví dụ trước vào slot bắt đầu tại địa chỉ vật lý 32 KB. Hai slot còn lại (16 KB–32 KB và 48 KB–64 KB) đang trống; do đó free list sẽ gồm hai mục này.</p>
+<p><strong>Thứ hai</strong>, OS phải thu hồi bộ nhớ khi một process kết thúc (thoát bình thường hoặc bị buộc dừng do vi phạm). Khi process kết thúc, OS sẽ đưa vùng nhớ của nó trở lại free list và dọn dẹp các cấu trúc dữ liệu liên quan.</p>
+<p><strong>Thứ ba</strong>, OS phải thực hiện thêm một số bước khi xảy ra <strong>context switch</strong> (chuyển ngữ cảnh). Mỗi CPU chỉ có một cặp base–bounds register, và giá trị của chúng khác nhau cho mỗi process (vì mỗi process được nạp ở địa chỉ vật lý khác nhau). Do đó, OS phải lưu và khôi phục cặp thanh ghi này khi chuyển đổi giữa các process. Cụ thể, khi OS dừng một process, nó phải lưu giá trị base và bounds register vào bộ nhớ, trong một cấu trúc dữ liệu riêng cho process như <strong>process structure</strong> hoặc <strong>process control block (PCB)</strong>. Khi OS chạy lại process (hoặc chạy lần đầu), nó phải thiết lập base và bounds register trên CPU với giá trị đúng của process đó.</p>
+<p>Cần lưu ý: khi một process bị dừng (không chạy), OS có thể di chuyển address space của nó sang vị trí khác trong bộ nhớ khá dễ dàng. Để làm điều này, OS sẽ <strong>deschedule</strong> process, sao chép address space từ vị trí hiện tại sang vị trí mới, sau đó cập nhật giá trị base register đã lưu (trong process structure) để trỏ tới vị trí mới. Khi process chạy lại, base register mới được khôi phục và process tiếp tục chạy mà không hề biết rằng mã lệnh và dữ liệu của mình đã ở vị trí khác trong bộ nhớ.</p>
+<p><strong>Thứ tư</strong>, OS phải cung cấp các <strong>exception handler</strong> (trình xử lý ngoại lệ) như đã đề cập; OS cài đặt các handler này khi khởi động (boot time) thông qua các lệnh đặc quyền. Ví dụ, nếu một process cố truy cập bộ nhớ ngoài giới hạn, CPU sẽ phát sinh exception; OS phải sẵn sàng xử lý, thường là chấm dứt process vi phạm. OS cần bảo vệ nghiêm ngặt hệ thống, và sẽ không “nhẹ tay” với process cố truy cập bộ nhớ hoặc thực thi lệnh trái phép.</p>
+<p><strong>Figure 15.5: Limited Direct Execution (Dynamic Relocation) @ Boot</strong><br />
+<em>(Thực thi trực tiếp có giới hạn — tái định vị động khi khởi động)</em></p>
+<p>Các Figure 15.5 và 15.6 (trang 12) minh họa tương tác phần cứng/OS theo dòng thời gian. Figure đầu cho thấy OS làm gì khi khởi động để chuẩn bị hệ thống; Figure thứ hai cho thấy khi một process (Process A) bắt đầu chạy, việc dịch địa chỉ được phần cứng xử lý hoàn toàn, không cần OS can thiệp. Tại một thời điểm, một <strong>timer interrupt</strong> xảy ra, OS chuyển sang Process B, process này thực hiện một “bad load” (truy cập địa chỉ bộ nhớ trái phép); lúc này OS phải can thiệp, chấm dứt process, giải phóng bộ nhớ và xóa entry của nó khỏi <strong>process table</strong>. Như bạn thấy, chúng ta vẫn theo mô hình <strong>limited direct execution</strong>: hầu hết thời gian, OS chỉ cần thiết lập phần cứng và để process chạy trực tiếp trên CPU; chỉ khi process vi phạm thì OS mới can thiệp.</p>
+<h2 id="156-summary--tóm-tắt"><a class="header" href="#156-summary--tóm-tắt">15.6 Summary — Tóm tắt</a></h2>
+<p>Trong chương này, chúng ta đã mở rộng khái niệm <strong>limited direct execution</strong> với một cơ chế cụ thể dùng trong virtual memory, gọi là <strong>address translation</strong> (dịch địa chỉ). Với address translation, OS có thể kiểm soát mọi truy cập bộ nhớ của process, đảm bảo chúng nằm trong giới hạn của address space. Yếu tố then chốt để kỹ thuật này hiệu quả là hỗ trợ phần cứng, giúp dịch địa chỉ nhanh chóng cho mỗi lần truy cập, biến virtual address (cách process nhìn bộ nhớ) thành physical address (cách bộ nhớ thực tế được tổ chức). Tất cả diễn ra hoàn toàn <strong>transparent</strong> (minh bạch) với process — nó không hề biết rằng các truy cập bộ nhớ đang được dịch.</p>
+<p><strong>Figure 15.6: Limited Direct Execution (Dynamic Relocation) @ Runtime</strong><br />
+<em>(Thực thi trực tiếp có giới hạn — tái định vị động khi chạy)</em></p>
+<p>Chúng ta cũng đã thấy một dạng ảo hóa cụ thể, gọi là <strong>base and bounds</strong> hoặc <strong>dynamic relocation</strong>. Cơ chế này rất hiệu quả vì chỉ cần thêm một chút logic phần cứng để cộng base register vào virtual address và kiểm tra địa chỉ có nằm trong bounds hay không. Nó cũng cung cấp <strong>protection</strong> (bảo vệ): OS và phần cứng phối hợp để đảm bảo không process nào có thể tạo ra truy cập bộ nhớ ngoài address space của chính nó. Bảo vệ là một trong những mục tiêu quan trọng nhất của OS; nếu không có nó, OS không thể kiểm soát hệ thống (process có thể ghi đè vùng nhớ quan trọng như trap table và chiếm quyền điều khiển).</p>
+<p>Tuy nhiên, kỹ thuật dynamic relocation đơn giản này vẫn có nhược điểm. Ví dụ, như trong Figure 15.2 (trang 5), process được tái định vị sử dụng physical memory từ 32 KB đến 48 KB; nhưng vì stack và heap của process không lớn, phần bộ nhớ giữa chúng bị bỏ trống. Kiểu lãng phí này gọi là <strong>internal fragmentation</strong> (phân mảnh bên trong), khi không gian bên trong đơn vị cấp phát không được sử dụng hết và bị bỏ phí. Trong cách tiếp cận hiện tại, dù có</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../14/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../16/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../14/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../16/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

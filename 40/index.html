@@ -1,0 +1,567 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>File System Implementation - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html" class="active"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="40-triển-khai-hệ-thống-tệp-file-system-implementation"><a class="header" href="#40-triển-khai-hệ-thống-tệp-file-system-implementation">40. Triển khai hệ thống tệp (File System Implementation)</a></h1>
+<p>Trong chương này, chúng ta sẽ giới thiệu một triển khai hệ thống tệp đơn giản, được gọi là <strong>vsfs</strong> (<em>Very Simple File System</em> – hệ thống tệp rất đơn giản).<br />
+Hệ thống tệp này là một phiên bản đơn giản hóa của <strong>UNIX file system</strong> (hệ thống tệp UNIX) và do đó sẽ giúp giới thiệu một số cấu trúc cơ bản trên đĩa (<strong>on-disk structures</strong>), các phương thức truy cập (<strong>access methods</strong>) và nhiều chính sách (<strong>policies</strong>) mà bạn sẽ thấy trong nhiều hệ thống tệp hiện nay.</p>
+<p>Hệ thống tệp này hoàn toàn là phần mềm; không giống như quá trình phát triển <strong>CPU virtualization</strong> (ảo hóa CPU) và <strong>memory virtualization</strong> (ảo hóa bộ nhớ), chúng ta sẽ không bổ sung các tính năng phần cứng để cải thiện một khía cạnh nào đó của hệ thống tệp (mặc dù chúng ta vẫn cần chú ý đến các đặc tính của thiết bị để đảm bảo hệ thống tệp hoạt động tốt).</p>
+<p>Vì có sự linh hoạt rất lớn trong việc xây dựng hệ thống tệp, nên đã có rất nhiều hệ thống tệp khác nhau được tạo ra, từ <strong>AFS</strong> (<em>Andrew File System</em>) [H+88] cho đến <strong>ZFS</strong> (<em>Sun’s Zettabyte File System</em>) [B07].<br />
+Tất cả các hệ thống tệp này đều có các cấu trúc dữ liệu khác nhau và thực hiện một số việc tốt hơn hoặc kém hơn so với các hệ thống khác.</p>
+<p>Do đó, cách chúng ta học về hệ thống tệp sẽ thông qua <strong>case study</strong> (nghiên cứu tình huống):</p>
+<ul>
+<li>Đầu tiên, một hệ thống tệp đơn giản (<strong>vsfs</strong>) trong chương này để giới thiệu hầu hết các khái niệm.</li>
+<li>Sau đó là một loạt nghiên cứu về các hệ thống tệp thực tế để hiểu cách chúng khác nhau trong thực tiễn.</li>
+</ul>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ TRIỂN KHAI MỘT HỆ THỐNG TỆP ĐƠN GIẢN</strong><br />
+Làm thế nào để xây dựng một hệ thống tệp đơn giản? Cần những cấu trúc nào trên đĩa? Chúng cần theo dõi những gì? Chúng được truy cập như thế nào?</p>
+</blockquote>
+<h2 id="401-cách-tư-duy-the-way-to-think"><a class="header" href="#401-cách-tư-duy-the-way-to-think">40.1 Cách tư duy (The Way To Think)</a></h2>
+<p>Khi suy nghĩ về hệ thống tệp, chúng ta thường đề xuất xem xét <strong>hai khía cạnh</strong> khác nhau; nếu bạn hiểu cả hai khía cạnh này, bạn có thể hiểu cơ bản cách hệ thống tệp hoạt động.</p>
+<p><strong>Khía cạnh thứ nhất</strong> là <strong>các cấu trúc dữ liệu</strong> (<strong>data structures</strong>) của hệ thống tệp.<br />
+Nói cách khác, những loại <strong>on-disk structures</strong> nào được hệ thống tệp sử dụng để tổ chức dữ liệu (<strong>data</strong>) và siêu dữ liệu (<strong>metadata</strong>) của nó?<br />
+Các hệ thống tệp đầu tiên mà chúng ta sẽ thấy (bao gồm cả <strong>vsfs</strong> bên dưới) sử dụng các cấu trúc đơn giản, như <strong>mảng các block</strong> hoặc các đối tượng khác.</p>
+<blockquote>
+<p><strong>ASIDE: MÔ HÌNH TƯ DUY (MENTAL MODELS) VỀ HỆ THỐNG TỆP</strong><br />
+Như chúng ta đã thảo luận trước đây, <strong>mental model</strong> (mô hình tư duy) là thứ bạn thực sự cần phát triển khi học về các hệ thống.<br />
+Đối với hệ thống tệp, mental model của bạn cuối cùng nên bao gồm câu trả lời cho các câu hỏi như:</p>
+<ul>
+<li>Những <strong>on-disk structures</strong> nào lưu trữ dữ liệu và metadata của hệ thống tệp?</li>
+<li>Điều gì xảy ra khi một <strong>process</strong> mở một file?</li>
+<li>Những cấu trúc nào trên đĩa được truy cập trong quá trình đọc hoặc ghi?</li>
+</ul>
+<p>Bằng cách làm việc và cải thiện mental model của mình, bạn sẽ phát triển một sự hiểu biết trừu tượng về những gì đang diễn ra, thay vì chỉ cố gắng hiểu các chi tiết cụ thể của một đoạn mã hệ thống tệp nào đó (mặc dù điều đó cũng hữu ích, tất nhiên!).</p>
+</blockquote>
+<p>Trong khi đó, các hệ thống tệp tinh vi hơn, như <strong>SGI’s XFS</strong>, sử dụng các cấu trúc dạng cây (<strong>tree-based structures</strong>) phức tạp hơn [S+96].</p>
+<p><strong>Khía cạnh thứ hai</strong> của một hệ thống tệp là <strong>các phương thức truy cập</strong> (<strong>access methods</strong>).<br />
+Hệ thống tệp ánh xạ các lời gọi (<strong>system call</strong>) do một process thực hiện, chẳng hạn như <code>open()</code>, <code>read()</code>, <code>write()</code>, v.v., vào các cấu trúc của nó như thế nào?<br />
+Những cấu trúc nào được đọc trong quá trình thực thi một system call cụ thể?<br />
+Những cấu trúc nào được ghi?<br />
+Tất cả các bước này được thực hiện hiệu quả đến mức nào?</p>
+<p>Nếu bạn hiểu <strong>các cấu trúc dữ liệu</strong> và <strong>các phương thức truy cập</strong> của một hệ thống tệp, bạn đã phát triển được một <strong>mental model</strong> tốt về cách nó thực sự hoạt động – đây là một phần quan trọng trong tư duy hệ thống (<strong>systems mindset</strong>).<br />
+Hãy cố gắng xây dựng mental model của bạn khi chúng ta bắt đầu đi sâu vào triển khai đầu tiên này.</p>
+<h2 id="402-tổ-chức-tổng-thể-overall-organization"><a class="header" href="#402-tổ-chức-tổng-thể-overall-organization">40.2 Tổ chức tổng thể (Overall Organization)</a></h2>
+<p>Bây giờ chúng ta sẽ xây dựng <strong>tổ chức tổng thể trên đĩa</strong> (<em>on-disk organization</em>) của các cấu trúc dữ liệu trong hệ thống tệp <strong>vsfs</strong>.<br />
+Điều đầu tiên cần làm là <strong>chia đĩa thành các block</strong>; các hệ thống tệp đơn giản chỉ sử dụng <strong>một kích thước block duy nhất</strong>, và đó cũng chính là cách chúng ta sẽ làm ở đây.<br />
+Chúng ta chọn kích thước phổ biến là <strong>4 KB</strong>.</p>
+<p>Như vậy, cách nhìn của chúng ta về <strong>phân vùng đĩa</strong> nơi xây dựng hệ thống tệp sẽ rất đơn giản: một dãy các block, mỗi block có kích thước 4 KB.<br />
+Các block được đánh địa chỉ từ <strong>0</strong> đến <strong>N − 1</strong>, trong một phân vùng có kích thước <strong>N block 4 KB</strong>.<br />
+Giả sử chúng ta có một đĩa rất nhỏ, chỉ với <strong>64 block</strong>:</p>
+<p>...</p>
+<p>Tiếp theo, hãy nghĩ về những gì cần lưu trữ trong các block này để xây dựng một hệ thống tệp.<br />
+Tất nhiên, điều đầu tiên xuất hiện trong đầu là <strong>dữ liệu người dùng</strong> (<em>user data</em>).<br />
+Thực tế, phần lớn dung lượng trong bất kỳ hệ thống tệp nào là (và nên là) dữ liệu người dùng.<br />
+Chúng ta sẽ gọi vùng đĩa dùng cho dữ liệu người dùng là <strong>data region</strong> (vùng dữ liệu), và, để đơn giản, dành một phần cố định của đĩa cho các block này – giả sử <strong>56 block cuối cùng</strong> trong tổng số 64 block trên đĩa:</p>
+<p>...</p>
+<p>Như chúng ta đã tìm hiểu (một chút) ở chương trước, hệ thống tệp phải <strong>theo dõi thông tin về mỗi file</strong>.<br />
+Thông tin này là một phần <strong>metadata</strong> (siêu dữ liệu) quan trọng, bao gồm:</p>
+<ul>
+<li>Các data block (trong data region) tạo thành file</li>
+<li>Kích thước file</li>
+<li>Chủ sở hữu và quyền truy cập</li>
+<li>Thời gian truy cập và chỉnh sửa</li>
+<li>Và các thông tin tương tự khác</li>
+</ul>
+<p>Để lưu trữ thông tin này, hệ thống tệp thường có một cấu trúc gọi là <strong>inode</strong> (chúng ta sẽ tìm hiểu kỹ hơn về inode ở phần sau).</p>
+<p>Để chứa các inode, chúng ta cũng cần dành một phần dung lượng trên đĩa cho chúng.<br />
+Chúng ta sẽ gọi phần này là <strong>inode table</strong> (bảng inode), đơn giản là một mảng các inode lưu trên đĩa.<br />
+Như vậy, hình ảnh hệ thống tệp trên đĩa của chúng ta bây giờ sẽ như sau, giả sử chúng ta dùng <strong>5 block</strong> trong tổng số 64 block cho inode (được ký hiệu bằng chữ <strong>I</strong> trong sơ đồ):</p>
+<p>...</p>
+<p>Cần lưu ý rằng inode thường <strong>không lớn</strong>, ví dụ 128 hoặc 256 byte.<br />
+Giả sử mỗi inode có kích thước <strong>256 byte</strong>, một block 4 KB có thể chứa <strong>16 inode</strong>, và hệ thống tệp ở trên sẽ có tổng cộng <strong>80 inode</strong>.<br />
+Trong hệ thống tệp đơn giản của chúng ta, được xây dựng trên một phân vùng nhỏ 64 block, con số này chính là <strong>số lượng file tối đa</strong> mà hệ thống tệp có thể chứa; tuy nhiên, cũng cần lưu ý rằng cùng một hệ thống tệp này, nếu được xây dựng trên một đĩa lớn hơn, chỉ cần cấp phát một <strong>inode table</strong> lớn hơn là có thể chứa nhiều file hơn.</p>
+<p>Cho đến lúc này, hệ thống tệp của chúng ta đã có <strong>data block</strong> (D) và <strong>inode</strong> (I), nhưng vẫn còn thiếu một số thành phần.<br />
+Một thành phần quan trọng vẫn cần, như bạn có thể đoán, là <strong>cách để theo dõi inode hoặc data block nào đang rảnh (free) hoặc đã được cấp phát (allocated)</strong>.<br />
+Các cấu trúc theo dõi cấp phát (<strong>allocation structures</strong>) là thành phần bắt buộc trong bất kỳ hệ thống tệp nào.</p>
+<p>Có nhiều phương pháp để theo dõi cấp phát.<br />
+Ví dụ: chúng ta có thể dùng <strong>free list</strong> (danh sách các block rảnh) trỏ tới block rảnh đầu tiên, block này lại trỏ tới block rảnh tiếp theo, và cứ thế.<br />
+Tuy nhiên, ở đây chúng ta chọn một cấu trúc đơn giản và phổ biến gọi là <strong>bitmap</strong> – một cho <strong>data region</strong> (<strong>data bitmap</strong>) và một cho <strong>inode table</strong> (<strong>inode bitmap</strong>).</p>
+<p><strong>Bitmap</strong> là một cấu trúc đơn giản: mỗi bit được dùng để biểu thị xem đối tượng/block tương ứng là <strong>free</strong> (0) hay <strong>in-use</strong> (1).</p>
+<p>Và như vậy, <strong>bố cục mới trên đĩa</strong> của chúng ta sẽ bao gồm <strong>inode bitmap</strong> (i) và <strong>data bitmap</strong> (d):</p>
+<p>Bạn có thể nhận thấy rằng việc sử dụng <strong>toàn bộ một block 4 KB</strong> cho các <strong>bitmap</strong> này có phần hơi “dư thừa”; một bitmap như vậy có thể theo dõi trạng thái cấp phát của <strong>32K đối tượng</strong>, trong khi chúng ta chỉ có <strong>80 inode</strong> và <strong>56 data block</strong>.<br />
+Tuy nhiên, để đơn giản, chúng ta vẫn dành nguyên một block 4 KB cho mỗi bitmap.</p>
+<p>Người đọc tinh ý (tức là người vẫn còn tỉnh táo) có thể nhận ra rằng còn <strong>một block trống</strong> trong thiết kế cấu trúc trên đĩa của hệ thống tệp rất đơn giản này.<br />
+Chúng ta sẽ dành block này cho <strong>superblock</strong>, được ký hiệu bằng <strong>S</strong> trong sơ đồ bên dưới.</p>
+<p><strong>Superblock</strong> chứa thông tin về hệ thống tệp cụ thể này, bao gồm, ví dụ:</p>
+<ul>
+<li>Số lượng inode và data block trong hệ thống tệp (lần lượt là 80 và 56 trong ví dụ này)</li>
+<li>Vị trí bắt đầu của <strong>inode table</strong> (block số 3)</li>
+<li>Và các thông tin khác</li>
+</ul>
+<p>Superblock cũng thường chứa một <strong>magic number</strong> nào đó để nhận diện loại hệ thống tệp (trong trường hợp này là <strong>vsfs</strong>).</p>
+<p>...</p>
+<p>Do đó, khi <strong>mount</strong> (gắn kết) một hệ thống tệp, hệ điều hành sẽ đọc <strong>superblock</strong> trước tiên để khởi tạo các tham số cần thiết, sau đó gắn volume vào <strong>cây hệ thống tệp</strong>.<br />
+Khi các file trong volume được truy cập, hệ thống sẽ biết chính xác cần tìm các cấu trúc trên đĩa ở đâu.</p>
+<h2 id="403-tổ-chức-file-inode-file-organization-the-inode"><a class="header" href="#403-tổ-chức-file-inode-file-organization-the-inode">40.3 Tổ chức file: Inode (File Organization: The Inode)</a></h2>
+<p>Một trong những <strong>cấu trúc trên đĩa</strong> quan trọng nhất của hệ thống tệp là <strong>inode</strong>; hầu như tất cả các hệ thống tệp đều có một cấu trúc tương tự.<br />
+Tên gọi <strong>inode</strong> là viết tắt của <strong>index node</strong>, tên lịch sử được đặt cho nó trong UNIX [RT74] và có thể cả các hệ thống trước đó, vì ban đầu các node này được sắp xếp trong một mảng, và mảng này được <strong>index</strong> (đánh chỉ số) để truy cập inode cụ thể.</p>
+<blockquote>
+<p><strong>ASIDE: CẤU TRÚC DỮ LIỆU — INODE</strong><br />
+Inode là tên gọi chung được sử dụng trong nhiều hệ thống tệp để mô tả cấu trúc lưu trữ <strong>metadata</strong> (siêu dữ liệu) của một file, chẳng hạn như:</p>
+<ul>
+<li>Độ dài file</li>
+<li>Quyền truy cập (permissions)</li>
+<li>Vị trí các block dữ liệu cấu thành file</li>
+</ul>
+<p>Tên gọi này xuất hiện ít nhất từ thời UNIX (và có thể sớm hơn, như trong hệ thống Multics hoặc các hệ thống trước đó); nó là viết tắt của <strong>index node</strong>, vì <strong>inode number</strong> được dùng để truy cập vào mảng inode trên đĩa nhằm tìm inode tương ứng.<br />
+Như chúng ta sẽ thấy, thiết kế inode là một phần quan trọng trong thiết kế hệ thống tệp.<br />
+Hầu hết các hệ thống hiện đại đều có một cấu trúc tương tự cho mỗi file mà chúng quản lý, nhưng có thể đặt tên khác (như <strong>dnodes</strong>, <strong>fnodes</strong>, v.v.).</p>
+</blockquote>
+<p>Mỗi inode được tham chiếu ngầm định bởi một số (gọi là <strong>i-number</strong>), mà trước đây chúng ta đã gọi là <strong>tên mức thấp</strong> của file.<br />
+Trong <strong>vsfs</strong> (và các hệ thống tệp đơn giản khác), khi biết <strong>i-number</strong>, bạn có thể trực tiếp tính toán vị trí inode tương ứng trên đĩa.</p>
+<p>Ví dụ: xét <strong>inode table</strong> của vsfs như trên:</p>
+<ul>
+<li>Kích thước 20 KB (gồm 5 block 4 KB)</li>
+<li>Chứa 80 inode (giả sử mỗi inode có kích thước 256 byte)</li>
+<li>Giả sử vùng inode bắt đầu tại địa chỉ 12 KB (tức là: superblock bắt đầu ở 0 KB, <strong>inode bitmap</strong> ở địa chỉ 4 KB, <strong>data bitmap</strong> ở 8 KB, và <strong>inode table</strong> ngay sau đó)</li>
+</ul>
+<p>Trong vsfs, chúng ta có bố cục cho phần đầu của phân vùng hệ thống tệp như sau (xem ở dạng phóng to):</p>
+<p>Để đọc <strong>inode</strong> số 32, hệ thống tệp trước tiên sẽ tính <strong>offset</strong> (vị trí bù) trong vùng inode:</p>
+<p>[
+32 \cdot \text{sizeof(inode)} = 8192 \ \text{byte}
+]</p>
+<p>Sau đó cộng giá trị này với địa chỉ bắt đầu của <strong>inode table</strong> trên đĩa (<code>inodeStartAddr = 12KB</code>), và thu được <strong>địa chỉ byte</strong> chính xác của block inode mong muốn: <strong>20KB</strong>.</p>
+<p>Nhắc lại rằng <strong>đĩa không được đánh địa chỉ theo byte</strong> (<em>byte addressable</em>), mà bao gồm một số lượng lớn các <strong>sector</strong> có thể đánh địa chỉ, thường là <strong>512 byte</strong> mỗi sector.<br />
+Do đó, để lấy block inode chứa inode số 32, hệ thống tệp sẽ thực hiện thao tác đọc từ sector:</p>
+<p>[
+(20 \times 1024) / 512 = 40
+]</p>
+<p>để lấy block inode mong muốn.</p>
+<p>Tổng quát hơn, địa chỉ sector <code>sector</code> của block inode có thể được tính như sau:</p>
+<pre><code class="language-c">blk = (inumber * sizeof(inode_t)) / blockSize;
+sector = ((blk * blockSize) + inodeStartAddr) / sectorSize;
+</code></pre>
+<p>Bên trong mỗi <strong>inode</strong> chứa hầu như toàn bộ thông tin cần thiết về một file:</p>
+<ul>
+<li><strong>Loại file</strong> (ví dụ: regular file, directory, v.v.)</li>
+<li><strong>Kích thước file</strong></li>
+<li><strong>Số lượng block</strong> đã được cấp phát cho file</li>
+<li><strong>Thông tin bảo vệ</strong> (protection information) như: ai là chủ sở hữu file, ai có quyền truy cập</li>
+<li><strong>Thông tin thời gian</strong>: thời điểm file được tạo, chỉnh sửa, hoặc truy cập lần cuối</li>
+<li><strong>Thông tin vị trí các data block</strong> trên đĩa (ví dụ: các con trỏ tới block dữ liệu)</li>
+</ul>
+<p>Chúng ta gọi toàn bộ thông tin này là <strong>metadata</strong> (siêu dữ liệu); thực tế, bất kỳ thông tin nào bên trong hệ thống tệp mà không phải dữ liệu người dùng thuần túy đều được coi là metadata.</p>
+<p>Một ví dụ về inode trong <strong>ext2</strong> [P09] được minh họa trong <strong>Hình 40.1</strong>^[1].</p>
+<p>Một trong những quyết định quan trọng nhất trong thiết kế inode là <strong>cách nó tham chiếu tới vị trí các data block</strong>.<br />
+Một cách tiếp cận đơn giản là đặt một hoặc nhiều <strong>direct pointer</strong> (con trỏ trực tiếp – địa chỉ đĩa) bên trong inode; mỗi con trỏ trỏ tới một block dữ liệu thuộc về file.<br />
+Cách tiếp cận này có giới hạn: ví dụ, nếu bạn muốn có một file rất lớn (lớn hơn kích thước block nhân với số lượng direct pointer trong inode), bạn sẽ không thể lưu trữ được.</p>
+<h3 id="chỉ-mục-nhiều-cấp-the-multi-level-index"><a class="header" href="#chỉ-mục-nhiều-cấp-the-multi-level-index">Chỉ mục nhiều cấp (The Multi-Level Index)</a></h3>
+<p>Để hỗ trợ các file lớn hơn, các nhà thiết kế hệ thống tệp đã phải đưa vào inode những cấu trúc khác nhau.<br />
+Một ý tưởng phổ biến là sử dụng một con trỏ đặc biệt gọi là <strong>indirect pointer</strong> (con trỏ gián tiếp).</p>
+<p>Thay vì trỏ tới một block chứa dữ liệu người dùng, nó trỏ tới một block chứa <strong>nhiều con trỏ khác</strong>, mỗi con trỏ lại trỏ tới một block dữ liệu người dùng.</p>
+<p>Do đó, một inode có thể có một số lượng cố định các <strong>direct pointer</strong> (ví dụ: 12), và <strong>một indirect pointer</strong>.<br />
+Nếu file đủ lớn, một <strong>indirect block</strong> sẽ được cấp phát (từ vùng data block trên đĩa), và vị trí dành cho indirect pointer trong inode sẽ được trỏ tới block này.</p>
+<p>Giả sử block 4 KB và địa chỉ đĩa dài 4 byte, thì một indirect block sẽ chứa thêm <strong>1024 con trỏ</strong>; khi đó, file có thể lớn tới:</p>
+<p>[
+(12 + 1024) \times 4\text{KB} = 4144\ \text{KB}
+]</p>
+<blockquote>
+<p><strong>TIP: CÂN NHẮC CÁC TIẾP CẬN DỰA TRÊN EXTENT (EXTENT-BASED APPROACHES)</strong><br />
+Một cách tiếp cận khác là sử dụng <strong>extent</strong> thay vì các <strong>pointer</strong> (con trỏ).<br />
+Một extent đơn giản là một <strong>disk pointer</strong> (con trỏ tới đĩa) cộng với một <strong>độ dài</strong> (tính theo block); do đó, thay vì cần một con trỏ cho <strong>mỗi block</strong> của file, bạn chỉ cần một con trỏ và một độ dài để xác định vị trí của file trên đĩa.<br />
+Chỉ sử dụng một extent là hạn chế, vì có thể gặp khó khăn khi tìm một vùng trống liên tục trên đĩa khi cấp phát file.<br />
+Do đó, các <strong>file system</strong> dựa trên extent thường cho phép nhiều hơn một extent, từ đó mang lại nhiều tự do hơn cho hệ thống tệp trong quá trình cấp phát file.</p>
+<p>Khi so sánh hai cách tiếp cận, phương pháp dựa trên con trỏ (<strong>pointer-based</strong>) linh hoạt hơn nhưng sử dụng nhiều <strong>metadata</strong> (siêu dữ liệu) trên mỗi file (đặc biệt là với các file lớn).<br />
+Phương pháp dựa trên extent kém linh hoạt hơn nhưng gọn hơn; đặc biệt, chúng hoạt động tốt khi có đủ không gian trống trên đĩa và file có thể được bố trí liên tục (điều này vốn là mục tiêu của hầu hết các chính sách cấp phát file).</p>
+</blockquote>
+<p>Không có gì ngạc nhiên, với cách tiếp cận này, bạn có thể muốn hỗ trợ các file <strong>lớn hơn nữa</strong>.<br />
+Để làm điều đó, chỉ cần thêm một con trỏ khác vào <strong>inode</strong>: <strong>double indirect pointer</strong> (con trỏ gián tiếp kép).<br />
+Con trỏ này trỏ tới một block chứa các con trỏ tới <strong>indirect block</strong> (block gián tiếp), mỗi block gián tiếp lại chứa các con trỏ tới <strong>data block</strong> (block dữ liệu).</p>
+<p>Một <strong>double indirect block</strong> do đó cho phép mở rộng file thêm <strong>1024 × 1024</strong> block 4 KB, tức là hỗ trợ các file có kích thước <strong>hơn 4 GB</strong>.<br />
+Bạn có thể muốn nhiều hơn thế, và chúng tôi đoán bạn biết điều này sẽ dẫn tới đâu: <strong>triple indirect pointer</strong> (con trỏ gián tiếp ba cấp).</p>
+<p>Tổng thể, cấu trúc <strong>cây mất cân bằng</strong> này được gọi là <strong>multi-level index</strong> (chỉ mục nhiều cấp) để tham chiếu tới các block dữ liệu của file.<br />
+Hãy xem xét một ví dụ với <strong>12 direct pointer</strong>, cùng với <strong>một single indirect block</strong> và <strong>một double indirect block</strong>.<br />
+Giả sử kích thước block là 4 KB và con trỏ dài 4 byte, cấu trúc này có thể chứa một file có kích thước <strong>hơn 4 GB</strong> (tức là ((12 + 1024 + 1024^2) \times 4\ \text{KB})).<br />
+Bạn có thể tính được kích thước file tối đa nếu bổ sung thêm một <strong>triple indirect block</strong> không? (gợi ý: rất lớn)</p>
+<p>Nhiều hệ thống tệp sử dụng <strong>multi-level index</strong>, bao gồm các hệ thống tệp phổ biến như <strong>Linux ext2</strong> [P09] và <strong>ext3</strong>, <strong>NetApp’s WAFL</strong>, cũng như <strong>UNIX file system</strong> nguyên bản.<br />
+Các hệ thống tệp khác, bao gồm <strong>SGI XFS</strong> và <strong>Linux ext4</strong>, sử dụng <strong>extent</strong> thay vì con trỏ đơn giản; xem phần <strong>ASIDE</strong> trước đó để biết chi tiết về cách hoạt động của các cơ chế dựa trên extent (chúng tương tự như <strong>segment</strong> trong phần thảo luận về <strong>virtual memory</strong>).</p>
+<p>Bạn có thể tự hỏi: tại sao lại sử dụng một cây mất cân bằng như vậy? Tại sao không dùng cách khác?<br />
+Thực tế, nhiều nhà nghiên cứu đã nghiên cứu về hệ thống tệp và cách chúng được sử dụng, và hầu như luôn tìm thấy một số “sự thật” đúng trong nhiều thập kỷ.<br />
+Một phát hiện như vậy là <strong>hầu hết các file đều nhỏ</strong>.<br />
+Thiết kế mất cân bằng này phản ánh thực tế đó; nếu hầu hết file thực sự nhỏ, thì hợp lý khi tối ưu cho trường hợp này.<br />
+Do đó, với một số lượng nhỏ <strong>direct pointer</strong> (12 là con số điển hình), một inode có thể trỏ trực tiếp tới <strong>48 KB</strong> dữ liệu, và chỉ cần một (hoặc nhiều hơn) block gián tiếp cho các file lớn hơn.</p>
+<p>Xem nghiên cứu gần đây của <strong>Agrawal et al.</strong> [A+07]; <strong>Hình 40.2</strong> tóm tắt các kết quả đó.</p>
+<p><strong>Hình 40.2: Tóm tắt đo lường hệ thống tệp (File System Measurement Summary)</strong></p>
+<p>Tất nhiên, trong không gian thiết kế inode, còn rất nhiều khả năng khác; suy cho cùng, inode chỉ là một <strong>cấu trúc dữ liệu</strong>, và bất kỳ cấu trúc dữ liệu nào lưu trữ thông tin liên quan và có thể truy vấn hiệu quả đều là đủ.<br />
+Vì phần mềm hệ thống tệp có thể dễ dàng thay đổi, bạn nên sẵn sàng khám phá các thiết kế khác nhau nếu <strong>workload</strong> hoặc công nghệ thay đổi.</p>
+<h2 id="404-tổ-chức-thư-mục-directory-organization"><a class="header" href="#404-tổ-chức-thư-mục-directory-organization">40.4 Tổ chức thư mục (Directory Organization)</a></h2>
+<p>Trong <strong>vsfs</strong> (cũng như trong nhiều <strong>file system</strong> khác), <strong>directory</strong> (thư mục) có một tổ chức đơn giản; một thư mục về cơ bản chỉ chứa một danh sách các cặp <strong>(entry name, inode number)</strong>.<br />
+Đối với mỗi <strong>file</strong> hoặc <strong>directory</strong> trong một thư mục nhất định, sẽ có một chuỗi ký tự (string) và một số nguyên (inode number) được lưu trong các <strong>data block</strong> của thư mục đó.<br />
+Đối với mỗi chuỗi, cũng có thể lưu thêm độ dài (trong trường hợp tên có kích thước thay đổi).</p>
+<p>Ví dụ: giả sử một thư mục <code>dir</code> (có <strong>inode number</strong> là 5) chứa ba file (<code>foo</code>, <code>bar</code>, và <code>foobar_is_a_pretty_longname</code>), với các <strong>inode number</strong> lần lượt là 12, 13 và 24.<br />
+Dữ liệu lưu trên đĩa cho <code>dir</code> có thể trông như sau:</p>
+<p>...</p>
+<p>Trong ví dụ này, mỗi entry có:</p>
+<ul>
+<li><strong>inode number</strong></li>
+<li><strong>record length</strong> (tổng số byte cho tên cộng với bất kỳ khoảng trống còn lại nào)</li>
+<li><strong>string length</strong> (độ dài thực tế của tên)</li>
+<li>Và cuối cùng là <strong>tên entry</strong></li>
+</ul>
+<p>Lưu ý rằng mỗi thư mục có hai entry đặc biệt: <code>.</code> (<strong>dot</strong>) và <code>..</code> (<strong>dot-dot</strong>);</p>
+<ul>
+<li><code>.</code> là thư mục hiện tại (trong ví dụ này là <code>dir</code>)</li>
+<li><code>..</code> là thư mục cha (trong trường hợp này là thư mục gốc – root)</li>
+</ul>
+<p>Việc xóa một file (ví dụ: gọi <code>unlink()</code>) có thể để lại một khoảng trống ở giữa thư mục, do đó cần có cách để đánh dấu khoảng trống này (ví dụ: bằng một <strong>inode number</strong> dự trữ như 0).<br />
+Việc xóa như vậy là một lý do để sử dụng <strong>record length</strong>: một entry mới có thể tái sử dụng một entry cũ lớn hơn và do đó có thêm khoảng trống bên trong.</p>
+<blockquote>
+<p><strong>ASIDE: CÁC TIẾP CẬN DỰA TRÊN LIÊN KẾT (LINKED-BASED APPROACHES)</strong><br />
+Một cách tiếp cận đơn giản hơn trong thiết kế <strong>inode</strong> là sử dụng <strong>linked list</strong> (danh sách liên kết).<br />
+Thay vì có nhiều con trỏ bên trong inode, bạn chỉ cần một con trỏ trỏ tới <strong>block đầu tiên</strong> của file.<br />
+Để xử lý các file lớn hơn, thêm một con trỏ khác ở cuối block dữ liệu đó, và cứ thế tiếp tục, nhờ đó bạn có thể hỗ trợ các file lớn.</p>
+<p>Như bạn có thể đoán, <strong>linked file allocation</strong> (cấp phát file theo danh sách liên kết) hoạt động kém hiệu quả đối với một số loại <strong>workload</strong>; hãy nghĩ đến việc đọc block cuối cùng của một file, hoặc chỉ đơn giản là truy cập ngẫu nhiên.<br />
+Để cải thiện hiệu năng của linked allocation, một số hệ thống sẽ giữ một <strong>bảng thông tin liên kết</strong> trong bộ nhớ (<strong>in-memory table</strong>), thay vì lưu các con trỏ “next” cùng với các block dữ liệu.<br />
+Bảng này được đánh chỉ số theo địa chỉ của một <strong>data block</strong> D; nội dung của một entry trong bảng đơn giản là <strong>next pointer</strong> của D, tức là địa chỉ của block tiếp theo trong file sau D.<br />
+Cũng có thể có giá trị null (biểu thị <strong>end-of-file</strong>) hoặc một ký hiệu khác để chỉ rằng block đó đang rảnh.<br />
+Việc có một bảng các con trỏ “next” như vậy giúp cho cơ chế linked allocation có thể thực hiện truy cập ngẫu nhiên hiệu quả, chỉ đơn giản bằng cách quét bảng (trong bộ nhớ) để tìm block mong muốn, rồi truy cập trực tiếp block đó trên đĩa.</p>
+<p>Nghe bảng này có quen không? Những gì chúng ta vừa mô tả chính là cấu trúc cơ bản của <strong>file allocation table</strong> hay <strong>FAT file system</strong>.<br />
+Đúng vậy, hệ thống tệp Windows cổ điển này, trước khi có <strong>NTFS</strong> [C94], dựa trên một cơ chế cấp phát liên kết đơn giản.<br />
+Cũng có những điểm khác biệt so với hệ thống tệp UNIX tiêu chuẩn; ví dụ: không có inode theo đúng nghĩa, mà thay vào đó là các entry trong thư mục lưu <strong>metadata</strong> về file và tham chiếu trực tiếp tới block đầu tiên của file đó, điều này khiến việc tạo <strong>hard link</strong> là không thể.<br />
+Xem Brouwer [B02] để biết thêm các chi tiết “kém thanh lịch” này.</p>
+</blockquote>
+<p>Bạn có thể tự hỏi: các thư mục được lưu trữ ở đâu?<br />
+Thường thì, các file system coi thư mục là một loại file đặc biệt.<br />
+Do đó, một thư mục có một inode, nằm đâu đó trong <strong>inode table</strong> (với trường <strong>type</strong> của inode được đánh dấu là “directory” thay vì “regular file”).<br />
+Thư mục có các <strong>data block</strong> được trỏ tới bởi inode (và có thể cả <strong>indirect block</strong>); các data block này nằm trong vùng <strong>data block region</strong> của hệ thống tệp đơn giản của chúng ta.<br />
+Cấu trúc trên đĩa của chúng ta vì thế vẫn không thay đổi.</p>
+<p>Cũng cần lưu ý rằng danh sách tuyến tính đơn giản của các entry thư mục không phải là cách duy nhất để lưu trữ thông tin này.<br />
+Như đã nói trước đó, bất kỳ cấu trúc dữ liệu nào cũng có thể được sử dụng.<br />
+Ví dụ: <strong>XFS</strong> [S+96] lưu trữ thư mục dưới dạng <strong>B-tree</strong>, giúp cho các thao tác tạo file (cần đảm bảo tên file chưa được sử dụng trước khi tạo) nhanh hơn so với các hệ thống dùng danh sách tuyến tính phải quét toàn bộ.</p>
+<blockquote>
+<p><strong>ASIDE: QUẢN LÝ VÙNG TRỐNG (FREE SPACE MANAGEMENT)</strong><br />
+Có nhiều cách để quản lý vùng trống; <strong>bitmap</strong> chỉ là một trong số đó.<br />
+Một số hệ thống tệp (file system) đời đầu sử dụng <strong>free list</strong> (danh sách khối trống), trong đó một con trỏ duy nhất trong <strong>superblock</strong> được dùng để trỏ tới <strong>block trống đầu tiên</strong>; bên trong block đó lại lưu con trỏ tới block trống tiếp theo, và cứ thế tạo thành một danh sách liên kết qua các block trống của hệ thống. Khi cần cấp phát một block, block ở đầu danh sách sẽ được sử dụng và danh sách được cập nhật tương ứng.</p>
+<p>Các hệ thống tệp hiện đại sử dụng các cấu trúc dữ liệu tinh vi hơn. Ví dụ, <strong>SGI’s XFS</strong> [S+96] sử dụng một dạng <strong>B-tree</strong> để biểu diễn gọn gàng các vùng đĩa còn trống. Giống như bất kỳ cấu trúc dữ liệu nào, luôn tồn tại các đánh đổi giữa thời gian và không gian lưu trữ.</p>
+</blockquote>
+<h2 id="405-quản-lý-vùng-trống-free-space-management"><a class="header" href="#405-quản-lý-vùng-trống-free-space-management">40.5 Quản lý vùng trống (Free Space Management)</a></h2>
+<p>Một hệ thống tệp phải theo dõi <strong>inode</strong> và <strong>data block</strong> nào đang trống và cái nào đã được sử dụng, để khi cần cấp phát một file hoặc thư mục mới, nó có thể tìm được không gian lưu trữ phù hợp.<br />
+Do đó, <strong>free space management</strong> là thành phần quan trọng đối với mọi hệ thống tệp.<br />
+Trong <strong>vsfs</strong>, chúng ta sử dụng <strong>hai bitmap đơn giản</strong> cho nhiệm vụ này.</p>
+<p>Ví dụ: khi tạo một file, hệ thống tệp sẽ phải cấp phát một inode cho file đó.<br />
+Hệ thống tệp sẽ tìm trong <strong>bitmap</strong> để tìm một inode đang trống, và cấp phát nó cho file; sau đó, hệ thống sẽ đánh dấu inode này là đã sử dụng (bằng giá trị 1) và cuối cùng cập nhật bitmap trên đĩa với thông tin chính xác.<br />
+Một quy trình tương tự cũng diễn ra khi cấp phát một data block.</p>
+<p>Ngoài ra, còn có một số yếu tố khác cần xem xét khi cấp phát data block cho một file mới.<br />
+Ví dụ: một số hệ thống tệp Linux như <strong>ext2</strong> và <strong>ext3</strong> sẽ tìm một dãy các block trống (ví dụ: 8 block) khi tạo một file mới và cần cấp phát data block; bằng cách tìm một dãy block trống như vậy và cấp phát chúng cho file mới, hệ thống tệp đảm bảo rằng một phần của file sẽ được lưu <strong>liên tiếp</strong> trên đĩa, từ đó cải thiện hiệu năng.<br />
+Chính sách <strong>pre-allocation</strong> (cấp phát trước) như vậy là một <strong>heuristic</strong> (kinh nghiệm thực tiễn) thường được sử dụng khi cấp phát không gian cho data block.</p>
+<h2 id="406-Đường-truy-cập-Đọc-và-ghi-access-paths-reading-and-writing"><a class="header" href="#406-Đường-truy-cập-Đọc-và-ghi-access-paths-reading-and-writing">40.6 Đường truy cập: Đọc và ghi (Access Paths: Reading and Writing)</a></h2>
+<p>Giờ đây, khi chúng ta đã có cái nhìn tổng quan về cách file và thư mục được lưu trữ trên đĩa, chúng ta có thể theo dõi <strong>luồng hoạt động</strong> trong quá trình đọc hoặc ghi một file.<br />
+Hiểu được điều gì xảy ra trên <strong>đường truy cập</strong> (access path) này là <strong>yếu tố then chốt thứ hai</strong> để nắm bắt cách một hệ thống tệp hoạt động; hãy chú ý!</p>
+<p>Trong các ví dụ sau, giả sử rằng hệ thống tệp đã được <strong>mount</strong> (gắn kết) và do đó <strong>superblock</strong> đã nằm trong bộ nhớ.<br />
+Mọi thứ khác (ví dụ: inode, thư mục) vẫn nằm trên đĩa.</p>
+<p><strong>Hình 40.3: Dòng thời gian đọc file (File Read Timeline – thời gian tăng dần từ trên xuống)</strong></p>
+<h3 id="Đọc-một-tệp-từ-đĩa-reading-a-file-from-disk"><a class="header" href="#Đọc-một-tệp-từ-đĩa-reading-a-file-from-disk">Đọc một tệp từ đĩa (Reading A File From Disk)</a></h3>
+<p>Trong ví dụ đơn giản này, giả sử bạn muốn mở một tệp (ví dụ: <code>/foo/bar</code>), đọc nội dung của nó, rồi đóng lại.<br />
+Để đơn giản, giả sử tệp này chỉ có kích thước <strong>12KB</strong> (tức là gồm <strong>3 block</strong>).</p>
+<p>Khi bạn gọi:</p>
+<pre><code class="language-c">open(&quot;/foo/bar&quot;, ORDONLY)
+</code></pre>
+<p><strong>File system</strong> (hệ thống tệp) trước tiên cần tìm <strong>inode</strong> của tệp <code>bar</code> để lấy một số thông tin cơ bản về tệp (thông tin quyền truy cập – <em>permissions</em>, kích thước tệp, v.v.).<br />
+Để làm được điều này, hệ thống tệp phải tìm được inode, nhưng lúc này nó chỉ có <strong>đường dẫn đầy đủ</strong> (<em>full pathname</em>).<br />
+Hệ thống tệp phải <strong>duyệt qua đường dẫn</strong> (<em>traverse the pathname</em>) để tìm ra inode mong muốn.</p>
+<p>Mọi quá trình duyệt đều bắt đầu từ <strong>root</strong> của hệ thống tệp, tức <strong>root directory</strong> (thư mục gốc) được ký hiệu đơn giản là <code>/</code>.<br />
+Vì vậy, điều đầu tiên mà <strong>FS</strong> (file system) sẽ đọc từ đĩa là <strong>inode</strong> của thư mục gốc.<br />
+Nhưng inode này nằm ở đâu?</p>
+<p>Để tìm một inode, chúng ta phải biết <strong>i-number</strong> (số inode).<br />
+Thông thường, i-number của một tệp hoặc thư mục được tìm thấy trong thư mục cha của nó; tuy nhiên, <strong>root</strong> không có thư mục cha (theo định nghĩa).<br />
+Do đó, <strong>i-number</strong> của root phải là một giá trị “được biết trước” (<em>well known</em>); FS phải biết giá trị này khi hệ thống tệp được <strong>mount</strong>.<br />
+Trong hầu hết các hệ thống tệp UNIX, <strong>i-number</strong> của root là <strong>2</strong>.</p>
+<p>Vì vậy, để bắt đầu quá trình, FS sẽ đọc block chứa inode số 2 (block inode đầu tiên).</p>
+<p>Khi inode đã được đọc vào bộ nhớ, FS có thể xem bên trong inode để tìm các <strong>con trỏ</strong> (<em>pointer</em>) tới các <strong>data block</strong> chứa nội dung của thư mục gốc.<br />
+FS sẽ sử dụng các con trỏ trên đĩa này để đọc qua thư mục, trong trường hợp này là tìm một entry cho <code>foo</code>.<br />
+Bằng cách đọc một hoặc nhiều <strong>directory data block</strong>, FS sẽ tìm thấy entry cho <code>foo</code>; khi tìm thấy, FS cũng sẽ biết được <strong>i-number</strong> của <code>foo</code> (giả sử là 44) – thông tin cần thiết cho bước tiếp theo.</p>
+<p>Bước tiếp theo là <strong>duyệt đệ quy</strong> (<em>recursively traverse</em>) đường dẫn cho đến khi tìm được inode mong muốn.<br />
+Trong ví dụ này, FS sẽ đọc block chứa inode của <code>foo</code>, sau đó đọc dữ liệu thư mục của nó, và cuối cùng tìm ra <strong>i-number</strong> của <code>bar</code>.</p>
+<blockquote>
+<p><strong>ASIDE: ĐỌC KHÔNG TRUY CẬP CÁC CẤU TRÚC CẤP PHÁT (READS DON’T ACCESS ALLOCATION STRUCTURES)</strong>
+Nhiều sinh viên thường nhầm lẫn về các cấu trúc cấp phát như bitmap. Cụ thể, nhiều người nghĩ rằng khi bạn chỉ đọc một file và không cấp phát block mới, thì bitmap vẫn sẽ được tham chiếu. Điều này là không đúng! Các cấu trúc cấp phát như bitmap chỉ được truy cập khi cần cấp phát. Inode, directory và indirect block đã có đầy đủ thông tin cần thiết để hoàn thành một yêu cầu đọc; không cần phải kiểm tra một block đã được cấp phát hay chưa khi inode đã trỏ đến nó.</p>
+</blockquote>
+<p>Bước cuối cùng của <code>open()</code> là đọc inode của <code>bar</code> vào bộ nhớ; sau đó FS (file system) thực hiện kiểm tra quyền truy cập (permissions) lần cuối, cấp phát một file descriptor cho tiến trình này trong bảng file mở theo tiến trình (per-process open-file table), và trả về descriptor đó cho người dùng.</p>
+<p>Khi đã mở, chương trình có thể gọi system call <code>read()</code> để đọc từ file. Lần đọc đầu tiên (tại offset 0 trừ khi đã gọi <code>lseek()</code>) sẽ đọc block đầu tiên của file, tham chiếu inode để tìm vị trí của block đó; FS cũng có thể cập nhật inode với thời điểm truy cập lần cuối (last-accessed time) mới. Lời gọi read này cũng cập nhật bảng file mở trong bộ nhớ (in-memory open file table) cho file descriptor này, cập nhật file offset để lần đọc tiếp theo sẽ đọc block thứ hai của file, v.v.</p>
+<p>Tới một thời điểm nào đó, file sẽ được đóng (close). Công việc ở đây ít hơn nhiều; rõ ràng file descriptor cần được giải phóng (deallocate), nhưng tạm thời đó là tất cả những gì FS cần làm. Không có I/O đĩa nào diễn ra.</p>
+<p>Toàn bộ quá trình này được minh họa trong Hình 40.3 (trang 11); thời gian tăng dần từ trên xuống trong hình. Trong hình, lời gọi open dẫn đến nhiều lần đọc để cuối cùng tìm ra inode của file. Sau đó, mỗi lần đọc block yêu cầu file system trước hết tham chiếu inode, rồi đọc block, và sau đó cập nhật trường thời gian truy cập lần cuối (last-accessed-time) của inode bằng một lần ghi (write). Hãy dành thời gian để hiểu kỹ điều gì đang diễn ra.</p>
+<p>Cũng lưu ý rằng lượng I/O phát sinh bởi open tỉ lệ với độ dài của pathname (đường dẫn). Với mỗi thư mục bổ sung trong đường dẫn, chúng ta phải đọc inode của nó cũng như dữ liệu của nó. Tệ hơn nữa là sự hiện diện của các thư mục lớn; ở đây, chúng ta chỉ phải đọc một block để lấy nội dung của một thư mục, trong khi với một thư mục lớn, chúng ta có thể phải đọc nhiều data block để tìm được entry mong muốn. Đúng vậy, việc đọc một file có thể khá “đau đớn”; và như bạn sắp thấy, việc ghi một file (đặc biệt là tạo mới) thậm chí còn tệ hơn.</p>
+<h3 id="ghi-một-tệp-xuống-đĩa-writing-a-file-to-disk"><a class="header" href="#ghi-một-tệp-xuống-đĩa-writing-a-file-to-disk">Ghi một tệp xuống đĩa (Writing A File To Disk)</a></h3>
+<p>Quy trình ghi vào một tệp tương tự như đọc.<br />
+Trước tiên, tệp phải được <strong>mở</strong> (giống như ở phần trên).<br />
+Sau đó, ứng dụng có thể gọi <strong><code>write()</code></strong> để cập nhật tệp với nội dung mới.<br />
+Cuối cùng, tệp sẽ được <strong>đóng</strong>.</p>
+<p>Không giống như đọc, việc ghi vào tệp có thể yêu cầu <strong>cấp phát một block mới</strong> (trừ khi block hiện tại chỉ bị ghi đè, chẳng hạn).<br />
+Khi ghi một tệp mới, mỗi thao tác ghi không chỉ phải ghi dữ liệu xuống đĩa mà trước đó còn phải quyết định <strong>block nào sẽ được cấp phát</strong> cho tệp, và do đó phải cập nhật các cấu trúc khác trên đĩa tương ứng (ví dụ: <strong>data bitmap</strong> và <strong>inode</strong>).</p>
+<p>Vì vậy, <strong>mỗi thao tác ghi</strong> vào một tệp về mặt logic sẽ tạo ra <strong>5 thao tác I/O</strong>:</p>
+<ol>
+<li><strong>Đọc data bitmap</strong> (sau đó được cập nhật để đánh dấu block mới cấp phát là đã sử dụng)</li>
+<li><strong>Ghi data bitmap</strong> (để phản ánh trạng thái mới xuống đĩa)</li>
+<li><strong>Đọc inode</strong> (để lấy thông tin hiện tại)</li>
+<li><strong>Ghi inode</strong> (đã được cập nhật với vị trí block mới)</li>
+<li><strong>Ghi block dữ liệu thực tế</strong></li>
+</ol>
+<p><strong>Hình 40.4: Dòng thời gian tạo tệp (File Creation Timeline – thời gian tăng dần từ trên xuống)</strong></p>
+<p>Lượng <strong>ghi</strong> còn tệ hơn nữa khi xét đến một thao tác đơn giản và phổ biến như <strong>tạo tệp</strong>.<br />
+Để tạo một tệp, hệ thống tệp không chỉ phải <strong>cấp phát một inode</strong>, mà còn phải <strong>cấp phát không gian trong thư mục</strong> chứa tệp mới đó.</p>
+<p>Tổng lượng I/O cần thiết để làm điều này là khá lớn:</p>
+<ul>
+<li><strong>1 lần đọc inode bitmap</strong> (để tìm một inode trống)</li>
+<li><strong>1 lần ghi inode bitmap</strong> (để đánh dấu inode đã được cấp phát)</li>
+<li><strong>1 lần ghi inode mới</strong> (để khởi tạo nó)</li>
+<li><strong>1 lần ghi dữ liệu thư mục</strong> (để liên kết tên mức cao của tệp với inode number của nó)</li>
+<li><strong>1 lần đọc và 1 lần ghi inode của thư mục</strong> (để cập nhật nó)</li>
+</ul>
+<p>Nếu thư mục cần mở rộng để chứa entry mới, sẽ cần thêm các thao tác I/O bổ sung (ví dụ: tới <strong>data bitmap</strong> và block thư mục mới).<br />
+Tất cả những điều đó chỉ để <strong>tạo một tệp</strong>!</p>
+<p>Hãy xem một ví dụ cụ thể, khi tệp <code>/foo/bar</code> được tạo và <strong>ba block</strong> được ghi vào nó.<br />
+<strong>Hình 40.4</strong> (trang 13) cho thấy điều gì xảy ra trong quá trình <code>open()</code> (tạo tệp) và trong mỗi lần ghi 4KB.</p>
+<p>Trong hình, các thao tác đọc và ghi xuống đĩa được nhóm theo <strong>system call</strong> nào đã gây ra chúng, và thứ tự thực hiện xấp xỉ được sắp xếp từ trên xuống dưới.<br />
+Bạn có thể thấy khối lượng công việc để tạo tệp: <strong>10 thao tác I/O</strong> trong trường hợp này, để duyệt qua pathname và cuối cùng tạo tệp.<br />
+Bạn cũng có thể thấy rằng <strong>mỗi thao tác ghi có cấp phát</strong> tốn <strong>5 thao tác I/O</strong>:</p>
+<ul>
+<li>Một cặp để đọc và cập nhật inode</li>
+<li>Một cặp để đọc và cập nhật data bitmap</li>
+<li>Và cuối cùng là ghi dữ liệu thực tế</li>
+</ul>
+<p>Làm thế nào để một hệ thống tệp có thể thực hiện tất cả những điều này <strong>một cách hiệu quả</strong>?</p>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ GIẢM CHI PHÍ I/O CỦA HỆ THỐNG TỆP</strong><br />
+Ngay cả những thao tác đơn giản nhất như mở, đọc hoặc ghi một tệp cũng tạo ra một số lượng lớn các thao tác I/O, rải rác khắp đĩa.<br />
+Hệ thống tệp có thể làm gì để giảm chi phí cao khi phải thực hiện quá nhiều I/O như vậy?</p>
+</blockquote>
+<h2 id="407-caching-và-buffering"><a class="header" href="#407-caching-và-buffering">40.7 Caching và Buffering</a></h2>
+<p>Như các ví dụ ở trên cho thấy, việc đọc và ghi file có thể rất tốn kém, gây ra nhiều thao tác I/O tới đĩa (vốn chậm).<br />
+Để khắc phục vấn đề hiệu năng nghiêm trọng này, hầu hết các <strong>file system</strong> (hệ thống tệp) đều tận dụng mạnh mẽ bộ nhớ hệ thống (<strong>DRAM</strong>) để <strong>cache</strong> (lưu đệm) các block quan trọng.</p>
+<p>Hãy hình dung ví dụ mở file ở trên: nếu <strong>không có caching</strong>, mỗi lần mở file sẽ yêu cầu ít nhất <strong>hai lần đọc</strong> cho mỗi cấp trong cây thư mục (<strong>directory hierarchy</strong>) — một lần để đọc <strong>inode</strong> của thư mục cần thiết, và ít nhất một lần để đọc dữ liệu của nó.<br />
+Với một <strong>pathname</strong> dài (ví dụ: <code>/1/2/3/.../100/file.txt</code>), hệ thống tệp sẽ phải thực hiện <strong>hàng trăm lần đọc</strong> chỉ để mở file!</p>
+<p>Các hệ thống tệp đời đầu đã giới thiệu một <strong>cache kích thước cố định</strong> để lưu các block được truy cập thường xuyên.<br />
+Tương tự như trong phần thảo luận về <strong>virtual memory</strong> (bộ nhớ ảo), các chiến lược như <strong>LRU</strong> (Least Recently Used) và các biến thể khác sẽ quyết định block nào được giữ lại trong cache.<br />
+Cache kích thước cố định này thường được cấp phát ngay khi khởi động (<strong>boot time</strong>) với dung lượng khoảng <strong>10% tổng bộ nhớ</strong>.</p>
+<p>Tuy nhiên, việc <strong>phân vùng bộ nhớ tĩnh</strong> như vậy có thể gây lãng phí;<br />
+Điều gì sẽ xảy ra nếu tại một thời điểm nào đó, hệ thống tệp <strong>không cần</strong> tới 10% bộ nhớ?<br />
+Với cách tiếp cận kích thước cố định như trên, các trang (<strong>page</strong>) không được sử dụng trong <strong>file cache</strong> sẽ <strong>không thể</strong> được tái sử dụng cho mục đích khác, và do đó bị lãng phí.</p>
+<p>Ngược lại, các hệ thống hiện đại áp dụng cách <strong>phân vùng động</strong>.<br />
+Cụ thể, nhiều <strong>hệ điều hành</strong> hiện đại tích hợp <strong>virtual memory pages</strong> và <strong>file system pages</strong> vào một <strong>unified page cache</strong> (bộ nhớ đệm trang hợp nhất) [S00].<br />
+Bằng cách này, bộ nhớ có thể được phân bổ linh hoạt hơn giữa <strong>virtual memory</strong> và <strong>file system</strong>, tùy thuộc vào bên nào cần nhiều bộ nhớ hơn tại một thời điểm nhất định.</p>
+<p>Hãy hình dung lại ví dụ mở file nhưng <strong>có caching</strong>:<br />
+Lần mở đầu tiên có thể tạo ra nhiều lưu lượng I/O để đọc inode và dữ liệu thư mục, nhưng các lần mở file tiếp theo của <strong>cùng file đó</strong> (hoặc các file trong cùng thư mục) sẽ <strong>hầu hết trúng cache</strong> (<em>cache hit</em>), và do đó <strong>không cần I/O</strong> nào nữa.</p>
+<blockquote>
+<p><strong>TIP: HIỂU RÕ SỰ KHÁC NHAU GIỮA PHÂN VÙNG TĨNH VÀ PHÂN VÙNG ĐỘNG (STATIC VS. DYNAMIC PARTITIONING)</strong><br />
+Khi phân chia một tài nguyên cho nhiều client/người dùng khác nhau, bạn có thể sử dụng <strong>phân vùng tĩnh</strong> (<em>static partitioning</em>) hoặc <strong>phân vùng động</strong> (<em>dynamic partitioning</em>).</p>
+<ul>
+<li><strong>Phân vùng tĩnh</strong>: đơn giản là chia tài nguyên thành các phần cố định ngay từ đầu; ví dụ, nếu có hai người dùng bộ nhớ, bạn có thể cấp một tỷ lệ cố định bộ nhớ cho một người, và phần còn lại cho người kia.</li>
+<li><strong>Phân vùng động</strong>: linh hoạt hơn, phân bổ lượng tài nguyên khác nhau theo thời gian; ví dụ, một người dùng có thể được cấp tỷ lệ băng thông đĩa cao hơn trong một khoảng thời gian, nhưng sau đó hệ thống có thể chuyển và cấp cho người dùng khác một phần lớn hơn của băng thông đĩa khả dụng.</li>
+</ul>
+<p>Mỗi cách tiếp cận đều có ưu điểm riêng:</p>
+<ul>
+<li><strong>Phân vùng tĩnh</strong> đảm bảo mỗi người dùng nhận được một phần tài nguyên, thường mang lại hiệu năng dự đoán được hơn và dễ triển khai hơn.</li>
+<li><strong>Phân vùng động</strong> có thể đạt hiệu suất sử dụng tốt hơn (bằng cách cho phép người dùng “đói” tài nguyên tiêu thụ phần tài nguyên đang nhàn rỗi), nhưng có thể phức tạp hơn để triển khai, và có thể dẫn đến hiệu năng kém hơn cho những người dùng mà tài nguyên nhàn rỗi của họ bị người khác sử dụng và mất nhiều thời gian để thu hồi lại khi cần.<br />
+Như thường lệ, không có phương pháp nào là “tốt nhất” tuyệt đối; thay vào đó, bạn nên xem xét vấn đề cụ thể và quyết định cách tiếp cận phù hợp nhất. Thực tế, chẳng phải bạn luôn nên làm như vậy sao?</li>
+</ul>
+</blockquote>
+<p>Chúng ta cũng cần xem xét <strong>tác động của caching đối với ghi (write)</strong>.<br />
+Trong khi <strong>read I/O</strong> có thể được loại bỏ hoàn toàn nếu cache đủ lớn, thì <strong>lưu lượng ghi</strong> vẫn phải được gửi xuống đĩa để trở thành dữ liệu bền vững (<em>persistent</em>).<br />
+Do đó, cache không đóng vai trò như một bộ lọc hiệu quả cho ghi như nó làm đối với đọc.</p>
+<p>Tuy nhiên, <strong>write buffering</strong> (đệm ghi – đôi khi được gọi như vậy) chắc chắn mang lại nhiều lợi ích về hiệu năng:</p>
+<ol>
+<li><strong>Trì hoãn ghi</strong> cho phép hệ thống tệp gom nhiều cập nhật thành một tập nhỏ các thao tác I/O; ví dụ, nếu <strong>inode bitmap</strong> được cập nhật khi một file được tạo và sau đó lại được cập nhật ngay sau đó khi một file khác được tạo, hệ thống tệp sẽ tiết kiệm được một thao tác I/O bằng cách trì hoãn việc ghi sau lần cập nhật đầu tiên.</li>
+<li><strong>Đệm nhiều thao tác ghi trong bộ nhớ</strong> cho phép hệ thống lập lịch (schedule) các thao tác I/O tiếp theo một cách tối ưu hơn, từ đó cải thiện hiệu năng.</li>
+<li><strong>Tránh một số thao tác ghi hoàn toàn</strong> nhờ trì hoãn chúng; ví dụ, nếu một ứng dụng tạo một file rồi xóa nó ngay sau đó, việc trì hoãn ghi thông tin tạo file xuống đĩa sẽ giúp bỏ qua hoàn toàn các thao tác ghi này. Trong trường hợp này, “lười biếng” (trong việc ghi block xuống đĩa) lại là một ưu điểm.</li>
+</ol>
+<p>Vì những lý do trên, hầu hết các hệ thống tệp hiện đại <strong>đệm ghi trong bộ nhớ</strong> từ <strong>5 đến 30 giây</strong>, điều này tạo ra một sự đánh đổi khác:</p>
+<ul>
+<li>Nếu hệ thống bị crash trước khi các cập nhật được ghi xuống đĩa, các cập nhật này sẽ bị mất.</li>
+<li>Tuy nhiên, bằng cách giữ dữ liệu ghi trong bộ nhớ lâu hơn, hiệu năng có thể được cải thiện nhờ <strong>gom nhóm (batching)</strong>, <strong>lập lịch (scheduling)</strong>, và thậm chí <strong>tránh được một số thao tác ghi</strong>.</li>
+</ul>
+<blockquote>
+<p><strong>TIP: HIỂU RÕ SỰ ĐÁNH ĐỔI GIỮA TÍNH BỀN VỮNG VÀ HIỆU NĂNG (DURABILITY/PERFORMANCE TRADE-OFF)</strong><br />
+Các <strong>storage system</strong> (hệ thống lưu trữ) thường đưa ra cho người dùng một sự đánh đổi giữa <strong>tính bền vững</strong> (<em>durability</em>) và <strong>hiệu năng</strong> (<em>performance</em>).</p>
+<ul>
+<li>Nếu người dùng muốn dữ liệu vừa ghi phải <strong>ngay lập tức bền vững</strong> (tức được lưu vĩnh viễn), hệ thống phải thực hiện đầy đủ quá trình <strong>commit</strong> dữ liệu mới xuống đĩa, và do đó thao tác ghi sẽ <strong>chậm</strong> (nhưng <strong>an toàn</strong>).</li>
+<li>Ngược lại, nếu người dùng có thể chấp nhận mất một lượng nhỏ dữ liệu, hệ thống có thể <strong>buffer</strong> (đệm) các thao tác ghi trong bộ nhớ một thời gian rồi mới ghi xuống đĩa (ở chế độ nền – <em>background</em>).</li>
+</ul>
+<p>Cách làm này khiến thao tác ghi <strong>có vẻ</strong> hoàn tất nhanh chóng, cải thiện <strong>hiệu năng cảm nhận</strong> (<em>perceived performance</em>); tuy nhiên, nếu xảy ra <strong>crash</strong> (sập hệ thống), các thao tác ghi chưa được commit xuống đĩa sẽ bị mất — và đó chính là sự đánh đổi.</p>
+<p>Để hiểu cách đưa ra quyết định đánh đổi hợp lý, tốt nhất là phải hiểu <strong>yêu cầu của ứng dụng</strong> đang sử dụng hệ thống lưu trữ. Ví dụ: việc mất vài hình ảnh cuối cùng được tải xuống bởi trình duyệt web có thể chấp nhận được, nhưng mất một phần của <strong>giao dịch cơ sở dữ liệu</strong> đang cộng tiền vào tài khoản ngân hàng của bạn thì khó chấp nhận hơn. Trừ khi bạn rất giàu, tất nhiên; khi đó, có lẽ bạn chẳng bận tâm đến việc giữ từng xu cuối cùng.</p>
+</blockquote>
+<p>Một số ứng dụng (như <strong>database</strong>) không chấp nhận sự đánh đổi này.<br />
+Do đó, để tránh mất dữ liệu ngoài ý muốn do <strong>write buffering</strong>, chúng đơn giản <strong>ép</strong> hệ thống ghi dữ liệu xuống đĩa, bằng cách gọi <code>fsync()</code>, sử dụng các giao diện <strong>direct I/O</strong> để bỏ qua cache, hoặc sử dụng giao diện <strong>raw disk</strong> và bỏ qua hoàn toàn file system².</p>
+<p>Trong khi hầu hết các ứng dụng chấp nhận sự đánh đổi mà file system đưa ra, vẫn có đủ các cơ chế kiểm soát để buộc hệ thống thực hiện theo ý bạn nếu mặc định không đáp ứng được.</p>
+<h2 id="408-tóm-tắt-summary"><a class="header" href="#408-tóm-tắt-summary">40.8 Tóm tắt (Summary)</a></h2>
+<p>Chúng ta đã tìm hiểu các thành phần cơ bản cần có để xây dựng một <strong>file system</strong>.<br />
+Cần có thông tin về mỗi file (<strong>metadata</strong> – siêu dữ liệu), thường được lưu trong một cấu trúc gọi là <strong>inode</strong>.<br />
+<strong>Directory</strong> (thư mục) chỉ là một loại file đặc biệt lưu ánh xạ <strong>tên → inode number</strong>.<br />
+Ngoài ra, còn cần các cấu trúc khác; ví dụ, file system thường sử dụng một cấu trúc như <strong>bitmap</strong> để theo dõi inode hoặc data block nào đang trống hoặc đã được cấp phát.</p>
+<p>Điểm tuyệt vời của thiết kế file system là <strong>tính tự do</strong>; các file system mà chúng ta sẽ khám phá trong những chương tiếp theo đều tận dụng sự tự do này để tối ưu một khía cạnh nào đó của hệ thống tệp.<br />
+Rõ ràng vẫn còn nhiều <strong>chính sách</strong> (policy) mà chúng ta chưa đề cập.<br />
+Ví dụ: khi tạo một file mới, nó nên được đặt ở đâu trên đĩa?<br />
+Chính sách này và các chính sách khác sẽ là chủ đề của những chương sau.<br />
+Hay là… sẽ không?³</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../39/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../41/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../39/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../41/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

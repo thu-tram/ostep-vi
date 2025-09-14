@@ -1,0 +1,298 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Segmentation - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html" class="active"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="16-segmentation-phân-đoạn-bộ-nhớ"><a class="header" href="#16-segmentation-phân-đoạn-bộ-nhớ">16 Segmentation (Phân đoạn bộ nhớ)</a></h1>
+<p>Cho đến nay, chúng ta đã đặt toàn bộ <strong>address space</strong> (không gian địa chỉ) của mỗi <strong>process</strong> (tiến trình) vào bộ nhớ. Với <strong>base register</strong> (thanh ghi cơ sở) và <strong>bounds register</strong> (thanh ghi giới hạn), <strong>OS</strong> (hệ điều hành) có thể dễ dàng tái định vị (relocate) các process sang các vị trí khác nhau trong <strong>physical memory</strong> (bộ nhớ vật lý). Tuy nhiên, bạn có thể nhận thấy một điều thú vị về các address space này: có một khoảng “trống” lớn ngay ở giữa, giữa <strong>stack</strong> và <strong>heap</strong>.</p>
+<p>Như bạn có thể hình dung từ <em>Figure 16.1</em>, mặc dù khoảng trống giữa stack và heap không được process sử dụng, nó vẫn chiếm physical memory khi chúng ta tái định vị toàn bộ address space vào một vị trí nào đó trong physical memory. Do đó, cách tiếp cận đơn giản sử dụng một cặp base–bounds register để ảo hóa bộ nhớ là lãng phí. Nó cũng khiến việc chạy một chương trình trở nên khó khăn khi toàn bộ address space không thể vừa trong bộ nhớ; vì vậy, cơ chế base and bounds không linh hoạt như mong muốn. Và do đó:</p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO SUPPORT A LARGE ADDRESS SPACE</strong><br />
+Làm thế nào để hỗ trợ một address space lớn với (có thể) rất nhiều khoảng trống giữa stack và heap? Lưu ý rằng trong các ví dụ của chúng ta, với address space nhỏ (giả định), sự lãng phí có vẻ không quá nghiêm trọng. Tuy nhiên, hãy tưởng tượng một address space 32-bit (kích thước 4 GB); một chương trình điển hình chỉ sử dụng vài megabyte bộ nhớ, nhưng vẫn yêu cầu toàn bộ address space phải nằm trong bộ nhớ.</p>
+</blockquote>
+<h2 id="161-segmentation-generalized-basebounds"><a class="header" href="#161-segmentation-generalized-basebounds">16.1 Segmentation: Generalized Base/Bounds</a></h2>
+<p>Để giải quyết vấn đề này, một ý tưởng đã ra đời, gọi là <strong>segmentation</strong> (phân đoạn bộ nhớ). Đây là một ý tưởng khá cũ, xuất hiện ít nhất từ đầu những năm 1960 [H61, G62]. Ý tưởng rất đơn giản: thay vì chỉ có một cặp base–bounds register trong <strong>MMU</strong> (Memory Management Unit — đơn vị quản lý bộ nhớ), tại sao không có một cặp base–bounds cho mỗi <strong>logical segment</strong> (đoạn logic) của address space?</p>
+<p><strong>Segment</strong> là một phần liên tục của address space với độ dài xác định. Trong address space chuẩn của chúng ta, có ba segment khác nhau về mặt logic: <strong>code</strong>, <strong>stack</strong>, và <strong>heap</strong>. Segmentation cho phép OS đặt từng segment này ở các vị trí khác nhau trong physical memory, từ đó tránh việc lấp đầy physical memory bằng các vùng virtual address space không sử dụng.</p>
+<p><img src="img/fig16_1.PNG" alt="" /></p>
+<p><strong>Figure 16.1: An Address Space (Again)</strong><br />
+<em>(Một không gian địa chỉ — minh họa lại)</em></p>
+<p>Hãy xem một ví dụ. Giả sử chúng ta muốn đặt address space từ <em>Figure 16.1</em> vào physical memory. Với một cặp base–bounds cho mỗi segment, chúng ta có thể đặt từng segment độc lập trong physical memory. Ví dụ, xem <em>Figure 16.2</em> (trang 3); ở đó bạn thấy một physical memory 64 KB với ba segment này (và 16 KB dành riêng cho OS).</p>
+<p><img src="img/fig16_2.PNG" alt="" /></p>
+<p><strong>Figure 16.2: Placing Segments In Physical Memory</strong><br />
+<em>(Đặt các segment trong bộ nhớ vật lý)</em></p>
+<p>Như bạn thấy trong sơ đồ, chỉ vùng bộ nhớ được sử dụng mới chiếm chỗ trong physical memory; do đó, các address space lớn với nhiều vùng không sử dụng (thường gọi là <strong>sparse address spaces</strong>) vẫn có thể được chứa.</p>
+<p>Cấu trúc phần cứng trong MMU để hỗ trợ segmentation đúng như bạn mong đợi: trong trường hợp này, là một tập hợp ba cặp base–bounds register. <em>Figure 16.3</em> dưới đây cho thấy giá trị các thanh ghi cho ví dụ trên; mỗi bounds register lưu kích thước của một segment.</p>
+<div class="table-wrapper"><table><thead><tr><th>Segment</th><th>Base</th><th>Size</th></tr></thead><tbody>
+<tr><td>Code</td><td>32K</td><td>2K</td></tr>
+<tr><td>Heap</td><td>34K</td><td>3K</td></tr>
+<tr><td>Stack</td><td>28K</td><td>2K</td></tr>
+</tbody></table>
+</div>
+<p><strong>Figure 16.3: Segment Register Values</strong><br />
+<em>(Giá trị thanh ghi phân đoạn)</em></p>
+<p>Bạn có thể thấy từ hình rằng <strong>code segment</strong> được đặt tại địa chỉ vật lý 32 KB và có kích thước 2 KB, còn <strong>heap segment</strong> được đặt tại 34 KB và có kích thước 3 KB. Giá trị kích thước segment ở đây giống hệt bounds register đã giới thiệu trước đó; nó cho phần cứng biết chính xác có bao nhiêu byte hợp lệ trong segment này (và do đó, cho phép phần cứng xác định khi nào chương trình truy cập trái phép ra ngoài giới hạn).</p>
+<p>Hãy làm một ví dụ dịch địa chỉ, sử dụng address space trong <em>Figure 16.1</em>. Giả sử có một tham chiếu tới virtual address 100 (nằm trong code segment, như thấy trực quan ở <em>Figure 16.1</em>, trang 2). Khi tham chiếu diễn ra (ví dụ, khi nạp lệnh), phần cứng sẽ cộng giá trị base với offset trong segment này (100 trong trường hợp này) để ra địa chỉ vật lý mong muốn: 100 + 32 KB = 32868. Sau đó, nó kiểm tra địa chỉ có nằm trong bounds hay không (100 &lt; 2 KB), thấy hợp lệ, và gửi yêu cầu tới địa chỉ vật lý 32868.</p>
+<blockquote>
+<p><strong>ASIDE: THE SEGMENTATION FAULT</strong><br />
+Thuật ngữ <strong>segmentation fault</strong> hoặc <strong>segmentation violation</strong> xuất phát từ việc truy cập bộ nhớ trái phép trên một máy sử dụng segmentation. Thú vị là thuật ngữ này vẫn tồn tại, ngay cả trên các máy không hỗ trợ segmentation. Hoặc không thú vị lắm, nếu bạn không hiểu tại sao code của mình liên tục bị lỗi.</p>
+</blockquote>
+<p>Bây giờ, hãy xem một địa chỉ trong heap: virtual address 4200 (xem lại <em>Figure 16.1</em>). Nếu chỉ cộng virtual address 4200 với base của heap (34 KB), ta được địa chỉ vật lý 39016 — đây không phải kết quả đúng. Trước tiên, ta cần lấy <strong>offset</strong> trong heap, tức là byte nào trong segment này địa chỉ đang trỏ tới. Vì heap bắt đầu tại virtual address 4 KB (4096), offset của 4200 là 4200 − 4096 = 104. Sau đó, ta cộng offset này (104) với base register của heap (34 KB) để được kết quả đúng: 34920.</p>
+<p>Nếu ta thử truy cập một địa chỉ trái phép (ví dụ: virtual address ≥ 7 KB, vượt quá cuối heap), phần cứng sẽ phát hiện địa chỉ vượt giới hạn, tạo <strong>trap</strong> vào OS, và nhiều khả năng dẫn tới việc chấm dứt process vi phạm. Và giờ bạn đã biết nguồn gốc của thuật ngữ mà mọi lập trình viên C đều e ngại: segmentation violation hoặc segmentation fault.</p>
+<h2 id="162-which-segment-are-we-referring-to"><a class="header" href="#162-which-segment-are-we-referring-to">16.2 Which Segment Are We Referring To?</a></h2>
+<p>(Chúng ta đang tham chiếu tới segment nào?)</p>
+<p>Phần cứng sử dụng <strong>segment register</strong> trong quá trình dịch địa chỉ. Làm thế nào nó biết offset trong segment và địa chỉ thuộc segment nào?</p>
+<p>Một cách tiếp cận phổ biến, đôi khi gọi là <strong>explicit approach</strong> (cách tiếp cận tường minh), là chia address space thành các segment dựa trên một vài bit cao nhất của virtual address; kỹ thuật này được sử dụng trong hệ thống <strong>VAX/VMS</strong> [LL82]. Trong ví dụ của chúng ta, có ba segment; do đó cần 2 bit để thực hiện. Nếu dùng 2 bit cao nhất của virtual address 14-bit để chọn segment, virtual address sẽ trông như sau:</p>
+<p><img src="img/fig16_2_1.PNG" alt="" /></p>
+<p>Trong ví dụ này, nếu 2 bit cao nhất là <code>00</code>, phần cứng biết virtual address nằm trong code segment, và sẽ dùng cặp base–bounds của code để dịch địa chỉ sang physical address đúng. Nếu 2 bit cao nhất là <code>01</code>, phần cứng biết địa chỉ nằm trong heap, và sẽ dùng cặp base–bounds của heap.</p>
+<p>Hãy lấy lại ví dụ heap virtual address ở trên (4200) và dịch nó để làm rõ. Virtual address 4200 ở dạng nhị phân:</p>
+<p><img src="img/fig16_2_2.PNG" alt="" /></p>
+<p>Như bạn có thể thấy từ hình minh họa, <strong>2 bit cao nhất</strong> (01) cho phần cứng biết chúng ta đang tham chiếu đến <strong>segment</strong> (phân đoạn) nào. <strong>12 bit thấp</strong> còn lại là <strong>offset</strong> (độ lệch) bên trong segment: <code>0000 0110 1000</code>, hay ở dạng hex là <code>0x068</code>, hoặc 104 ở hệ thập phân.</p>
+<p>Do đó, phần cứng chỉ cần lấy 2 bit cao nhất để xác định <strong>segment register</strong> (thanh ghi phân đoạn) cần sử dụng, sau đó lấy 12 bit tiếp theo làm offset trong segment. Bằng cách cộng <strong>base register</strong> (thanh ghi cơ sở) với offset, phần cứng sẽ tính ra <strong>địa chỉ vật lý</strong> (physical address) cuối cùng.</p>
+<p>Lưu ý rằng offset cũng giúp việc kiểm tra giới hạn (<strong>bounds check</strong>) trở nên đơn giản hơn: chúng ta chỉ cần kiểm tra xem offset có nhỏ hơn giá trị bounds hay không; nếu không, địa chỉ đó là bất hợp lệ.</p>
+<p>Vì vậy, nếu base và bounds được lưu trong các mảng (mỗi phần tử ứng với một segment), phần cứng sẽ thực hiện tương tự như đoạn mã sau để lấy được địa chỉ vật lý mong muốn:</p>
+<pre><code class="language-c">// lấy 2 bit cao nhất của VA (Virtual Address - địa chỉ ảo) 14-bit
+Segment = (VirtualAddress &amp; SEG_MASK) &gt;&gt; SEG_SHIFT;
+// lấy offset
+Offset = VirtualAddress &amp; OFFSET_MASK;
+if (Offset &gt;= Bounds[Segment]) {
+  RaiseException(PROTECTION_FAULT);
+} else {
+  PhysAddr = Base[Segment] + Offset;
+}
+Register = AccessMemory(PhysAddr);
+</code></pre>
+<p>Trong ví dụ đang xét, chúng ta có thể gán giá trị cho các hằng số ở trên. Cụ thể:</p>
+<ul>
+<li><code>SEG_MASK</code> sẽ được đặt là <code>0x3000</code></li>
+<li><code>SEG_SHIFT</code> là 12</li>
+<li><code>OFFSET_MASK</code> là <code>0xFFF</code></li>
+</ul>
+<p>Bạn cũng có thể nhận thấy rằng khi chúng ta dùng 2 bit cao nhất, nhưng chỉ có <strong>3 segment</strong> (code, heap, stack), thì sẽ có một segment trong không gian địa chỉ (<strong>address space</strong>) không được sử dụng.</p>
+<p>Để tận dụng tối đa <strong>virtual address space</strong> (bộ nhớ ảo) và tránh lãng phí một segment, một số hệ thống đặt code chung với heap trong cùng một segment, và do đó chỉ cần dùng <strong>1 bit</strong> để chọn segment cần sử dụng [LL82].</p>
+<p>Một vấn đề khác khi sử dụng một số bit cao nhất để chọn <strong>segment</strong> (đoạn bộ nhớ) là nó giới hạn việc sử dụng <strong>virtual address space</strong> (không gian địa chỉ ảo). Cụ thể, mỗi segment bị giới hạn ở một kích thước tối đa, trong ví dụ của chúng ta là 4 KB (việc dùng 2 bit cao nhất để chọn segment ngụ ý rằng address space 16 KB sẽ bị chia thành 4 phần, tức mỗi phần 4 KB). Nếu một chương trình đang chạy muốn mở rộng một segment (ví dụ heap hoặc stack) vượt quá giới hạn này, chương trình sẽ không thể thực hiện được.</p>
+<p>Có những cách khác để phần cứng xác định một địa chỉ thuộc segment nào. Trong <strong>implicit approach</strong> (cách tiếp cận ngầm định), phần cứng xác định segment bằng cách quan sát cách địa chỉ được hình thành. Ví dụ, nếu địa chỉ được tạo ra từ <strong>program counter</strong> (tức là khi nạp lệnh — instruction fetch), thì địa chỉ đó thuộc code segment; nếu địa chỉ dựa trên <strong>stack pointer</strong> hoặc <strong>base pointer</strong>, nó phải thuộc stack segment; bất kỳ địa chỉ nào khác sẽ thuộc heap.</p>
+<h2 id="163-what-about-the-stack-còn-stack-thì-sao"><a class="header" href="#163-what-about-the-stack-còn-stack-thì-sao">16.3 What About The Stack? (Còn stack thì sao?)</a></h2>
+<p>Cho đến giờ, chúng ta đã bỏ qua một thành phần quan trọng của address space: <strong>stack</strong>. Stack đã được tái định vị tới địa chỉ vật lý 28 KB trong sơ đồ ở trên, nhưng có một điểm khác biệt quan trọng: nó <strong>tăng trưởng ngược</strong> (tức là hướng về các địa chỉ thấp hơn). Trong physical memory, nó “bắt đầu” tại 28 KB<sup class="footnote-reference"><a href="#1">1</a></sup> và phát triển ngược về 26 KB, tương ứng với virtual address từ 16 KB đến 14 KB; do đó, quá trình dịch địa chỉ phải thực hiện khác đi.</p>
+<p>Điều đầu tiên chúng ta cần là một chút hỗ trợ bổ sung từ phần cứng. Thay vì chỉ lưu giá trị base và bounds, phần cứng cũng cần biết hướng tăng trưởng của segment (ví dụ: một bit được đặt là 1 nếu segment tăng theo hướng địa chỉ dương, và 0 nếu tăng theo hướng âm). Cách nhìn cập nhật về những gì phần cứng theo dõi được thể hiện trong <em>Figure 16.4</em>:</p>
+<div class="table-wrapper"><table><thead><tr><th>Segment</th><th>Base</th><th>Size (max 4K)</th><th>Grows Positive?</th></tr></thead><tbody>
+<tr><td>Code 00</td><td>32K</td><td>2K</td><td>1</td></tr>
+<tr><td>Heap 01</td><td>34K</td><td>3K</td><td>1</td></tr>
+<tr><td>Stack 11</td><td>28K</td><td>2K</td><td>0</td></tr>
+</tbody></table>
+</div>
+<p><strong>Figure 16.4: Segment Registers (With Negative-Growth Support)</strong><br />
+<em>(Thanh ghi phân đoạn với hỗ trợ tăng trưởng ngược)</em></p>
+<p>Khi phần cứng hiểu rằng segment có thể tăng trưởng theo hướng âm, nó phải dịch các virtual address như vậy theo cách hơi khác. Hãy lấy một ví dụ về địa chỉ stack ảo và dịch nó để hiểu quy trình.</p>
+<p>Trong ví dụ này, giả sử chúng ta muốn truy cập virtual address 15 KB, vốn sẽ ánh xạ tới physical address 27 KB. Virtual address này ở dạng nhị phân là:<br />
+<code>11 1100 0000 0000</code> (hex <code>0x3C00</code>).</p>
+<p>Phần cứng dùng 2 bit cao nhất (<code>11</code>) để xác định segment, sau đó còn lại offset là 3 KB. Để có được offset âm đúng, ta phải lấy 3 KB trừ đi kích thước tối đa của segment: trong ví dụ này, một segment có thể là 4 KB, do đó offset âm đúng là 3 KB − 4 KB = −1 KB. Ta chỉ cần cộng offset âm (−1 KB) này với base (28 KB) để ra physical address đúng: 27 KB.</p>
+<p>Việc kiểm tra bounds có thể được thực hiện bằng cách đảm bảo giá trị tuyệt đối của offset âm nhỏ hơn hoặc bằng kích thước hiện tại của segment (trong trường hợp này là 2 KB).</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Mặc dù để đơn giản, chúng ta nói stack “bắt đầu” tại 28 KB, nhưng thực tế giá trị này là byte ngay <strong>trước</strong> vùng tăng trưởng ngược; byte hợp lệ đầu tiên thực sự là 28 KB trừ 1. Ngược lại, các vùng tăng trưởng xuôi bắt đầu tại địa chỉ của byte đầu tiên của segment. Chúng ta chọn cách này vì nó giúp việc tính toán physical address trở nên đơn giản: physical address chỉ là base cộng với offset âm.</p>
+</div>
+<h2 id="164-support-for-sharing-hỗ-trợ-chia-sẻ"><a class="header" href="#164-support-for-sharing-hỗ-trợ-chia-sẻ">16.4 Support for Sharing (Hỗ trợ chia sẻ)</a></h2>
+<p>Khi hỗ trợ segmentation phát triển, các nhà thiết kế hệ thống sớm nhận ra rằng họ có thể đạt được những hiệu quả mới với một chút hỗ trợ phần cứng bổ sung. Cụ thể, để tiết kiệm bộ nhớ, đôi khi việc chia sẻ một số segment giữa các address space là hữu ích. Đặc biệt, <strong>code sharing</strong> (chia sẻ mã lệnh) là phổ biến và vẫn được sử dụng trong các hệ thống ngày nay.</p>
+<p>Để hỗ trợ chia sẻ, chúng ta cần thêm một chút hỗ trợ từ phần cứng, dưới dạng <strong>protection bits</strong> (các bit bảo vệ). Hỗ trợ cơ bản thêm một vài bit cho mỗi segment, cho biết chương trình có thể đọc hoặc ghi segment hay không, hoặc có thể thực thi mã nằm trong segment đó hay không. Bằng cách đặt code segment ở chế độ chỉ đọc (<strong>read-only</strong>), cùng một mã lệnh có thể được chia sẻ giữa nhiều process, mà không lo ảnh hưởng đến tính cách ly; trong khi mỗi process vẫn nghĩ rằng nó đang truy cập bộ nhớ riêng, OS thực chất đang chia sẻ vùng bộ nhớ không thể bị process sửa đổi, do đó ảo tưởng này được duy trì.</p>
+<p>Một ví dụ về thông tin bổ sung được phần cứng (và OS) theo dõi được thể hiện trong <em>Figure 16.5</em>. Như bạn thấy, code segment được đặt ở chế độ đọc và thực thi (<strong>read</strong> và <strong>execute</strong>), do đó cùng một segment vật lý trong bộ nhớ có thể được ánh xạ vào nhiều virtual address space.</p>
+<div class="table-wrapper"><table><thead><tr><th>Segment</th><th>Base</th><th>Size (max 4K)</th><th>Grows Positive?</th><th>Protection</th></tr></thead><tbody>
+<tr><td>Code 00</td><td>32K</td><td>2K</td><td>1</td><td>Read-Execute</td></tr>
+<tr><td>Heap 01</td><td>34K</td><td>3K</td><td>1</td><td>Read-Write</td></tr>
+<tr><td>Stack 11</td><td>28K</td><td>2K</td><td>0</td><td>Read-Write</td></tr>
+</tbody></table>
+</div>
+<p><strong>Figure 16.5: Segment Register Values (with Protection)</strong><br />
+<em>(Giá trị thanh ghi phân đoạn với bảo vệ)</em></p>
+<p>Với protection bits, thuật toán phần cứng đã mô tả trước đó cũng phải thay đổi. Ngoài việc kiểm tra virtual address có nằm trong bounds hay không, phần cứng còn phải kiểm tra xem một truy cập cụ thể có được phép hay không. Nếu một user process cố ghi vào segment chỉ đọc, hoặc thực thi từ segment không cho phép thực thi, phần cứng sẽ phát sinh <strong>exception</strong>, và OS sẽ xử lý process vi phạm.</p>
+<h2 id="165-fine-grained-vs-coarse-grained-segmentation"><a class="header" href="#165-fine-grained-vs-coarse-grained-segmentation">16.5 Fine-grained vs. Coarse-grained Segmentation</a></h2>
+<p>(Phân đoạn mịn so với phân đoạn thô)</p>
+<p>Hầu hết các ví dụ của chúng ta cho đến nay tập trung vào các hệ thống chỉ có một vài segment (ví dụ: code, stack, heap); chúng ta có thể coi segmentation này là <strong>coarse-grained</strong> (phân đoạn thô), vì nó chia address space thành các khối lớn, thô. Tuy nhiên, một số hệ thống đời đầu (ví dụ: <strong>Multics</strong> [CV65, DD68]) linh hoạt hơn và cho phép address space bao gồm một số lượng lớn các segment nhỏ hơn, gọi là <strong>fine-grained segmentation</strong> (phân đoạn mịn).</p>
+<p><img src="img/fig16_6.PNG" alt="" /></p>
+<p>Hỗ trợ nhiều segment đòi hỏi thêm hỗ trợ phần cứng, với một <strong>segment table</strong> (bảng phân đoạn) nào đó được lưu trong bộ nhớ. Các bảng phân đoạn như vậy thường hỗ trợ tạo ra một số lượng rất lớn segment, cho phép hệ thống sử dụng segment theo những cách linh hoạt hơn so với những gì chúng ta đã thảo luận. Ví dụ, các máy đời đầu như <strong>Burroughs B5000</strong> hỗ trợ hàng nghìn segment, và mong đợi trình biên dịch (compiler) chia nhỏ code và dữ liệu thành các segment riêng biệt mà OS và phần cứng sẽ hỗ trợ [RK68]. Suy nghĩ vào thời điểm đó là: bằng cách có các segment mịn, OS có thể hiểu rõ hơn segment nào đang được sử dụng và segment nào không, từ đó tận dụng <strong>main memory</strong> (bộ nhớ chính) hiệu quả hơn.</p>
+<h2 id="166-os-support-hỗ-trợ-từ-hệ-điều-hành"><a class="header" href="#166-os-support-hỗ-trợ-từ-hệ-điều-hành">16.6 OS Support (Hỗ trợ từ Hệ điều hành)</a></h2>
+<p>Đến đây, bạn đã có một ý tưởng cơ bản về cách <strong>segmentation</strong> (phân đoạn bộ nhớ) hoạt động. Các phần của <strong>address space</strong> (không gian địa chỉ) được tái định vị (relocate) vào <strong>physical memory</strong> (bộ nhớ vật lý) khi hệ thống chạy, và nhờ đó tiết kiệm được một lượng lớn physical memory so với cách tiếp cận đơn giản chỉ dùng một cặp <strong>base/bounds register</strong> (thanh ghi cơ sở/giới hạn) cho toàn bộ address space. Cụ thể, toàn bộ vùng trống giữa <strong>stack</strong> và <strong>heap</strong> không cần phải được cấp phát trong physical memory, cho phép chúng ta chứa nhiều address space hơn trong physical memory và hỗ trợ một virtual address space (bộ nhớ ảo) lớn và thưa (sparse) cho mỗi <strong>process</strong> (tiến trình).</p>
+<p>Tuy nhiên, segmentation đặt ra một số vấn đề mới cho <strong>OS</strong> (hệ điều hành). Vấn đề đầu tiên là một vấn đề cũ: OS nên làm gì khi xảy ra <strong>context switch</strong> (chuyển ngữ cảnh)? Có lẽ bạn đã đoán được: các <strong>segment register</strong> (thanh ghi phân đoạn) phải được lưu và khôi phục. Rõ ràng, mỗi process có virtual address space riêng, và OS phải đảm bảo thiết lập đúng các thanh ghi này trước khi cho process chạy lại.</p>
+<p>Vấn đề thứ hai là sự tương tác của OS khi các segment tăng (hoặc giảm) kích thước. Ví dụ, một chương trình có thể gọi <code>malloc()</code> để cấp phát một đối tượng. Trong một số trường hợp, heap hiện tại có thể đáp ứng yêu cầu, và <code>malloc()</code> sẽ tìm vùng trống cho đối tượng và trả về một con trỏ cho hàm gọi. Tuy nhiên, trong các trường hợp khác, chính heap segment có thể cần mở rộng. Khi đó, thư viện cấp phát bộ nhớ sẽ thực hiện một <strong>system call</strong> (lời gọi hệ thống) để mở rộng heap (ví dụ: system call <code>sbrk()</code> truyền thống của UNIX). OS sau đó (thường) sẽ cấp thêm không gian, cập nhật <strong>segment size register</strong> (thanh ghi kích thước segment) thành kích thước mới (lớn hơn), và thông báo cho thư viện biết việc mở rộng thành công; thư viện khi đó có thể cấp phát vùng nhớ cho đối tượng mới và trả về thành công cho chương trình gọi. Lưu ý rằng OS có thể từ chối yêu cầu nếu không còn physical memory, hoặc nếu nó quyết định rằng process gọi đã sử dụng quá nhiều.</p>
+<blockquote>
+<p><strong>TIP: IF 1000 SOLUTIONS EXIST, NO GREAT ONE DOES</strong><br />
+Việc tồn tại quá nhiều thuật toán khác nhau nhằm giảm thiểu <strong>external fragmentation</strong> (phân mảnh bên ngoài) cho thấy một sự thật cơ bản hơn: không có một cách “tốt nhất” để giải quyết vấn đề. Do đó, chúng ta chọn một giải pháp hợp lý và hy vọng nó đủ tốt. Giải pháp thực sự duy nhất (như chúng ta sẽ thấy trong các chương tiếp theo) là tránh vấn đề ngay từ đầu, bằng cách không bao giờ cấp phát bộ nhớ theo các khối có kích thước thay đổi.</p>
+</blockquote>
+<p>Vấn đề cuối cùng, và có lẽ quan trọng nhất, là quản lý vùng trống trong physical memory. Khi một address space mới được tạo, OS phải tìm được chỗ trong physical memory cho các segment của nó. Trước đây, chúng ta giả định rằng mỗi address space có cùng kích thước, và do đó physical memory có thể được coi như một tập hợp các slot (ô nhớ) để đặt các process. Giờ đây, mỗi process có nhiều segment, và mỗi segment có thể có kích thước khác nhau.</p>
+<p>Vấn đề chung phát sinh là physical memory nhanh chóng bị lấp đầy bởi các “lỗ” nhỏ của vùng trống, khiến việc cấp phát segment mới hoặc mở rộng segment hiện tại trở nên khó khăn. Chúng ta gọi vấn đề này là <strong>external fragmentation</strong> [R69]; xem <em>Figure 16.6</em> (trái).</p>
+<p>Trong ví dụ, một process muốn cấp phát một segment 20 KB. Trong ví dụ này, có 24 KB trống, nhưng không nằm trong một vùng liên tục (mà ở ba khối rời rạc). Do đó, OS không thể đáp ứng yêu cầu 20 KB. Các vấn đề tương tự có thể xảy ra khi có yêu cầu mở rộng một segment; nếu số byte tiếp theo trong physical memory không có sẵn, OS sẽ phải từ chối yêu cầu, ngay cả khi vẫn còn byte trống ở nơi khác trong physical memory.</p>
+<p>Một giải pháp cho vấn đề này là <strong>compaction</strong> (nén bộ nhớ vật lý) bằng cách sắp xếp lại các segment hiện có. Ví dụ, OS có thể dừng các process đang chạy, sao chép dữ liệu của chúng vào một vùng liên tục trong bộ nhớ, thay đổi giá trị segment register để trỏ tới vị trí vật lý mới, và nhờ đó có một vùng trống lớn để sử dụng. Bằng cách này, OS có thể đáp ứng yêu cầu cấp phát mới. Tuy nhiên, compaction rất tốn kém, vì việc sao chép segment tiêu tốn nhiều tài nguyên bộ nhớ và thường sử dụng khá nhiều thời gian CPU; xem <em>Figure 16.6</em> (phải) để thấy sơ đồ bộ nhớ vật lý sau khi compaction. Trớ trêu thay, compaction cũng khiến việc mở rộng các segment hiện có trở nên khó khăn, và có thể dẫn đến việc phải sắp xếp lại thêm để đáp ứng các yêu cầu đó.</p>
+<p>Một cách tiếp cận đơn giản hơn là sử dụng một thuật toán quản lý <strong>free list</strong> (danh sách vùng trống) nhằm cố gắng giữ các vùng bộ nhớ lớn sẵn sàng cho việc cấp phát. Có hàng trăm cách tiếp cận đã được đề xuất, bao gồm các thuật toán kinh điển như <strong>best-fit</strong> (giữ danh sách các vùng trống và trả về vùng gần nhất về kích thước so với yêu cầu), <strong>worst-fit</strong>, <strong>first-fit</strong>, và các phương pháp phức tạp hơn như <strong>buddy algorithm</strong> [K68]. Một khảo sát xuất sắc của Wilson et al. [W+95] là điểm khởi đầu tốt nếu bạn muốn tìm hiểu thêm về các thuật toán này, hoặc bạn có thể chờ đến khi chúng ta đề cập đến một số nguyên lý cơ bản trong chương sau. Tuy nhiên, dù thuật toán có thông minh đến đâu, external fragmentation vẫn tồn tại; một thuật toán tốt chỉ cố gắng giảm thiểu nó.</p>
+<h2 id="167-summary-tóm-tắt"><a class="header" href="#167-summary-tóm-tắt">16.7 Summary (Tóm tắt)</a></h2>
+<p>Segmentation giải quyết được nhiều vấn đề và giúp chúng ta xây dựng một cơ chế ảo hóa bộ nhớ hiệu quả hơn. Ngoài việc hỗ trợ <strong>dynamic relocation</strong> (tái định vị động), segmentation còn hỗ trợ tốt hơn cho <strong>sparse address space</strong> (không gian địa chỉ thưa), bằng cách tránh lãng phí bộ nhớ lớn giữa các segment logic của address space. Nó cũng nhanh, vì các phép tính mà segmentation yêu cầu rất đơn giản và phù hợp với phần cứng; chi phí dịch địa chỉ là tối thiểu. Một lợi ích phụ nữa là <strong>code sharing</strong> (chia sẻ mã lệnh). Nếu code được đặt trong một segment riêng, segment đó có thể được chia sẻ giữa nhiều chương trình đang chạy.</p>
+<p>Tuy nhiên, như chúng ta đã thấy, việc cấp phát các segment có kích thước thay đổi trong bộ nhớ dẫn đến một số vấn đề cần khắc phục. Vấn đề đầu tiên, như đã thảo luận ở trên, là <strong>external fragmentation</strong>. Vì segment có kích thước thay đổi, vùng nhớ trống bị chia nhỏ thành các mảnh kích thước lẻ, khiến việc đáp ứng yêu cầu cấp phát bộ nhớ trở nên khó khăn. Có thể sử dụng các thuật toán thông minh [W+95] hoặc định kỳ compaction bộ nhớ, nhưng vấn đề này là cơ bản và khó tránh.</p>
+<p>Vấn đề thứ hai, và có lẽ quan trọng hơn, là segmentation vẫn chưa đủ linh hoạt để hỗ trợ một sparse address space tổng quát hoàn toàn. Ví dụ, nếu chúng ta có một heap lớn nhưng sử dụng thưa, tất cả nằm trong một segment logic, thì toàn bộ heap vẫn phải nằm trong bộ nhớ để có thể truy cập. Nói cách khác, nếu mô hình sử dụng address space của chúng ta không khớp chính xác với cách segmentation được thiết kế để hỗ trợ, segmentation sẽ hoạt động không hiệu quả. Do đó, chúng ta cần tìm các giải pháp mới. Sẵn sàng khám phá chúng chứ?</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../15/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../17/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../15/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../17/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Condition Variables - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html" class="active"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="30-condition-variables-biến-điều-kiện"><a class="header" href="#30-condition-variables-biến-điều-kiện">30 Condition Variables (Biến điều kiện)</a></h1>
+<p>Cho đến nay, chúng ta đã phát triển khái niệm <strong>lock</strong> (khóa) và thấy cách xây dựng một lock đúng đắn với sự kết hợp hợp lý giữa hỗ trợ từ <strong>hardware</strong> (phần cứng) và <strong>OS</strong> (hệ điều hành). Tuy nhiên, lock không phải là <strong>primitive</strong> (nguyên thủy) duy nhất cần thiết để xây dựng các chương trình <strong>concurrent</strong> (đồng thời).</p>
+<p>Đặc biệt, có nhiều trường hợp một <strong>thread</strong> (luồng) muốn kiểm tra xem một <strong>condition</strong> (điều kiện) nào đó có đúng hay không trước khi tiếp tục thực thi. Ví dụ, một <strong>parent thread</strong> (luồng cha) có thể muốn kiểm tra xem <strong>child thread</strong> (luồng con) đã hoàn thành hay chưa trước khi tiếp tục (thường được gọi là <code>join()</code>); vậy việc chờ này nên được triển khai như thế nào? Hãy xem <strong>Hình 30.1</strong>.</p>
+<pre><code class="language-c">void *child(void *arg) {
+  printf(&quot;child\n&quot;);
+  // XXX làm sao để báo là đã xong?
+  return NULL;
+}
+
+int main(int argc, char *argv[]) {
+  printf(&quot;parent: begin\n&quot;);
+  pthread_t c;
+  Pthread_create(&amp;c, NULL, child, NULL); // child
+  // XXX làm sao để chờ child?
+  printf(&quot;parent: end\n&quot;);
+  return 0;
+}
+</code></pre>
+<p><strong>Hình 30.1: Parent chờ Child</strong></p>
+<p>Điều chúng ta muốn thấy ở đây là kết quả sau:</p>
+<pre><code>parent: begin
+child
+parent: end
+</code></pre>
+<p>Chúng ta có thể thử dùng một biến chia sẻ, như trong <strong>Hình 30.2</strong>. Giải pháp này nhìn chung sẽ hoạt động, nhưng cực kỳ <strong>kém hiệu quả</strong> vì parent sẽ <strong>spin</strong> (quay vòng chờ) và lãng phí thời gian CPU. Điều chúng ta muốn ở đây là một cách để đưa parent vào trạng thái <strong>sleep</strong> (ngủ) cho đến khi điều kiện mà ta đang chờ (ví dụ: child đã hoàn thành) trở thành đúng.</p>
+<pre><code class="language-c">volatile int done = 0;
+
+void *child(void *arg) {
+  printf(&quot;child\n&quot;);
+  done = 1;
+  return NULL;
+}
+
+int main(int argc, char *argv[]) {
+  printf(&quot;parent: begin\n&quot;);
+  pthread_t c;
+  Pthread_create(&amp;c, NULL, child, NULL); // child
+  while (done == 0)
+    ; // spin
+  printf(&quot;parent: end\n&quot;);
+  return 0;
+}
+</code></pre>
+<p><strong>Hình 30.2: Parent chờ Child – Cách tiếp cận Spin-based</strong></p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO WAIT FOR A CONDITION</strong><br />
+Trong các chương trình đa luồng, việc một thread chờ cho đến khi một điều kiện trở thành đúng trước khi tiếp tục là rất hữu ích. Cách tiếp cận đơn giản là spin cho đến khi điều kiện đúng, nhưng điều này cực kỳ kém hiệu quả và lãng phí chu kỳ CPU, và trong một số trường hợp có thể không chính xác. Vậy, một thread nên chờ điều kiện như thế nào?</p>
+</blockquote>
+<h2 id="301-Định-nghĩa-và-các-hàm-definition-and-routines"><a class="header" href="#301-Định-nghĩa-và-các-hàm-definition-and-routines">30.1 Định nghĩa và các hàm (Definition and Routines)</a></h2>
+<p>Để chờ một điều kiện trở thành đúng, một thread có thể sử dụng cái gọi là <strong>condition variable</strong> (biến điều kiện). Condition variable là một <strong>explicit queue</strong> (hàng đợi tường minh) mà các thread có thể tự đưa mình vào khi một trạng thái thực thi nào đó (tức là một điều kiện) chưa như mong muốn (bằng cách <strong>wait</strong> trên condition); một thread khác, khi thay đổi trạng thái đó, có thể <strong>wake</strong> (đánh thức) một (hoặc nhiều) thread đang chờ và cho phép chúng tiếp tục (bằng cách <strong>signal</strong> trên condition).</p>
+<p>Ý tưởng này bắt nguồn từ việc Dijkstra sử dụng “private semaphores” [D68]; một ý tưởng tương tự sau đó được Hoare đặt tên là “condition variable” trong công trình của ông về <strong>monitor</strong> [H74].</p>
+<p>Để khai báo một condition variable, ta chỉ cần viết như sau:</p>
+<pre><code class="language-c">pthread_cond_t c;
+</code></pre>
+<p>Điều này khai báo <code>c</code> là một condition variable (lưu ý: cần khởi tạo đúng cách). Một condition variable có hai thao tác liên quan: <code>wait()</code> và <code>signal()</code>.</p>
+<ul>
+<li>Lời gọi <code>wait()</code> được thực thi khi một thread muốn tự đưa mình vào trạng thái ngủ.</li>
+<li>Lời gọi <code>signal()</code> được thực thi khi một thread đã thay đổi điều gì đó trong chương trình và muốn đánh thức một thread đang ngủ chờ trên condition này.</li>
+</ul>
+<p>Cụ thể, các lời gọi POSIX trông như sau:</p>
+<pre><code class="language-c">pthread_cond_wait(pthread_cond_t *c, pthread_mutex_t *m);
+pthread_cond_signal(pthread_cond_t *c);
+</code></pre>
+<p>Chúng ta thường gọi tắt là <code>wait()</code> và <code>signal</code> cho đơn giản. Một điều bạn có thể nhận thấy về <code>wait()</code> là nó cũng nhận một <strong>mutex</strong> làm tham số; nó giả định rằng mutex này đang được <strong>lock</strong> khi <code>wait()</code> được gọi.</p>
+<p>Nhiệm vụ của <code>wait()</code> là <strong>release</strong> (nhả) lock và đưa thread gọi hàm vào trạng thái ngủ (<strong>atomically</strong> – nguyên tử); khi thread được đánh thức (sau khi một thread khác signal nó), nó phải <strong>re-acquire</strong> (lấy lại) lock trước khi trả quyền điều khiển về cho caller. Sự phức tạp này xuất phát từ mong muốn ngăn chặn một số <strong>race condition</strong> xảy ra khi một thread đang cố tự đưa mình vào trạng thái ngủ.</p>
+<p>Hãy xem giải pháp cho bài toán join (<strong>Hình 30.3</strong>) để hiểu rõ hơn.</p>
+<p><strong>Hình 30.3: Parent chờ Child – Sử dụng Condition Variable</strong></p>
+<p>Có hai trường hợp cần xem xét:</p>
+<ol>
+<li>
+<p><strong>Trường hợp 1:</strong> Parent tạo child thread nhưng tiếp tục chạy (giả sử chỉ có một CPU) và ngay lập tức gọi <code>thr_join()</code> để chờ child hoàn thành. Trong trường hợp này, nó sẽ acquire lock, kiểm tra xem child đã xong chưa (chưa), và đưa mình vào trạng thái ngủ bằng cách gọi <code>wait()</code> (do đó nhả lock). Child sẽ chạy, in ra “child”, và gọi <code>thr_exit()</code> để đánh thức parent; đoạn code này chỉ cần acquire lock, đặt biến trạng thái <code>done</code>, và signal parent để đánh thức nó. Cuối cùng, parent sẽ chạy (trở về từ <code>wait()</code> với lock đang giữ), unlock, và in ra “parent: end”.</p>
+</li>
+<li>
+<p><strong>Trường hợp 2:</strong> Child chạy ngay khi được tạo, đặt <code>done = 1</code>, gọi <code>signal</code> để đánh thức một thread đang ngủ (nhưng không có thread nào, nên chỉ return), và kết thúc. Parent sau đó chạy, gọi <code>thr_join()</code>, thấy <code>done = 1</code>, nên không chờ và return.</p>
+</li>
+</ol>
+<p>Một lưu ý cuối: bạn có thể thấy parent dùng vòng lặp <code>while</code> thay vì chỉ <code>if</code> khi quyết định có chờ trên condition hay không. Mặc dù theo logic chương trình thì điều này có vẻ không bắt buộc, nhưng đây luôn là một ý tưởng tốt, như chúng ta sẽ thấy ở phần sau.</p>
+<p>Để đảm bảo bạn hiểu tầm quan trọng của từng phần trong code <code>thr_exit()</code> và <code>thr_join()</code>, hãy thử một vài cách triển khai thay thế. Đầu tiên, bạn có thể tự hỏi liệu chúng ta có cần biến trạng thái <code>done</code> hay không. Điều gì sẽ xảy ra nếu code trông như ví dụ dưới đây? (<strong>Hình 30.4</strong>)</p>
+<p><strong>Hình 30.4: Parent Waiting – Không có biến trạng thái</strong></p>
+<p>Đáng tiếc, cách tiếp cận này <strong>bị lỗi</strong>. Hãy tưởng tượng trường hợp child chạy ngay lập tức và gọi <code>thr_exit()</code> ngay lập tức; trong trường hợp này, child sẽ thực hiện <strong>signal</strong>, nhưng không có thread nào đang ngủ trên condition. Khi parent chạy, nó sẽ chỉ đơn giản gọi <code>wait</code> và bị kẹt; sẽ không có thread nào đánh thức nó. Từ ví dụ này, bạn có thể thấy tầm quan trọng của biến trạng thái <code>done</code>; nó lưu trữ giá trị mà các thread quan tâm. Việc ngủ, đánh thức và khóa đều được xây dựng xoay quanh biến này.</p>
+<p>Dưới đây (<strong>Hình 30.5</strong>) là một cách triển khai kém khác. Trong ví dụ này, ta giả định rằng không cần giữ lock để thực hiện signal và wait. Vấn đề gì có thể xảy ra ở đây? Hãy suy nghĩ<sup class="footnote-reference"><a href="#1">1</a></sup>!</p>
+<pre><code class="language-c">void thr_exit() {
+  done = 1;
+  Pthread_cond_signal(&amp;c);
+}
+
+void thr_join() {
+  if (done == 0)
+    Pthread_cond_wait(&amp;c);
+}
+</code></pre>
+<p><strong>Hình 30.5: Parent Waiting – Không có lock</strong></p>
+<p>Vấn đề ở đây là một <strong>race condition</strong> tinh vi. Cụ thể, nếu parent gọi <code>thr_join()</code> và sau đó kiểm tra giá trị của <code>done</code>, nó sẽ thấy giá trị là 0 và do đó cố gắng đi ngủ. Nhưng ngay trước khi nó gọi <code>wait</code> để ngủ, parent bị <strong>interrupt</strong> (ngắt), và child chạy. Child thay đổi biến trạng thái <code>done</code> thành 1 và thực hiện signal, nhưng không có thread nào đang chờ nên không thread nào được đánh thức. Khi parent chạy lại, nó sẽ ngủ mãi mãi — thật đáng buồn.</p>
+<p>Hy vọng rằng, từ ví dụ join đơn giản này, bạn có thể thấy một số yêu cầu cơ bản để sử dụng condition variable một cách đúng đắn. Để đảm bảo bạn hiểu, chúng ta sẽ đi qua một ví dụ phức tạp hơn: bài toán <strong>producer/consumer</strong> hoặc <strong>bounded-buffer</strong>.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Lưu ý rằng ví dụ này không phải là code “thực”, vì lời gọi <code>pthread_cond_wait()</code> luôn yêu cầu một mutex cũng như một condition variable; ở đây, chúng ta chỉ giả định giao diện không yêu cầu mutex để minh họa ví dụ phản ví dụ.</p>
+</div>
+<blockquote>
+<p><strong>TIP: LUÔN GIỮ LOCK KHI SIGNAL</strong><br />
+Mặc dù không phải lúc nào cũng bắt buộc, nhưng đơn giản và tốt nhất là giữ lock khi thực hiện signal với condition variable. Ví dụ trên cho thấy một trường hợp bạn <strong>phải</strong> giữ lock để đảm bảo tính đúng đắn; tuy nhiên, cũng có một số trường hợp có thể không sao nếu không giữ, nhưng tốt nhất là nên tránh. Vì vậy, để đơn giản, hãy giữ lock khi gọi <code>signal</code>.<br />
+Ngược lại, việc giữ lock khi gọi <code>wait</code> không chỉ là một mẹo, mà là <strong>bắt buộc</strong> theo ngữ nghĩa của <code>wait</code>, vì <code>wait</code> luôn: (a) giả định lock đang được giữ khi bạn gọi nó, (b) nhả lock khi đưa thread gọi vào trạng thái ngủ, và (c) lấy lại lock ngay trước khi trả về. Do đó, có thể tổng quát hóa mẹo này: <strong>giữ lock khi gọi <code>signal</code> hoặc <code>wait</code></strong>, và bạn sẽ luôn an toàn.</p>
+</blockquote>
+<h2 id="302-bài-toán-producerconsumer-bounded-buffer"><a class="header" href="#302-bài-toán-producerconsumer-bounded-buffer">30.2 Bài toán Producer/Consumer (Bounded Buffer)</a></h2>
+<p>Bài toán đồng bộ hóa tiếp theo mà chúng ta sẽ gặp trong chương này được gọi là <strong>producer/consumer problem</strong> (bài toán nhà sản xuất/nhà tiêu thụ), hoặc đôi khi là <strong>bounded buffer problem</strong> (bài toán bộ đệm giới hạn), lần đầu được nêu ra bởi <strong>Dijkstra</strong> [D72]. Thực tế, chính bài toán producer/consumer này đã dẫn Dijkstra và các cộng sự phát minh ra <strong>generalized semaphore</strong> (semaphore tổng quát – có thể dùng như lock hoặc condition variable) [D01]; chúng ta sẽ tìm hiểu thêm về semaphore sau.</p>
+<p>Hãy tưởng tượng có một hoặc nhiều <strong>producer thread</strong> (luồng sản xuất) và một hoặc nhiều <strong>consumer thread</strong> (luồng tiêu thụ). Producer tạo ra các <strong>data item</strong> (mục dữ liệu) và đặt chúng vào một <strong>buffer</strong> (bộ đệm); consumer lấy các mục này ra khỏi buffer và tiêu thụ chúng theo một cách nào đó. Mô hình này xuất hiện trong nhiều hệ thống thực tế. Ví dụ, trong một <strong>multi-threaded web server</strong> (máy chủ web đa luồng), một producer đặt các yêu cầu HTTP vào <strong>work queue</strong> (hàng đợi công việc – tức bounded buffer); các consumer thread lấy yêu cầu ra khỏi hàng đợi này và xử lý.</p>
+<p>Một bounded buffer cũng được sử dụng khi bạn <strong>pipe</strong> (dùng đường ống) đầu ra của một chương trình vào chương trình khác, ví dụ:</p>
+<pre><code class="language-bash">grep foo file.txt | wc -l
+</code></pre>
+<p>Ví dụ này chạy hai <strong>process</strong> (tiến trình) đồng thời; <code>grep</code> ghi các dòng từ <code>file.txt</code> có chứa chuỗi <code>foo</code> vào cái mà nó nghĩ là <strong>standard output</strong> (đầu ra chuẩn); <strong>UNIX shell</strong> chuyển hướng đầu ra này vào một <strong>UNIX pipe</strong> (được tạo bởi <strong>system call</strong> <code>pipe</code>). Đầu còn lại của pipe này được kết nối với <strong>standard input</strong> (đầu vào chuẩn) của tiến trình <code>wc</code>, tiến trình này chỉ đơn giản đếm số dòng trong luồng đầu vào và in ra kết quả. Như vậy, tiến trình <code>grep</code> là producer; tiến trình <code>wc</code> là consumer; giữa chúng là một bounded buffer nằm trong kernel; còn bạn, trong ví dụ này, là người dùng hạnh phúc.</p>
+<p>Vì bounded buffer là một tài nguyên chia sẻ, tất nhiên chúng ta phải yêu cầu <strong>synchronized access</strong> (truy cập đồng bộ) tới nó, nếu không<sup class="footnote-reference"><a href="#2">2</a></sup> sẽ xảy ra <strong>race condition</strong>. Để bắt đầu hiểu rõ hơn vấn đề này, hãy xem một số đoạn code thực tế. Điều đầu tiên chúng ta cần là một <strong>shared buffer</strong> (bộ đệm chia sẻ), nơi producer đặt dữ liệu vào, và consumer lấy dữ liệu ra. Để đơn giản, ta chỉ dùng một số nguyên (bạn hoàn toàn có thể tưởng tượng đặt một con trỏ tới một cấu trúc dữ liệu vào đây), và hai hàm nội bộ để đặt một giá trị vào buffer chia sẻ, và lấy một giá trị ra khỏi buffer. Xem <strong>Hình 30.6</strong> (trang 6) để biết chi tiết.</p>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Đây là lúc chúng ta dùng một chút tiếng Anh cổ điển, ở thể giả định (subjunctive form).</p>
+</div>
+<p><strong>Hình 30.6: Các hàm Put và Get (phiên bản 1)</strong></p>
+<p>Khá đơn giản, đúng không? Hàm <code>put()</code> giả định rằng buffer đang rỗng (và kiểm tra điều này bằng một <strong>assertion</strong>), sau đó đơn giản đặt một giá trị vào <strong>shared buffer</strong> (bộ đệm chia sẻ) và đánh dấu nó là đầy bằng cách đặt <code>count</code> thành 1. Hàm <code>get()</code> làm điều ngược lại: đặt buffer về trạng thái rỗng (tức là đặt <code>count</code> thành 0) và trả về giá trị. Đừng lo lắng việc buffer chia sẻ này chỉ có một ô; sau này, chúng ta sẽ tổng quát hóa nó thành một <strong>queue</strong> (hàng đợi) có thể chứa nhiều phần tử, và điều đó sẽ còn thú vị hơn bạn tưởng.</p>
+<p>Bây giờ, chúng ta cần viết một số hàm biết khi nào thì <strong>OK</strong> để truy cập buffer — hoặc để đặt dữ liệu vào, hoặc để lấy dữ liệu ra. Điều kiện cho việc này khá rõ ràng: chỉ đặt dữ liệu vào buffer khi <code>count</code> bằng 0 (tức là buffer rỗng), và chỉ lấy dữ liệu ra khi <code>count</code> bằng 1 (tức là buffer đầy). Nếu chúng ta viết code đồng bộ hóa mà để producer đặt dữ liệu vào một buffer đã đầy, hoặc consumer lấy dữ liệu từ một buffer rỗng, thì chúng ta đã làm sai (và trong code này, một assertion sẽ kích hoạt).</p>
+<p>Công việc này sẽ được thực hiện bởi hai loại <strong>thread</strong>: một nhóm gọi là <strong>producer threads</strong> (luồng sản xuất), và nhóm còn lại gọi là <strong>consumer threads</strong> (luồng tiêu thụ). <strong>Hình 30.7</strong> cho thấy code của một producer đặt một số nguyên vào buffer chia sẻ <code>loops</code> lần, và một consumer lấy dữ liệu ra khỏi buffer chia sẻ (liên tục), mỗi lần in ra giá trị mà nó lấy được.</p>
+<pre><code class="language-c">void *producer(void *arg) {
+  int i;
+  int loops = (int) arg;
+  for (i = 0; i &lt; loops; i++) {
+    put(i);
+  }
+}
+
+void *consumer(void *arg) {
+  while (1) {
+    int tmp = get();
+    printf(&quot;%d\n&quot;, tmp);
+  }
+}
+</code></pre>
+<p><strong>Hình 30.7: Producer/Consumer Threads (phiên bản 1)</strong></p>
+<h3 id="một-giải-pháp-bị-lỗi-a-broken-solution"><a class="header" href="#một-giải-pháp-bị-lỗi-a-broken-solution">Một giải pháp bị lỗi (A Broken Solution)</a></h3>
+<p>Bây giờ, hãy tưởng tượng rằng chúng ta chỉ có một producer và một consumer. Rõ ràng, các hàm <code>put()</code> và <code>get()</code> có <strong>critical section</strong> (vùng tới hạn) bên trong, vì <code>put()</code> cập nhật buffer, và <code>get()</code> đọc từ nó. Tuy nhiên, chỉ đặt một lock bao quanh code là <strong>không đủ</strong>; chúng ta cần thêm thứ gì đó nữa. Không ngạc nhiên, thứ đó chính là <strong>condition variables</strong> (biến điều kiện). Trong lần thử đầu tiên (bị lỗi) này (<strong>Hình 30.8</strong>), chúng ta có một condition variable duy nhất <code>cond</code> và một lock <code>mutex</code> đi kèm.</p>
+<pre><code class="language-c">int loops; // phải được khởi tạo ở đâu đó...
+cond_t cond;
+mutex_t mutex;
+
+void *producer(void *arg) {
+  int i;
+  for (i = 0; i &lt; loops; i++) {
+    Pthread_mutex_lock(&amp;mutex);
+    // p1
+    if (count == 1)
+      // p2
+      Pthread_cond_wait(&amp;cond, &amp;mutex); // p3
+    put(i);
+    // p4
+    Pthread_cond_signal(&amp;cond);
+    // p5
+    Pthread_mutex_unlock(&amp;mutex);
+    // p6
+  }
+}
+
+void *consumer(void *arg) {
+  int i;
+  for (i = 0; i &lt; loops; i++) {
+    Pthread_mutex_lock(&amp;mutex);
+    // c1
+    if (count == 0)
+      // c2
+      Pthread_cond_wait(&amp;cond, &amp;mutex); // c3
+    int tmp = get();
+    // c4
+    Pthread_cond_signal(&amp;cond);
+    // c5
+    Pthread_mutex_unlock(&amp;mutex);
+    // c6
+    printf(&quot;%d\n&quot;, tmp);
+  }
+}
+</code></pre>
+<p><strong>Hình 30.8: Producer/Consumer – Một CV duy nhất và câu lệnh If</strong></p>
+<p>Hãy phân tích logic <strong>signaling</strong> (báo hiệu) giữa producer và consumer. Khi một producer muốn điền dữ liệu vào buffer, nó sẽ chờ cho đến khi buffer rỗng (p1–p3). Consumer có logic tương tự, nhưng chờ một điều kiện khác: buffer đầy (c1–c3).</p>
+<p>Với chỉ một producer và một consumer, code trong <strong>Hình 30.8</strong> hoạt động. Tuy nhiên, nếu có nhiều hơn một thread thuộc mỗi loại (ví dụ: hai consumer), giải pháp này có <strong>hai vấn đề nghiêm trọng</strong>. Đó là gì? … (tạm dừng để suy nghĩ) …</p>
+<p>Hãy hiểu vấn đề đầu tiên, liên quan đến câu lệnh <code>if</code> trước khi gọi <code>wait</code>. Giả sử có hai consumer (Tc1 và Tc2) và một producer (Tp).</p>
+<ol>
+<li>Đầu tiên, một consumer (Tc1) chạy; nó acquire lock (c1), kiểm tra xem có buffer nào sẵn sàng để tiêu thụ không (c2), và thấy không có, nên gọi <code>wait</code> (c3) (thao tác này sẽ release lock).</li>
+<li>Sau đó, producer (Tp) chạy. Nó acquire lock (p1), kiểm tra xem tất cả buffer đã đầy chưa (p2), và thấy chưa, nên tiếp tục điền dữ liệu vào buffer (p4). Producer sau đó signal rằng buffer đã được điền (p5). Quan trọng là, thao tác này chuyển Tc1 từ trạng thái ngủ trên condition variable sang <strong>ready queue</strong>; Tc1 giờ đã sẵn sàng chạy (nhưng chưa chạy ngay).</li>
+<li>Producer tiếp tục cho đến khi nhận ra buffer đã đầy, lúc này nó ngủ (p6, p1–p3).</li>
+</ol>
+<p>Vấn đề xảy ra ở đây: một consumer khác (Tc2) chen vào và tiêu thụ giá trị duy nhất trong buffer (c1, c2, c4, c5, c6), bỏ qua bước chờ ở c3 vì buffer đang đầy.</p>
+<p>Bây giờ, giả sử Tc1 chạy; ngay trước khi trở về từ <code>wait</code>, nó re-acquire lock và sau đó return. Nó gọi <code>get()</code> (c4), nhưng <strong>không còn dữ liệu nào trong buffer để tiêu thụ</strong>! Một assertion sẽ kích hoạt, và code không hoạt động như mong muốn.</p>
+<p>Rõ ràng, chúng ta cần phải ngăn Tc1 cố gắng tiêu thụ khi Tc2 đã “lén” tiêu thụ giá trị duy nhất trong buffer mà producer vừa tạo ra. <strong>Hình 30.9</strong> sẽ minh họa hành động của từng thread, cũng như trạng thái của chúng trong scheduler (<strong>Ready</strong>, <strong>Running</strong>, hoặc <strong>Sleeping</strong>) theo thời gian.</p>
+<p><strong>Hình 30.9: Vết vạch luồng: Lời giải bị lỗi (phiên bản 1)</strong>
+<img src="" alt="Figure 30.9: Thread Trace: Broken Solution (v1)" /></p>
+<p>Vấn đề phát sinh vì một lý do đơn giản: sau khi producer đánh thức Tc1, nhưng trước khi Tc1 thực sự chạy, trạng thái của bounded buffer đã thay đổi (nhờ Tc2). Việc signal một thread chỉ đơn thuần đánh thức nó; đó là một gợi ý rằng trạng thái hệ thống đã thay đổi (trong trường hợp này là đã có một giá trị được đặt vào buffer), nhưng không có gì đảm bảo rằng khi thread được đánh thức chạy, trạng thái vẫn còn như mong muốn. Cách diễn giải ý nghĩa của signal này thường được gọi là ngữ nghĩa Mesa (Mesa semantics), theo công trình nghiên cứu đầu tiên xây dựng condition variable theo cách như vậy [LR80]; ngược lại là ngữ nghĩa Hoare (Hoare semantics), khó xây dựng hơn nhưng đưa ra bảo đảm mạnh hơn rằng thread được đánh thức sẽ chạy ngay lập tức khi được đánh thức [H74]. Hầu như mọi hệ thống từng được xây dựng đều sử dụng ngữ nghĩa Mesa.</p>
+<h3 id="tốt-hơn-nhưng-vẫn-lỗi-while-không-phải-if"><a class="header" href="#tốt-hơn-nhưng-vẫn-lỗi-while-không-phải-if">Tốt hơn, nhưng vẫn lỗi: While, không phải If</a></h3>
+<p>May mắn thay, cách khắc phục khá dễ (<strong>Hình 30.10</strong>): đổi <code>if</code> thành <code>while</code>. Hãy suy nghĩ vì sao điều này hoạt động; lúc này, consumer Tc1 thức dậy và (khi đang giữ lock) lập tức kiểm tra lại trạng thái biến chia sẻ (c2). Nếu tại thời điểm đó buffer rỗng, consumer đơn giản quay lại ngủ (c3). Mệnh đề <code>if</code> tương ứng trong producer (p2) cũng được đổi thành <code>while</code>.</p>
+<pre><code class="language-c">int loops;
+cond_t cond;
+mutex_t mutex;
+
+void *producer(void *arg) {
+  int i;
+  for (i = 0; i &lt; loops; i++) {
+    Pthread_mutex_lock(&amp;mutex);
+    // p1
+    while (count == 1)
+      // p2
+      Pthread_cond_wait(&amp;cond, &amp;mutex); // p3
+    put(i);
+    // p4
+    Pthread_cond_signal(&amp;cond);
+    // p5
+    Pthread_mutex_unlock(&amp;mutex);
+    // p6
+  }
+}
+
+void *consumer(void *arg) {
+  int i;
+  for (i = 0; i &lt; loops; i++) {
+    Pthread_mutex_lock(&amp;mutex);
+    // c1
+    while (count == 0)
+      // c2
+      Pthread_cond_wait(&amp;cond, &amp;mutex); // c3
+    int tmp = get();
+    // c4
+    Pthread_cond_signal(&amp;cond);
+    // c5
+    Pthread_mutex_unlock(&amp;mutex);
+    // c6
+    printf(&quot;%d\n&quot;, tmp);
+  }
+}
+</code></pre>
+<p><strong>Hình 30.10: Producer/Consumer — Một CV duy nhất và dùng While</strong>
+<img src="" alt="Figure 30.10: Producer/Consumer: Single CV And While" /></p>
+<p>Nhờ ngữ nghĩa Mesa, một quy tắc đơn giản cần ghi nhớ khi dùng condition variable là luôn dùng vòng lặp <code>while</code>. Đôi khi bạn không cần kiểm tra lại điều kiện, nhưng việc kiểm tra lại luôn an toàn; cứ làm vậy và yên tâm.</p>
+<p>Tuy nhiên, đoạn code này vẫn còn một lỗi — lỗi thứ hai trong hai vấn đề đã nêu. Bạn thấy được không? Nó liên quan đến việc chỉ có một condition variable. Hãy thử tìm ra vấn đề trước khi đọc tiếp. LÀM ĐI! (tạm dừng để bạn suy nghĩ, hoặc nhắm mắt lại...)</p>
+<p><strong>Hình 30.11: Vết vạch luồng: Lời giải bị lỗi (phiên bản 2)</strong>
+<img src="" alt="Figure 30.11: Thread Trace: Broken Solution (v2)" /></p>
+<p>Hãy xác nhận rằng bạn đã tìm ra đúng (hoặc ít nhất là bạn đang tỉnh táo và đọc phần này của sách). Vấn đề xảy ra khi hai consumer chạy trước (Tc1 và Tc2) và cả hai đều đi ngủ (c3). Sau đó, producer chạy, đặt một giá trị vào buffer, và đánh thức một trong các consumer (giả sử Tc1). Producer sau đó lặp lại (giải phóng và acquire lại lock trong quá trình) và cố đặt thêm dữ liệu vào buffer; vì buffer đầy, producer thay vào đó chờ trên condition (đi ngủ). Lúc này, một consumer sẵn sàng chạy (Tc1), và hai thread đang ngủ trên condition (Tc2 và Tp). Chúng ta sắp gây ra một vấn đề: mọi thứ đang trở nên “hấp dẫn”!</p>
+<p>Consumer Tc1 sau đó thức dậy bằng cách trả về từ <code>wait()</code> (c3), kiểm tra lại điều kiện (c2), và thấy buffer đầy, nên tiêu thụ giá trị (c4). Consumer này sau đó, quan trọng là, thực hiện signal trên condition (c5), chỉ đánh thức một thread đang ngủ. Tuy nhiên, nó nên đánh thức thread nào? Vì consumer vừa làm rỗng buffer, rõ ràng nó nên đánh thức producer. Tuy nhiên, nếu nó lại đánh thức consumer Tc2 (điều này hoàn toàn có thể, tùy cách quản lý hàng đợi chờ), chúng ta gặp vấn đề. Cụ thể, consumer Tc2 sẽ thức dậy và thấy buffer rỗng (c2), rồi quay lại ngủ (c3). Producer Tp, vốn đang có giá trị để đặt vào buffer, thì vẫn còn ngủ. Consumer còn lại, Tc1, cũng quay lại ngủ. Cả ba thread đều rơi vào trạng thái ngủ — một lỗi hiển nhiên; xem <strong>Hình 30.11</strong> để thấy trình tự “thảm họa” này từng bước. Rõ ràng cần có signaling, nhưng phải có định hướng hơn. Một consumer không nên đánh thức consumer khác, mà chỉ đánh thức producer, và ngược lại.</p>
+<h3 id="lời-giải-cho-producerconsumer-với-bộ-đệm-đơn-the-single-buffer-producerconsumer-solution"><a class="header" href="#lời-giải-cho-producerconsumer-với-bộ-đệm-đơn-the-single-buffer-producerconsumer-solution">Lời giải cho producer/consumer với bộ đệm đơn (The Single Buffer Producer/Consumer Solution)</a></h3>
+<p>Lời giải ở đây một lần nữa rất nhỏ gọn: dùng hai condition variable thay vì một, để signal đúng kiểu thread cần được đánh thức khi trạng thái hệ thống thay đổi. <strong>Hình 30.12</strong> cho thấy đoạn code kết quả.
+<img src="" alt="Figure 30.12: Single-Buffer Producer/Consumer Solution with Two Condition Variables" /></p>
+<p><strong>Hình 30.12: Producer/Consumer – Hai Condition Variable và While</strong></p>
+<p>Trong đoạn code này, <strong>producer thread</strong> sẽ <strong>wait</strong> trên condition <code>empty</code> và <strong>signal</strong> <code>fill</code>. Ngược lại, <strong>consumer thread</strong> sẽ <strong>wait</strong> trên <code>fill</code> và <strong>signal</strong> <code>empty</code>. Bằng cách này, vấn đề thứ hai đã nêu ở trên được loại bỏ ngay từ thiết kế: một consumer sẽ không bao giờ vô tình đánh thức một consumer khác, và một producer cũng sẽ không bao giờ vô tình đánh thức một producer khác.</p>
+<h3 id="giải-pháp-producerconsumer-đúng"><a class="header" href="#giải-pháp-producerconsumer-đúng">Giải pháp Producer/Consumer đúng</a></h3>
+<p>Giờ đây, chúng ta đã có một giải pháp producer/consumer hoạt động, dù chưa phải là tổng quát hoàn toàn. Thay đổi cuối cùng chúng ta thực hiện là cho phép <strong>tăng concurrency</strong> (tính đồng thời) và <strong>hiệu suất</strong>; cụ thể, chúng ta thêm nhiều <strong>buffer slot</strong> (ô đệm) hơn, để có thể sản xuất nhiều giá trị trước khi phải ngủ, và tương tự, có thể tiêu thụ nhiều giá trị trước khi phải ngủ.</p>
+<p>Với chỉ một producer và một consumer, cách tiếp cận này hiệu quả hơn vì giảm số lần <strong>context switch</strong>; với nhiều producer hoặc consumer (hoặc cả hai), nó thậm chí cho phép nhiều hoạt động sản xuất hoặc tiêu thụ diễn ra đồng thời, từ đó tăng concurrency. May mắn thay, đây chỉ là một thay đổi nhỏ so với giải pháp hiện tại.</p>
+<p><strong>Hình 30.13: Các hàm Put và Get đúng</strong></p>
+<blockquote>
+<p><strong>TIP: DÙNG WHILE (KHÔNG PHẢI IF) CHO CÁC ĐIỀU KIỆN</strong><br />
+Khi kiểm tra một điều kiện trong chương trình đa luồng, dùng vòng lặp <code>while</code> luôn đúng; dùng câu lệnh <code>if</code> thì <strong>có thể</strong> đúng, tùy thuộc vào ngữ nghĩa của signaling. Vì vậy, hãy luôn dùng <code>while</code> và code của bạn sẽ hoạt động như mong đợi.</p>
+<p>Việc dùng <code>while</code> bao quanh các kiểm tra điều kiện cũng xử lý được trường hợp <strong>spurious wakeup</strong> (đánh thức giả). Trong một số thư viện thread, do chi tiết triển khai, có thể xảy ra tình huống hai thread được đánh thức dù chỉ có một signal diễn ra [L11]. Spurious wakeup là một lý do nữa để luôn kiểm tra lại điều kiện mà thread đang chờ.</p>
+</blockquote>
+<p><strong>Hình 30.14: Đồng bộ hóa Producer/Consumer đúng</strong></p>
+<p>Thay đổi đầu tiên cho giải pháp đúng này nằm trong chính cấu trúc buffer và các hàm <code>put()</code> và <code>get()</code> tương ứng (<strong>Hình 30.13</strong>). Chúng ta cũng thay đổi nhẹ các điều kiện mà producer và consumer kiểm tra để quyết định có nên ngủ hay không. Đồng thời, chúng ta cũng thể hiện logic <strong>wait</strong> và <strong>signal</strong> đúng (<strong>Hình 30.14</strong>).</p>
+<ul>
+<li>Producer chỉ ngủ nếu <strong>tất cả</strong> buffer hiện đang đầy (p2).</li>
+<li>Consumer chỉ ngủ nếu <strong>tất cả</strong> buffer hiện đang rỗng (c2).</li>
+</ul>
+<p>Và như vậy, chúng ta đã giải quyết xong bài toán producer/consumer; giờ là lúc ngồi xuống và thưởng thức một ly nước mát.</p>
+<h2 id="303-covering-conditions"><a class="header" href="#303-covering-conditions">30.3 Covering Conditions</a></h2>
+<p>Bây giờ, chúng ta sẽ xem thêm một ví dụ nữa về cách sử dụng <strong>condition variable</strong>. Nghiên cứu mã nguồn này được trích từ bài báo của <strong>Lampson và Redell</strong> về hệ điều hành <strong>Pilot</strong> [LR80], cùng nhóm tác giả đã triển khai ngữ nghĩa Mesa được mô tả ở trên (ngôn ngữ họ dùng là Mesa, do đó có tên gọi này).</p>
+<p>Vấn đề họ gặp phải được minh họa rõ nhất qua một ví dụ đơn giản: một thư viện <strong>multi-threaded memory allocation</strong> (cấp phát bộ nhớ đa luồng) đơn giản. <strong>Hình 30.15</strong> cho thấy một đoạn code minh họa vấn đề.</p>
+<p><strong>Hình 30.15: Covering Conditions – Một ví dụ</strong></p>
+<p>Như bạn có thể thấy trong code, khi một thread gọi vào hàm cấp phát bộ nhớ, nó có thể phải chờ cho đến khi có thêm bộ nhớ được giải phóng. Ngược lại, khi một thread giải phóng bộ nhớ, nó sẽ signal rằng đã có thêm bộ nhớ trống.</p>
+<p>Tuy nhiên, code trên có một vấn đề: <strong>thread nào</strong> (trong số nhiều thread có thể đang chờ) sẽ được đánh thức?</p>
+<p>Hãy xét kịch bản sau:</p>
+<ul>
+<li>Giả sử hiện có <strong>0 byte</strong> bộ nhớ trống; thread <strong>Ta</strong> gọi <code>allocate(100)</code>, tiếp theo là thread <strong>Tb</strong> gọi <code>allocate(10)</code> (yêu cầu ít bộ nhớ hơn).</li>
+<li>Cả Ta và Tb đều phải <strong>wait</strong> trên condition và đi ngủ; hiện không đủ bộ nhớ trống để đáp ứng bất kỳ yêu cầu nào.</li>
+</ul>
+<p>Tại thời điểm đó, giả sử một thread thứ ba, <strong>Tc</strong>, gọi <code>free(50)</code>. Đáng tiếc, khi nó gọi <code>signal</code> để đánh thức một thread đang chờ, nó <strong>có thể không đánh thức đúng thread</strong> — cụ thể là Tb, thread chỉ cần 10 byte; trong khi Ta vẫn nên tiếp tục chờ vì chưa đủ bộ nhớ trống.</p>
+<p>Do đó, code trong hình <strong>không hoạt động đúng</strong>, vì thread đánh thức các thread khác <strong>không biết</strong> thread nào (hoặc những thread nào) cần được đánh thức.</p>
+<p>Giải pháp mà Lampson và Redell đề xuất khá đơn giản: thay lời gọi <code>pthread_cond_signal()</code> trong code trên bằng <code>pthread_cond_broadcast()</code>, lệnh này sẽ đánh thức <strong>tất cả</strong> các thread đang chờ. Bằng cách này, chúng ta đảm bảo rằng mọi thread cần được đánh thức sẽ được đánh thức.</p>
+<p>Nhược điểm, tất nhiên, là <strong>ảnh hưởng hiệu năng tiêu cực</strong>, vì có thể chúng ta sẽ đánh thức không cần thiết nhiều thread chưa nên thức. Những thread này sẽ chỉ đơn giản thức dậy, kiểm tra lại điều kiện, rồi lập tức quay lại ngủ.</p>
+<p>Lampson và Redell gọi loại condition này là <strong>covering condition</strong>, vì nó bao quát tất cả các trường hợp mà một thread cần được đánh thức (theo hướng bảo thủ); cái giá phải trả, như đã nói, là có thể đánh thức quá nhiều thread.</p>
+<p>Người đọc tinh ý có thể nhận ra rằng chúng ta <strong>có thể</strong> đã dùng cách tiếp cận này trước đó (xem bài toán producer/consumer với chỉ một condition variable). Tuy nhiên, trong trường hợp đó, chúng ta có một giải pháp tốt hơn, nên đã sử dụng nó.</p>
+<p>Nói chung, nếu bạn thấy chương trình của mình chỉ hoạt động khi bạn đổi các lệnh signal thành broadcast (nhưng bạn nghĩ rằng lẽ ra không cần), thì có thể bạn đang có một <strong>bug</strong>; hãy sửa nó! Nhưng trong những trường hợp như bộ cấp phát bộ nhớ ở trên, broadcast có thể là giải pháp đơn giản và hiệu quả nhất.</p>
+<h2 id="304-tóm-tắt"><a class="header" href="#304-tóm-tắt">30.4 Tóm tắt</a></h2>
+<p>Chúng ta đã được giới thiệu một <strong>synchronization primitive</strong> (nguyên thủy đồng bộ hóa) quan trọng khác ngoài lock: <strong>condition variable</strong>.</p>
+<p>Bằng cách cho phép các thread ngủ khi trạng thái chương trình chưa như mong muốn, condition variable giúp chúng ta giải quyết gọn gàng nhiều vấn đề đồng bộ hóa quan trọng, bao gồm bài toán nổi tiếng (và vẫn còn quan trọng) <strong>producer/consumer</strong>, cũng như <strong>covering condition</strong>.</p>
+<p>Một câu kết ấn tượng có thể được đặt ở đây, chẳng hạn như: <em>“He loved Big Brothe…”</em></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../29/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../31/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../29/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../31/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

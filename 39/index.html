@@ -1,0 +1,340 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Interlude: Files and Directories - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html" class="active"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="phần-xen-kẽ-tệp-và-thư-mục-interlude-files-and-directories"><a class="header" href="#phần-xen-kẽ-tệp-và-thư-mục-interlude-files-and-directories">Phần xen kẽ: Tệp và Thư mục (Interlude: Files and Directories)</a></h1>
+<p>Cho đến nay, chúng ta đã thấy sự hình thành của hai <strong>abstraction</strong> (lớp trừu tượng) quan trọng trong hệ điều hành: <strong>process</strong> (tiến trình) – là sự ảo hóa của CPU, và <strong>address space</strong> (không gian địa chỉ) – là sự ảo hóa của bộ nhớ.<br />
+Kết hợp lại, hai abstraction này cho phép một chương trình chạy như thể nó đang ở trong một thế giới riêng tư, tách biệt; như thể nó có bộ xử lý (hoặc nhiều bộ xử lý) riêng; như thể nó có bộ nhớ riêng.<br />
+Ảo tưởng này giúp việc lập trình hệ thống trở nên dễ dàng hơn rất nhiều, và vì thế ngày nay nó phổ biến không chỉ trên máy tính để bàn và máy chủ mà còn ngày càng xuất hiện trên mọi nền tảng lập trình được, bao gồm cả điện thoại di động và các thiết bị tương tự.</p>
+<p>Trong phần này, chúng ta sẽ bổ sung một mảnh ghép quan trọng nữa vào bức tranh ảo hóa: <strong>persistent storage</strong> (lưu trữ bền vững).<br />
+Một thiết bị lưu trữ bền vững, chẳng hạn như <strong>ổ đĩa cứng</strong> (hard disk drive) truyền thống hoặc <strong>thiết bị lưu trữ thể rắn</strong> (solid-state storage device) hiện đại, lưu trữ thông tin một cách lâu dài (hoặc ít nhất là trong một thời gian dài).<br />
+Không giống như bộ nhớ, nơi dữ liệu bị mất khi mất điện, thiết bị lưu trữ bền vững giữ nguyên dữ liệu.<br />
+Do đó, hệ điều hành phải đặc biệt cẩn trọng với loại thiết bị này: đây là nơi người dùng lưu trữ dữ liệu mà họ thực sự quan tâm.</p>
+<h3 id="crux-quẢn-lÝ-thiẾt-bỊ-lƯu-trỮ-bỀn-vỮng-nhƯ-thẾ-nÀo"><a class="header" href="#crux-quẢn-lÝ-thiẾt-bỊ-lƯu-trỮ-bỀn-vỮng-nhƯ-thẾ-nÀo">CRUX: QUẢN LÝ THIẾT BỊ LƯU TRỮ BỀN VỮNG NHƯ THẾ NÀO?</a></h3>
+<blockquote>
+<p>Hệ điều hành nên quản lý một thiết bị lưu trữ bền vững như thế nào? Các API là gì? Những khía cạnh quan trọng trong triển khai là gì?</p>
+</blockquote>
+<p>Vì vậy, trong vài chương tiếp theo, chúng ta sẽ khám phá các kỹ thuật quan trọng để quản lý dữ liệu bền vững, tập trung vào các phương pháp cải thiện hiệu năng và độ tin cậy.<br />
+Tuy nhiên, trước tiên chúng ta sẽ bắt đầu với phần tổng quan về <strong>API</strong>: các giao diện mà bạn sẽ gặp khi tương tác với <strong>UNIX file system</strong> (hệ thống tệp UNIX).</p>
+<h2 id="391-tệp-và-thư-mục-files-and-directories"><a class="header" href="#391-tệp-và-thư-mục-files-and-directories">39.1 Tệp và Thư mục (Files And Directories)</a></h2>
+<p>Hai abstraction quan trọng đã được phát triển theo thời gian trong quá trình ảo hóa lưu trữ.</p>
+<p><strong>Abstraction</strong> đầu tiên là <strong>file</strong> (tệp).<br />
+Một file đơn giản là một mảng tuyến tính các byte, mỗi byte có thể được đọc hoặc ghi.<br />
+Mỗi file có một dạng tên mức thấp nào đó, thường là một con số; người dùng thường không biết đến tên này.<br />
+Vì lý do lịch sử, tên mức thấp của một file thường được gọi là <strong>inode number</strong> (số inode, hay i-number).<br />
+Chúng ta sẽ tìm hiểu nhiều hơn về inode trong các chương sau; hiện tại, chỉ cần giả định rằng mỗi file có một inode number gắn liền với nó.</p>
+<p>Trong hầu hết các hệ thống, hệ điều hành không biết nhiều về cấu trúc bên trong của file (ví dụ: nó là một bức ảnh, một tệp văn bản, hay mã C); thay vào đó, trách nhiệm của <strong>file system</strong> (hệ thống tệp) chỉ đơn giản là lưu trữ dữ liệu đó một cách bền vững trên đĩa và đảm bảo rằng khi bạn yêu cầu dữ liệu lần nữa, bạn nhận được đúng dữ liệu mà bạn đã lưu ban đầu.<br />
+Làm được điều này không đơn giản như tưởng tượng!</p>
+<p><strong>Abstraction</strong> thứ hai là <strong>directory</strong> (thư mục).<br />
+Một directory, giống như file, cũng có một tên mức thấp (tức inode number), nhưng nội dung của nó rất đặc thù: nó chứa một danh sách các cặp <strong>(tên đọc được bởi người dùng, tên mức thấp)</strong>.<br />
+Ví dụ: giả sử có một file với tên mức thấp là “10”, và nó được người dùng gọi bằng tên “foo”.<br />
+Directory chứa “foo” sẽ có một mục <strong>(“foo”, “10”)</strong> ánh xạ tên đọc được sang tên mức thấp.<br />
+Mỗi mục trong một directory tham chiếu tới hoặc là file, hoặc là directory khác.<br />
+Bằng cách đặt các directory bên trong các directory khác, người dùng có thể xây dựng một <strong>directory tree</strong> (cây thư mục) hoặc <strong>directory hierarchy</strong> (hệ phân cấp thư mục) tùy ý, trong đó tất cả file và directory đều được lưu trữ.</p>
+<p>Cây thư mục bắt đầu từ <strong>root directory</strong> (thư mục gốc) – trong các hệ thống dựa trên UNIX, thư mục gốc được ký hiệu đơn giản là <code>/</code> – và sử dụng một ký tự phân tách nào đó để đặt tên các thư mục con tiếp theo cho đến khi chỉ ra được file hoặc directory mong muốn.<br />
+Ví dụ: nếu một người dùng tạo một thư mục <code>foo</code> trong thư mục gốc <code>/</code>, và sau đó tạo một file <code>bar.txt</code> trong thư mục <code>foo</code>, chúng ta có thể tham chiếu tới file này bằng <strong>absolute pathname</strong> (đường dẫn tuyệt đối), trong trường hợp này sẽ là:</p>
+<pre><code>/foo/bar.txt
+</code></pre>
+<p><strong>Hình 39.1: Ví dụ về cây thư mục (An Example Directory Tree)</strong></p>
+<blockquote>
+<p><strong>TIP: SUY NGHĨ CẨN THẬN VỀ VIỆC ĐẶT TÊN</strong></p>
+<p>Đặt tên (<strong>naming</strong>) là một khía cạnh quan trọng của các hệ thống máy tính. Trong các hệ thống UNIX, hầu như mọi thứ bạn có thể nghĩ tới đều được đặt tên thông qua <strong>file system</strong> (hệ thống tệp). Không chỉ các file, mà cả thiết bị (<strong>device</strong>), ống dẫn (<strong>pipe</strong>), và thậm chí cả <strong>process</strong> (tiến trình) cũng có thể được tìm thấy trong một cấu trúc trông giống như một hệ thống tệp thông thường.<br />
+Sự thống nhất trong cách đặt tên này giúp đơn giản hóa mô hình khái niệm của bạn về hệ thống, và làm cho hệ thống trở nên đơn giản hơn và có tính mô-đun cao hơn. Vì vậy, bất cứ khi nào tạo một hệ thống hoặc giao diện, hãy suy nghĩ kỹ về những cái tên bạn đang sử dụng.</p>
+</blockquote>
+<p>Các <strong>directory</strong> (thư mục) và <strong>file</strong> (tệp) có thể trùng tên miễn là chúng nằm ở các vị trí khác nhau trong cây hệ thống tệp.<br />
+Ví dụ: có thể tồn tại hai file tên <code>bar.txt</code> như trong hình minh họa: <code>/foo/bar.txt</code> và <code>/bar/foo/bar.txt</code>.</p>
+<h2 id="392-giao-diện-hệ-thống-tệp-the-file-system-interface"><a class="header" href="#392-giao-diện-hệ-thống-tệp-the-file-system-interface">39.2 Giao diện hệ thống tệp (The File System Interface)</a></h2>
+<p>Bây giờ, chúng ta sẽ thảo luận chi tiết hơn về <strong>file system interface</strong> (giao diện hệ thống tệp).<br />
+Chúng ta sẽ bắt đầu với những thao tác cơ bản: tạo, truy cập và xóa file.<br />
+Bạn có thể nghĩ rằng điều này khá đơn giản, nhưng trong quá trình tìm hiểu, chúng ta sẽ khám phá một <strong>system call</strong> bí ẩn được dùng để xóa file, gọi là <code>unlink()</code>.<br />
+Hy vọng rằng, đến cuối chương này, lời giải cho “bí ẩn” đó sẽ trở nên rõ ràng với bạn.</p>
+<h2 id="393-tạo-file-creating-files"><a class="header" href="#393-tạo-file-creating-files">39.3 Tạo file (Creating Files)</a></h2>
+<p>Chúng ta sẽ bắt đầu với thao tác cơ bản nhất: <strong>tạo một file</strong>.<br />
+Điều này có thể thực hiện được với <strong>system call</strong> <code>open</code>; bằng cách gọi <code>open()</code> và truyền vào cờ (<strong>flag</strong>) <code>O_CREAT</code>, một chương trình có thể tạo ra một file mới.<br />
+Dưới đây là ví dụ mã nguồn để tạo một file tên “foo” trong <strong>current working directory</strong> (thư mục làm việc hiện tại):</p>
+<pre><code class="language-c">int fd = open(&quot;foo&quot;, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR);
+</code></pre>
+<blockquote>
+<p><strong>ASIDE: SYSTEM CALL CREAT()</strong></p>
+<p>Cách cũ hơn để tạo file là gọi <code>creat()</code>, như sau:</p>
+<pre><code class="language-c">// tùy chọn: thêm tham số thứ hai để thiết lập quyền truy cập
+int fd = creat(&quot;foo&quot;);
+</code></pre>
+<p>Bạn có thể coi <code>creat()</code> tương đương với <code>open()</code> với các cờ: <code>O_CREAT | O_WRONLY | O_TRUNC</code>.<br />
+Vì <code>open()</code> có thể tạo file, nên việc sử dụng <code>creat()</code> đã phần nào ít phổ biến hơn.<br />
+Tuy nhiên, nó vẫn giữ một vị trí đặc biệt trong “truyền thuyết” UNIX.<br />
+Cụ thể, khi Ken Thompson được hỏi ông sẽ làm gì khác nếu thiết kế lại UNIX, ông trả lời:<br />
+“Tôi sẽ viết <code>creat</code> với một chữ e” (tức là <code>create</code>).</p>
+</blockquote>
+<p>Một khía cạnh quan trọng của <code>open()</code> là giá trị nó trả về: <strong>file descriptor</strong> (bộ mô tả tệp).<br />
+File descriptor chỉ đơn giản là một số nguyên, riêng cho mỗi <strong>process</strong> (tiến trình), và được dùng trong các hệ thống UNIX để truy cập file.</p>
+<p>Các file descriptor được hệ điều hành quản lý <strong>theo từng process</strong>.<br />
+Điều này có nghĩa là một cấu trúc dữ liệu đơn giản nào đó (ví dụ: một mảng) được lưu trong <strong>proc structure</strong> (cấu trúc tiến trình) trên các hệ thống UNIX.<br />
+Dưới đây là phần liên quan từ <strong>xv6 kernel</strong>:</p>
+<h2 id="394-Đọc-và-ghi-tệp-reading-and-writing-files"><a class="header" href="#394-Đọc-và-ghi-tệp-reading-and-writing-files">39.4 Đọc và ghi tệp (Reading And Writing Files)</a></h2>
+<p>Khi đã có một số file, tất nhiên chúng ta sẽ muốn đọc hoặc ghi chúng.<br />
+Hãy bắt đầu bằng việc đọc một file đã tồn tại.<br />
+Nếu đang gõ lệnh trong <strong>command line</strong> (dòng lệnh), chúng ta có thể dùng chương trình <code>cat</code> để hiển thị nội dung của file ra màn hình.</p>
+<pre><code class="language-sh">prompt&gt; echo hello &gt; foo
+prompt&gt; cat foo
+hello
+prompt&gt;
+</code></pre>
+<p>Để tìm hiểu điều gì thực sự xảy ra, chúng ta sẽ sử dụng một công cụ cực kỳ hữu ích để <strong>theo dõi các system call</strong> mà một chương trình thực hiện.<br />
+Trên Linux, công cụ này được gọi là <code>strace</code>.<br />
+Dưới đây là ví dụ sử dụng <code>strace</code> để tìm hiểu <code>cat</code> đang làm gì (một số lời gọi đã được lược bỏ để dễ đọc):</p>
+<p>...</p>
+<p>Tại sao lần gọi <code>open()</code> đầu tiên lại trả về <strong>3</strong>, chứ không phải <strong>0</strong> hoặc <strong>1</strong>?<br />
+Hóa ra, mỗi <strong>process</strong> (tiến trình) đang chạy đã mặc định mở sẵn <strong>ba file</strong>:</p>
+<ul>
+<li><strong>standard input</strong> (stdin – bộ mô tả tệp số 0)</li>
+<li><strong>standard output</strong> (stdout – bộ mô tả tệp số 1)</li>
+<li><strong>standard error</strong> (stderr – bộ mô tả tệp số 2)</li>
+</ul>
+<p>Sau khi <code>open</code> thành công, <code>cat</code> sử dụng <strong>system call</strong> <code>read()</code> để liên tục đọc một số byte từ file.<br />
+Chương trình sau đó cố gắng đọc thêm, nhưng vì không còn byte nào, <code>read()</code> trả về <strong>0</strong> và chương trình hiểu rằng nó đã đọc hết toàn bộ file.<br />
+Do đó, chương trình gọi <code>close()</code> để báo rằng nó đã hoàn tất.</p>
+<h2 id="395-Đọc-và-ghi-nhưng-không-theo-tuần-tự-reading-and-writing-but-not-sequentially"><a class="header" href="#395-Đọc-và-ghi-nhưng-không-theo-tuần-tự-reading-and-writing-but-not-sequentially">39.5 Đọc và ghi, nhưng không theo tuần tự (Reading And Writing, But Not Sequentially)</a></h2>
+<p>Đôi khi, chúng ta cần đọc hoặc ghi tại một <strong>offset</strong> (vị trí bù) cụ thể trong file.<br />
+Để làm điều này, ta sử dụng <strong>system call</strong> <code>lseek()</code>:</p>
+<pre><code class="language-c">off_t lseek(int fildes, off_t offset, int whence);
+</code></pre>
+<p>Tham số <code>whence</code> xác định chính xác cách dịch chuyển con trỏ file:</p>
+<ul>
+<li><strong>SEEK_SET</strong>: đặt offset hiện tại thành <code>offset</code> byte.</li>
+<li><strong>SEEK_CUR</strong>: đặt offset thành vị trí hiện tại cộng thêm <code>offset</code> byte.</li>
+<li><strong>SEEK_END</strong>: đặt offset thành kích thước file cộng thêm <code>offset</code> byte.</li>
+</ul>
+<p>Với mỗi file mà một process mở, hệ điều hành sẽ theo dõi một <strong>offset hiện tại</strong> (current offset), xác định vị trí bắt đầu cho lần đọc hoặc ghi tiếp theo.<br />
+Offset này được cập nhật <strong>ngầm</strong> khi gọi <code>read</code> hoặc <code>write</code>, hoặc <strong>tường minh</strong> khi gọi <code>lseek</code>.<br />
+Offset này được lưu trong <strong>struct file</strong>.<br />
+Dưới đây là định nghĩa (đơn giản hóa) của cấu trúc này trong <strong>xv6</strong>:</p>
+<pre><code class="language-c">struct file {
+  int ref;
+  char readable;
+  char writable;
+  struct inode *ip;
+  uint off;
+};
+</code></pre>
+<blockquote>
+<p><strong>ASIDE: GỌI LSEEK() KHÔNG THỰC HIỆN DISK SEEK</strong></p>
+<p>Tên gọi của system call <code>lseek()</code> dễ gây nhầm lẫn cho nhiều sinh viên.<br />
+Lời gọi <code>lseek()</code> chỉ đơn giản thay đổi một biến trong bộ nhớ của hệ điều hành, biến này theo dõi offset hiện tại.<br />
+<strong>Disk seek</strong> (dịch chuyển đầu đọc đĩa) chỉ xảy ra khi một thao tác đọc hoặc ghi tới đĩa nằm trên một track khác so với thao tác trước đó.<br />
+Gọi <code>lseek()</code> có thể dẫn đến một disk seek trong thao tác đọc hoặc ghi tiếp theo, nhưng bản thân nó <strong>không hề</strong> gây ra bất kỳ I/O vật lý nào.</p>
+</blockquote>
+<p>Hãy theo dõi một process mở một file (kích thước 300 byte) và đọc nó bằng cách gọi <code>read()</code> nhiều lần, mỗi lần đọc 100 byte.</p>
+<h2 id="396-chia-sẻ-entry-trong-bảng-file-mở-fork-và-dup-shared-file-table-entries-fork-and-dup"><a class="header" href="#396-chia-sẻ-entry-trong-bảng-file-mở-fork-và-dup-shared-file-table-entries-fork-and-dup">39.6 Chia sẻ entry trong bảng file mở: fork() và dup() (Shared File Table Entries: fork() And dup())</a></h2>
+<p>Trong nhiều trường hợp, ánh xạ từ <strong>file descriptor</strong> (bộ mô tả tệp) tới một entry trong <strong>open file table</strong> (bảng file mở) là ánh xạ <strong>một-một</strong>.<br />
+Tuy nhiên, có một số trường hợp thú vị khi một entry trong open file table được <strong>chia sẻ</strong>.<br />
+Một trong những trường hợp đó xảy ra khi <strong>process cha</strong> tạo ra <strong>process con</strong> bằng <code>fork()</code>.</p>
+<p><strong>Hình 39.2: Chia sẻ entry bảng file giữa tiến trình cha/con (fork-seek.c)</strong></p>
+<p>Khi chạy chương trình này, chúng ta thấy kết quả sau:</p>
+<pre><code class="language-sh">prompt&gt; ./fork-seek
+child: offset 10
+parent: offset 10
+prompt&gt;
+</code></pre>
+<p>Một trường hợp chia sẻ khác xảy ra với <strong>system call</strong> <code>dup()</code>.<br />
+Lời gọi <code>dup()</code> cho phép một <strong>process</strong> (tiến trình) tạo ra một <strong>file descriptor</strong> (bộ mô tả tệp) mới tham chiếu tới <strong>cùng một file đã mở</strong> (open file) như một descriptor hiện có.</p>
+<p>...</p>
+<p><strong>Hình 39.4: Chia sẻ entry bảng file với dup() (dup.c)</strong></p>
+<h2 id="397-ghi-ngay-lập-tức-với-fsync-writing-immediately-with-fsync"><a class="header" href="#397-ghi-ngay-lập-tức-với-fsync-writing-immediately-with-fsync">39.7 Ghi ngay lập tức với fsync() (Writing Immediately With fsync())</a></h2>
+<p>Thông thường, khi một chương trình gọi <code>write()</code>, <strong>file system</strong> (hệ thống tệp) sẽ <strong>buffer</strong> (đệm) các thao tác ghi này trong bộ nhớ một thời gian vì lý do hiệu năng.<br />
+Tuy nhiên, một số ứng dụng yêu cầu khả năng <strong>ép</strong> dữ liệu được ghi xuống đĩa ngay lập tức.</p>
+<p>Để hỗ trợ các ứng dụng loại này, hầu hết các file system cung cấp <strong>system call</strong>:</p>
+<pre><code class="language-c">int fsync(int fd);
+</code></pre>
+<p>Khi một process gọi <code>fsync()</code>, file system sẽ buộc tất cả dữ liệu <strong>dirty</strong> (chưa được ghi xuống đĩa) của file được tham chiếu bởi file descriptor chỉ định phải được ghi xuống đĩa.</p>
+<h2 id="398-Đổi-tên-file-renaming-files"><a class="header" href="#398-Đổi-tên-file-renaming-files">39.8 Đổi tên file (Renaming Files)</a></h2>
+<p>Để đổi tên một file, lệnh <code>mv</code> sử dụng <strong>system call</strong>:</p>
+<pre><code class="language-c">int rename(char *old, char *new);
+</code></pre>
+<p>Một đảm bảo thú vị mà <code>rename()</code> cung cấp là nó (thường) được triển khai như một lời gọi <strong>atomic</strong> (nguyên tử) đối với các sự cố <strong>system crash</strong> (sập hệ thống).<br />
+Điều này rất quan trọng đối với các ứng dụng yêu cầu cập nhật trạng thái file một cách nguyên tử.<br />
+Ví dụ, một trình soạn thảo file có thể thực hiện các bước sau để lưu thay đổi một cách an toàn:</p>
+<p>...</p>
+<p>Bước cuối cùng này <strong>hoán đổi nguyên tử</strong> file mới vào vị trí, đồng thời xóa phiên bản cũ của file.</p>
+<h2 id="399-lấy-thông-tin-về-file-getting-information-about-files"><a class="header" href="#399-lấy-thông-tin-về-file-getting-information-about-files">39.9 Lấy thông tin về file (Getting Information About Files)</a></h2>
+<p>File system lưu trữ khá nhiều thông tin về mỗi file, mà chúng ta thường gọi là <strong>metadata</strong> (siêu dữ liệu).<br />
+Để xem metadata của một file cụ thể, chúng ta có thể sử dụng <strong>system call</strong> <code>stat()</code> hoặc <code>fstat()</code>.<br />
+Các lời gọi này sẽ điền thông tin vào một cấu trúc <code>stat</code>:</p>
+<p>...</p>
+<p><strong>Hình 39.5: Cấu trúc stat (The stat structure)</strong></p>
+<p>Bạn cũng có thể sử dụng công cụ dòng lệnh <code>stat</code> để xem thông tin này.</p>
+<h2 id="3910-xóa-file-removing-files"><a class="header" href="#3910-xóa-file-removing-files">39.10 Xóa file (Removing Files)</a></h2>
+<p>...</p>
+<p>(TODO)</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../38/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../40/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../38/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../40/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

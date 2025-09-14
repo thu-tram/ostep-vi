@@ -1,0 +1,482 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Interlude: Process API - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html" class="active"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="5-phần-xen-kẽ-process-api"><a class="header" href="#5-phần-xen-kẽ-process-api">5. Phần xen kẽ: Process API</a></h1>
+<p><strong>GHI CHÚ: VỀ CÁC PHẦN XEN KẼ</strong><br />
+Các phần xen kẽ (interlude) sẽ đề cập đến những khía cạnh thực tiễn hơn của hệ thống, đặc biệt tập trung vào các API (Application Programming Interface – interface lập trình ứng dụng) của hệ điều hành và cách sử dụng chúng. Nếu bạn không thích các vấn đề mang tính thực hành, bạn có thể bỏ qua các phần này. Tuy nhiên, bạn <strong>nên</strong> quan tâm đến chúng, vì chúng thường rất hữu ích trong thực tế; ví dụ, các công ty thường không tuyển dụng bạn chỉ vì những kỹ năng “phi thực tế”.</p>
+<p>Trong phần xen kẽ này, chúng ta sẽ thảo luận về việc tạo process (process) trong các hệ thống UNIX. UNIX cung cấp một trong những cách thú vị nhất để tạo process mới thông qua một cặp system call (lời gọi hệ thống): <code>fork()</code> và <code>exec()</code>. Một thủ tục thứ ba, <code>wait()</code>, có thể được một process sử dụng khi muốn chờ process mà nó đã tạo hoàn thành. Chúng ta sẽ trình bày chi tiết các interface này, kèm theo một số ví dụ đơn giản để minh họa. Và đây là vấn đề đặt ra:</p>
+<blockquote>
+<p><strong>Cốt lõi: Làm thế nào để tạo và điều khiển process</strong><br />
+Hệ điều hành nên cung cấp những interface nào để tạo và điều khiển process? Các interface này nên được thiết kế ra sao để vừa mạnh mẽ, dễ sử dụng, vừa đạt hiệu năng cao?</p>
+</blockquote>
+<h2 id="51-lời-gọi-hệ-thống-fork"><a class="header" href="#51-lời-gọi-hệ-thống-fork">5.1 Lời gọi hệ thống fork()</a></h2>
+<p>Lời gọi hệ thống <code>fork()</code> được sử dụng để tạo một process mới [C63]. Tuy nhiên, hãy lưu ý: đây chắc chắn là một trong những thủ tục kỳ lạ nhất mà bạn từng gọi<sup class="footnote-reference"><a href="#1">1</a></sup>. Cụ thể hơn, giả sử bạn có một chương trình đang chạy với đoạn mã như trong Hình 5.1; hãy xem xét đoạn mã đó, hoặc tốt hơn, hãy gõ và chạy nó để tự mình trải nghiệm.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Thực ra, chúng tôi không thể khẳng định chắc chắn điều này; ai biết được bạn gọi những thủ tục gì khi không ai để ý? Nhưng <code>fork()</code> thực sự rất khác thường, bất kể thói quen gọi hàm của bạn ra sao.</p>
+</div>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+
+int main(int argc, char *argv[]) {
+printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+int rc = fork();
+if (rc &lt; 0) {
+// fork failed
+fprintf(stderr, &quot;fork failed\n&quot;);
+exit(1);
+} else if (rc == 0) {
+// child (new process)
+printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+} else {
+// parent goes down this path (main)
+printf(&quot;parent of %d (pid:%d)\n&quot;,
+rc, (int) getpid());
+}
+return 0;
+}
+
+</code></pre>
+<p>Figure 5.1: Calling fork() (p1.c)</p>
+<p>Khi bạn chạy chương trình này (gọi là <code>p1.c</code>), bạn sẽ thấy kết quả như sau:</p>
+<pre><code>prompt&gt; ./p1
+hello (pid:29146)
+parent of 29147 (pid:29146)
+child (pid:29147)
+prompt&gt;
+</code></pre>
+<p>Hãy phân tích chi tiết hơn điều gì đã xảy ra trong <code>p1.c</code>. Khi bắt đầu chạy, process in ra một thông điệp “hello”; kèm theo đó là <strong>process identifier</strong> (PID – định danh process). Trong ví dụ, process có PID là 29146; trong hệ thống UNIX, PID được dùng để định danh process khi muốn thực hiện một thao tác nào đó với nó, chẳng hạn như dừng process. Đến đây thì mọi thứ vẫn bình thường.</p>
+<p>Phần thú vị bắt đầu khi process gọi lời gọi hệ thống <code>fork()</code>, mà OS cung cấp như một cách để tạo process mới. Điều kỳ lạ là: process được tạo ra gần như là <strong>bản sao</strong> của process gọi <code>fork()</code>. Điều này có nghĩa là, từ góc nhìn của OS, giờ đây có hai bản sao của chương trình <code>p1</code> đang chạy, và cả hai đều sắp <strong>trả về</strong> từ lời gọi <code>fork()</code>. Process mới được tạo (gọi là <strong>child process</strong> – process con, đối lập với <strong>parent process</strong> – process cha) <strong>không</strong> bắt đầu chạy từ <code>main()</code> như bạn có thể nghĩ (lưu ý, thông điệp “hello” chỉ được in ra một lần); thay vào đó, nó xuất hiện như thể chính nó vừa gọi <code>fork()</code>.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;sys/wait.h&gt;
+
+
+int main(int argc, char *argv[]) {
+printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+int rc = fork();
+if (rc &lt; 0) {
+// fork failed; exit
+fprintf(stderr, &quot;fork failed\n&quot;);
+exit(1);
+} else if (rc == 0) { // child (new process)
+printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+} else {
+// parent goes down this path
+int rc_wait = wait(NULL);
+printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
+rc, rc_wait, (int) getpid());
+}
+return 0;
+}
+
+</code></pre>
+<p>Figure 5.2: Calling fork() And wait() (p2.c)</p>
+<p>Bạn có thể nhận thấy: process con <strong>không</strong> phải là bản sao hoàn toàn. Cụ thể, mặc dù nó có bản sao riêng của <strong>address space</strong> (không gian địa chỉ – tức vùng bộ nhớ riêng), các thanh ghi (registers) riêng, bộ đếm chương trình (PC – Program Counter) riêng, v.v., nhưng giá trị trả về từ <code>fork()</code> lại khác nhau. Cụ thể, process cha nhận về PID của process con mới tạo, còn process con nhận giá trị trả về là 0. Sự khác biệt này rất hữu ích, vì nó giúp lập trình viên dễ dàng viết mã xử lý cho hai trường hợp khác nhau.</p>
+<p>Bạn cũng có thể nhận thấy: kết quả in ra từ <code>p1.c</code> <strong>không</strong> mang tính xác định (non-deterministic). Khi process con được tạo, lúc này có hai process đang hoạt động: cha và con. Giả sử hệ thống chỉ có một CPU (để đơn giản), thì tại thời điểm đó, hoặc process cha, hoặc process con có thể được chạy trước. Trong ví dụ trên, process cha chạy trước và in thông điệp của nó trước. Trong các trường hợp khác, điều ngược lại có thể xảy ra, như trong kết quả sau:</p>
+<pre><code>prompt&gt; ./p1
+hello (pid:29146)
+child (pid:29147)
+parent of 29147 (pid:29146)
+prompt&gt;
+</code></pre>
+<p><strong>CPU scheduler</strong> (bộ lập lịch CPU – thành phần quyết định process nào chạy tại một thời điểm) sẽ quyết định process nào được chạy. Vì bộ lập lịch khá phức tạp, chúng ta thường không thể dự đoán chắc chắn nó sẽ chọn process nào, và do đó không thể biết process nào sẽ chạy trước. Tính <strong>bất định</strong> (nondeterminism) này sẽ dẫn đến nhiều vấn đề thú vị, đặc biệt trong các chương trình đa luồng (multi-threaded). Chúng ta sẽ gặp lại khái niệm này nhiều hơn khi nghiên cứu <strong>lập trình đồng thời</strong> (concurrency) ở phần sau của sách.</p>
+<h2 id="52-lời-gọi-hệ-thống-wait"><a class="header" href="#52-lời-gọi-hệ-thống-wait">5.2 Lời gọi hệ thống wait()</a></h2>
+<p>Cho đến giờ, chúng ta mới chỉ tạo một process con in ra thông điệp rồi thoát. Trong nhiều trường hợp, process cha cần <strong>chờ</strong> process con hoàn thành công việc. Nhiệm vụ này được thực hiện bằng lời gọi hệ thống <code>wait()</code> (hoặc phiên bản đầy đủ hơn là <code>waitpid()</code>); xem Hình 5.2 để biết chi tiết.</p>
+<p>Trong ví dụ (<code>p2.c</code>), process cha gọi <code>wait()</code> để tạm dừng excecute cho đến khi process con kết thúc. Khi process con hoàn tất, <code>wait()</code> trả quyền điều khiển lại cho process cha.</p>
+<p>Việc thêm lời gọi <code>wait()</code> vào đoạn mã trên khiến kết quả trở nên <strong>xác định</strong> (deterministic). Bạn có biết tại sao không? Hãy thử suy nghĩ một chút.<br />
+(… chờ bạn suy nghĩ … xong)<br />
+Và đây là kết quả:</p>
+<pre><code>prompt&gt; ./p2
+hello (pid:29266)
+child (pid:29267)
+parent of 29267 (rc_wait:29267) (pid:29266)
+prompt&gt;
+</code></pre>
+<p>Với đoạn mã này, chúng ta <strong>luôn</strong> biết rằng process con sẽ in ra trước. Tại sao? Bởi vì:</p>
+<ul>
+<li>Nếu process con chạy trước, nó sẽ in thông điệp trước process cha.</li>
+<li>Nếu process cha chạy trước, nó sẽ lập tức gọi <code>wait()</code>; lời gọi này sẽ <strong>không trả về</strong> cho đến khi process con chạy và thoát<sup class="footnote-reference"><a href="#2">2</a></sup>. Do đó, ngay cả khi cha chạy trước, nó vẫn “lịch sự” chờ con hoàn thành, rồi mới in thông điệp của mình.</li>
+</ul>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Có một số trường hợp <code>wait()</code> trả về trước khi process con thoát; hãy đọc trang hướng dẫn <code>man</code> để biết thêm chi tiết. Và hãy cảnh giác với những phát biểu tuyệt đối như “process con luôn in trước” hoặc “UNIX là thứ tuyệt vời nhất trên đời, còn hơn cả kem”.</p>
+</div>
+<h2 id="53-cuối-cùng-lời-gọi-hệ-thống-exec"><a class="header" href="#53-cuối-cùng-lời-gọi-hệ-thống-exec">5.3 Cuối cùng, lời gọi hệ thống exec()</a></h2>
+<p>Một thành phần cuối cùng và quan trọng của <strong>process creation API</strong> (API tạo process) là lời gọi hệ thống <code>exec()</code><sup class="footnote-reference"><a href="#3">3</a></sup>. Lời gọi này hữu ích khi bạn muốn chạy một chương trình <strong>khác</strong> với chương trình đang gọi nó. Ví dụ, gọi <code>fork()</code>…</p>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>Trên Linux, có sáu biến thể của <code>exec()</code>: <code>execl()</code>, <code>execlp()</code>, <code>execle()</code>, <code>execv()</code>, <code>execvp()</code>, và <code>execvpe()</code>. Hãy đọc trang hướng dẫn <code>man</code> để tìm hiểu thêm.</p>
+</div>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;sys/wait.h&gt;
+
+int main(int argc, char *argv[]) {
+printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+int rc = fork();
+if (rc &lt; 0) {
+// fork failed; exit
+fprintf(stderr, &quot;fork failed\n&quot;);
+exit(1);
+} else if (rc == 0) { // child (new process)
+printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+char *myargs[3];
+myargs[0] = strdup(&quot;wc&quot;);
+// program: &quot;wc&quot;
+myargs[1] = strdup(&quot;p3.c&quot;); // arg: input file
+myargs[2] = NULL;
+// mark end of array
+execvp(myargs[0], myargs); // runs word count
+printf(&quot;this shouldn’t print out&quot;);
+} else {
+// parent goes down this path
+int rc_wait = wait(NULL);
+printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
+rc, rc_wait, (int) getpid());
+}
+return 0;
+}
+
+</code></pre>
+<p><strong>Hình 5.3: Gọi fork(), wait() và exec() (p3.c)</strong></p>
+<p>Trong <code>p2.c</code>, việc sử dụng chỉ hữu ích nếu bạn muốn tiếp tục chạy các bản sao của <strong>cùng một chương trình</strong>. Tuy nhiên, trong nhiều trường hợp, bạn muốn chạy <strong>một chương trình khác</strong>; <code>exec()</code> chính là công cụ để làm điều đó (Hình 5.3).</p>
+<p>Trong ví dụ này, <strong>process con</strong> (child process) gọi <code>execvp()</code> để chạy chương trình <code>wc</code> – đây là chương trình đếm từ (word counting program). Cụ thể, nó chạy <code>wc</code> trên tệp mã nguồn <code>p3.c</code>, cho chúng ta biết số dòng, số từ và số byte trong tệp:</p>
+<pre><code>prompt&gt; ./p3
+hello (pid:29383)
+child (pid:29384)
+29
+107
+1030 p3.c
+parent of 29384 (rc_wait:29384) (pid:29383)
+prompt&gt;
+</code></pre>
+<p>Lời gọi hệ thống (system call) <code>fork()</code> vốn đã kỳ lạ; “đồng phạm” của nó, <code>exec()</code>, cũng không hề bình thường. Cách hoạt động của <code>exec()</code> như sau: khi được cung cấp tên của một <strong>tệp excecute</strong> (executable) – ví dụ <code>wc</code> – và một số đối số (arguments) – ví dụ <code>p3.c</code> – nó sẽ nạp (load) mã lệnh (code) và static data (static data) từ tệp excecute đó, <strong>ghi đè</strong> lên phân đoạn mã (code segment) và static data hiện tại của process; vùng heap, stack và các phần khác của không gian bộ nhớ (memory space) của chương trình sẽ được khởi tạo lại. Sau đó, hệ điều hành chỉ đơn giản chạy chương trình mới này, truyền các đối số vào dưới dạng <code>argv</code> của process.</p>
+<p>Điểm quan trọng: <code>exec()</code> <strong>không tạo ra process mới</strong>; thay vào đó, nó <strong>biến đổi</strong> process hiện tại (trước đó là <code>p3</code>) thành một chương trình khác đang chạy (<code>wc</code>). Sau khi <code>exec()</code> được gọi trong process con, gần như <code>p3.c</code> chưa từng chạy; một lời gọi <code>exec()</code> thành công sẽ <strong>không bao giờ trả về</strong>.</p>
+<blockquote>
+<p><strong>Mẹo: Làm đúng ngay từ đầu (Lampson’s Law)</strong><br />
+Như Lampson đã nói trong bài viết nổi tiếng <em>Hints for Computer Systems Design</em> [L83]:<br />
+“Hãy làm đúng. Cả tính trừu tượng lẫn sự đơn giản đều không thể thay thế cho việc làm đúng.”<br />
+Đôi khi, bạn chỉ cần làm đúng, và khi làm đúng, kết quả sẽ vượt xa mọi lựa chọn thay thế. Có rất nhiều cách để thiết kế API cho việc tạo process; tuy nhiên, sự kết hợp giữa <code>fork()</code> và <code>exec()</code> vừa đơn giản vừa cực kỳ mạnh mẽ. Ở đây, các nhà thiết kế UNIX đã “làm đúng”. Và vì Lampson thường xuyên “làm đúng”, nên nguyên tắc này được đặt tên để vinh danh ông.</p>
+</blockquote>
+<h2 id="54-tại-sao-Động-cơ-thiết-kế-api"><a class="header" href="#54-tại-sao-Động-cơ-thiết-kế-api">5.4 Tại sao? Động cơ thiết kế API</a></h2>
+<p>Một câu hỏi lớn có thể xuất hiện: <strong>Tại sao</strong> chúng ta lại xây dựng một interface kỳ lạ như vậy cho một hành động tưởng chừng đơn giản là tạo process mới?</p>
+<p>Câu trả lời: việc tách biệt <code>fork()</code> và <code>exec()</code> là <strong>thiết yếu</strong> trong việc xây dựng một <strong>UNIX shell</strong>, vì nó cho phép shell chạy một đoạn mã <strong>sau</strong> khi gọi <code>fork()</code> nhưng <strong>trước</strong> khi gọi <code>exec()</code>. Đoạn mã này có thể thay đổi môi trường (environment) của chương trình sắp chạy, từ đó cho phép xây dựng nhiều tính năng thú vị một cách dễ dàng.</p>
+<p><strong>Shell</strong> thực chất chỉ là một chương trình người dùng (user program)<sup class="footnote-reference"><a href="#4">4</a></sup>. Nó hiển thị một dấu nhắc lệnh (prompt) và chờ bạn nhập vào. Bạn gõ một lệnh (tức tên của một chương trình excecute kèm các đối số) vào; trong hầu hết các trường hợp, shell sẽ:</p>
+<ol>
+<li>Xác định vị trí của tệp excecute trong hệ thống tệp (file system).</li>
+<li>Gọi <code>fork()</code> để tạo một process con chạy lệnh đó.</li>
+<li>Gọi một biến thể của <code>exec()</code> để excecute lệnh.</li>
+<li>Gọi <code>wait()</code> để chờ lệnh hoàn tất.</li>
+</ol>
+<p>Khi process con kết thúc, shell thoát khỏi <code>wait()</code> và in ra dấu nhắc lệnh mới, sẵn sàng cho lệnh tiếp theo.</p>
+<p>Việc tách <code>fork()</code> và <code>exec()</code> cho phép shell thực hiện nhiều việc hữu ích một cách đơn giản. Ví dụ:</p>
+<pre><code>prompt&gt; wc p3.c &gt; newfile.txt
+</code></pre>
+<div class="footnote-definition" id="4"><sup class="footnote-definition-label">4</sup>
+<p>Có rất nhiều loại shell: <code>tcsh</code>, <code>bash</code>, <code>zsh</code>… Bạn nên chọn một loại, đọc trang hướng dẫn (<code>man page</code>) và tìm hiểu thêm; tất cả chuyên gia UNIX đều làm vậy.</p>
+</div>
+<p>Trong ví dụ trên, đầu ra của chương trình <code>wc</code> được <strong>chuyển hướng</strong> (redirect) vào tệp <code>newfile.txt</code> (dấu <code>&gt;</code> thể hiện việc chuyển hướng). Cách shell thực hiện rất đơn giản: khi process con được tạo, <strong>trước</strong> khi gọi <code>exec()</code>, shell (cụ thể là đoạn mã chạy trong process con) đóng luồng xuất chuẩn (standard output) và mở tệp <code>newfile.txt</code>.</p>
+<p>Bằng cách này, mọi dữ liệu xuất ra từ chương trình <code>wc</code> sắp chạy sẽ được ghi vào tệp thay vì hiển thị trên màn hình. (Các <strong>file descriptor</strong> đang mở sẽ vẫn được giữ nguyên qua lời gọi <code>exec()</code>, cho phép hành vi này [SR05]).</p>
+<p>Hình 5.4 (trang 8) minh họa một chương trình thực hiện chính xác điều này. Nguyên nhân việc chuyển hướng hoạt động được là nhờ giả định về cách hệ điều hành quản lý file descriptor: trong UNIX, hệ thống bắt đầu tìm file descriptor trống từ số 0. Trong trường hợp này, <code>STDOUT_FILENO</code> sẽ là file descriptor trống đầu tiên và được gán khi <code>open()</code> được gọi. Các lệnh ghi (write) tiếp theo của process con tới file descriptor xuất chuẩn – ví dụ qua <code>printf()</code> – sẽ được ghi vào tệp mới mở thay vì màn hình.</p>
+<p>Kết quả chạy chương trình <code>p4.c</code> như sau:</p>
+<pre><code>prompt&gt; ./p4
+prompt&gt; cat p4.output
+32
+109
+846 p4.c
+prompt&gt;
+</code></pre>
+<p>Có ít nhất <strong>hai điểm thú vị</strong> trong kết quả này:</p>
+<ol>
+<li>Khi chạy <code>p4</code>, có vẻ như không có gì xảy ra; shell chỉ in dấu nhắc lệnh và sẵn sàng cho lệnh tiếp theo. Nhưng thực tế, <code>p4</code> đã gọi <code>fork()</code> để tạo process con, sau đó chạy chương trình <code>wc</code> qua <code>execvp()</code>. Bạn không thấy kết quả trên màn hình vì nó đã được chuyển hướng vào tệp <code>p4.output</code>.</li>
+<li>Khi dùng <code>cat</code> để xem nội dung tệp <code>p4.output</code>, toàn bộ kết quả mong đợi từ <code>wc</code> đều có ở đó.</li>
+</ol>
+<p><strong>UNIX pipes</strong> (đường ống) được triển khai tương tự, nhưng sử dụng lời gọi hệ thống <code>pipe()</code>. Trong trường hợp này, đầu ra của một process được kết nối tới một <strong>in-kernel pipe</strong> (hàng đợi trong nhân hệ điều hành), và đầu vào của process khác được kết nối tới cùng pipe đó. Nhờ vậy, đầu ra của process này trở thành đầu vào của process kia một cách liền mạch, cho phép ghép chuỗi nhiều lệnh hữu ích.</p>
+<p>Ví dụ đơn giản: tìm một từ trong tệp và đếm số lần từ đó xuất hiện. Với pipe và các tiện ích <code>grep</code> và <code>wc</code>, việc này rất dễ:</p>
+<pre><code>grep -o foo file | wc -l
+</code></pre>
+<p>Nhập lệnh trên vào shell và bạn sẽ thấy kết quả ngay.</p>
+<p>Cuối cùng, mặc dù chúng ta mới chỉ phác thảo API tạo process ở mức cao, nhưng vẫn còn rất nhiều chi tiết cần tìm hiểu thêm; ví dụ, chúng ta sẽ học kỹ hơn về <strong>file descriptor</strong> khi bàn về hệ thống tệp ở phần ba của sách. Tạm thời, có thể kết luận rằng sự kết hợp <code>fork()</code>/<code>exec()</code> là một cách <strong>mạnh mẽ</strong> để tạo và điều khiển process.</p>
+<pre><code class="language-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;sys/wait.h&gt;
+
+
+int main(int argc, char *argv[]) {
+int rc = fork();
+if (rc &lt; 0) {
+// fork failed
+fprintf(stderr, &quot;fork failed\n&quot;);
+exit(1);
+} else if (rc == 0) {
+// child: redirect standard output to a file
+close(STDOUT_FILENO);
+open(&quot;./p4.output&quot;, O_CREAT|O_WRONLY|O_TRUNC,
+S_IRWXU);
+// now exec &quot;wc&quot;...
+char *myargs[3];
+myargs[0] = strdup(&quot;wc&quot;);
+// program: wc
+myargs[1] = strdup(&quot;p4.c&quot;); // arg: file to count
+myargs[2] = NULL;
+// mark end of array
+execvp(myargs[0], myargs); // runs word count
+} else {
+// parent goes down this path (main)
+int rc_wait = wait(NULL);
+}
+return 0;
+}
+
+</code></pre>
+<p>Figure 5.4: All Of The Above With Redirection (p4.c)</p>
+<h2 id="55-Điều-khiển-process-process-control-và-người-dùng-users"><a class="header" href="#55-Điều-khiển-process-process-control-và-người-dùng-users">5.5 Điều khiển process (Process Control) và Người dùng (Users)</a></h2>
+<p>Ngoài <code>fork()</code>, <code>exec()</code> và <code>wait()</code>, trong các hệ thống UNIX còn có nhiều interface khác để tương tác với <strong>process</strong> (process). Ví dụ, lời gọi hệ thống (system call) <code>kill()</code> được dùng để gửi <strong>signal</strong> (tín hiệu) tới một process, bao gồm các chỉ thị như tạm dừng (pause), kết thúc (die/terminate) và nhiều lệnh hữu ích khác.</p>
+<p>Để thuận tiện, trong hầu hết các <strong>UNIX shell</strong>, một số tổ hợp phím được cấu hình để gửi một tín hiệu cụ thể tới process đang chạy. Ví dụ:</p>
+<ul>
+<li><code>Ctrl-C</code> gửi tín hiệu <strong>SIGINT</strong> (interrupt – ngắt) tới process (thường sẽ kết thúc process đó).</li>
+<li><code>Ctrl-Z</code> gửi tín hiệu <strong>SIGTSTP</strong> (stop – dừng) để tạm dừng process khi đang excecute (bạn có thể tiếp tục process này sau bằng một lệnh, ví dụ lệnh tích hợp <code>fg</code> có trong nhiều shell).</li>
+</ul>
+<p>Toàn bộ <strong>hệ thống con signals</strong> (signals subsystem) cung cấp một hạ tầng phong phú để gửi các sự kiện bên ngoài tới process, bao gồm:</p>
+<ul>
+<li>Cách để process nhận và xử lý các tín hiệu này.</li>
+<li>Cách gửi tín hiệu tới từng process hoặc cả nhóm process (process group).</li>
+</ul>
+<p>Để sử dụng hình thức giao tiếp này, một process có thể dùng lời gọi hệ thống <code>signal()</code> để “bắt” (catch) các tín hiệu khác nhau. Khi một tín hiệu cụ thể được gửi tới process, process sẽ tạm ngừng excecute bình thường và chạy một đoạn mã được chỉ định để xử lý tín hiệu đó. (Xem [SR05] để tìm hiểu sâu hơn về signals và các chi tiết phức tạp của chúng).</p>
+<p><strong>GHI CHÚ: RTFM — Read The Man Pages</strong></p>
+<p>Nhiều lần trong cuốn sách này, khi đề cập đến một system call hoặc library call cụ thể, chúng tôi sẽ khuyên bạn đọc <strong>man pages</strong> (manual pages – trang hướng dẫn). Đây là dạng tài liệu gốc tồn tại trên các hệ thống UNIX, được tạo ra <strong>trước khi</strong> có thứ gọi là “web”.</p>
+<p>Dành thời gian đọc man pages là một bước quan trọng trong quá trình trưởng thành của một lập trình viên hệ thống; có rất nhiều thông tin hữu ích ẩn trong đó. Một số man pages đặc biệt hữu ích gồm:</p>
+<ul>
+<li>Man pages của shell bạn đang dùng (ví dụ: <code>tcsh</code>, <code>bash</code>).</li>
+<li>Man pages của bất kỳ system call nào mà chương trình của bạn sử dụng (để biết giá trị trả về và các điều kiện lỗi).</li>
+</ul>
+<p>Cuối cùng, đọc man pages còn giúp bạn tránh bối rối. Khi bạn hỏi đồng nghiệp về một chi tiết phức tạp của <code>fork()</code>, họ có thể chỉ trả lời: <strong>“RTFM”</strong>. Đây là cách họ nhẹ nhàng nhắc bạn <strong>Read The Man pages</strong>. Chữ “F” trong RTFM chỉ để thêm chút “màu sắc” cho câu nói…</p>
+<p>Điều này dẫn đến câu hỏi: <strong>Ai có thể gửi tín hiệu tới một process, và ai thì không?</strong></p>
+<p>Thông thường, hệ thống có thể được nhiều người dùng cùng lúc. Nếu một người có thể tùy ý gửi tín hiệu như <strong>SIGINT</strong> (để ngắt process, thường sẽ kết thúc nó) tới process của người khác, tính khả dụng (usability) và bảo mật (security) của hệ thống sẽ bị ảnh hưởng nghiêm trọng.</p>
+<p>Vì vậy, các hệ thống hiện đại có khái niệm chặt chẽ về <strong>user</strong> (người dùng). Sau khi nhập mật khẩu để xác thực, người dùng đăng nhập để truy cập tài nguyên hệ thống. Người dùng có thể khởi chạy một hoặc nhiều process và toàn quyền điều khiển chúng (tạm dừng, kết thúc, v.v.).</p>
+<p>Người dùng thường chỉ có thể điều khiển <strong>process của chính mình</strong>; hệ điều hành chịu trách nhiệm phân bổ tài nguyên (CPU, bộ nhớ, đĩa…) cho từng người dùng (và các process của họ) để đạt được mục tiêu tổng thể của hệ thống.</p>
+<h2 id="56-các-công-cụ-hữu-ích"><a class="header" href="#56-các-công-cụ-hữu-ích">5.6 Các công cụ hữu ích</a></h2>
+<p>Có nhiều công cụ dòng lệnh (command-line tools) rất hữu ích. Ví dụ:</p>
+<ul>
+<li>Lệnh <code>ps</code> cho phép bạn xem các process đang chạy; hãy đọc man pages để biết các tùy chọn (flags) hữu ích khi dùng <code>ps</code>.</li>
+<li>Công cụ <code>top</code> cũng rất hữu ích, hiển thị các process của hệ thống và mức độ sử dụng CPU cùng các tài nguyên khác. Thú vị là, nhiều khi bạn chạy <code>top</code>, nó tự nhận mình là process “ngốn” tài nguyên nhất – có lẽ hơi… tự mãn.</li>
+<li>Lệnh <code>kill</code> có thể được dùng để gửi tín hiệu tùy ý tới process; <code>killall</code> thân thiện hơn một chút với người dùng.</li>
+</ul>
+<p>Hãy cẩn thận khi dùng các lệnh này; nếu bạn vô tình “kill” <strong>window manager</strong> (trình quản lý cửa sổ), máy tính trước mặt bạn có thể trở nên rất khó sử dụng.</p>
+<p>Ngoài ra, có nhiều loại <strong>CPU meter</strong> (đồng hồ đo CPU) giúp bạn nhanh chóng nắm được tải (load) của hệ thống. Ví dụ, chúng tôi luôn bật <strong>MenuMeters</strong> (từ Raging Menace software) trên thanh công cụ của máy Mac để xem mức sử dụng CPU tại mọi thời điểm. Nói chung, càng có nhiều thông tin về những gì đang diễn ra, bạn càng dễ quản lý hệ thống.</p>
+<p><strong>GHI CHÚ: Superuser (Root)</strong></p>
+<p>Một hệ thống thường cần một người dùng có quyền quản trị (admin) và <strong>không bị giới hạn</strong> như người dùng thông thường. Người này có thể:</p>
+<ul>
+<li>Kết thúc (kill) bất kỳ process nào (ví dụ: nếu process đó đang gây hại cho hệ thống), ngay cả khi process đó không do họ khởi chạy.</li>
+<li>Chạy các lệnh mạnh như <code>shutdown</code> (tắt hệ thống).</li>
+</ul>
+<p>Trong các hệ thống dựa trên UNIX, các quyền đặc biệt này được trao cho <strong>superuser</strong> (còn gọi là <strong>root</strong>). Trong khi hầu hết người dùng không thể kết thúc process của người khác, superuser có thể.</p>
+<p>Làm <strong>root</strong> giống như làm Spider-Man: <em>“Quyền lực lớn đi kèm trách nhiệm lớn”</em> [QI15]. Vì vậy, để tăng cường bảo mật (và tránh sai lầm tốn kém), tốt nhất là bạn nên hoạt động như một người dùng bình thường; nếu cần trở thành root, hãy thật cẩn trọng, vì mọi “quyền năng hủy diệt” của thế giới máy tính đều nằm trong tay bạn.</p>
+<h2 id="57-tóm-tắt"><a class="header" href="#57-tóm-tắt">5.7 Tóm tắt</a></h2>
+<p>Chúng ta đã giới thiệu một số API liên quan đến việc tạo process trong UNIX: <code>fork()</code>, <code>exec()</code> và <code>wait()</code>. Tuy nhiên, đây mới chỉ là phần bề mặt. Để tìm hiểu chi tiết hơn, hãy đọc Stevens và Rago [SR05], đặc biệt các chương về <strong>Process Control</strong>, <strong>Process Relationships</strong> và <strong>Signals</strong>.</p>
+<p>Mặc dù chúng tôi đánh giá cao API process của UNIX, nhưng không phải ai cũng đồng tình. Ví dụ, một bài báo gần đây của các nhà nghiên cứu hệ thống từ Microsoft, Đại học Boston và ETH Zurich đã chỉ ra một số vấn đề với <code>fork()</code> và đề xuất các API tạo process khác, đơn giản hơn, như <code>spawn()</code> [B+19]. Hãy đọc bài báo và các tài liệu liên quan để hiểu góc nhìn khác này.</p>
+<p>Nhớ rằng, dù bạn có thể tin tưởng cuốn sách này, tác giả vẫn có quan điểm riêng; và những quan điểm đó không phải lúc nào cũng được chia sẻ rộng rãi như bạn nghĩ.</p>
+<p><strong>GHI CHÚ: Các thuật ngữ chính trong Process API</strong></p>
+<ul>
+<li>Mỗi <strong>process</strong> (process) có một tên; trong hầu hết các hệ thống, tên này là một số gọi là <strong>process ID</strong> (PID – định danh process).</li>
+<li>Lời gọi hệ thống <code>fork()</code> trong UNIX được dùng để tạo process mới. Process tạo ra gọi là <strong>parent</strong> (cha), process mới gọi là <strong>child</strong> (con). Giống như ngoài đời [J16], process con gần như là bản sao của process cha.</li>
+<li>Lời gọi hệ thống <code>wait()</code> cho phép process cha chờ process con hoàn tất excecute.</li>
+<li>Nhóm lời gọi hệ thống <code>exec()</code> cho phép process con thoát khỏi sự giống nhau với process cha và excecute một chương trình hoàn toàn mới.</li>
+<li>Một UNIX shell thường dùng <code>fork()</code>, <code>wait()</code> và <code>exec()</code> để chạy lệnh của người dùng; việc tách <code>fork</code> và <code>exec</code> cho phép thực hiện các tính năng như chuyển hướng I/O (input/output redirection), <strong>pipes</strong> và nhiều tính năng khác mà không cần</li>
+</ul>
+<h2 id="tham-khảo"><a class="header" href="#tham-khảo">Tham khảo</a></h2>
+<p>[C63] “A Multiprocessor System Design”<br />
+Melvin E. Conway<br />
+AFIPS ’63 Fall Joint Computer Conference<br />
+New York, USA 1963<br />
+An early paper on how to design multiprocessing systems; may be the first place the term fork() was used in the discussion of spawning new processes.</p>
+<p>[DV66] “Programming Semantics for Multiprogrammed Computations”<br />
+Jack B. Dennis and Earl C. Van Horn<br />
+Communications of the ACM, Volume 9, Number 3, March 1966<br />
+A classic paper that outlines the basics of multiprogrammed computer systems. Undoubtedly had great influence on Project MAC, Multics, and eventually UNIX.</p>
+<p>[L83] “Hints for Computer Systems Design”<br />
+Butler Lampson<br />
+ACM Operating Systems Review, 15:5, October 1983<br />
+Lampson’s famous hints on how to design computer systems. You should read it at some point in your life, and probably at many points in your life.</p>
+<p>[SR05] “Advanced Programming in the UNIX Environment”<br />
+W. Richard Stevens and Stephen A. Rago<br />
+Addison-Wesley, 2005<br />
+All nuances and subtleties of using UNIX APIs are found herein. Buy this book! Read it! And most importantly, live it.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../04/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../06/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../04/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../06/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

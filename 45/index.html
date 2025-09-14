@@ -1,0 +1,352 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Data Integrity and Protection - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html" class="active"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="45-tính-toàn-vẹn-và-bảo-vệ-dữ-liệu-data-integrity-and-protection"><a class="header" href="#45-tính-toàn-vẹn-và-bảo-vệ-dữ-liệu-data-integrity-and-protection">45. Tính toàn vẹn và bảo vệ dữ liệu (Data Integrity and Protection)</a></h1>
+<p>Bên cạnh những cải tiến cơ bản đã được tìm thấy trong các <strong>file system</strong> (hệ thống tệp) mà chúng ta đã nghiên cứu cho đến nay, vẫn còn một số tính năng đáng để tìm hiểu. Trong chương này, chúng ta sẽ một lần nữa tập trung vào <strong>độ tin cậy</strong> (reliability) (trước đây đã nghiên cứu về độ tin cậy của hệ thống lưu trữ trong chương về <strong>RAID</strong>). Cụ thể, một file system hoặc hệ thống lưu trữ nên làm gì để đảm bảo dữ liệu được an toàn, xét đến bản chất không đáng tin cậy của các thiết bị lưu trữ hiện đại?</p>
+<p>Lĩnh vực tổng quát này được gọi là <strong>data integrity</strong> (tính toàn vẹn dữ liệu) hoặc <strong>data protection</strong> (bảo vệ dữ liệu). Do đó, chúng ta sẽ tìm hiểu các kỹ thuật được sử dụng để đảm bảo rằng dữ liệu bạn đưa vào hệ thống lưu trữ sẽ vẫn giữ nguyên khi hệ thống lưu trữ trả lại cho bạn.</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ ĐẢM BẢO TÍNH TOÀN VẸN DỮ LIỆU</strong><br />
+Hệ thống nên làm gì để đảm bảo dữ liệu được ghi xuống lưu trữ được bảo vệ? Cần những kỹ thuật nào? Làm thế nào để các kỹ thuật này hoạt động hiệu quả, với chi phí về không gian và thời gian thấp?</p>
+</blockquote>
+</blockquote>
+<h2 id="451-các-dạng-lỗi-của-đĩa-disk-failure-modes"><a class="header" href="#451-các-dạng-lỗi-của-đĩa-disk-failure-modes">45.1 Các dạng lỗi của đĩa (Disk Failure Modes)</a></h2>
+<p>Như bạn đã học trong chương về <strong>RAID</strong>, đĩa không hoàn hảo và đôi khi có thể bị hỏng. Trong các hệ thống RAID ban đầu, mô hình lỗi khá đơn giản: hoặc toàn bộ đĩa hoạt động, hoặc nó hỏng hoàn toàn, và việc phát hiện lỗi như vậy là khá đơn giản. Mô hình lỗi <strong>fail-stop</strong> (ngừng hoạt động hoàn toàn) này khiến việc xây dựng RAID trở nên tương đối dễ dàng [S90].</p>
+<p>Điều mà bạn chưa được học là còn nhiều dạng lỗi khác mà các ổ đĩa hiện đại có thể gặp phải. Cụ thể, như Bairavasundaram và cộng sự đã nghiên cứu chi tiết [B+07, B+08], các ổ đĩa hiện đại đôi khi vẫn hoạt động gần như bình thường nhưng lại gặp khó khăn khi truy cập thành công một hoặc nhiều block. Đặc biệt, có hai loại lỗi <strong>single-block</strong> (trên một block đơn) phổ biến và đáng để xem xét: <strong>latent sector errors</strong> (LSE – lỗi sector tiềm ẩn) và <strong>block corruption</strong> (hỏng block). Chúng ta sẽ thảo luận chi tiết từng loại.</p>
+<p>...</p>
+<p><strong>Hình 45.1: Tần suất xuất hiện của LSE và Block Corruption</strong></p>
+<p><strong>LSE</strong> xảy ra khi một sector (hoặc nhóm sector) của đĩa bị hỏng theo một cách nào đó. Ví dụ, nếu <strong>đầu đọc/ghi</strong> của đĩa chạm vào bề mặt vì một lý do nào đó (<strong>head crash</strong> – sự cố đầu đọc, điều vốn không nên xảy ra trong vận hành bình thường), nó có thể làm hỏng bề mặt, khiến các bit không thể đọc được. <strong>Tia vũ trụ</strong> (cosmic rays) cũng có thể làm lật bit, dẫn đến nội dung sai. May mắn thay, <strong>in-disk error correcting codes</strong> (ECC – mã sửa lỗi tích hợp trong đĩa) được ổ đĩa sử dụng để xác định liệu các bit trên đĩa trong một block có đúng hay không, và trong một số trường hợp có thể sửa chúng; nếu dữ liệu không đúng và ổ đĩa không có đủ thông tin để sửa lỗi, ổ sẽ trả về lỗi khi có yêu cầu đọc.</p>
+<p>Cũng có những trường hợp một block của đĩa bị hỏng theo cách mà chính ổ đĩa không thể phát hiện. Ví dụ, <strong>firmware</strong> của ổ đĩa bị lỗi có thể ghi một block vào sai vị trí; trong trường hợp này, ECC của ổ đĩa cho biết nội dung block là “tốt”, nhưng từ góc nhìn của client thì block sai sẽ được trả về khi truy cập. Tương tự, một block có thể bị hỏng khi nó được truyền từ host tới ổ đĩa qua một <strong>bus</strong> bị lỗi; dữ liệu bị hỏng này sẽ được ổ đĩa lưu lại, nhưng không phải là dữ liệu mà client mong muốn. Những loại lỗi này đặc biệt nguy hiểm vì chúng là <strong>silent faults</strong> (lỗi im lặng); ổ đĩa không đưa ra bất kỳ dấu hiệu nào về vấn đề khi trả về dữ liệu bị lỗi.</p>
+<p>Prabhakaran và cộng sự mô tả quan điểm hiện đại hơn về lỗi đĩa này là <strong>mô hình lỗi fail-partial</strong> (fail-partial disk failure model) [P+05]. Trong mô hình này, đĩa vẫn có thể hỏng hoàn toàn (giống như trong mô hình <strong>fail-stop</strong> truyền thống); tuy nhiên, đĩa cũng có thể trông như vẫn hoạt động bình thường nhưng lại có một hoặc nhiều block trở nên không thể truy cập được (tức là <strong>LSE</strong> – <em>latent sector error</em>, lỗi sector tiềm ẩn) hoặc chứa nội dung sai (tức là <strong>corruption</strong> – hỏng dữ liệu). Do đó, khi truy cập một đĩa có vẻ đang hoạt động, đôi khi nó có thể trả về lỗi khi cố đọc hoặc ghi một block nhất định (<strong>non-silent partial fault</strong> – lỗi bộ phận không im lặng), và đôi khi nó có thể đơn giản trả về dữ liệu sai (<strong>silent partial fault</strong> – lỗi bộ phận im lặng).</p>
+<p>Cả hai loại lỗi này đều tương đối hiếm, nhưng thực sự hiếm đến mức nào? <strong>Hình 45.1</strong> tóm tắt một số phát hiện từ hai nghiên cứu của Bairavasundaram [B+07, B+08].</p>
+<p>Hình này cho thấy tỷ lệ phần trăm ổ đĩa xuất hiện ít nhất một LSE hoặc một lỗi hỏng block trong suốt thời gian nghiên cứu (khoảng 3 năm, trên hơn 1,5 triệu ổ đĩa). Hình cũng chia nhỏ kết quả thành hai loại: ổ “rẻ” (thường là ổ SATA) và ổ “đắt” (thường là ổ SCSI hoặc Fibre Channel). Như bạn có thể thấy, mặc dù mua ổ chất lượng cao hơn giúp giảm tần suất của cả hai loại vấn đề (khoảng một bậc độ lớn – <em>order of magnitude</em>), nhưng chúng vẫn xảy ra đủ thường xuyên để bạn cần cân nhắc kỹ cách xử lý trong hệ thống lưu trữ của mình.</p>
+<p>Một số phát hiện bổ sung về <strong>LSE</strong>:</p>
+<ul>
+<li>Ổ đắt tiền có nhiều hơn một LSE có khả năng phát sinh thêm lỗi tương đương với ổ rẻ tiền.</li>
+<li>Đối với hầu hết các ổ, tỷ lệ lỗi hàng năm tăng lên trong năm thứ hai.</li>
+<li>Số lượng LSE tăng theo kích thước đĩa.</li>
+<li>Hầu hết các ổ có LSE đều có ít hơn 50 lỗi.</li>
+<li>Ổ có LSE có khả năng phát sinh thêm LSE cao hơn.</li>
+<li>Tồn tại mức độ đáng kể của <strong>spatial locality</strong> (tính cục bộ không gian) và <strong>temporal locality</strong> (tính cục bộ thời gian).</li>
+<li><strong>Disk scrubbing</strong> (quét đĩa định kỳ) là hữu ích (hầu hết LSE được phát hiện theo cách này).</li>
+</ul>
+<p>Một số phát hiện về <strong>corruption</strong> (hỏng dữ liệu):</p>
+<ul>
+<li>Xác suất hỏng dữ liệu thay đổi rất nhiều giữa các model ổ khác nhau trong cùng một loại ổ.</li>
+<li>Ảnh hưởng của tuổi thọ khác nhau giữa các model.</li>
+<li><strong>Workload</strong> (tải công việc) và kích thước đĩa có ít tác động đến corruption.</li>
+<li>Hầu hết các ổ bị corruption chỉ có một vài lỗi hỏng.</li>
+<li>Corruption không độc lập trong cùng một ổ hoặc giữa các ổ trong RAID.</li>
+<li>Tồn tại <strong>spatial locality</strong> và một phần <strong>temporal locality</strong>.</li>
+<li>Có mối tương quan yếu giữa corruption và LSE.</li>
+</ul>
+<p>Để tìm hiểu thêm về các lỗi này, bạn nên đọc các bài báo gốc [B+07, B+08]. Nhưng hy vọng rằng điểm chính đã rõ: nếu bạn thực sự muốn xây dựng một hệ thống lưu trữ đáng tin cậy, bạn phải tích hợp cơ chế để <strong>phát hiện</strong> và <strong>khôi phục</strong> cả LSE và block corruption.</p>
+<h2 id="452-xử-lý-lỗi-sector-tiềm-ẩn-handling-latent-sector-errors"><a class="header" href="#452-xử-lý-lỗi-sector-tiềm-ẩn-handling-latent-sector-errors">45.2 Xử lý lỗi sector tiềm ẩn (Handling Latent Sector Errors)</a></h2>
+<p>Với hai dạng lỗi bộ phận (partial disk failure) mới này, chúng ta cần xem có thể làm gì để xử lý chúng. Trước tiên, hãy giải quyết dạng dễ hơn, đó là <strong>latent sector errors</strong> (LSE – lỗi sector tiềm ẩn).</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: CÁCH XỬ LÝ LỖI SECTOR TIỀM ẨN</strong><br />
+Hệ thống lưu trữ nên xử lý lỗi sector tiềm ẩn như thế nào? Cần thêm bao nhiêu cơ chế bổ sung để xử lý dạng lỗi bộ phận này?</p>
+</blockquote>
+</blockquote>
+<p>Thực tế, lỗi LSE khá đơn giản để xử lý, vì chúng (theo định nghĩa) dễ dàng được phát hiện. Khi một hệ thống lưu trữ cố gắng truy cập một block và ổ đĩa trả về lỗi, hệ thống lưu trữ chỉ cần sử dụng bất kỳ cơ chế <strong>redundancy</strong> (dự phòng) nào mà nó có để trả lại dữ liệu đúng. Ví dụ, trong một hệ thống <strong>RAID</strong> dạng mirror, hệ thống sẽ truy cập bản sao thay thế; trong hệ thống RAID-4 hoặc RAID-5 dựa trên <strong>parity</strong> (chẵn lẻ), hệ thống sẽ tái tạo block từ các block khác trong nhóm parity. Do đó, các vấn đề dễ phát hiện như LSE có thể được khôi phục dễ dàng thông qua các cơ chế dự phòng tiêu chuẩn.</p>
+<p>Sự gia tăng của LSE theo thời gian đã ảnh hưởng đến thiết kế RAID. Một vấn đề đặc biệt thú vị xuất hiện trong các hệ thống RAID-4/5 khi cả lỗi toàn bộ đĩa (<strong>full-disk fault</strong>) và LSE xảy ra đồng thời. Cụ thể, khi một ổ đĩa hỏng hoàn toàn, RAID sẽ cố gắng tái tạo ổ đĩa đó (ví dụ, sang một <strong>hot spare</strong>) bằng cách đọc toàn bộ các ổ còn lại trong nhóm parity và tính toán lại các giá trị bị thiếu. Nếu trong quá trình tái tạo, một LSE được phát hiện trên bất kỳ ổ nào khác, chúng ta sẽ gặp vấn đề: quá trình tái tạo không thể hoàn tất thành công.</p>
+<p>Để giải quyết vấn đề này, một số hệ thống bổ sung thêm mức độ dự phòng. Ví dụ, <strong>RAID-DP</strong> của NetApp có tương đương với hai ổ parity thay vì một [C+04]. Khi một LSE được phát hiện trong quá trình tái tạo, parity bổ sung sẽ giúp tái tạo block bị thiếu. Tất nhiên, điều này có chi phí: duy trì hai block parity cho mỗi stripe tốn kém hơn; tuy nhiên, bản chất <strong>log-structured</strong> của file system <strong>NetApp WAFL</strong> giúp giảm chi phí này trong nhiều trường hợp [HLM94]. Chi phí còn lại là dung lượng lưu trữ, dưới dạng một ổ đĩa bổ sung cho block parity thứ hai.</p>
+<h2 id="453-phát-hiện-lỗi-hỏng-dữ-liệu-checksum-detecting-corruption-the-checksum"><a class="header" href="#453-phát-hiện-lỗi-hỏng-dữ-liệu-checksum-detecting-corruption-the-checksum">45.3 Phát hiện lỗi hỏng dữ liệu: Checksum (Detecting Corruption: The Checksum)</a></h2>
+<p>Bây giờ, hãy giải quyết vấn đề khó hơn: các lỗi im lặng (<strong>silent failures</strong>) do <strong>data corruption</strong> (hỏng dữ liệu). Làm thế nào để ngăn người dùng nhận dữ liệu sai khi corruption xảy ra và khiến ổ đĩa trả về dữ liệu không chính xác?</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: CÁCH BẢO TOÀN TÍNH TOÀN VẸN DỮ LIỆU KHI XẢY RA CORRUPTION</strong><br />
+Với bản chất im lặng của các lỗi này, hệ thống lưu trữ có thể làm gì để phát hiện khi corruption xảy ra? Cần những kỹ thuật nào? Làm thế nào để triển khai chúng một cách hiệu quả?</p>
+</blockquote>
+</blockquote>
+<p>Không giống như LSE, việc phát hiện corruption là một vấn đề then chốt. Làm thế nào để client biết rằng một block đã bị hỏng? Khi đã biết block cụ thể bị hỏng, quá trình khôi phục cũng giống như trước: bạn cần có một bản sao khác của block đó (và hy vọng là bản sao này không bị hỏng!). Do đó, ở đây chúng ta tập trung vào các kỹ thuật phát hiện.</p>
+<p>Cơ chế chính mà các hệ thống lưu trữ hiện đại sử dụng để bảo toàn <strong>data integrity</strong> (tính toàn vẹn dữ liệu) được gọi là <strong>checksum</strong>. Checksum đơn giản là kết quả của một hàm nhận vào một khối dữ liệu (ví dụ: một block 4KB) và tính toán một giá trị dựa trên dữ liệu đó, tạo ra một bản tóm tắt nhỏ về nội dung dữ liệu (ví dụ: 4 hoặc 8 byte). Bản tóm tắt này được gọi là checksum. Mục tiêu của phép tính này là cho phép hệ thống phát hiện nếu dữ liệu bị hỏng hoặc bị thay đổi bằng cách lưu checksum cùng với dữ liệu và sau đó, khi truy cập lại, xác nhận rằng checksum hiện tại của dữ liệu khớp với giá trị checksum ban đầu đã lưu.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: KHÔNG CÓ BỮA TRƯA MIỄN PHÍ</strong><br />
+“There’s No Such Thing As A Free Lunch” (TNSTAAFL) là một thành ngữ Mỹ cổ, ngụ ý rằng khi bạn tưởng như đang nhận được thứ gì đó miễn phí, thực tế bạn vẫn phải trả một cái giá nào đó. Thành ngữ này bắt nguồn từ thời các quán ăn quảng cáo bữa trưa miễn phí để thu hút khách; chỉ khi bước vào, bạn mới nhận ra rằng để có được “bữa trưa miễn phí” đó, bạn phải mua một hoặc nhiều đồ uống có cồn. Tất nhiên, điều này có thể không phải là vấn đề, đặc biệt nếu bạn là một người thích uống rượu (hoặc một sinh viên đại học điển hình).</p>
+</blockquote>
+</blockquote>
+<h3 id="các-hàm-checksum-phổ-biến-common-checksum-functions"><a class="header" href="#các-hàm-checksum-phổ-biến-common-checksum-functions">Các hàm Checksum phổ biến (Common Checksum Functions)</a></h3>
+<p>Có nhiều hàm khác nhau được sử dụng để tính <strong>checksum</strong>, và chúng khác nhau về <strong>độ mạnh</strong> (strength – tức là khả năng bảo vệ tính toàn vẹn dữ liệu tốt đến mức nào) và <strong>tốc độ</strong> (speed – tức là tốc độ tính toán). Một sự đánh đổi (trade-off) phổ biến trong các hệ thống xuất hiện ở đây: thường thì, càng bảo vệ tốt hơn thì chi phí càng cao. Không có cái gọi là “bữa trưa miễn phí”.</p>
+<p>Một hàm checksum đơn giản mà một số hệ thống sử dụng dựa trên phép <strong>exclusive or (XOR)</strong>. Với checksum dựa trên XOR, giá trị checksum được tính bằng cách XOR từng phần (chunk) của block dữ liệu cần tính checksum, từ đó tạo ra một giá trị duy nhất đại diện cho XOR của toàn bộ block.</p>
+<p>Để minh họa cụ thể hơn, giả sử chúng ta đang tính một checksum 4 byte cho một block 16 byte (block này tất nhiên là quá nhỏ để thực tế là một sector hoặc block đĩa, nhưng sẽ dùng cho ví dụ). 16 byte dữ liệu, ở dạng hex, như sau:</p>
+<pre><code>365e c4cd ba14 8a92 ecef 2c3a 40be f666
+</code></pre>
+<p>Nếu biểu diễn ở dạng nhị phân, ta có:</p>
+<pre><code>0011 0110    0101 1110    1100 0100    1100 1101
+1011 1010    0001 0100    1000 1010    1001 0010
+1110 1100    1110 1111    0010 1100    0011 1010
+0100 0000    1011 1110    1111 0110    0110 0110
+</code></pre>
+<p>Vì chúng ta đã sắp xếp dữ liệu thành các nhóm 4 byte mỗi hàng, nên dễ dàng thấy giá trị checksum sẽ là gì: thực hiện phép XOR trên từng cột để có giá trị checksum cuối cùng:</p>
+<pre><code>0010 0000 0001 1011    1001 0100 0000 0011
+</code></pre>
+<p>Kết quả, ở dạng hex, là <code>0x201b9403</code>.</p>
+<p>XOR là một checksum hợp lý nhưng có hạn chế. Ví dụ, nếu hai bit ở cùng một vị trí trong mỗi đơn vị được tính checksum thay đổi, checksum sẽ không phát hiện ra lỗi. Vì lý do này, người ta đã nghiên cứu các hàm checksum khác.</p>
+<p>Một hàm checksum cơ bản khác là <strong>cộng</strong> (addition). Cách tiếp cận này có ưu điểm là nhanh; việc tính toán chỉ yêu cầu thực hiện phép cộng bù 2 (<strong>2’s-complement addition</strong>) trên từng phần dữ liệu, bỏ qua tràn số (overflow). Nó có thể phát hiện nhiều thay đổi trong dữ liệu, nhưng không tốt nếu dữ liệu, chẳng hạn, bị dịch chuyển.</p>
+<p>Một thuật toán phức tạp hơn một chút được gọi là <strong>Fletcher checksum</strong>, đặt theo tên của nhà phát minh John G. Fletcher [F82]. Nó khá đơn giản để tính toán và bao gồm việc tính hai byte kiểm tra, <code>s1</code> và <code>s2</code>. Cụ thể, giả sử một block D gồm các byte <code>d1 ... dn</code>; <code>s1</code> được định nghĩa như sau:<br />
+<code>s1 = (s1 + di) mod 255</code> (tính trên tất cả <code>di</code>);<br />
+<code>s2</code> lần lượt là:<br />
+<code>s2 = (s2 + s1) mod 255</code> (cũng tính trên tất cả <code>di</code>) [F04].<br />
+Fletcher checksum gần mạnh như <strong>CRC</strong> (xem bên dưới), phát hiện tất cả lỗi 1 bit, 2 bit, và nhiều lỗi dạng burst [F04].</p>
+<p>Một checksum phổ biến khác là <strong>cyclic redundancy check (CRC)</strong>. Giả sử bạn muốn tính checksum cho một block dữ liệu D. Tất cả những gì bạn làm là coi D như một số nhị phân lớn (thực chất nó chỉ là một chuỗi bit) và chia nó cho một giá trị k đã được thống nhất. Phần dư của phép chia này chính là giá trị CRC. Thực tế, phép chia modulo nhị phân này có thể được triển khai khá hiệu quả, và đó là lý do CRC cũng rất phổ biến trong mạng máy tính. Xem thêm chi tiết ở [M13].</p>
+<p>Dù sử dụng phương pháp nào, rõ ràng là không có checksum nào hoàn hảo: có thể tồn tại hai block dữ liệu với nội dung khác nhau nhưng có cùng checksum, hiện tượng này gọi là <strong>collision</strong> (xung đột). Điều này là trực quan: sau cùng, tính checksum là lấy một thứ lớn (ví dụ: 4KB) và tạo ra một bản tóm tắt nhỏ hơn nhiều (ví dụ: 4 hoặc 8 byte). Khi chọn một hàm checksum tốt, chúng ta cố gắng tìm một hàm giảm thiểu khả năng xảy ra collision trong khi vẫn dễ tính toán.</p>
+<h3 id="bố-trí-checksum-checksum-layout"><a class="header" href="#bố-trí-checksum-checksum-layout">Bố trí Checksum (Checksum Layout)</a></h3>
+<p>Bây giờ bạn đã hiểu phần nào cách tính checksum, hãy phân tích cách sử dụng checksum trong một hệ thống lưu trữ. Câu hỏi đầu tiên cần giải quyết là <strong>bố trí checksum</strong> – tức là checksum nên được lưu trên đĩa như thế nào?</p>
+<p>Cách cơ bản nhất là lưu một checksum cùng với mỗi sector (hoặc block) của đĩa. Cho một block dữ liệu D, gọi checksum của dữ liệu đó là C(D). Như vậy, nếu không có checksum, bố cục đĩa sẽ như sau:</p>
+<p>...</p>
+<p>Với checksum, bố cục sẽ thêm một checksum cho mỗi block:</p>
+<p>...</p>
+<p>Vì checksum thường nhỏ (ví dụ: 8 byte), và đĩa chỉ có thể ghi theo đơn vị sector (512 byte) hoặc bội số của nó, một vấn đề phát sinh là làm thế nào để đạt được bố cục trên. Một giải pháp mà các nhà sản xuất ổ đĩa áp dụng là định dạng ổ với sector 520 byte; thêm 8 byte mỗi sector để lưu checksum.</p>
+<p>Trong các ổ đĩa không có chức năng này, file system phải tìm cách lưu checksum được đóng gói vào các block 512 byte. Một khả năng như sau:</p>
+<p>...</p>
+<p>Trong sơ đồ này, n checksum được lưu cùng nhau trong một sector, tiếp theo là n block dữ liệu, tiếp theo là một sector checksum khác cho n block tiếp theo, và cứ thế tiếp diễn. Cách tiếp cận này có ưu điểm là hoạt động trên mọi loại đĩa, nhưng có thể kém hiệu quả hơn; nếu file system, chẳng hạn, muốn ghi đè block D1, nó phải đọc sector checksum chứa C(D1), cập nhật C(D1) trong đó, rồi ghi lại sector checksum và block dữ liệu mới D1 (tức là một lần đọc và hai lần ghi). Cách tiếp cận trước đó (một checksum cho mỗi sector) chỉ cần thực hiện một lần ghi.</p>
+<h2 id="454-sử-dụng-checksum-using-checksums"><a class="header" href="#454-sử-dụng-checksum-using-checksums">45.4 Sử dụng Checksum (Using Checksums)</a></h2>
+<p>Khi đã quyết định được <strong>bố trí checksum</strong> (checksum layout), chúng ta có thể tiến hành tìm hiểu cách sử dụng checksum trong thực tế. Khi đọc một block D, <strong>client</strong> (tức là file system hoặc bộ điều khiển lưu trữ – storage controller) cũng sẽ đọc checksum của block đó từ đĩa, ký hiệu là ( C_s(D) ), gọi là <strong>stored checksum</strong> (checksum đã lưu – do đó có chỉ số dưới ( C_s )).</p>
+<p>Client sau đó tính toán checksum trên block D vừa đọc được, gọi là <strong>computed checksum</strong> ( C_c(D) ). Tại thời điểm này, client so sánh checksum đã lưu và checksum vừa tính:</p>
+<ul>
+<li>Nếu chúng bằng nhau (tức là ( C_s(D) == C_c(D) )), dữ liệu <strong>nhiều khả năng</strong> chưa bị hỏng và có thể an toàn trả về cho người dùng.</li>
+<li>Nếu chúng <strong>không</strong> bằng nhau (tức là ( C_s(D) \neq C_c(D) )), điều này ngụ ý dữ liệu đã thay đổi kể từ thời điểm lưu trữ (vì checksum đã lưu phản ánh giá trị dữ liệu tại thời điểm đó). Trong trường hợp này, chúng ta đã phát hiện ra <strong>corruption</strong> (hỏng dữ liệu) nhờ checksum.</li>
+</ul>
+<p>Khi phát hiện corruption, câu hỏi tự nhiên là: <strong>chúng ta nên làm gì?</strong></p>
+<ul>
+<li>Nếu hệ thống lưu trữ có một bản sao dự phòng (<strong>redundant copy</strong>), câu trả lời rất đơn giản: hãy thử sử dụng bản sao đó.</li>
+<li>Nếu hệ thống lưu trữ <strong>không</strong> có bản sao dự phòng, khả năng cao là phải trả về lỗi.</li>
+</ul>
+<p>Dù trong trường hợp nào, cần nhận thức rằng việc phát hiện corruption <strong>không</strong> phải là “viên đạn bạc” (magic bullet); nếu không có cách nào khác để lấy dữ liệu không bị hỏng, thì đơn giản là bạn đã <strong>hết cách</strong>.</p>
+<h2 id="455-một-vấn-đề-mới-misdirected-writes-ghi-sai-hướng"><a class="header" href="#455-một-vấn-đề-mới-misdirected-writes-ghi-sai-hướng">45.5 Một vấn đề mới: Misdirected Writes (Ghi sai hướng)</a></h2>
+<p>Cơ chế cơ bản được mô tả ở trên hoạt động tốt trong hầu hết các trường hợp block bị hỏng. Tuy nhiên, các ổ đĩa hiện đại có một số dạng lỗi bất thường cần giải pháp khác.</p>
+<p>Dạng lỗi đầu tiên đáng chú ý được gọi là <strong>misdirected write</strong> (ghi sai hướng). Lỗi này xảy ra trong ổ đĩa hoặc bộ điều khiển RAID, khi dữ liệu được ghi xuống đĩa <strong>đúng</strong> về nội dung nhưng <strong>sai vị trí</strong>.</p>
+<ul>
+<li>Trong hệ thống <strong>một ổ đĩa</strong>, điều này có nghĩa là ổ đĩa ghi block ( D_x ) <strong>không</strong> vào địa chỉ x (như mong muốn) mà lại vào địa chỉ y (do đó “làm hỏng” ( D_y )).</li>
+<li>Trong hệ thống <strong>nhiều ổ đĩa</strong>, bộ điều khiển có thể ghi ( D_{i,x} ) <strong>không</strong> vào địa chỉ x của ổ i mà lại vào một ổ khác j.</li>
+</ul>
+<p>Do đó, câu hỏi đặt ra là:</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: CÁCH XỬ LÝ MISDIRECTED WRITES</strong><br />
+Hệ thống lưu trữ hoặc bộ điều khiển đĩa nên phát hiện misdirected writes như thế nào? Checksum cần bổ sung thêm tính năng gì?</p>
+</blockquote>
+</blockquote>
+<p>Câu trả lời, không có gì ngạc nhiên, là khá đơn giản: <strong>thêm một chút thông tin</strong> vào mỗi checksum. Trong trường hợp này, việc thêm <strong>physical identifier</strong> (ID vật lý) là rất hữu ích.</p>
+<p>Ví dụ: nếu thông tin được lưu trữ hiện tại bao gồm cả checksum ( C(D) ) <strong>và</strong> số hiệu ổ đĩa cùng số sector của block, thì client có thể dễ dàng xác định liệu dữ liệu đúng có đang nằm ở đúng vị trí hay không.</p>
+<p>Cụ thể, nếu client đang đọc block 4 trên ổ 10 (( D_{10,4} )), thông tin đã lưu nên bao gồm số hiệu ổ đĩa và offset sector, như minh họa bên dưới. Nếu thông tin này không khớp, tức là đã xảy ra <strong>misdirected write</strong>, và corruption được phát hiện.</p>
+<p>Dưới đây là ví dụ về thông tin bổ sung này trong một hệ thống hai ổ đĩa. Lưu ý rằng hình minh họa này, giống như các hình trước, <strong>không theo tỷ lệ</strong> (not to scale), vì checksum thường rất nhỏ (ví dụ: 8 byte) trong khi block dữ liệu lớn hơn nhiều (ví dụ: 4 KB hoặc hơn).</p>
+<p>Từ <strong>định dạng trên đĩa</strong> (on-disk format), bạn có thể thấy hiện tại có một lượng đáng kể thông tin dư thừa (<strong>redundancy</strong>) trên đĩa:</p>
+<ul>
+<li>Với mỗi block, số hiệu ổ đĩa được lặp lại bên trong block đó.</li>
+<li>Offset của block cũng được lưu ngay bên cạnh block.</li>
+</ul>
+<p>Sự hiện diện của thông tin dư thừa này không có gì bất ngờ; <strong>redundancy</strong> chính là chìa khóa để <strong>phát hiện lỗi</strong> (trong trường hợp này) và <strong>khôi phục</strong> (trong các trường hợp khác). Một chút thông tin bổ sung, dù không thực sự cần thiết với các ổ đĩa “hoàn hảo”, vẫn có thể giúp ích rất nhiều trong việc phát hiện các tình huống sự cố nếu chúng xảy ra.</p>
+<h2 id="456-một-vấn-đề-cuối-cùng-lost-writes-ghi-bị-mất"><a class="header" href="#456-một-vấn-đề-cuối-cùng-lost-writes-ghi-bị-mất">45.6 Một vấn đề cuối cùng: Lost Writes (Ghi bị mất)</a></h2>
+<p>Thật không may, <strong>misdirected writes</strong> (ghi sai hướng) không phải là vấn đề cuối cùng mà chúng ta cần đề cập. Cụ thể, một số thiết bị lưu trữ hiện đại còn gặp một vấn đề gọi là <strong>lost write</strong> (ghi bị mất), xảy ra khi thiết bị thông báo cho tầng trên rằng một thao tác ghi đã hoàn tất, nhưng trên thực tế dữ liệu đó <strong>không</strong> được lưu bền vững; do đó, những gì còn lại trên block là nội dung cũ thay vì nội dung mới đã được cập nhật.</p>
+<p>Câu hỏi hiển nhiên ở đây là: liệu bất kỳ chiến lược <strong>checksumming</strong> (tính checksum) nào ở trên (ví dụ: checksum cơ bản, hoặc <strong>physical identity</strong> – định danh vật lý) có giúp phát hiện lost write hay không?<br />
+Đáng tiếc, câu trả lời là <strong>không</strong>: block cũ nhiều khả năng vẫn có checksum khớp, và <strong>physical ID</strong> được sử dụng ở trên (số hiệu ổ đĩa và offset block) cũng sẽ đúng. Do đó, chúng ta có vấn đề cuối cùng:</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: CÁCH XỬ LÝ LOST WRITES</strong><br />
+Hệ thống lưu trữ hoặc bộ điều khiển đĩa nên phát hiện lost write như thế nào? Checksum cần bổ sung thêm tính năng gì?</p>
+</blockquote>
+</blockquote>
+<p>Có một số giải pháp khả thi có thể giúp [K+08]. Một cách tiếp cận kinh điển [BS04] là thực hiện <strong>write verify</strong> hoặc <strong>read-after-write</strong>; bằng cách đọc lại ngay dữ liệu sau khi ghi, hệ thống có thể đảm bảo rằng dữ liệu thực sự đã được ghi xuống bề mặt đĩa. Tuy nhiên, cách tiếp cận này khá chậm, vì làm tăng gấp đôi số lượng I/O cần thiết để hoàn tất một thao tác ghi.</p>
+<p>Một số hệ thống thêm checksum ở một vị trí khác trong hệ thống để phát hiện lost write. Ví dụ, <strong>Zettabyte File System (ZFS)</strong> của Sun bao gồm một checksum trong mỗi <strong>inode</strong> của file system và trong các <strong>indirect block</strong> cho mọi block thuộc về một file. Do đó, ngay cả khi thao tác ghi vào một data block bị mất, checksum trong inode sẽ không khớp với dữ liệu cũ. Chỉ khi cả thao tác ghi vào inode và ghi vào dữ liệu đều bị mất đồng thời thì cơ chế này mới thất bại – một tình huống khó xảy ra (nhưng đáng tiếc là vẫn có thể!).</p>
+<h2 id="457-scrubbing-quét-kiểm-tra-đĩa"><a class="header" href="#457-scrubbing-quét-kiểm-tra-đĩa">45.7 Scrubbing (Quét kiểm tra đĩa)</a></h2>
+<p>Với tất cả những gì đã thảo luận, bạn có thể tự hỏi: <strong>khi nào</strong> các checksum này thực sự được kiểm tra? Tất nhiên, một phần việc kiểm tra diễn ra khi dữ liệu được ứng dụng truy cập, nhưng phần lớn dữ liệu hiếm khi được truy cập, và do đó sẽ <strong>không</strong> được kiểm tra. Dữ liệu không được kiểm tra là một vấn đề đối với hệ thống lưu trữ đáng tin cậy, vì <strong>bit rot</strong> (sự suy giảm bit theo thời gian) có thể cuối cùng ảnh hưởng đến tất cả các bản sao của một dữ liệu nhất định.</p>
+<p>Để khắc phục vấn đề này, nhiều hệ thống sử dụng <strong>disk scrubbing</strong> (quét kiểm tra đĩa) dưới nhiều hình thức khác nhau [K+08]. Bằng cách định kỳ đọc qua <strong>từng block</strong> của hệ thống và kiểm tra xem checksum có còn hợp lệ hay không, hệ thống lưu trữ có thể giảm khả năng tất cả các bản sao của một dữ liệu nào đó bị hỏng. Các hệ thống điển hình thường lên lịch quét vào ban đêm hoặc hàng tuần.</p>
+<h2 id="458-chi-phí-overheads-của-việc-sử-dụng-checksum"><a class="header" href="#458-chi-phí-overheads-của-việc-sử-dụng-checksum">45.8 Chi phí (Overheads) của việc sử dụng Checksum</a></h2>
+<p>Trước khi kết thúc, chúng ta sẽ thảo luận về một số <strong>overhead</strong> (chi phí phụ trội) khi sử dụng <strong>checksum</strong> để bảo vệ dữ liệu. Giống như nhiều hệ thống máy tính khác, có hai loại overhead riêng biệt: <strong>overhead về không gian</strong> (space) và <strong>overhead về thời gian</strong> (time).</p>
+<p><strong>Overhead về không gian</strong> có hai dạng:</p>
+<ul>
+<li>
+<p><strong>Thứ nhất</strong> là trên đĩa (hoặc phương tiện lưu trữ khác) – mỗi checksum được lưu sẽ chiếm một phần dung lượng trên đĩa, phần này không thể dùng cho dữ liệu người dùng. Một tỷ lệ điển hình có thể là một checksum 8 byte cho mỗi block dữ liệu 4 KB, tương đương với khoảng <strong>0,19% overhead dung lượng trên đĩa</strong>.</p>
+</li>
+<li>
+<p><strong>Thứ hai</strong> là trong bộ nhớ của hệ thống. Khi truy cập dữ liệu, bộ nhớ phải có chỗ chứa cả checksum và dữ liệu. Tuy nhiên, nếu hệ thống chỉ kiểm tra checksum rồi loại bỏ nó sau khi xong, overhead này chỉ tồn tại trong thời gian ngắn và không đáng lo ngại. Chỉ khi checksum được giữ lại trong bộ nhớ (để tăng mức bảo vệ chống lại <strong>memory corruption</strong> – lỗi hỏng dữ liệu trong bộ nhớ [Z+13]) thì overhead nhỏ này mới trở nên đáng chú ý.</p>
+</li>
+</ul>
+<p>Mặc dù overhead về không gian là nhỏ, nhưng <strong>overhead về thời gian</strong> do việc tính toán checksum có thể khá đáng kể. Tối thiểu, <strong>CPU</strong> phải tính toán checksum cho mỗi block, cả khi dữ liệu được lưu (để xác định giá trị checksum sẽ lưu) và khi dữ liệu được truy cập (để tính lại checksum và so sánh với checksum đã lưu).</p>
+<p>Một cách tiếp cận để giảm overhead CPU – được nhiều hệ thống sử dụng checksum áp dụng (bao gồm cả <strong>network stack</strong>) – là <strong>kết hợp việc sao chép dữ liệu và tính checksum thành một hoạt động duy nhất</strong>; vì việc sao chép là cần thiết (ví dụ: sao chép dữ liệu từ <strong>kernel page cache</strong> sang <strong>user buffer</strong>), nên việc kết hợp sao chép/tính checksum có thể rất hiệu quả.</p>
+<p>Ngoài overhead CPU, một số cơ chế checksumming có thể gây thêm <strong>overhead I/O</strong>, đặc biệt khi checksum được lưu tách biệt khỏi dữ liệu (dẫn đến cần thêm I/O để truy cập chúng), và cho bất kỳ I/O bổ sung nào cần cho quá trình <strong>background scrubbing</strong> (quét kiểm tra nền).</p>
+<ul>
+<li>Trường hợp đầu tiên có thể giảm bằng thiết kế.</li>
+<li>Trường hợp thứ hai có thể điều chỉnh để giới hạn tác động, ví dụ bằng cách kiểm soát thời điểm thực hiện scrubbing.</li>
+</ul>
+<p>Thời điểm giữa đêm, khi hầu hết (nhưng không phải tất cả!) những người làm việc năng suất đã đi ngủ, có thể là lúc thích hợp để thực hiện scrubbing và tăng độ bền vững của hệ thống lưu trữ.</p>
+<h2 id="459-tóm-tắt-summary"><a class="header" href="#459-tóm-tắt-summary">45.9 Tóm tắt (Summary)</a></h2>
+<p>Chúng ta đã thảo luận về <strong>bảo vệ dữ liệu</strong> trong các hệ thống lưu trữ hiện đại, tập trung vào việc triển khai và sử dụng <strong>checksum</strong>. Các loại checksum khác nhau bảo vệ chống lại các loại lỗi khác nhau; khi các thiết bị lưu trữ phát triển, chắc chắn sẽ xuất hiện các dạng lỗi mới.</p>
+<p>Có thể những thay đổi này sẽ buộc cộng đồng nghiên cứu và ngành công nghiệp phải xem xét lại một số phương pháp cơ bản này, hoặc phát minh ra những phương pháp hoàn toàn mới. Thời gian sẽ trả lời. Hoặc cũng có thể không. Thời gian vốn dĩ thú vị theo cách đó.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../44/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../48/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../44/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../48/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

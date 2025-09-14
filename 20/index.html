@@ -1,0 +1,339 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Paging: Smaller Tables - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html" class="active"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như một chương trong giáo trình.</p>
+<h1 id="20-paging-smaller-tables"><a class="header" href="#20-paging-smaller-tables">20 Paging: Smaller Tables</a></h1>
+<p>(Paging: Bảng trang nhỏ hơn)</p>
+<p>Chúng ta sẽ giải quyết vấn đề thứ hai mà <strong>paging</strong> (phân trang) gây ra: <strong>page table</strong> (bảng trang) quá lớn và tiêu tốn quá nhiều bộ nhớ. Hãy bắt đầu với <strong>linear page table</strong> (bảng trang tuyến tính). Như bạn có thể nhớ<sup class="footnote-reference"><a href="#1">1</a></sup>, linear page table có thể rất lớn. Giả sử một <strong>address space</strong> (không gian địa chỉ) 32-bit (2^32 byte), với <strong>page</strong> 4KB (2^12 byte) và mỗi <strong>page-table entry</strong> (PTE — mục bảng trang) có kích thước 4 byte. Một address space như vậy sẽ có khoảng một triệu <strong>virtual pages</strong> (trang ảo) (2^32 / 2^12); nhân với kích thước mỗi PTE, ta thấy page table có kích thước 4MB. Cũng cần nhớ: thông thường, mỗi <strong>process</strong> (tiến trình) trong hệ thống sẽ có một page table riêng! Với 100 process đang hoạt động (không hiếm trong hệ thống hiện đại), chúng ta sẽ phải cấp phát hàng trăm MB bộ nhớ chỉ để lưu page table! Do đó, chúng ta cần tìm các kỹ thuật để giảm gánh nặng này. Có khá nhiều kỹ thuật, vậy hãy bắt đầu. Nhưng trước tiên, là một điểm mấu chốt:</p>
+<blockquote>
+<p><strong>CRUX: HOW TO MAKE PAGE TABLES SMALLER?</strong><br />
+(Làm thế nào để làm nhỏ page table?)<br />
+Các page table dạng mảng đơn giản (thường gọi là linear page table) quá lớn, chiếm quá nhiều bộ nhớ trong các hệ thống thông thường. Làm thế nào để làm nhỏ page table? Ý tưởng chính là gì? Những sự kém hiệu quả nào sẽ phát sinh từ các cấu trúc dữ liệu mới này?</p>
+</blockquote>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Hoặc có thể bạn không nhớ; cơ chế paging này đang trở nên khá phức tạp, đúng không? Dù sao, hãy luôn đảm bảo rằng bạn hiểu rõ vấn đề mình đang giải quyết trước khi chuyển sang phần giải pháp; thực tế, nếu bạn hiểu rõ vấn đề, bạn thường có thể tự suy ra giải pháp. Ở đây, vấn đề đã rõ: linear page table đơn giản (dạng mảng) là quá lớn.</p>
+</div>
+<h2 id="201-simple-solution-bigger-pages"><a class="header" href="#201-simple-solution-bigger-pages">20.1 Simple Solution: Bigger Pages</a></h2>
+<p>(Giải pháp đơn giản: Page lớn hơn)</p>
+<p>Chúng ta có thể giảm kích thước page table theo một cách đơn giản: sử dụng page lớn hơn. Lấy lại ví dụ address space 32-bit, nhưng lần này giả sử page có kích thước 16KB. Khi đó, chúng ta sẽ có <strong>VPN</strong> (virtual page number) 18-bit và <strong>offset</strong> 14-bit. Giữ nguyên kích thước mỗi PTE là 4 byte, ta sẽ có 2^18 entry trong linear page table, tức tổng kích thước là 1MB cho mỗi page table — giảm 4 lần so với ban đầu (không ngạc nhiên, mức giảm này phản ánh đúng mức tăng gấp 4 của kích thước page).</p>
+<blockquote>
+<p><strong>ASIDE: MULTIPLE PAGE SIZES</strong><br />
+(Nhiều kích thước page)<br />
+Nhiều kiến trúc (ví dụ: MIPS, SPARC, x86-64) hiện hỗ trợ nhiều kích thước page. Thông thường, kích thước page nhỏ (4KB hoặc 8KB) được sử dụng. Tuy nhiên, nếu một ứng dụng “thông minh” yêu cầu, một page lớn duy nhất (ví dụ: 4MB) có thể được dùng cho một phần cụ thể của address space, cho phép ứng dụng đặt một <strong>data structure</strong> (cấu trúc dữ liệu) lớn và thường xuyên được sử dụng vào đó, đồng thời chỉ tiêu tốn một entry trong <strong>TLB</strong>. Kiểu sử dụng page lớn này phổ biến trong <strong>database management systems</strong> (hệ quản trị cơ sở dữ liệu) và các ứng dụng thương mại cao cấp khác. Lý do chính của việc hỗ trợ nhiều kích thước page không phải để tiết kiệm không gian page table, mà là để giảm áp lực lên TLB, cho phép chương trình truy cập nhiều hơn vào address space của nó mà không gặp quá nhiều <strong>TLB misses</strong>. Tuy nhiên, như các nghiên cứu đã chỉ ra [N+02], việc sử dụng nhiều kích thước page khiến <strong>virtual memory manager</strong> (bộ quản lý bộ nhớ ảo) của OS trở nên phức tạp hơn đáng kể, và do đó page lớn đôi khi dễ sử dụng nhất khi OS cung cấp một giao diện mới để ứng dụng yêu cầu trực tiếp.</p>
+</blockquote>
+<p>Vấn đề lớn của cách tiếp cận này là page lớn dẫn đến lãng phí bên trong mỗi page, gọi là <strong>internal fragmentation</strong> (phân mảnh bên trong — vì phần lãng phí nằm bên trong đơn vị cấp phát). Ứng dụng có thể cấp phát page nhưng chỉ dùng một phần nhỏ, khiến bộ nhớ nhanh chóng bị lấp đầy bởi các page quá lớn này. Do đó, hầu hết hệ thống sử dụng kích thước page tương đối nhỏ trong trường hợp phổ biến: 4KB (như x86) hoặc 8KB (như SPARCv9). Vậy là vấn đề của chúng ta sẽ không thể giải quyết đơn giản như vậy.</p>
+<h2 id="202-hybrid-approach-paging-and-segments"><a class="header" href="#202-hybrid-approach-paging-and-segments">20.2 Hybrid Approach: Paging and Segments</a></h2>
+<p>(Cách tiếp cận lai: Paging và Segmentation)</p>
+<p>Khi bạn có hai cách tiếp cận hợp lý nhưng khác nhau, bạn nên xem xét việc kết hợp chúng để tận dụng ưu điểm của cả hai. Chúng ta gọi sự kết hợp này là <strong>hybrid</strong> (lai). Ví dụ, tại sao chỉ ăn sô-cô-la hoặc chỉ bơ đậu phộng khi bạn có thể kết hợp chúng thành một món tuyệt vời như Reese’s Peanut Butter Cup [M28]?</p>
+<p>Nhiều năm trước, những người tạo ra hệ thống <strong>Multics</strong> (đặc biệt là Jack Dennis) đã nảy ra ý tưởng này khi xây dựng hệ thống virtual memory của Multics [M07]. Cụ thể, Dennis đã nghĩ đến việc kết hợp paging và segmentation để giảm chi phí bộ nhớ của page table. Chúng ta có thể thấy tại sao điều này hiệu quả bằng cách xem xét kỹ hơn một linear page table điển hình. Giả sử chúng ta có một address space mà phần heap và stack được sử dụng rất nhỏ. Trong ví dụ này, ta dùng một address space 16KB với page 1KB (<em>Figure 20.1</em>); page table cho address space này được thể hiện trong <em>Figure 20.2</em>.</p>
+<p><strong>Figure 20.1: A 16KB Address Space With 1KB Pages</strong><br />
+<em>(Không gian địa chỉ 16KB với page 1KB)</em></p>
+<p><strong>Figure 20.2: A Page Table For 16KB Address Space</strong><br />
+<em>(Page table cho không gian địa chỉ 16KB)</em></p>
+<p>Ví dụ này giả định:</p>
+<ul>
+<li>Page code duy nhất (VPN 0) ánh xạ tới <strong>physical page</strong> 10</li>
+<li>Page heap duy nhất (VPN 4) ánh xạ tới physical page 23</li>
+<li>Hai page stack ở cuối address space (VPN 14 và 15) ánh xạ tới physical page 28 và 4</li>
+</ul>
+<p>Như bạn thấy, phần lớn page table không được sử dụng, đầy các entry invalid. Thật lãng phí! Và đây mới chỉ là address space 16KB. Hãy tưởng tượng page table của address space 32-bit và lượng không gian lãng phí tiềm tàng! Thực ra, đừng tưởng tượng — nó quá khủng khiếp.</p>
+<p>Vì vậy, cách tiếp cận hybrid của chúng ta: thay vì có một page table duy nhất cho toàn bộ address space của process, tại sao không có một page table cho mỗi <strong>logical segment</strong> (đoạn logic)? Trong ví dụ này, ta có thể có ba page table: một cho code, một cho heap, và một cho stack.</p>
+<p>Hãy nhớ rằng với segmentation, chúng ta có <strong>base register</strong> (thanh ghi cơ sở) cho biết mỗi segment nằm ở đâu trong physical memory, và <strong>bound/limit register</strong> (thanh ghi giới hạn) cho biết kích thước segment. Trong hybrid này, chúng ta vẫn giữ các cấu trúc đó trong <strong>MMU</strong>; nhưng ở đây, base không trỏ tới segment, mà chứa địa chỉ vật lý của page table của segment đó. Bound register dùng để chỉ điểm kết thúc của page table (tức là số lượng page hợp lệ).</p>
+<p>Ví dụ: Giả sử address space 32-bit với page 4KB, chia thành bốn segment. Ta chỉ dùng ba segment: code, heap, stack.</p>
+<p>Để xác định một địa chỉ thuộc segment nào, ta dùng 2 bit cao nhất của address space. Giả sử:</p>
+<ul>
+<li><code>00</code> là segment không dùng</li>
+<li><code>01</code> cho code</li>
+<li><code>10</code> cho heap</li>
+<li><code>11</code> cho stack</li>
+</ul>
+<p>Khi đó, virtual address sẽ như sau:</p>
+<pre><code>31 30 29 ... 12 11 ... 0
+Seg      VPN      Offset
+</code></pre>
+<p>Trong phần cứng, giả sử có ba cặp base/bounds, mỗi cặp cho code, heap, stack. Khi process chạy, base register của mỗi segment chứa địa chỉ vật lý của linear page table</p>
+<p>(TODO)</p>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật.</p>
+<p>Điểm khác biệt then chốt trong mô hình <strong>hybrid</strong> (lai) của chúng ta là sự tồn tại của một <strong>bounds register</strong> (thanh ghi giới hạn) cho mỗi <strong>segment</strong> (đoạn). Mỗi bounds register lưu giá trị của <strong>page</strong> (trang) hợp lệ lớn nhất trong segment đó. Ví dụ, nếu <strong>code segment</strong> (đoạn mã) đang sử dụng ba page đầu tiên (0, 1 và 2), thì <strong>page table</strong> (bảng trang) của code segment sẽ chỉ có ba entry được cấp phát và bounds register sẽ được đặt là 3; mọi truy cập bộ nhớ vượt quá cuối segment sẽ tạo ra một <strong>exception</strong> (ngoại lệ) và nhiều khả năng dẫn đến việc chấm dứt <strong>process</strong> (tiến trình). Theo cách này, mô hình hybrid của chúng ta tiết kiệm đáng kể bộ nhớ so với <strong>linear page table</strong> (bảng trang tuyến tính); các page chưa cấp phát giữa <strong>stack</strong> và <strong>heap</strong> sẽ không còn chiếm chỗ trong page table (chỉ để đánh dấu là không hợp lệ).</p>
+<p>Tuy nhiên, như bạn có thể nhận thấy, cách tiếp cận này không phải không có vấn đề. Thứ nhất, nó vẫn yêu cầu chúng ta sử dụng segmentation; như đã thảo luận trước đây, segmentation không linh hoạt như mong muốn, vì nó giả định một mô hình sử dụng address space nhất định; nếu chúng ta có một heap lớn nhưng sử dụng thưa thớt, chẳng hạn, ta vẫn có thể gặp nhiều lãng phí trong page table. Thứ hai, mô hình hybrid này khiến <strong>external fragmentation</strong> (phân mảnh bên ngoài) xuất hiện trở lại. Trong khi phần lớn bộ nhớ được quản lý theo đơn vị kích thước page, thì các page table giờ đây có thể có kích thước tùy ý (theo bội số của PTE). Do đó, việc tìm không gian trống cho chúng trong bộ nhớ trở nên phức tạp hơn. Vì những lý do này, các nhà thiết kế hệ thống tiếp tục tìm kiếm những cách tốt hơn để triển khai các page table nhỏ hơn.</p>
+<h2 id="203-multi-level-page-tables"><a class="header" href="#203-multi-level-page-tables">20.3 Multi-level Page Tables</a></h2>
+<p>(Bảng trang nhiều cấp)</p>
+<p>Một cách tiếp cận khác không dựa vào segmentation nhưng giải quyết cùng vấn đề: làm thế nào để loại bỏ tất cả các vùng <strong>invalid</strong> (không hợp lệ) trong page table thay vì giữ chúng trong bộ nhớ? Chúng ta gọi cách tiếp cận này là <strong>multi-level page table</strong> (bảng trang nhiều cấp), vì nó biến linear page table thành một cấu trúc giống như cây. Cách tiếp cận này hiệu quả đến mức nhiều hệ thống hiện đại áp dụng nó (ví dụ: x86 [BOH10]). Sau đây, chúng ta sẽ mô tả chi tiết.</p>
+<p>Ý tưởng cơ bản của multi-level page table rất đơn giản:</p>
+<ul>
+<li>Đầu tiên, chia nhỏ page table thành các đơn vị kích thước bằng một page.</li>
+<li>Sau đó, nếu toàn bộ một page của các <strong>page-table entries</strong> (PTE) là invalid, thì không cấp phát page đó trong page table.</li>
+</ul>
+<p>Để theo dõi xem một page của page table có hợp lệ hay không (và nếu hợp lệ thì nằm ở đâu trong bộ nhớ), ta sử dụng một cấu trúc mới gọi là <strong>page directory</strong> (thư mục trang). Page directory có thể cho biết vị trí của một page trong page table, hoặc cho biết toàn bộ page đó không chứa page hợp lệ nào.</p>
+<p><strong>Figure 20.3: Linear (Left) And Multi-Level (Right) Page Tables</strong><br />
+<em>(Bảng trang tuyến tính — trái, và bảng trang nhiều cấp — phải)</em></p>
+<p><em>Figure 20.3</em> minh họa ví dụ:</p>
+<ul>
+<li>Bên trái là linear page table cổ điển; mặc dù phần lớn các vùng ở giữa address space là invalid, ta vẫn phải cấp phát không gian page table cho các vùng này (tức là hai page ở giữa của page table).</li>
+<li>Bên phải là multi-level page table; page directory chỉ đánh dấu hai page của page table là hợp lệ (đầu tiên và cuối cùng), do đó chỉ hai page này tồn tại trong bộ nhớ.</li>
+</ul>
+<p>Có thể hình dung multi-level table như một cách “làm biến mất” các phần không cần thiết của linear page table (giải phóng các frame cho mục đích khác), đồng thời theo dõi các page đã được cấp phát bằng page directory.</p>
+<p>Trong một bảng hai cấp đơn giản, page directory chứa một entry cho mỗi page của page table. Nó bao gồm nhiều <strong>page directory entries</strong> (PDE). Một PDE (tối thiểu) có một <strong>valid bit</strong> và một <strong>page frame number</strong> (PFN), tương tự như một PTE. Tuy nhiên, ý nghĩa của valid bit ở đây hơi khác: nếu PDE hợp lệ, điều đó có nghĩa là ít nhất một page của page table mà entry này trỏ tới (thông qua PFN) là hợp lệ, tức là trong ít nhất một PTE trên page đó, valid bit được đặt thành 1. Nếu PDE không hợp lệ (bằng 0), phần còn lại của PDE không có ý nghĩa.</p>
+<p><strong>Ưu điểm của multi-level page table</strong> so với các cách tiếp cận trước:</p>
+<ol>
+<li>Chỉ cấp phát không gian page table tỷ lệ thuận với lượng address space đang sử dụng → gọn nhẹ và hỗ trợ tốt <strong>sparse address space</strong> (không gian địa chỉ thưa).</li>
+<li>Nếu được thiết kế cẩn thận, mỗi phần của page table vừa khít trong một page, giúp quản lý bộ nhớ dễ dàng hơn; OS chỉ cần lấy page trống tiếp theo khi cần cấp phát hoặc mở rộng page table.</li>
+</ol>
+<blockquote>
+<p><strong>TIP: UNDERSTAND TIME-SPACE TRADE-OFFS</strong><br />
+(Hiểu sự đánh đổi giữa thời gian và không gian)<br />
+Khi xây dựng một cấu trúc dữ liệu, luôn cần cân nhắc sự đánh đổi giữa thời gian và không gian. Thông thường, nếu muốn truy cập nhanh hơn, bạn sẽ phải trả giá bằng việc sử dụng nhiều bộ nhớ hơn.</p>
+</blockquote>
+<p>So sánh với linear page table đơn giản (không phân trang) <sup class="footnote-reference"><a href="#2">2</a></sup>, vốn chỉ là một mảng PTE được đánh chỉ số bởi VPN: với cấu trúc này, toàn bộ linear page table phải nằm liên tục trong physical memory. Với một page table lớn (ví dụ 4MB), việc tìm một khối bộ nhớ vật lý trống liên tục lớn như vậy là một thách thức. Với cấu trúc nhiều cấp, ta thêm một mức gián tiếp thông qua page directory, trỏ tới các phần của page table; mức gián tiếp này cho phép đặt các page của page table ở bất kỳ đâu trong physical memory.</p>
+<p>Tuy nhiên, multi-level table cũng có chi phí: khi xảy ra <strong>TLB miss</strong>, cần hai lần tải dữ liệu từ bộ nhớ để lấy thông tin dịch địa chỉ (một lần cho page directory, một lần cho PTE), so với chỉ một lần ở linear page table. Đây là ví dụ nhỏ về <strong>time-space trade-off</strong>: chúng ta muốn bảng nhỏ hơn (và đã đạt được), nhưng không miễn phí; mặc dù trong trường hợp phổ biến (<strong>TLB hit</strong>) hiệu năng là như nhau, nhưng khi TLB miss, chi phí cao hơn.</p>
+<p>Một nhược điểm khác là <strong>độ phức tạp</strong>: dù phần cứng hay OS xử lý tra cứu page table (khi TLB miss), thì việc này chắc chắn phức tạp hơn so với linear page table. Thường thì chúng ta chấp nhận tăng độ phức tạp để cải thiện hiệu năng hoặc giảm chi phí; với multi-level table, chúng ta làm tra cứu page table phức tạp hơn để tiết kiệm bộ nhớ quý giá.</p>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Ở đây, chúng ta giả định rằng tất cả page table đều nằm hoàn toàn trong physical memory (tức là không bị swap ra đĩa); giả định này sẽ được nới lỏng ở phần sau.</p>
+</div>
+<h3 id="a-detailed-multi-level-example"><a class="header" href="#a-detailed-multi-level-example">A Detailed Multi-Level Example</a></h3>
+<p>(Một ví dụ chi tiết về bảng trang nhiều cấp)</p>
+<p>Để hiểu rõ hơn ý tưởng của multi-level page table, hãy xét một ví dụ:</p>
+<ul>
+<li>Address space nhỏ 16KB</li>
+<li>Page 64 byte</li>
+</ul>
+<p>Như vậy, ta có virtual address 14-bit, với 8 bit cho VPN và 6 bit cho offset. Linear page table sẽ có 2^8 (256) entry, ngay cả khi chỉ một phần nhỏ address space được sử dụng. <em>Figure 20.4</em> minh họa một ví dụ như vậy.</p>
+<p><strong>Figure 20.4: A 16KB Address Space With 64-byte Pages</strong><br />
+<em>(Không gian địa chỉ 16KB với page 64 byte)</em></p>
+<p>Trong ví dụ này:</p>
+<ul>
+<li>Virtual pages 0 và 1 dành cho code</li>
+<li>Virtual pages 4 và 5 dành cho heap</li>
+<li>Virtual pages 254 và 255 dành cho stack</li>
+<li>Các page còn lại không dùng.</li>
+</ul>
+<p>Để xây dựng <strong>two-level page table</strong> (bảng trang hai cấp) cho address space này, ta bắt đầu với linear page table đầy đủ và chia nó thành các đơn vị kích thước page.</p>
+<ul>
+<li>Page table đầy đủ có 256 entry</li>
+<li>Mỗi PTE = 4 byte → page table = 1KB (256 × 4 byte)</li>
+<li>Với page 64 byte, page table 1KB được chia thành 16 page</li>
+</ul>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật.</p>
+<p>Chỉ số <strong>page-table index</strong> (viết tắt là <strong>PTIndex</strong>) này có thể được dùng để đánh chỉ số vào chính <strong>page table</strong>, từ đó cho chúng ta địa chỉ của <strong>PTE</strong> (page-table entry — mục bảng trang):</p>
+<pre><code>PTEAddr = (PDE.PFN &lt;&lt; SHIFT) + (PTIndex * sizeof(PTE))
+</code></pre>
+<p>Lưu ý rằng <strong>page-frame number</strong> (PFN — số khung trang vật lý) lấy từ <strong>page-directory entry</strong> (PDE — mục thư mục trang) phải được dịch trái (left-shift) vào đúng vị trí trước khi kết hợp với chỉ số page table để tạo thành địa chỉ của PTE.</p>
+<p>Để xem toàn bộ quá trình này có hợp lý không, chúng ta sẽ điền một số giá trị thực tế vào <strong>multi-level page table</strong> (bảng trang nhiều cấp) và dịch một địa chỉ ảo cụ thể. Hãy bắt đầu với <strong>page directory</strong> (thư mục trang) cho ví dụ này (bên trái <em>Figure 20.5</em>).</p>
+<p><strong>Figure 20.5: A Page Directory, And Pieces Of Page Table</strong><br />
+<em>(Một thư mục trang và các phần của bảng trang)</em></p>
+<p>Trong hình, bạn có thể thấy mỗi PDE mô tả thông tin về một page của page table trong address space. Trong ví dụ này, chúng ta có hai vùng hợp lệ trong address space (ở đầu và cuối), và một số lượng lớn ánh xạ không hợp lệ ở giữa.</p>
+<p>Trong <strong>physical page</strong> 100 (PFN của page 0 trong page table), chúng ta có page đầu tiên chứa 16 PTE cho 16 VPN đầu tiên trong address space. Xem phần giữa của <em>Figure 20.5</em> để biết nội dung của phần này trong page table.</p>
+<p>Page này của page table chứa ánh xạ cho 16 VPN đầu tiên; trong ví dụ, VPN 0 và 1 là hợp lệ (code segment), cũng như VPN 4 và 5 (heap). Do đó, bảng có thông tin ánh xạ cho từng page này. Các entry còn lại được đánh dấu <strong>invalid</strong> (không hợp lệ).</p>
+<p>Page hợp lệ còn lại của page table nằm trong PFN 101. Page này chứa ánh xạ cho 16 VPN cuối cùng của address space; xem phần bên phải của <em>Figure 20.5</em> để biết chi tiết.</p>
+<p>Trong ví dụ, VPN 254 và 255 (stack) có ánh xạ hợp lệ. Hy vọng từ ví dụ này, chúng ta có thể thấy lượng bộ nhớ tiết kiệm được khi dùng cấu trúc đánh chỉ số nhiều cấp. Trong ví dụ này, thay vì cấp phát đủ 16 page cho một linear page table, chúng ta chỉ cấp phát 3 page: một cho page directory, và hai cho các phần của page table có ánh xạ hợp lệ. Với address space lớn (32-bit hoặc 64-bit), mức tiết kiệm sẽ còn lớn hơn nhiều.</p>
+<blockquote>
+<p><strong>TIP: BE WARY OF COMPLEXITY</strong><br />
+(Cẩn trọng với độ phức tạp)<br />
+Các nhà thiết kế hệ thống nên thận trọng khi thêm độ phức tạp vào hệ thống. Một kỹ sư hệ thống giỏi sẽ triển khai hệ thống ít phức tạp nhất nhưng vẫn hoàn thành nhiệm vụ. Ví dụ, nếu dung lượng đĩa dồi dào, bạn không nên thiết kế một hệ thống file cố gắng tiết kiệm từng byte; tương tự, nếu bộ xử lý nhanh, tốt hơn là viết một module trong OS rõ ràng, dễ hiểu thay vì tối ưu CPU đến mức cực đoan bằng mã hợp ngữ khó bảo trì. Hãy cảnh giác với sự phức tạp không cần thiết, trong mã tối ưu sớm hoặc các hình thức khác; những cách tiếp cận như vậy khiến hệ thống khó hiểu, khó bảo trì và khó gỡ lỗi. Như Antoine de Saint-Exupery từng viết: “Sự hoàn hảo đạt được không phải khi không còn gì để thêm vào, mà là khi không còn gì để bớt đi.” Điều ông không viết: “Nói về sự hoàn hảo thì dễ hơn nhiều so với việc đạt được nó.”</p>
+</blockquote>
+<p>Cuối cùng, hãy sử dụng thông tin này để thực hiện một phép dịch địa chỉ. Đây là một địa chỉ tham chiếu tới byte thứ 0 của VPN 254: <code>0x3F80</code>, hay ở dạng nhị phân là <code>11 1111 1000 0000</code>.</p>
+<p>Nhớ rằng chúng ta sẽ dùng 4 bit cao nhất của VPN để đánh chỉ số vào page directory. Do đó, <code>1111</code> sẽ chọn entry cuối cùng (thứ 15, nếu bắt đầu từ 0) của page directory ở trên. Entry này trỏ tới một page hợp lệ của page table nằm tại địa chỉ PFN 101. Sau đó, chúng ta dùng 4 bit tiếp theo của VPN (<code>1110</code>) để đánh chỉ số vào page này của page table và tìm PTE mong muốn. <code>1110</code> là entry áp chót (thứ 14) trên page, và cho biết page 254 của address space được ánh xạ tới <strong>physical page</strong> 55. Bằng cách ghép PFN=55 (hex <code>0x37</code>) với offset=<code>000000</code>, chúng ta có thể tạo ra <strong>physical address</strong> mong muốn và gửi yêu cầu tới hệ thống bộ nhớ:</p>
+<pre><code>PhysAddr = (PTE.PFN &lt;&lt; SHIFT) + offset 
+         = 00 1101 1100 0000 
+         = 0x0DC0
+</code></pre>
+<p>Bây giờ, bạn đã có ý tưởng về cách xây dựng một <strong>two-level page table</strong> (bảng trang hai cấp), sử dụng page directory trỏ tới các page của page table. Tuy nhiên, công việc của chúng ta chưa kết thúc. Như sẽ thảo luận ngay sau đây, đôi khi hai cấp page table là chưa đủ.</p>
+<h3 id="more-than-two-levels"><a class="header" href="#more-than-two-levels">More Than Two Levels</a></h3>
+<p>(Hơn hai cấp)</p>
+<p>Trong ví dụ trên, chúng ta giả định multi-level page table chỉ có hai cấp: một page directory và các phần của page table. Trong một số trường hợp, một cây sâu hơn là khả thi (và thực sự cần thiết).</p>
+<p>Hãy lấy một ví dụ đơn giản để thấy tại sao multi-level table sâu hơn lại hữu ích. Trong ví dụ này, giả sử chúng ta có <strong>virtual address space</strong> 30-bit, và <strong>page</strong> nhỏ (512 byte). Khi đó, virtual address có thành phần <strong>virtual page number</strong> (VPN) 21-bit và <strong>offset</strong> 9-bit.</p>
+<p>Hãy nhớ mục tiêu khi xây dựng multi-level page table: làm cho mỗi phần của page table vừa trong một page. Cho đến giờ, chúng ta mới chỉ xét bản thân page table; nhưng nếu page directory trở nên quá lớn thì sao?</p>
+<p>Để xác định cần bao nhiêu cấp trong multi-level table để tất cả các phần của page table vừa trong một page, ta bắt đầu bằng việc xác định số lượng PTE có thể chứa trong một page. Với kích thước page 512 byte và giả sử mỗi PTE là 4 byte, ta có thể chứa 128 PTE trên một page. Khi đánh chỉ số vào một page của page table, ta sẽ cần <strong>7 bit</strong> ít quan trọng nhất (log₂ 128) của VPN làm chỉ số:</p>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật.</p>
+<p>Bây giờ, khi đánh chỉ số vào <strong>upper-level page directory</strong> (thư mục trang cấp cao), chúng ta sử dụng các bit cao nhất của <strong>virtual address</strong> (PD Index 0 trong sơ đồ); chỉ số này được dùng để lấy <strong>page-directory entry</strong> (PDE — mục thư mục trang) từ page directory cấp cao nhất. Nếu hợp lệ, cấp thứ hai của page directory sẽ được tra cứu bằng cách kết hợp <strong>physical frame number</strong> (PFN — số khung trang vật lý) từ PDE cấp cao nhất với phần tiếp theo của <strong>VPN</strong> (PD Index 1). Cuối cùng, nếu hợp lệ, địa chỉ của <strong>PTE</strong> (page-table entry — mục bảng trang) có thể được hình thành bằng cách sử dụng <strong>page-table index</strong> kết hợp với địa chỉ từ PDE cấp thứ hai. Ồ! Khá nhiều bước chỉ để tra cứu một mục trong <strong>multi-level table</strong> (bảng nhiều cấp).</p>
+<h3 id="the-translation-process-remember-the-tlb"><a class="header" href="#the-translation-process-remember-the-tlb">The Translation Process: Remember the TLB</a></h3>
+<p>(Quy trình dịch địa chỉ: Đừng quên TLB)</p>
+<p>Để tóm tắt toàn bộ quá trình dịch địa chỉ sử dụng <strong>two-level page table</strong> (bảng trang hai cấp), chúng ta một lần nữa trình bày luồng điều khiển dưới dạng thuật toán (<em>Figure 20.6</em>). Hình này cho thấy điều gì xảy ra trong phần cứng (giả sử <strong>hardware-managed TLB</strong> — TLB do phần cứng quản lý) khi có mỗi lần tham chiếu bộ nhớ.</p>
+<p><strong>Figure 20.6: Multi-level Page Table Control Flow</strong><br />
+<em>(Luồng điều khiển bảng trang nhiều cấp)</em></p>
+<p>Như bạn thấy trong hình, trước khi bất kỳ truy cập phức tạp nào tới multi-level page table diễn ra, phần cứng sẽ kiểm tra TLB trước; nếu <strong>hit</strong>, <strong>physical address</strong> (địa chỉ vật lý) sẽ được tạo trực tiếp mà không cần truy cập page table, giống như trước đây. Chỉ khi <strong>TLB miss</strong> xảy ra, phần cứng mới cần thực hiện toàn bộ quá trình tra cứu nhiều cấp. Trên đường này, bạn có thể thấy chi phí của two-level page table truyền thống: cần thêm hai lần truy cập bộ nhớ để tìm một bản dịch hợp lệ.</p>
+<h2 id="204-inverted-page-tables"><a class="header" href="#204-inverted-page-tables">20.4 Inverted Page Tables</a></h2>
+<p>(Bảng trang đảo)</p>
+<p>Một cách tiết kiệm không gian cực đoan hơn trong thế giới page table là <strong>inverted page table</strong> (bảng trang đảo). Ở đây, thay vì có nhiều page table (một cho mỗi <strong>process</strong> trong hệ thống), chúng ta giữ một page table duy nhất, trong đó mỗi entry tương ứng với một <strong>physical page</strong> (trang vật lý) của hệ thống. Entry này cho biết process nào đang sử dụng page đó, và <strong>virtual page</strong> (trang ảo) nào của process đó được ánh xạ tới page vật lý này.</p>
+<p>Việc tìm entry đúng bây giờ là vấn đề tìm kiếm trong cấu trúc dữ liệu này. Quét tuyến tính sẽ tốn kém, do đó thường xây dựng một <strong>hash table</strong> (bảng băm) trên cấu trúc cơ sở để tăng tốc tra cứu. <strong>PowerPC</strong> là một ví dụ về kiến trúc sử dụng cách này [JM98].</p>
+<p>Nói chung hơn, inverted page table minh họa cho điều chúng ta đã nói từ đầu: page table chỉ là <strong>data structure</strong> (cấu trúc dữ liệu). Bạn có thể làm nhiều điều “điên rồ” với cấu trúc dữ liệu — làm chúng nhỏ hơn hoặc lớn hơn, chậm hơn hoặc nhanh hơn. Multi-level và inverted page table chỉ là hai ví dụ trong số rất nhiều cách có thể áp dụng.</p>
+<h2 id="205-swapping-the-page-tables-to-disk"><a class="header" href="#205-swapping-the-page-tables-to-disk">20.5 Swapping the Page Tables to Disk</a></h2>
+<p>(Đưa page table ra đĩa)</p>
+<p>Cuối cùng, chúng ta bàn về việc nới lỏng một giả định cuối cùng. Cho đến nay, chúng ta giả định rằng page table nằm trong <strong>kernel-owned physical memory</strong> (bộ nhớ vật lý thuộc quyền quản lý của kernel). Ngay cả với nhiều thủ thuật để giảm kích thước page table, vẫn có khả năng chúng quá lớn để vừa trong bộ nhớ cùng lúc. Do đó, một số hệ thống đặt page table trong <strong>kernel virtual memory</strong> (bộ nhớ ảo của kernel), cho phép hệ thống <strong>swap</strong> (hoán đổi) một số page table này ra đĩa khi bộ nhớ bị áp lực. Chúng ta sẽ nói kỹ hơn về điều này trong một chương sau (cụ thể là nghiên cứu tình huống về <strong>VAX/VMS</strong>), khi đã hiểu rõ hơn cách di chuyển các page vào và ra khỏi bộ nhớ.</p>
+<h2 id="206-summary"><a class="header" href="#206-summary">20.6 Summary</a></h2>
+<p>(Tóm tắt)</p>
+<p>Chúng ta đã thấy cách các page table thực tế được xây dựng; không nhất thiết chỉ là mảng tuyến tính mà có thể là các <strong>data structure</strong> phức tạp hơn. Sự đánh đổi (trade-off) mà các bảng này đưa ra là giữa <strong>time</strong> (thời gian) và <strong>space</strong> (không gian) — bảng càng lớn, thời gian xử lý một <strong>TLB miss</strong> càng nhanh, và ngược lại — do đó, lựa chọn cấu trúc phù hợp phụ thuộc mạnh mẽ vào các ràng buộc của môi trường cụ thể.</p>
+<p>Trong một hệ thống bị giới hạn bộ nhớ (như nhiều hệ thống cũ), các cấu trúc nhỏ là hợp lý; trong một hệ thống có lượng bộ nhớ hợp lý và với <strong>workload</strong> (khối lượng công việc) sử dụng tích cực nhiều page, một bảng lớn hơn để tăng tốc xử lý TLB miss có thể là lựa chọn đúng. Với <strong>software-managed TLBs</strong> (TLB do phần mềm quản lý), toàn bộ không gian thiết kế cấu trúc dữ liệu được mở ra cho các nhà sáng tạo hệ điều hành (ám chỉ: chính bạn). Bạn có thể nghĩ ra những cấu trúc mới nào? Chúng giải quyết vấn đề gì? Hãy suy nghĩ về những câu hỏi này khi bạn đi ngủ, và mơ những giấc mơ lớn mà chỉ các nhà phát triển hệ điều hành mới có thể mơ.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../19/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../21/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../19/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../21/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Scheduling:The Multi-Level Feedback Queue - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html" class="active"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="8-scheduling-multi-level-feedback-queue"><a class="header" href="#8-scheduling-multi-level-feedback-queue">8 Scheduling: Multi-Level Feedback Queue</a></h1>
+<p>Trong chương này, chúng ta sẽ giải quyết vấn đề phát triển một trong những phương pháp <strong>scheduling</strong> (lập lịch) nổi tiếng nhất, được gọi là <strong>Multi-level Feedback Queue</strong> (MLFQ – Hàng đợi phản hồi đa mức). Bộ lập lịch MLFQ lần đầu tiên được mô tả bởi Corbato và cộng sự vào năm 1962 [C+62] trong một hệ thống có tên <strong>Compatible Time-Sharing System</strong> (CTSS – Hệ thống chia sẻ thời gian tương thích). Công trình này, cùng với các nghiên cứu sau đó trên hệ thống <strong>Multics</strong>, đã giúp Corbato nhận được giải thưởng cao quý nhất của ACM – <strong>Turing Award</strong>. Thuật toán lập lịch này sau đó đã được tinh chỉnh qua nhiều năm để trở thành các phiên bản triển khai mà bạn sẽ gặp trong một số hệ thống hiện đại.</p>
+<p>Vấn đề cơ bản mà MLFQ cố gắng giải quyết gồm hai khía cạnh:</p>
+<ol>
+<li><strong>Tối ưu hóa turnaround time</strong> (thời gian hoàn thành), mà như chúng ta đã thấy ở phần trước, được thực hiện bằng cách chạy các job (công việc) ngắn trước. Tuy nhiên, hệ điều hành (OS) thường không biết chính xác một job sẽ chạy trong bao lâu – đây lại chính là thông tin mà các thuật toán như <strong>SJF</strong> (Shortest Job First) hoặc <strong>STCF</strong> (Shortest Time-to-Completion First) yêu cầu.</li>
+<li><strong>Tăng tính phản hồi</strong> đối với người dùng tương tác (interactive users – ví dụ: người dùng đang ngồi trước màn hình chờ một process (tiến trình) hoàn thành), tức là giảm <strong>response time</strong> (thời gian phản hồi). Các thuật toán như <strong>Round Robin</strong> có thể giảm response time, nhưng lại rất tệ đối với turnaround time.</li>
+</ol>
+<p>Vậy, vấn đề đặt ra là: khi chúng ta <strong>không biết trước</strong> thông tin về một process, làm thế nào để xây dựng một scheduler (bộ lập lịch) đạt được cả hai mục tiêu trên? Làm thế nào để scheduler có thể <strong>học</strong> được đặc điểm của các job khi hệ thống đang chạy, từ đó đưa ra quyết định lập lịch tốt hơn?</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: HOW TO SCHEDULE WITHOUT PERFECT KNOWLEDGE?</strong><br />
+Làm thế nào để thiết kế một scheduler vừa giảm thiểu response time cho các job tương tác, vừa giảm turnaround time, mà không cần biết trước độ dài của job?</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>TIP: LEARN FROM HISTORY</strong><br />
+Multi-level Feedback Queue là một ví dụ điển hình về hệ thống <strong>học từ quá khứ để dự đoán tương lai</strong>. Cách tiếp cận này phổ biến trong hệ điều hành (và nhiều lĩnh vực khác của Khoa học Máy tính, bao gồm cả bộ dự đoán nhánh phần cứng – hardware branch predictors – và các thuật toán caching). Phương pháp này hiệu quả khi các job có <strong>các pha hành vi</strong> (behavior phases) và do đó có thể dự đoán được. Tuy nhiên, cần thận trọng vì nếu dự đoán sai, hệ thống có thể đưa ra quyết định còn tệ hơn cả khi không biết gì.</p>
+</blockquote>
+<h2 id="81-mlfq-các-quy-tắc-cơ-bản"><a class="header" href="#81-mlfq-các-quy-tắc-cơ-bản">8.1 MLFQ: Các quy tắc cơ bản</a></h2>
+<p>Để xây dựng một scheduler như vậy, trong chương này chúng ta sẽ mô tả các thuật toán cơ bản đằng sau MLFQ. Mặc dù chi tiết triển khai của nhiều phiên bản MLFQ khác nhau [E95], nhưng hầu hết đều có nguyên tắc tương tự.</p>
+<p>Trong mô hình này, MLFQ có một số hàng đợi (queue) riêng biệt, mỗi hàng đợi được gán một <strong>mức ưu tiên</strong> (priority) khác nhau. Tại một thời điểm bất kỳ, một job sẵn sàng chạy sẽ nằm trong <strong>một</strong> hàng đợi duy nhất. MLFQ sử dụng <strong>priority</strong> để quyết định job nào sẽ chạy: job có priority cao hơn (nằm ở hàng đợi cao hơn) sẽ được chọn chạy.</p>
+<p>Tất nhiên, có thể có nhiều job trong cùng một hàng đợi, tức là có cùng priority. Trong trường hợp này, chúng ta sẽ sử dụng <strong>Round Robin</strong> để chia sẻ CPU giữa các job đó.</p>
+<p>Hai quy tắc cơ bản đầu tiên của MLFQ:</p>
+<ul>
+<li><strong>Rule 1:</strong> Nếu Priority(A) &gt; Priority(B), A chạy (B không chạy).</li>
+<li><strong>Rule 2:</strong> Nếu Priority(A) = Priority(B), A và B chạy theo Round Robin.</li>
+</ul>
+<p>Điểm mấu chốt của MLFQ nằm ở <strong>cách scheduler thiết lập priority</strong>. Thay vì gán một priority cố định cho mỗi job, MLFQ <strong>thay đổi priority dựa trên hành vi quan sát được</strong>:</p>
+<ul>
+<li>Nếu một job thường xuyên nhường CPU để chờ nhập liệu từ bàn phím, MLFQ sẽ giữ priority cao cho nó (đặc trưng của process tương tác).</li>
+<li>Nếu một job sử dụng CPU liên tục trong thời gian dài, MLFQ sẽ giảm priority của nó.</li>
+</ul>
+<p>Bằng cách này, MLFQ <strong>học</strong> về process khi nó chạy và dùng <strong>lịch sử</strong> của job để dự đoán hành vi tương lai.</p>
+<p>Ví dụ, nếu minh họa trạng thái các hàng đợi tại một thời điểm (Hình 8.1), ta có thể thấy: hai job (A và B) ở mức priority cao nhất, job C ở mức trung bình, và job D ở mức thấp nhất. Theo nguyên tắc MLFQ, scheduler sẽ luân phiên cấp CPU cho A và B, còn C và D sẽ không được chạy – điều này rõ ràng là không công bằng.</p>
+<p><img src="./img/fig8_1.PNG" alt="" /></p>
+<p>Tuy nhiên, chỉ nhìn vào một ảnh chụp tĩnh của các hàng đợi thì chưa thể hiểu rõ MLFQ hoạt động thế nào. Điều quan trọng là phải xem <strong>priority của job thay đổi theo thời gian</strong> ra sao – và đó chính là điều chúng ta sẽ tìm hiểu tiếp theo.</p>
+<h2 id="82-lần-thử-thứ-nhất-cách-thay-đổi-priority"><a class="header" href="#82-lần-thử-thứ-nhất-cách-thay-đổi-priority">8.2 Lần thử thứ nhất: Cách thay đổi priority</a></h2>
+<p>Bây giờ, chúng ta cần quyết định cách MLFQ sẽ thay đổi priority của một job (và do đó thay đổi hàng đợi của nó) trong suốt vòng đời. Cần nhớ rằng workload của chúng ta là sự kết hợp giữa:</p>
+<ul>
+<li>Các job tương tác, chạy ngắn (thường xuyên nhường CPU).</li>
+<li>Các job <strong>CPU-bound</strong> (dùng CPU nhiều), chạy dài, không yêu cầu response time thấp.</li>
+</ul>
+<p>Để làm điều này, chúng ta cần một khái niệm mới: <strong>allotment</strong> của job.<br />
+Allotment là <strong>lượng thời gian</strong> mà một job có thể chạy ở một mức priority nhất định trước khi scheduler giảm priority của nó. Để đơn giản, ban đầu ta giả sử allotment = một time slice.</p>
+<p>Thuật toán điều chỉnh priority đầu tiên:</p>
+<ul>
+<li><strong>Rule 3:</strong> Khi một job vào hệ thống, nó được đặt ở mức priority cao nhất (hàng đợi trên cùng).</li>
+<li><strong>Rule 4a:</strong> Nếu job dùng hết allotment khi chạy, priority của nó bị giảm (chuyển xuống một hàng đợi).</li>
+<li><strong>Rule 4b:</strong> Nếu job nhường CPU (ví dụ: thực hiện I/O) trước khi allotment hết, nó giữ nguyên priority (allotment được đặt lại).</li>
+</ul>
+<p><img src="./img/fig8_2.PNG" alt="" /></p>
+<p><strong>Hình 8.2:</strong> Job chạy dài theo thời gian</p>
+<h3 id="ví-dụ-1-một-job-chạy-dài-duy-nhất"><a class="header" href="#ví-dụ-1-một-job-chạy-dài-duy-nhất"><strong>Ví dụ 1: Một job chạy dài duy nhất</strong></a></h3>
+<p>Giả sử có một job chạy dài trong hệ thống, time slice = 10 ms, allotment = time slice. Hình 8.2 minh họa quá trình:</p>
+<ul>
+<li>Job bắt đầu ở priority cao nhất (Q2).</li>
+<li>Sau 10 ms, scheduler giảm priority xuống Q1.</li>
+<li>Sau một time slice ở Q1, job bị giảm xuống Q0 (thấp nhất) và ở đó mãi.</li>
+</ul>
+<h3 id="ví-dụ-2-xuất-hiện-một-job-ngắn"><a class="header" href="#ví-dụ-2-xuất-hiện-một-job-ngắn"><strong>Ví dụ 2: Xuất hiện một job ngắn</strong></a></h3>
+<p>Giờ xét trường hợp phức tạp hơn để thấy MLFQ <strong>xấp xỉ SJF</strong>:</p>
+<ul>
+<li>Job A: chạy dài, CPU-bound.</li>
+<li>Job B: chạy ngắn, tương tác.</li>
+</ul>
+<p>Giả sử A đã chạy một thời gian và đang ở priority thấp nhất. Khi B đến (T = 100 ms), nó được đưa vào priority cao nhất. Vì B chỉ chạy 20 ms, nó hoàn thành trước khi bị giảm xuống priority thấp hơn. Sau đó, A tiếp tục chạy ở priority thấp.</p>
+<p>Từ ví dụ này, ta thấy: vì không biết job là ngắn hay dài, MLFQ <strong>giả định ban đầu là job ngắn</strong> và cho priority cao. Nếu đúng là job ngắn, nó sẽ hoàn thành nhanh; nếu không, nó sẽ dần bị đẩy xuống các hàng đợi thấp hơn, trở thành job batch dài hạn. Bằng cách này, MLFQ <strong>xấp xỉ SJF</strong>.</p>
+<p><img src="./img/fig8_3.PNG" alt="" /></p>
+<h3 id="ví-dụ-3-với-io"><a class="header" href="#ví-dụ-3-với-io"><strong>Ví dụ 3: với I/O</strong></a></h3>
+<p>Bây giờ, hãy xem một ví dụ có liên quan đến <strong>I/O</strong> (Input/Output – nhập/xuất). Như <strong>Rule 4b</strong> đã nêu ở trên, nếu một <strong>process</strong> (tiến trình) nhường CPU trước khi sử dụng hết <strong>allotment</strong> (phần thời gian được cấp ở một mức ưu tiên), chúng ta sẽ giữ nó ở cùng mức <strong>priority</strong> (ưu tiên). Ý tưởng của quy tắc này rất đơn giản: nếu một <strong>interactive job</strong> (công việc tương tác), ví dụ, thực hiện nhiều thao tác I/O (chẳng hạn chờ nhập liệu từ bàn phím hoặc chuột), nó sẽ nhường CPU trước khi allotment kết thúc; trong trường hợp này, chúng ta không muốn phạt job đó, và do đó giữ nguyên mức priority.</p>
+<p><strong>Hình 8.3 (bên phải)</strong> minh họa cách hoạt động: một interactive job B (màu xám) chỉ cần CPU trong 1 ms trước khi thực hiện I/O, cạnh tranh CPU với một <strong>batch job</strong> chạy dài A (màu đen). Cách tiếp cận MLFQ giữ B ở mức priority cao nhất vì B liên tục nhường CPU; nếu B là một interactive job, MLFQ đạt được mục tiêu chạy nhanh các job tương tác.</p>
+<h3 id="vấn-đề-với-mlfq-hiện-tại"><a class="header" href="#vấn-đề-với-mlfq-hiện-tại"><strong>Vấn đề với MLFQ hiện tại</strong></a></h3>
+<p>Như vậy, chúng ta đã có một MLFQ cơ bản. Nó dường như hoạt động khá tốt: chia sẻ CPU công bằng giữa các job chạy dài, và cho phép các job ngắn hoặc tương tác nhiều với I/O chạy nhanh. Tuy nhiên, cách tiếp cận này vẫn tồn tại những nhược điểm nghiêm trọng. Bạn có đoán ra không?<br />
+(Đây là lúc bạn tạm dừng và suy nghĩ một cách “xảo quyệt” nhất có thể)</p>
+<ol>
+<li><strong>Starvation</strong> (đói CPU): nếu có “quá nhiều” interactive job trong hệ thống, chúng sẽ chiếm toàn bộ thời gian CPU, khiến các job chạy dài không bao giờ nhận được CPU (bị đói). Chúng ta muốn đảm bảo các job này vẫn có tiến triển, ngay cả trong tình huống này.</li>
+<li><strong>Gaming the scheduler</strong> (lách luật bộ lập lịch): một người dùng thông minh có thể viết lại chương trình để “đánh lừa” scheduler, nhằm nhận được nhiều tài nguyên hơn mức công bằng. Thuật toán hiện tại dễ bị tấn công như sau: trước khi allotment hết, thực hiện một thao tác I/O (ví dụ ghi/đọc file) để nhường CPU; việc này giúp job ở lại cùng hàng đợi, và do đó nhận được tỷ lệ CPU cao hơn. Nếu làm khéo (ví dụ chạy 99% allotment rồi mới nhường CPU), một job có thể gần như độc chiếm CPU.</li>
+<li><strong>Thay đổi hành vi theo thời gian</strong>: một chương trình ban đầu CPU-bound (dùng CPU nhiều) có thể chuyển sang giai đoạn tương tác. Với cách tiếp cận hiện tại, job này sẽ không được đối xử như các interactive job khác.</li>
+</ol>
+<blockquote>
+<blockquote>
+<p><strong>TIP: SCHEDULING MUST BE SECURE FROM ATTACK</strong><br />
+Bạn có thể nghĩ rằng một <strong>scheduling policy</strong> (chính sách lập lịch), dù bên trong hệ điều hành hay trong bối cảnh rộng hơn (ví dụ: xử lý yêu cầu I/O trong hệ thống lưu trữ phân tán [Y+18]), không liên quan đến bảo mật. Nhưng ngày càng nhiều trường hợp cho thấy điều ngược lại. Hãy xem xét một <strong>data center</strong> hiện đại, nơi người dùng từ khắp thế giới chia sẻ CPU, bộ nhớ, mạng và hệ thống lưu trữ; nếu không cẩn trọng trong thiết kế và thực thi chính sách, một người dùng có thể gây hại cho người khác và giành lợi thế cho mình. Do đó, <strong>scheduling policy</strong> là một phần quan trọng của bảo mật hệ thống và cần được xây dựng cẩn thận.</p>
+</blockquote>
+</blockquote>
+<h2 id="83-lần-thử-2-priority-boost"><a class="header" href="#83-lần-thử-2-priority-boost">8.3 Lần thử #2: Priority Boost</a></h2>
+<p>Hãy thử thay đổi quy tắc để tránh vấn đề starvation. Chúng ta có thể làm gì để đảm bảo các job CPU-bound vẫn có tiến triển (dù ít)?</p>
+<p>Ý tưởng đơn giản: định kỳ <strong>tăng priority</strong> cho tất cả job trong hệ thống. Có nhiều cách thực hiện, nhưng ta chọn cách đơn giản: đưa tất cả lên hàng đợi cao nhất. Do đó, có thêm quy tắc mới:</p>
+<ul>
+<li><strong>Rule 5:</strong> Sau một khoảng thời gian <strong>S</strong>, di chuyển tất cả job trong hệ thống lên hàng đợi cao nhất.</li>
+</ul>
+<p>Quy tắc mới này giải quyết hai vấn đề:</p>
+<ol>
+<li><strong>Không bị đói CPU</strong>: khi ở hàng đợi cao nhất, job sẽ chia sẻ CPU với các job ưu tiên cao khác theo Round Robin, và cuối cùng sẽ được chạy.</li>
+<li><strong>Thay đổi hành vi</strong>: nếu một job CPU-bound trở thành interactive, scheduler sẽ xử lý đúng sau khi job được tăng priority.</li>
+</ol>
+<p><img src="./img/fig8_4.PNG" alt="" /></p>
+<p><strong>Ví dụ:</strong> Một job chạy dài cạnh tranh CPU với hai job tương tác ngắn.</p>
+<ul>
+<li><strong>Hình 8.4 (trái):</strong> Không có priority boost → job chạy dài bị đói khi hai job ngắn xuất hiện.</li>
+<li><strong>Hình 8.4 (phải):</strong> Có priority boost mỗi 100 ms (giá trị này có thể quá nhỏ, nhưng dùng để minh họa) → job chạy dài được tăng priority định kỳ và có cơ hội chạy.</li>
+</ul>
+<p>Tất nhiên, việc thêm khoảng thời gian S dẫn đến câu hỏi: <strong>S nên là bao nhiêu?</strong> John Ousterhout – một nhà nghiên cứu hệ thống nổi tiếng [O11] – gọi các giá trị như vậy là <strong>voo-doo constants</strong> (hằng số “ma thuật”), vì việc chọn đúng giá trị giống như cần phép thuật. Nếu S quá lớn → job chạy dài có thể bị đói; nếu quá nhỏ → job tương tác không được chia CPU hợp lý. Thường thì quản trị viên hệ thống sẽ điều chỉnh, hoặc hiện nay, dùng phương pháp tự động dựa trên <strong>machine learning</strong> [A+17].</p>
+<h2 id="84-lần-thử-3-better-accounting"><a class="header" href="#84-lần-thử-3-better-accounting">8.4 Lần thử #3: Better Accounting</a></h2>
+<p>Chúng ta còn một vấn đề: <strong>ngăn chặn việc lách luật scheduler</strong>. Thủ phạm chính là <strong>Rules 4a và 4b</strong>, cho phép job giữ nguyên priority nếu nhường CPU trước khi allotment hết. Giải pháp?</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: AVOID VOO-DOO CONSTANTS (OUSTERHOUT’S LAW)</strong><br />
+Tránh dùng <strong>voo-doo constants</strong> là ý tưởng tốt khi có thể. Nhưng như ví dụ trên, điều này thường khó. Có thể làm hệ thống tự học giá trị phù hợp, nhưng cũng không đơn giản. Kết quả thường thấy: một file cấu hình đầy giá trị mặc định, để quản trị viên giàu kinh nghiệm tinh chỉnh khi cần. Thực tế, chúng thường bị bỏ mặc, và chúng ta chỉ hy vọng giá trị mặc định hoạt động tốt. Mẹo này đến từ giáo sư OS John Ousterhout, nên được gọi là <strong>Ousterhout’s Law</strong>.</p>
+</blockquote>
+</blockquote>
+<p><img src="./img/fig8_5.PNG" alt="" /></p>
+<p><strong>Giải pháp:</strong> Thực hiện <strong>better accounting</strong> (ghi nhận chính xác hơn) thời gian CPU ở mỗi mức MLFQ. Thay vì quên allotment đã dùng khi job thực hiện I/O, scheduler sẽ <strong>ghi nhớ</strong>; khi job dùng hết allotment, nó bị giảm priority, bất kể dùng một lần dài hay nhiều lần ngắn. Do đó, gộp Rules 4a và 4b thành: <strong>Rule 4:</strong> Khi một job dùng hết allotment ở một mức (bất kể bao nhiêu lần nhường CPU), priority của nó bị giảm (chuyển xuống một hàng đợi).</p>
+<p><strong>Ví dụ:</strong> <strong>Hình 8.5</strong> cho thấy:</p>
+<ul>
+<li><strong>Trái:</strong> Với Rules 4a và 4b cũ → job có thể thực hiện I/O trước khi allotment hết, giữ nguyên priority và chiếm CPU.</li>
+<li><strong>Phải:</strong> Với better accounting → bất kể hành vi I/O, job sẽ dần bị giảm priority, không thể chiếm CPU quá mức.</li>
+</ul>
+<h2 id="85-tinh-chỉnh-mlfq-và-các-vấn-đề-khác"><a class="header" href="#85-tinh-chỉnh-mlfq-và-các-vấn-đề-khác">8.5 Tinh chỉnh MLFQ và các vấn đề khác</a></h2>
+<p>Một số vấn đề khác cũng phát sinh với <strong>MLFQ scheduling</strong> (lập lịch hàng đợi phản hồi đa mức). Một câu hỏi lớn là làm thế nào để <strong>tham số hóa</strong> (parameterize) một bộ lập lịch như vậy. Ví dụ: nên có bao nhiêu hàng đợi? <strong>Time slice</strong> (lượng thời gian chia cho mỗi tiến trình trong một vòng lập lịch) cho mỗi hàng đợi nên dài bao nhiêu? <strong>Allotment</strong> (tổng thời gian được cấp ở một mức ưu tiên) là bao nhiêu? Bao lâu thì nên <strong>boost priority</strong> (tăng mức ưu tiên) để tránh <strong>starvation</strong> (đói CPU) và phản ánh sự thay đổi trong hành vi của tiến trình?</p>
+<p>Không có câu trả lời đơn giản cho những câu hỏi này, và do đó chỉ có kinh nghiệm thực tế với các <strong>workload</strong> (khối lượng công việc) và việc tinh chỉnh bộ lập lịch sau đó mới có thể dẫn đến một sự cân bằng hợp lý.</p>
+<p>Ví dụ, hầu hết các biến thể của MLFQ cho phép thay đổi độ dài time slice giữa các hàng đợi khác nhau. Các hàng đợi ưu tiên cao thường được cấp time slice ngắn; chúng bao gồm các <strong>interactive job</strong> (tác vụ tương tác), và do đó việc chuyển đổi nhanh giữa chúng là hợp lý (ví dụ: 10 mili-giây hoặc ít hơn). Ngược lại, các hàng đợi ưu tiên thấp chứa các <strong>long-running job</strong> (tác vụ chạy dài) vốn <strong>CPU-bound</strong> (phụ thuộc nhiều vào CPU); vì vậy, time slice dài hơn sẽ hiệu quả hơn (ví dụ: hàng trăm mili-giây).</p>
+<p>Hình 8.6 minh họa một ví dụ trong đó hai job chạy 20 ms ở hàng đợi cao nhất (với time slice 10 ms), 40 ms ở hàng giữa (time slice 20 ms), và với time slice 40 ms ở hàng thấp nhất.</p>
+<p><img src="./img/fig8_6.PNG" alt="" /></p>
+<p><strong>Hình 8.6:</strong> Mức ưu tiên thấp hơn, lượng thời gian (quanta) dài hơn.</p>
+<p>Triển khai MLFQ của <strong>Solaris</strong> — lớp lập lịch <strong>Time-Sharing</strong> (TS) — đặc biệt dễ cấu hình; nó cung cấp một tập hợp các bảng xác định chính xác cách mức ưu tiên của một <strong>process</strong> (tiến trình) thay đổi trong suốt vòng đời của nó, độ dài mỗi time slice, và tần suất tăng mức ưu tiên của một job [AD00]. Quản trị viên có thể chỉnh sửa bảng này để khiến bộ lập lịch hoạt động theo những cách khác nhau.</p>
+<p>Giá trị mặc định của bảng là 60 hàng đợi, với độ dài time slice tăng dần từ 20 mili-giây (ưu tiên cao nhất) đến vài trăm mili-giây (ưu tiên thấp nhất), và mức ưu tiên được tăng khoảng mỗi 1 giây.</p>
+<p>Các bộ lập lịch MLFQ khác không sử dụng bảng hoặc các quy tắc chính xác như mô tả trong chương này; thay vào đó, chúng điều chỉnh mức ưu tiên bằng các công thức toán học. Ví dụ, bộ lập lịch <strong>FreeBSD</strong> (phiên bản 4.3) sử dụng một công thức để tính mức ưu tiên hiện tại của một job, dựa trên lượng CPU mà process đã sử dụng [LM+89]; ngoài ra, mức sử dụng này bị <strong>decay</strong> (giảm dần) theo thời gian, cung cấp hiệu ứng tăng ưu tiên theo một cách khác so với mô tả ở đây. Xem bài báo của Epema để có cái nhìn tổng quan xuất sắc về các thuật toán <strong>decay-usage</strong> và đặc tính của chúng [E95].</p>
+<p>Cuối cùng, nhiều bộ lập lịch còn có một số tính năng khác mà bạn có thể gặp. Ví dụ, một số bộ lập lịch dành các mức ưu tiên cao nhất cho công việc của hệ điều hành; do đó các job của người dùng thông thường sẽ không bao giờ đạt được mức ưu tiên cao nhất trong hệ thống. Một số hệ thống cũng cho phép người dùng cung cấp <strong>advice</strong> (gợi ý) để giúp thiết lập mức ưu tiên; ví dụ, bằng cách sử dụng tiện ích dòng lệnh <code>nice</code>, bạn có thể tăng hoặc giảm mức ưu tiên của một job (ở một mức độ nhất định) và do đó tăng hoặc giảm khả năng nó được chạy tại một thời điểm nhất định. Xem <strong>man page</strong> để biết thêm chi tiết.</p>
+<blockquote>
+<p><strong>TIP: USE ADVICE WHERE POSSIBLE</strong><br />
+Vì hệ điều hành hiếm khi biết điều gì là tốt nhất cho từng process trong hệ thống, nên việc cung cấp các giao diện cho phép người dùng hoặc quản trị viên đưa ra một số gợi ý cho OS thường rất hữu ích. Chúng ta thường gọi những gợi ý này là <em>advice</em>, vì OS không nhất thiết phải tuân theo, nhưng có thể cân nhắc chúng để đưa ra quyết định tốt hơn. Những gợi ý như vậy hữu ích ở nhiều phần của OS, bao gồm bộ lập lịch (ví dụ: với <code>nice</code>), <strong>memory manager</strong> (trình quản lý bộ nhớ, ví dụ: <code>madvise</code>), và <strong>file system</strong> (hệ thống tệp, ví dụ: <em>informed prefetching</em> và <em>caching</em> [P+95]).</p>
+</blockquote>
+<h2 id="86-mlfq-tóm-tắt"><a class="header" href="#86-mlfq-tóm-tắt">8.6 MLFQ: Tóm tắt</a></h2>
+<p>Chúng ta đã mô tả một phương pháp lập lịch được gọi là <strong>Multi-Level Feedback Queue</strong> (MLFQ — hàng đợi phản hồi đa mức). Hy vọng bạn đã thấy lý do tại sao nó được gọi như vậy: nó có nhiều mức hàng đợi, và sử dụng <strong>feedback</strong> (phản hồi) để xác định mức ưu tiên của một job nhất định. Lịch sử thực thi là kim chỉ nam: quan sát cách các job hoạt động theo thời gian và xử lý chúng tương ứng.</p>
+<p>Bộ quy tắc MLFQ đã được tinh chỉnh, rải rác trong chương, được tổng hợp lại ở đây:</p>
+<ul>
+<li><strong>Rule 1:</strong> Nếu Priority(A) &gt; Priority(B), A chạy (B không chạy).</li>
+<li><strong>Rule 2:</strong> Nếu Priority(A) = Priority(B), A và B chạy theo kiểu <strong>round-robin</strong> (xoay vòng) sử dụng time slice (độ dài quantum) của hàng đợi tương ứng.</li>
+<li><strong>Rule 3:</strong> Khi một job vào hệ thống, nó được đặt ở mức ưu tiên cao nhất (hàng đợi trên cùng).</li>
+<li><strong>Rule 4:</strong> Khi một job sử dụng hết allotment (tổng thời gian được cấp) ở một mức (bất kể nó đã nhường CPU bao nhiêu lần), mức ưu tiên của nó bị giảm (tức là nó xuống một hàng đợi).</li>
+<li><strong>Rule 5:</strong> Sau một khoảng thời gian S, di chuyển tất cả các job trong hệ thống lên hàng đợi trên cùng.</li>
+</ul>
+<p>MLFQ thú vị ở chỗ: thay vì yêu cầu biết trước bản chất của một job, nó quan sát quá trình thực thi và ưu tiên nó tương ứng. Theo cách này, nó đạt được lợi ích của cả hai thế giới: có thể cung cấp hiệu năng tổng thể xuất sắc (tương tự <strong>SJF/STCF</strong>) cho các job tương tác ngắn hạn, đồng thời vẫn công bằng và đảm bảo tiến độ cho các workload dài hạn, tiêu tốn nhiều CPU.</p>
+<p>Vì lý do này, nhiều hệ thống, bao gồm các biến thể <strong>BSD UNIX</strong> [LM+89, B86], <strong>Solaris</strong> [M06], và <strong>Windows NT</strong> cùng các hệ điều hành Windows sau này [CS97], sử dụng một dạng MLFQ làm bộ lập lịch (scheduler) cơ sở.</p>
+<h2 id="tham-khảo"><a class="header" href="#tham-khảo">Tham khảo</a></h2>
+<p>[AD00] “Multilevel Feedback Queue Scheduling in Solaris”<br />
+Andrea Arpaci-Dusseau<br />
+Available: http://www.ostep.org/Citations/notes-solaris.pdf<br />
+A great short set of notes by one of the authors on the details of the Solaris scheduler. OK, we are probably biased in this description, but the notes are pretty darn good.</p>
+<p>[B86] “The Design of the UNIX Operating System”<br />
+M.J. Bach<br />
+Prentice-Hall, 1986<br />
+One of the classic old books on how a real UNIX operating system is built; a definite must-read for kernel hackers.</p>
+<p>[C+62] “An Experimental Time-Sharing System”<br />
+F. J. Corbato, M. M. Daggett, R. C. Daley<br />
+IFIPS 1962<br />
+A bit hard to read, but the source of many of the first ideas in multi-level feedback scheduling. Much of this later went into Multics, which one could argue was the most influential operating system of all time.</p>
+<p>[CS97] “Inside Windows NT”<br />
+Helen Custer and David A. Solomon<br />
+Microsoft Press, 1997<br />
+The NT book, if you want to learn about something other than UNIX. Of course, why would you? OK, we’re kidding; you might actually work for Microsoft some day you know.</p>
+<p>[E95] “An Analysis of Decay-Usage Scheduling in Multiprocessors”<br />
+D.H.J. Epema<br />
+SIGMETRICS ’95<br />
+A nice paper on the state of the art of scheduling back in the mid 1990s, including a good overview of the basic approach behind decay-usage schedulers.</p>
+<p>[LM+89] “The Design and Implementation of the 4.3BSD UNIX Operating System”<br />
+S.J. Leffler, M.K. McKusick, M.J. Karels, J.S. Quarterman<br />
+Addison-Wesley, 1989<br />
+Another OS classic, written by four of the main people behind BSD. The later versions of this book, while more up to date, don’t quite match the beauty of this one.</p>
+<p>[M06] “Solaris Internals: Solaris 10 and OpenSolaris Kernel Architecture”<br />
+Richard McDougall<br />
+Prentice-Hall, 2006<br />
+A good book about Solaris and how it works.</p>
+<p>[O11] “John Ousterhout’s Home Page”
+John Ousterhout
+Available: http://www.stanford.edu/˜ouster/
+The home page of the famous Professor Ousterhout. The two co-authors of this book had the pleasure of
+taking graduate operating systems from Ousterhout while in graduate school; indeed, this is where the
+two co-authors got to know each other, eventually leading to marriage, kids, and even this book. Thus,
+you really can blame Ousterhout for this entire mess you’re in.</p>
+<p>[P+95] “Informed Prefetching and Caching”
+R.H. Patterson, G.A. Gibson, E. Ginting, D. Stodolsky, J. Zelenka
+SOSP ’95
+A fun paper about some very cool ideas in file systems, including how applications can give the OS
+advice about what files it is accessing and how it plans to access them</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../07/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../09/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../07/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../09/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

@@ -1,0 +1,468 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Sun’s Network File System (NFS) - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html" class="active"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="49-hệ-thống-tệp-mạng-của-sun-suns-network-file-system--nfs"><a class="header" href="#49-hệ-thống-tệp-mạng-của-sun-suns-network-file-system--nfs">49. Hệ thống Tệp Mạng của Sun (Sun’s Network File System – NFS)</a></h1>
+<p>Một trong những ứng dụng đầu tiên của mô hình tính toán <strong>client/server</strong> phân tán là trong lĩnh vực <strong>distributed file system</strong> (hệ thống tệp phân tán). Trong môi trường như vậy, có một số máy client và một máy server (hoặc một vài máy); server lưu trữ dữ liệu trên các ổ đĩa của nó, và các client yêu cầu dữ liệu thông qua các thông điệp giao thức được định dạng chuẩn.</p>
+<p><strong>Hình 49.1: Một hệ thống Client/Server tổng quát</strong></p>
+<p>Như bạn có thể thấy từ hình minh họa, server sở hữu các ổ đĩa, và các client gửi thông điệp qua mạng để truy cập thư mục và tệp trên các ổ đĩa đó.</p>
+<p>Tại sao chúng ta lại sử dụng mô hình này? (tức là, tại sao không để client dùng ổ đĩa cục bộ của chính nó?)</p>
+<ul>
+<li>Lý do chính là mô hình này cho phép <strong>chia sẻ dữ liệu dễ dàng</strong> giữa các client. Ví dụ, nếu bạn truy cập một tệp trên một máy (Client 0) và sau đó sử dụng một máy khác (Client 2), bạn sẽ có cùng một cái nhìn về hệ thống tệp. Dữ liệu của bạn được chia sẻ một cách tự nhiên giữa các máy khác nhau.</li>
+<li>Lợi ích thứ hai là <strong>quản trị tập trung</strong>; ví dụ, việc sao lưu tệp có thể được thực hiện từ một vài máy server thay vì từ hàng loạt máy client.</li>
+<li>Một lợi ích khác có thể là <strong>bảo mật</strong>; việc đặt tất cả server trong một phòng máy được khóa sẽ ngăn chặn một số loại sự cố nhất định.</li>
+</ul>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ XÂY DỰNG MỘT DISTRIBUTED FILE SYSTEM</strong><br />
+Làm thế nào để xây dựng một hệ thống tệp phân tán? Những khía cạnh chính cần xem xét là gì? Điều gì dễ mắc sai lầm? Chúng ta có thể học được gì từ các hệ thống hiện có?</p>
+</blockquote>
+</blockquote>
+<h2 id="491-một-distributed-file-system-cơ-bản"><a class="header" href="#491-một-distributed-file-system-cơ-bản">49.1 Một Distributed File System cơ bản</a></h2>
+<p>Bây giờ chúng ta sẽ nghiên cứu kiến trúc của một hệ thống tệp phân tán đơn giản. Một hệ thống tệp phân tán kiểu client/server đơn giản có nhiều thành phần hơn so với các hệ thống tệp mà chúng ta đã nghiên cứu trước đây.</p>
+<ul>
+<li>
+<p><strong>Phía client</strong>: có các ứng dụng client truy cập tệp và thư mục thông qua <strong>client-side file system</strong> (hệ thống tệp phía client).<br />
+Ứng dụng client gọi các <strong>system call</strong> tới client-side file system (chẳng hạn như <code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code>, <code>mkdir()</code>, v.v.) để truy cập các tệp được lưu trữ trên server.<br />
+Do đó, đối với ứng dụng client, hệ thống tệp không khác gì so với hệ thống tệp cục bộ (dựa trên đĩa), ngoại trừ có thể về hiệu năng; theo cách này, distributed file system cung cấp khả năng truy cập tệp <strong>minh bạch</strong> (transparent access) – một mục tiêu hiển nhiên; rốt cuộc, ai lại muốn dùng một hệ thống tệp yêu cầu một bộ API khác hoặc gây khó khăn khi sử dụng?</p>
+</li>
+<li>
+<p><strong>Vai trò của client-side file system</strong> là thực hiện các hành động cần thiết để xử lý các system call đó.<br />
+Ví dụ, nếu client thực hiện một yêu cầu <code>read()</code>, client-side file system có thể gửi một thông điệp tới <strong>server-side file system</strong> (hay thường gọi là <strong>file server</strong>) để đọc một block cụ thể; file server sau đó sẽ đọc block từ đĩa (hoặc từ <strong>in-memory cache</strong> của nó), và gửi lại một thông điệp cho client chứa dữ liệu được yêu cầu.<br />
+Client-side file system sau đó sẽ sao chép dữ liệu vào <strong>user buffer</strong> được truyền cho system call <code>read()</code>, và yêu cầu sẽ hoàn tất.<br />
+Lưu ý rằng, một lần <code>read()</code> tiếp theo của cùng block đó trên client có thể được lấy từ bộ nhớ cache của client hoặc thậm chí từ đĩa cục bộ của client; trong trường hợp tốt nhất, sẽ <strong>không cần</strong> tạo ra lưu lượng mạng nào.</p>
+</li>
+</ul>
+<p><strong>Hình 49.2: Kiến trúc Distributed File System</strong></p>
+<p>Từ cái nhìn tổng quan đơn giản này, bạn có thể thấy rằng có <strong>hai thành phần phần mềm quan trọng</strong> trong một distributed file system kiểu client/server:</p>
+<ol>
+<li><strong>Client-side file system</strong></li>
+<li><strong>File server</strong></li>
+</ol>
+<p>Hành vi kết hợp của chúng quyết định hành vi của toàn bộ distributed file system. Bây giờ là lúc nghiên cứu một hệ thống cụ thể: <strong>Sun’s Network File System (NFS)</strong>.</p>
+<h2 id="492-tìm-hiểu-về-nfs"><a class="header" href="#492-tìm-hiểu-về-nfs">49.2 Tìm hiểu về NFS</a></h2>
+<p>Một trong những hệ thống phân tán đầu tiên và khá thành công được phát triển bởi <strong>Sun Microsystems</strong>, được gọi là <strong>Sun Network File System (NFS)</strong> [S86].</p>
+<p>Khi định nghĩa NFS, Sun đã chọn một cách tiếp cận khác thường: thay vì xây dựng một hệ thống độc quyền và đóng, Sun đã phát triển một <strong>giao thức mở</strong> chỉ đơn giản là <strong>xác định chính xác định dạng thông điệp</strong> mà client và server sẽ sử dụng để giao tiếp.</p>
+<p>Nhờ đó, các nhóm khác nhau có thể phát triển NFS server của riêng họ và cạnh tranh trong thị trường NFS, đồng thời vẫn đảm bảo khả năng tương tác (<strong>interoperability</strong>). Và điều này đã thành công: ngày nay có nhiều công ty bán NFS server (bao gồm Oracle/Sun, NetApp [HLM94], EMC, IBM và những hãng khác), và sự thành công rộng rãi của NFS có thể được cho là nhờ vào cách tiếp cận “<strong>thị trường mở</strong>” này.</p>
+<blockquote>
+<blockquote>
+<p><strong>ASIDE: TẠI SAO SERVER BỊ CRASH</strong><br />
+Trước khi đi sâu vào chi tiết của giao thức NFSv2, bạn có thể tự hỏi: tại sao server lại bị crash? Như bạn có thể đoán, có rất nhiều lý do. Server có thể đơn giản bị mất điện (tạm thời); chỉ khi có điện trở lại thì máy mới có thể khởi động lại. Server thường bao gồm hàng trăm nghìn hoặc thậm chí hàng triệu dòng mã; do đó, chúng có lỗi (<strong>bug</strong>) (ngay cả phần mềm tốt cũng có một vài lỗi trên mỗi trăm hoặc nghìn dòng mã), và cuối cùng sẽ gặp phải một lỗi gây crash. Chúng cũng có thể bị <strong>memory leak</strong> (rò rỉ bộ nhớ); ngay cả một rò rỉ nhỏ cũng có thể khiến hệ thống hết bộ nhớ và crash. Và cuối cùng, trong các hệ thống phân tán, luôn tồn tại mạng giữa client và server; nếu mạng hoạt động bất thường (ví dụ: nếu bị phân vùng – <strong>network partition</strong> – và client và server vẫn hoạt động nhưng không thể giao tiếp), thì có thể <strong>trông như</strong> một máy từ xa đã bị crash, nhưng thực tế là nó chỉ tạm thời không thể truy cập qua mạng.</p>
+</blockquote>
+</blockquote>
+<h2 id="493-trọng-tâm-khôi-phục-nhanh-và-đơn-giản-khi-server-bị-crash-simple-and-fast-server-crash-recovery"><a class="header" href="#493-trọng-tâm-khôi-phục-nhanh-và-đơn-giản-khi-server-bị-crash-simple-and-fast-server-crash-recovery">49.3 Trọng tâm: Khôi phục nhanh và đơn giản khi server bị crash (Simple And Fast Server Crash Recovery)</a></h2>
+<p>Trong chương này, chúng ta sẽ thảo luận về <strong>giao thức NFS cổ điển</strong> (phiên bản 2, hay còn gọi là <strong>NFSv2</strong>), vốn đã là tiêu chuẩn trong nhiều năm; khi chuyển sang <strong>NFSv3</strong> chỉ có một số thay đổi nhỏ, còn khi chuyển sang <strong>NFSv4</strong> thì có những thay đổi lớn hơn về giao thức. Tuy nhiên, NFSv2 vừa tuyệt vời vừa gây nhiều bực bội, và do đó sẽ là trọng tâm nghiên cứu của chúng ta.</p>
+<p>Trong NFSv2, mục tiêu chính khi thiết kế giao thức là <strong>khôi phục nhanh chóng và đơn giản khi server bị crash</strong>. Trong môi trường nhiều client – một server, mục tiêu này là hoàn toàn hợp lý; bất kỳ phút nào server ngừng hoạt động (hoặc không thể truy cập) đều khiến tất cả các máy client (và người dùng của chúng) không hài lòng và giảm năng suất. Nói cách khác, <strong>server ra sao thì cả hệ thống sẽ như vậy</strong>.</p>
+<h2 id="494-chìa-khóa-để-khôi-phục-nhanh-khi-crash-statelessness"><a class="header" href="#494-chìa-khóa-để-khôi-phục-nhanh-khi-crash-statelessness">49.4 Chìa khóa để khôi phục nhanh khi crash: Statelessness</a></h2>
+<p>Mục tiêu đơn giản này được hiện thực hóa trong NFSv2 bằng cách thiết kế một giao thức <strong>stateless</strong> (không lưu trạng thái). Theo thiết kế, server <strong>không</strong> theo dõi bất kỳ thông tin nào về những gì đang diễn ra ở mỗi client.<br />
+Ví dụ: server không biết client nào đang cache block nào, hoặc file nào đang được mở ở mỗi client, hoặc vị trí con trỏ file hiện tại của một file, v.v. Nói ngắn gọn, server không theo dõi bất kỳ hoạt động nào của client; thay vào đó, giao thức được thiết kế sao cho <strong>mỗi yêu cầu giao thức đều chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu đó</strong>. Nếu điều này chưa rõ ràng, cách tiếp cận stateless sẽ trở nên dễ hiểu hơn khi chúng ta phân tích chi tiết giao thức ở phần sau.</p>
+<p>Ví dụ về một giao thức <strong>stateful</strong> (có lưu trạng thái, tức là không stateless) là system call <code>open()</code>.<br />
+Với một <strong>pathname</strong>, <code>open()</code> trả về một <strong>file descriptor</strong> (một số nguyên). Descriptor này được sử dụng trong các lời gọi <code>read()</code> hoặc <code>write()</code> tiếp theo để truy cập các block dữ liệu của file, như trong đoạn mã ứng dụng sau (lưu ý: phần kiểm tra lỗi của system call được lược bỏ để tiết kiệm không gian):</p>
+<pre><code class="language-c">char buffer[MAX];
+int fd = open(&quot;foo&quot;, O_RDONLY); // lấy descriptor &quot;fd&quot;
+read(fd, buffer, MAX);          // đọc MAX byte từ foo qua &quot;fd&quot;
+read(fd, buffer, MAX);          // đọc MAX byte lần nữa
+...
+read(fd, buffer, MAX);          // đọc MAX byte lần nữa
+close(fd);                      // đóng file
+</code></pre>
+<p><strong>Hình 49.3: Mã phía client – Đọc từ một file</strong></p>
+<p>Bây giờ hãy tưởng tượng <strong>client-side file system</strong> mở file bằng cách gửi một thông điệp giao thức tới server với nội dung: “mở file ‘foo’ và trả lại cho tôi một descriptor”. <strong>File server</strong> sau đó mở file cục bộ ở phía nó và gửi descriptor này về cho client.<br />
+Trong các lần đọc tiếp theo, ứng dụng client sử dụng descriptor đó để gọi system call <code>read()</code>; client-side file system sẽ truyền descriptor này trong thông điệp gửi tới file server, với nội dung: “đọc một số byte từ file được tham chiếu bởi descriptor mà tôi đang gửi cho bạn”.</p>
+<p>Trong ví dụ này, <strong>file descriptor</strong> là một phần của <strong>shared state</strong> (trạng thái chia sẻ) giữa client và server (Ousterhout gọi đây là <strong>distributed state</strong> [O91]). <strong>Shared state</strong>, như đã gợi ý ở trên, làm phức tạp quá trình khôi phục sau crash.<br />
+Hãy tưởng tượng server bị crash sau khi hoàn tất lần đọc đầu tiên, nhưng trước khi client gửi yêu cầu đọc thứ hai. Sau khi server khởi động lại, client gửi yêu cầu đọc thứ hai. Đáng tiếc, server <strong>không hề biết</strong> <code>fd</code> đang tham chiếu tới file nào; thông tin đó chỉ tồn tại tạm thời trong bộ nhớ và đã bị mất khi server crash.<br />
+Để xử lý tình huống này, client và server sẽ phải thực hiện một <strong>recovery protocol</strong> (giao thức khôi phục), trong đó client phải giữ đủ thông tin trong bộ nhớ của mình để có thể thông báo cho server những gì nó cần biết (trong trường hợp này là file descriptor <code>fd</code> tham chiếu tới file <code>foo</code>).</p>
+<p>Tình huống còn tệ hơn khi xét đến việc <strong>stateful server</strong> phải xử lý <strong>client crash</strong>.<br />
+Ví dụ: một client mở một file và sau đó bị crash. Lời gọi <code>open()</code> đã tiêu tốn một file descriptor trên server; làm sao server biết được khi nào thì an toàn để đóng file đó?<br />
+Trong hoạt động bình thường, client cuối cùng sẽ gọi <code>close()</code> và thông báo cho server rằng file nên được đóng. Tuy nhiên, khi client bị crash, server sẽ không bao giờ nhận được <code>close()</code>, và do đó phải tự phát hiện client đã crash để đóng file.</p>
+<p>Vì những lý do này, các nhà thiết kế NFS đã quyết định theo đuổi cách tiếp cận <strong>stateless</strong>: <strong>mỗi thao tác của client đều chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu</strong>.<br />
+Không cần cơ chế khôi phục phức tạp; server chỉ cần khởi động lại, và client, trong trường hợp xấu nhất, chỉ cần gửi lại yêu cầu.</p>
+<h2 id="495-giao-thức-nfsv2-the-nfsv2-protocol"><a class="header" href="#495-giao-thức-nfsv2-the-nfsv2-protocol">49.5 Giao thức NFSv2 (The NFSv2 Protocol)</a></h2>
+<p>Chúng ta đến với phần định nghĩa giao thức NFSv2. Bài toán đặt ra rất đơn giản:</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ ĐỊNH NGHĨA MỘT FILE PROTOCOL THEO KIỂU STATELESS</strong><br />
+Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động ở chế độ <strong>stateless</strong> (không lưu trạng thái)? Rõ ràng, các lời gọi <strong>stateful</strong> như <code>open()</code> không thể nằm trong phạm vi thảo luận (vì nó yêu cầu server phải theo dõi các file đang mở); tuy nhiên, ứng dụng phía client vẫn muốn gọi <code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code> và các lời gọi API chuẩn khác để truy cập file và thư mục. Do đó, câu hỏi chi tiết hơn là: làm thế nào để định nghĩa giao thức vừa <strong>stateless</strong> vừa hỗ trợ API hệ thống tệp <strong>POSIX</strong>?</p>
+</blockquote>
+</blockquote>
+<p>Một yếu tố then chốt để hiểu thiết kế của giao thức NFS là <strong>file handle</strong>. <strong>File handle</strong> được dùng để mô tả duy nhất file hoặc thư mục mà một thao tác cụ thể sẽ thực hiện; do đó, nhiều yêu cầu giao thức sẽ bao gồm một file handle.</p>
+<p>Bạn có thể hình dung một file handle gồm ba thành phần quan trọng:</p>
+<ol>
+<li><strong>Volume identifier</strong> (định danh volume)</li>
+<li><strong>Inode number</strong> (số inode)</li>
+<li><strong>Generation number</strong> (số thế hệ)</li>
+</ol>
+<p>Kết hợp lại, ba thành phần này tạo thành một định danh duy nhất cho một file hoặc thư mục mà client muốn truy cập.</p>
+<ul>
+<li><strong>Volume identifier</strong> cho server biết yêu cầu đang tham chiếu tới hệ thống tệp nào (một NFS server có thể export nhiều hệ thống tệp).</li>
+<li><strong>Inode number</strong> cho server biết file nào trong phân vùng đó đang được truy cập.</li>
+<li><strong>Generation number</strong> cần thiết khi tái sử dụng một inode number; bằng cách tăng giá trị này mỗi khi inode number được tái sử dụng, server đảm bảo rằng một client với file handle cũ sẽ không thể vô tình truy cập vào file mới được cấp phát.</li>
+</ul>
+<p>Dưới đây là tóm tắt một số thành phần quan trọng của giao thức; toàn bộ giao thức có thể tìm thấy ở nơi khác (xem sách của Callaghan để có cái nhìn chi tiết và xuất sắc về NFS [C00]).</p>
+<p><strong>Hình 49.4: Giao thức NFS – Ví dụ</strong></p>
+<p>Một số thành phần quan trọng của giao thức:</p>
+<ul>
+<li>
+<p><strong>LOOKUP</strong>: được dùng để lấy file handle, sau đó sẽ được sử dụng để truy cập dữ liệu file. Client gửi <strong>directory file handle</strong> và tên file cần tra cứu; server trả về file handle (hoặc directory handle) của file đó kèm theo <strong>attributes</strong> (thuộc tính).<br />
+Ví dụ: giả sử client đã có file handle của thư mục gốc <code>/</code> (thực tế, điều này có được thông qua <strong>NFS mount protocol</strong>, là cách client và server kết nối ban đầu; chúng ta sẽ không bàn chi tiết về mount protocol ở đây). Nếu một ứng dụng trên client mở file <code>/foo.txt</code>, client-side file system sẽ gửi yêu cầu LOOKUP tới server, truyền vào file handle của <code>/</code> và tên <code>foo.txt</code>; nếu thành công, file handle (và attributes) của <code>foo.txt</code> sẽ được trả về.</p>
+</li>
+<li>
+<p><strong>Attributes</strong>: là metadata mà hệ thống tệp lưu cho mỗi file, bao gồm thời gian tạo file, thời gian sửa đổi cuối cùng, kích thước, thông tin quyền sở hữu và phân quyền, v.v. – tức là cùng loại thông tin mà bạn nhận được khi gọi <code>stat()</code> trên một file.</p>
+</li>
+<li>
+<p><strong>READ</strong> và <strong>WRITE</strong>:</p>
+<ul>
+<li><strong>READ</strong> yêu cầu client gửi file handle, offset trong file và số byte cần đọc. Server sẽ đọc dữ liệu (file handle cho biết volume và inode, offset và count cho biết byte nào cần đọc) và trả về dữ liệu cùng attributes mới nhất (hoặc lỗi nếu thất bại).</li>
+<li><strong>WRITE</strong> tương tự, nhưng dữ liệu được gửi từ client tới server, và server trả về mã thành công cùng attributes mới nhất.</li>
+</ul>
+</li>
+<li>
+<p><strong>GETATTR</strong>: cho một file handle, yêu cầu này trả về attributes của file, bao gồm thời gian sửa đổi cuối cùng. Chúng ta sẽ thấy tại sao yêu cầu này quan trọng trong NFSv2 khi bàn về caching (bạn có đoán được lý do không?).</p>
+</li>
+</ul>
+<h2 id="496-từ-giao-thức-đến-distributed-file-system-from-protocol-to-distributed-file-system"><a class="header" href="#496-từ-giao-thức-đến-distributed-file-system-from-protocol-to-distributed-file-system">49.6 Từ giao thức đến Distributed File System (From Protocol To Distributed File System)</a></h2>
+<p>Hy vọng đến đây bạn đã hình dung được cách giao thức này được triển khai thành một hệ thống tệp phân tán thông qua <strong>client-side file system</strong> và <strong>file server</strong>.</p>
+<ul>
+<li><strong>Client-side file system</strong> theo dõi các file đang mở và thường dịch các yêu cầu của ứng dụng thành tập hợp các thông điệp giao thức tương ứng.</li>
+<li><strong>Server</strong> chỉ đơn giản phản hồi các thông điệp giao thức, mỗi thông điệp chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu.</li>
+</ul>
+<p>Ví dụ, hãy xét một ứng dụng đơn giản đọc một file. Trong sơ đồ (<strong>Hình 49.5</strong>), chúng ta thấy các system call mà ứng dụng thực hiện, và cách client-side file system cùng file server xử lý các lời gọi này.</p>
+<p><strong>Hình 49.5: Đọc một file – Hoạt động của Client-side và File Server</strong></p>
+<p>Một vài nhận xét về hình minh họa:</p>
+<ol>
+<li>
+<p><strong>Client</strong> theo dõi toàn bộ trạng thái liên quan đến truy cập file, bao gồm ánh xạ từ <strong>file descriptor</strong> (số nguyên) sang <strong>NFS file handle</strong> và vị trí con trỏ file hiện tại. Điều này cho phép client biến mỗi yêu cầu đọc (vốn không chỉ rõ offset cần đọc) thành một thông điệp READ được định dạng đúng, chỉ rõ cho server byte nào của file cần đọc. Sau khi đọc thành công, client cập nhật vị trí con trỏ file; các lần đọc tiếp theo sẽ dùng cùng file handle nhưng offset khác.</p>
+</li>
+<li>
+<p><strong>Tương tác với server</strong>: Khi file được mở lần đầu, client-side file system gửi thông điệp LOOKUP. Nếu đường dẫn dài (ví dụ <code>/home/remzi/foo.txt</code>), client sẽ gửi ba LOOKUP:</p>
+<ul>
+<li>Một để tra <code>home</code> trong thư mục <code>/</code></li>
+<li>Một để tra <code>remzi</code> trong <code>home</code></li>
+<li>Và một để tra <code>foo.txt</code> trong <code>remzi</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Mỗi yêu cầu tới server</strong> đều chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu. Đây là điểm thiết kế quan trọng để có thể khôi phục trơn tru sau khi server bị lỗi, vì nó đảm bảo server không cần trạng thái để phản hồi yêu cầu.</p>
+</li>
+</ol>
+<h2 id="497-xử-lý-lỗi-server-với-các-thao-tác-idempotent-handling-server-failure-with-idempotent-operations"><a class="header" href="#497-xử-lý-lỗi-server-với-các-thao-tác-idempotent-handling-server-failure-with-idempotent-operations">49.7 Xử lý lỗi server với các thao tác idempotent (Handling Server Failure With Idempotent Operations)</a></h2>
+<p>Khi một <strong>client</strong> gửi thông điệp tới <strong>server</strong>, đôi khi nó không nhận được phản hồi. Có nhiều nguyên nhân có thể dẫn đến việc này.</p>
+<ul>
+<li>Trong một số trường hợp, thông điệp có thể bị <strong>network</strong> (mạng) làm rơi; mạng có thể làm mất gói tin, và do đó hoặc yêu cầu hoặc phản hồi có thể bị mất, khiến client không bao giờ nhận được câu trả lời.</li>
+<li>Cũng có thể server đã bị <strong>crash</strong> và do đó hiện tại không phản hồi các thông điệp. Sau một thời gian, server sẽ được khởi động lại và chạy bình thường, nhưng trong thời gian đó tất cả các yêu cầu đã bị mất.</li>
+</ul>
+<p>Trong tất cả các trường hợp này, client sẽ phải đối mặt với câu hỏi: <strong>nên làm gì khi server không phản hồi kịp thời?</strong></p>
+<p>Trong <strong>NFSv2</strong>, client xử lý tất cả các lỗi này theo một cách <strong>duy nhất, thống nhất và gọn gàng</strong>: nó đơn giản là <strong>gửi lại yêu cầu</strong>.<br />
+Cụ thể, sau khi gửi yêu cầu, client đặt một bộ đếm thời gian (<strong>timer</strong>) để kích hoạt sau một khoảng thời gian nhất định.</p>
+<ul>
+<li>Nếu phản hồi được nhận trước khi timer kích hoạt, timer bị hủy và mọi thứ đều ổn.</li>
+<li>Nếu timer kích hoạt trước khi nhận được phản hồi, client giả định rằng yêu cầu chưa được xử lý và gửi lại.<br />
+Nếu server phản hồi, mọi thứ lại ổn và client đã xử lý gọn gàng vấn đề.</li>
+</ul>
+<p>Khả năng của client trong việc đơn giản gửi lại yêu cầu (bất kể nguyên nhân lỗi là gì) là nhờ một thuộc tính quan trọng của hầu hết các yêu cầu NFS: chúng là <strong>idempotent</strong>.</p>
+<p><strong>Idempotent</strong> nghĩa là: hiệu ứng của việc thực hiện thao tác nhiều lần <strong>tương đương</strong> với hiệu ứng của việc thực hiện thao tác đó một lần duy nhất.</p>
+<ul>
+<li>Ví dụ: nếu bạn ghi một giá trị vào một vị trí bộ nhớ ba lần, kết quả giống như chỉ ghi một lần ⇒ “store value to memory” là một thao tác idempotent.</li>
+<li>Ngược lại, nếu bạn tăng một bộ đếm ba lần, kết quả sẽ khác so với chỉ tăng một lần ⇒ “increment counter” <strong>không</strong> phải là idempotent.</li>
+</ul>
+<p>Nói chung, mọi thao tác chỉ đọc dữ liệu thì hiển nhiên là idempotent; còn thao tác cập nhật dữ liệu thì cần xem xét kỹ để xác định xem nó có thuộc tính này hay không.</p>
+<p>Trọng tâm của thiết kế <strong>crash recovery</strong> (khôi phục sau crash) trong NFS là tính idempotent của hầu hết các thao tác phổ biến:</p>
+<ul>
+<li><strong>LOOKUP</strong> và <strong>READ</strong> là idempotent một cách hiển nhiên, vì chúng chỉ đọc thông tin từ file server và không cập nhật gì.</li>
+<li>Thú vị hơn, <strong>WRITE</strong> cũng là idempotent. Nếu một WRITE thất bại, client có thể đơn giản gửi lại. Thông điệp WRITE chứa dữ liệu, số byte (count), và <strong>offset chính xác</strong> để ghi dữ liệu. Do đó, nó có thể được lặp lại với đảm bảo rằng kết quả của nhiều lần ghi giống hệt kết quả của một lần ghi.</li>
+</ul>
+<p><strong>Hình 49.6: Ba loại mất mát (The Three Types Of Loss)</strong></p>
+<p>Theo cách này, client có thể xử lý tất cả các timeout theo một cách thống nhất:</p>
+<ul>
+<li><strong>Case 1</strong>: Nếu một yêu cầu WRITE bị mất, client sẽ gửi lại, server thực hiện ghi, và mọi thứ ổn.</li>
+<li><strong>Case 2</strong>: Nếu server bị down khi yêu cầu được gửi, nhưng đã up trở lại khi yêu cầu thứ hai được gửi, mọi thứ vẫn hoạt động như mong muốn.</li>
+<li><strong>Case 3</strong>: Nếu server nhận yêu cầu WRITE, ghi dữ liệu xuống đĩa và gửi phản hồi, nhưng phản hồi bị mất, client sẽ gửi lại yêu cầu. Khi nhận lại, server sẽ thực hiện đúng thao tác như trước: ghi dữ liệu xuống đĩa và phản hồi. Nếu lần này client nhận được phản hồi, mọi thứ lại ổn.</li>
+</ul>
+<p>Như vậy, client đã xử lý cả <strong>message loss</strong> (mất thông điệp) và <strong>server failure</strong> (lỗi server) theo một cách thống nhất. Gọn gàng!</p>
+<p>Một lưu ý nhỏ: một số thao tác khó để làm idempotent.<br />
+Ví dụ: khi bạn tạo một thư mục đã tồn tại, bạn sẽ nhận thông báo rằng yêu cầu <code>mkdir</code> thất bại. Trong NFS, nếu file server nhận thông điệp giao thức MKDIR và thực hiện thành công nhưng phản hồi bị mất, client có thể gửi lại và gặp lỗi “thư mục đã tồn tại” – mặc dù thao tác ban đầu đã thành công và chỉ thất bại ở lần gửi lại. Cuộc sống không hoàn hảo.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: “PERFECT IS THE ENEMY OF THE GOOD” – LUẬT CỦA VOLTAIRE <sup class="footnote-reference"><a href="#2">1</a></sup></strong><br />
+Ngay cả khi bạn thiết kế một hệ thống tuyệt vời, đôi khi các trường hợp đặc biệt (corner cases) sẽ không hoạt động hoàn hảo như mong muốn. Lấy ví dụ <code>mkdir</code> ở trên; bạn có thể thiết kế lại <code>mkdir</code> với ngữ nghĩa khác để nó trở thành idempotent (hãy thử nghĩ cách làm), nhưng liệu có đáng không? Triết lý thiết kế của NFS bao quát hầu hết các trường hợp quan trọng, và nhìn chung làm cho thiết kế hệ thống trở nên gọn gàng và đơn giản khi xử lý lỗi. Do đó, chấp nhận rằng cuộc sống không hoàn hảo nhưng vẫn xây dựng hệ thống là dấu hiệu của một kỹ sư giỏi. Câu nói này được cho là của Voltaire: “... một người Ý khôn ngoan nói rằng cái tốt nhất là kẻ thù của cái tốt” [V72], và vì thế chúng ta gọi đây là <strong>Luật của Voltaire</strong>.</p>
+</blockquote>
+</blockquote>
+<h2 id="498-cải-thiện-hiệu-năng-client-side-caching-bộ-nhớ-đệm-phía-client"><a class="header" href="#498-cải-thiện-hiệu-năng-client-side-caching-bộ-nhớ-đệm-phía-client">49.8 Cải thiện hiệu năng: Client-side Caching (Bộ nhớ đệm phía client)</a></h2>
+<p><strong>Distributed file system</strong> (hệ thống tệp phân tán) có nhiều ưu điểm, nhưng việc gửi tất cả các yêu cầu đọc và ghi qua mạng có thể dẫn đến một vấn đề lớn về hiệu năng: mạng thường không nhanh, đặc biệt khi so với bộ nhớ hoặc đĩa cục bộ. Do đó, một câu hỏi khác được đặt ra: <strong>làm thế nào để cải thiện hiệu năng của một distributed file system?</strong></p>
+<p>Câu trả lời, như bạn có thể đoán từ tiêu đề, là <strong>client-side caching</strong> (bộ nhớ đệm phía client). <strong>NFS client-side file system</strong> lưu trữ dữ liệu file (và metadata) mà nó đã đọc từ server trong bộ nhớ của client. Nhờ vậy, trong khi lần truy cập đầu tiên tốn kém (vì cần giao tiếp qua mạng), các lần truy cập sau được phục vụ rất nhanh từ bộ nhớ của client.</p>
+<p>Bộ nhớ đệm này cũng đóng vai trò như một bộ đệm tạm thời cho các thao tác ghi. Khi một ứng dụng client ghi vào file, dữ liệu sẽ được lưu tạm trong bộ nhớ của client (trong cùng bộ nhớ đệm với dữ liệu đọc từ file server) trước khi được ghi ra server. Cơ chế <strong>write buffering</strong> này hữu ích vì nó tách độ trễ của lời gọi <code>write()</code> trong ứng dụng khỏi hiệu năng ghi thực tế, tức là lời gọi <code>write()</code> của ứng dụng sẽ trả về ngay lập tức (chỉ đưa dữ liệu vào cache của client-side file system); dữ liệu chỉ được ghi ra file server sau đó.</p>
+<p>Vậy là NFS client cache dữ liệu và hiệu năng thường rất tốt, xong rồi phải không? Đáng tiếc là chưa hẳn. Việc thêm cơ chế cache vào bất kỳ hệ thống nào có nhiều client cache sẽ dẫn đến một thách thức lớn và thú vị, gọi là <strong>cache consistency problem</strong> (vấn đề nhất quán bộ nhớ đệm).</p>
+<h2 id="499-vấn-đề-nhất-quán-bộ-nhớ-đệm-the-cache-consistency-problem"><a class="header" href="#499-vấn-đề-nhất-quán-bộ-nhớ-đệm-the-cache-consistency-problem">49.9 Vấn đề nhất quán bộ nhớ đệm (The Cache Consistency Problem)</a></h2>
+<p>Vấn đề này được minh họa rõ nhất với ba client và một server.</p>
+<ul>
+<li>Giả sử client <strong>C1</strong> đọc file <strong>F</strong> và giữ một bản sao trong cache cục bộ.</li>
+<li>Tiếp theo, một client khác, <strong>C2</strong>, ghi đè file <strong>F</strong>, thay đổi nội dung của nó; gọi phiên bản mới là <strong>F[v2]</strong> và phiên bản cũ là <strong>F[v1]</strong> (file vẫn cùng tên, chỉ khác nội dung).</li>
+<li>Cuối cùng, có một client thứ ba, <strong>C3</strong>, chưa từng truy cập file <strong>F</strong>.</li>
+</ul>
+<p><strong>Hình 49.7: Vấn đề nhất quán bộ nhớ đệm</strong></p>
+<p>Có thể bạn đã thấy vấn đề (Hình 49.7). Thực tế, có <strong>hai tiểu vấn đề</strong>:</p>
+<ol>
+<li>
+<p><strong>Update visibility</strong> (tính hiển thị của bản cập nhật):<br />
+Client <strong>C2</strong> có thể giữ dữ liệu ghi trong cache một thời gian trước khi gửi lên server; trong thời gian đó, khi <strong>F[v2]</strong> chỉ nằm trong bộ nhớ của C2, bất kỳ client nào khác (ví dụ C3) truy cập F sẽ nhận bản cũ <strong>F[v1]</strong>. Điều này khiến các client khác nhận dữ liệu lỗi thời, có thể gây khó chịu (ví dụ: bạn đăng nhập vào C2, cập nhật F, rồi đăng nhập vào C3 và đọc file nhưng lại nhận bản cũ).</p>
+</li>
+<li>
+<p><strong>Stale cache</strong> (cache lỗi thời):<br />
+Trong trường hợp này, C2 đã gửi dữ liệu ghi lên server, và server có phiên bản mới nhất <strong>F[v2]</strong>. Tuy nhiên, C1 vẫn giữ <strong>F[v1]</strong> trong cache; nếu một chương trình trên C1 đọc F, nó sẽ nhận bản cũ thay vì bản mới nhất.</p>
+</li>
+</ol>
+<p><strong>Cách NFSv2 giải quyết:</strong></p>
+<ul>
+<li>
+<p><strong>Giải quyết update visibility</strong>:<br />
+Client triển khai cơ chế <strong>flush-on-close</strong> (hay <strong>close-to-open</strong> consistency semantics); cụ thể, khi một file được ghi và sau đó đóng bởi ứng dụng client, client sẽ gửi tất cả các cập nhật (các trang dirty trong cache) lên server. Nhờ đó, một lần mở file sau đó từ node khác sẽ thấy phiên bản mới nhất.</p>
+</li>
+<li>
+<p><strong>Giải quyết stale cache</strong>:<br />
+Trước khi dùng dữ liệu trong cache, client-side file system sẽ gửi yêu cầu <strong>GETATTR</strong> tới server để lấy <strong>attributes</strong> (thuộc tính) của file. Thuộc tính này bao gồm thời điểm file được sửa đổi lần cuối trên server; nếu thời điểm này mới hơn thời điểm file được đưa vào cache của client, client sẽ <strong>invalidate</strong> (hủy) file trong cache, đảm bảo các lần đọc tiếp theo sẽ lấy bản mới nhất từ server. Nếu client thấy mình đã có bản mới nhất, nó sẽ dùng dữ liệu trong cache để tăng hiệu năng.</p>
+</li>
+</ul>
+<p><strong>Vấn đề mới phát sinh:</strong><br />
+Khi nhóm phát triển ban đầu tại Sun triển khai giải pháp stale cache này, họ nhận ra một vấn đề mới: server NFS bị <strong>ngập lụt</strong> bởi các yêu cầu GETATTR.<br />
+Nguyên tắc thiết kế tốt là tối ưu cho <strong>trường hợp phổ biến</strong>; ở đây, trường hợp phổ biến là file chỉ được truy cập từ một client (có thể nhiều lần), nhưng client vẫn phải gửi GETATTR mỗi lần để chắc chắn không ai thay đổi file. Điều này khiến server liên tục bị hỏi “có ai thay đổi file này không?”, trong khi hầu hết thời gian câu trả lời là “không”.</p>
+<p><strong>Giải pháp:</strong><br />
+Thêm <strong>attribute cache</strong> vào mỗi client. Client vẫn xác thực file trước khi truy cập, nhưng thường chỉ cần tra trong attribute cache. Thuộc tính của file được đưa vào cache khi file được truy cập lần đầu, và sẽ <strong>timeout</strong> sau một khoảng thời gian (ví dụ 3 giây). Trong thời gian này, mọi truy cập file sẽ dùng bản cache mà không cần giao tiếp mạng với server.</p>
+<h2 id="4910-Đánh-giá-tính-nhất-quán-cache-của-nfs-assessing-nfs-cache-consistency"><a class="header" href="#4910-Đánh-giá-tính-nhất-quán-cache-của-nfs-assessing-nfs-cache-consistency">49.10 Đánh giá tính nhất quán cache của NFS (Assessing NFS Cache Consistency)</a></h2>
+<p>Một vài nhận xét cuối cùng về tính nhất quán cache của NFS:</p>
+<ul>
+<li>
+<p><strong>Flush-on-close</strong> được thêm vào để “hợp lý” hơn, nhưng lại gây ra vấn đề hiệu năng: nếu một file tạm hoặc file sống ngắn được tạo trên client và sớm bị xóa, nó vẫn bị gửi lên server. Một cách tối ưu hơn là giữ các file ngắn hạn này trong bộ nhớ cho đến khi bị xóa, loại bỏ hoàn toàn tương tác với server.</p>
+</li>
+<li>
+<p>Việc thêm <strong>attribute cache</strong> khiến khó xác định chính xác phiên bản file mà bạn nhận được: đôi khi là bản mới nhất, đôi khi là bản cũ chỉ vì attribute cache chưa hết hạn. Dù hầu hết thời gian điều này không gây vấn đề, nhưng đôi khi vẫn dẫn đến hành vi khó hiểu.</p>
+</li>
+</ul>
+<p>Như vậy, chúng ta đã mô tả sự “đặc biệt” của <strong>NFS client caching</strong>. Đây là một ví dụ thú vị cho thấy chi tiết triển khai có thể quyết định <strong>ngữ nghĩa quan sát được bởi người dùng</strong>, thay vì ngược lại.</p>
+<h2 id="4911-Ảnh-hưởng-của-write-buffering-phía-server-implications-on-server-side-write-buffering"><a class="header" href="#4911-Ảnh-hưởng-của-write-buffering-phía-server-implications-on-server-side-write-buffering">49.11 Ảnh hưởng của Write Buffering phía Server (Implications On Server-Side Write Buffering)</a></h2>
+<p>Cho đến giờ, chúng ta tập trung vào <strong>client caching</strong> (bộ nhớ đệm phía client), nơi phát sinh hầu hết các vấn đề thú vị. Tuy nhiên, các <strong>NFS server</strong> thường là những máy được trang bị tốt với nhiều bộ nhớ, và vì vậy chúng cũng có các vấn đề liên quan đến caching. Khi dữ liệu (và metadata) được đọc từ đĩa, NFS server sẽ giữ nó trong bộ nhớ, và các lần đọc tiếp theo của dữ liệu (và metadata) đó sẽ không cần truy cập đĩa, mang lại một cải thiện (nhỏ) về hiệu năng.</p>
+<p>Điều thú vị hơn là trường hợp <strong>write buffering</strong> (đệm ghi). Một NFS server <strong>tuyệt đối không được</strong> trả về trạng thái thành công cho một yêu cầu <strong>WRITE</strong> trong giao thức cho đến khi thao tác ghi đã được ghi xuống <strong>stable storage</strong> (bộ nhớ lưu trữ bền vững, ví dụ: đĩa hoặc thiết bị lưu trữ lâu dài khác). Mặc dù server có thể lưu một bản sao dữ liệu trong bộ nhớ, việc trả về thành công cho client khi yêu cầu WRITE chưa được ghi xuống bộ nhớ bền vững có thể dẫn đến hành vi sai; bạn có đoán được tại sao không?</p>
+<p>Câu trả lời nằm ở giả định của chúng ta về cách client xử lý lỗi server. Hãy tưởng tượng chuỗi thao tác ghi sau được thực hiện bởi một client:</p>
+<pre><code class="language-c">write(fd, a_buffer, size); // ghi block 1 toàn ký tự 'a'
+write(fd, b_buffer, size); // ghi block 2 toàn ký tự 'b'
+write(fd, c_buffer, size); // ghi block 3 toàn ký tự 'c'
+</code></pre>
+<p>Các thao tác này ghi đè ba block của một file: block đầu bằng ‘a’, block thứ hai bằng ‘b’, và block thứ ba bằng ‘c’. Giả sử file ban đầu trông như sau:</p>
+<pre><code>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy
+zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+</code></pre>
+<p>Chúng ta kỳ vọng kết quả cuối cùng sau các thao tác ghi sẽ là:</p>
+<pre><code>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+cccccccccccccccccccccccccccccccccccccccccccc
+</code></pre>
+<p>Bây giờ, giả sử ba thao tác ghi này được gửi tới server dưới dạng ba thông điệp WRITE riêng biệt.</p>
+<ul>
+<li>Thông điệp WRITE đầu tiên được server nhận và ghi xuống đĩa, sau đó thông báo thành công cho client.</li>
+<li>Thông điệp WRITE thứ hai chỉ được lưu trong bộ nhớ, và server <strong>cũng</strong> báo thành công cho client trước khi ghi xuống đĩa; không may, server bị crash trước khi ghi nó xuống đĩa.</li>
+<li>Server nhanh chóng khởi động lại và nhận yêu cầu WRITE thứ ba, thao tác này thành công.</li>
+</ul>
+<p>Kết quả là, từ góc nhìn của client, tất cả yêu cầu đều thành công, nhưng nội dung file lại như sau:</p>
+<pre><code>aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy &lt;--- lỗi
+cccccccccccccccccccccccccccccccccccccccccccc
+</code></pre>
+<p>Thật tệ! Vì server đã báo thành công cho client ở thao tác ghi thứ hai trước khi commit xuống đĩa, một phần dữ liệu cũ vẫn tồn tại trong file, điều này – tùy ứng dụng – có thể gây hậu quả nghiêm trọng.</p>
+<blockquote>
+<blockquote>
+<p><strong>ASIDE: SỰ ĐỔI MỚI KÉO THEO SỰ ĐỔI MỚI (INNOVATION BREEDS INNOVATION) <sup class="footnote-reference"><a href="#3">2</a></sup></strong><br />
+Giống như nhiều công nghệ tiên phong khác, việc đưa NFS ra đời cũng đòi hỏi những đổi mới nền tảng khác để đảm bảo thành công. Có lẽ bền vững nhất là <strong>Virtual File System (VFS)</strong> / <strong>Virtual Node (vnode)</strong> interface, được Sun giới thiệu để cho phép các hệ thống tệp khác nhau dễ dàng tích hợp vào hệ điều hành [K86].<br />
+Lớp <strong>VFS</strong> bao gồm các thao tác áp dụng cho toàn bộ hệ thống tệp, như mount/unmount, lấy thống kê toàn hệ thống tệp, và ép ghi tất cả các trang dirty (chưa ghi) xuống đĩa. Lớp <strong>vnode</strong> bao gồm tất cả các thao tác có thể thực hiện trên một file, như open, close, read, write, v.v.<br />
+Để xây dựng một hệ thống tệp mới, chỉ cần định nghĩa các “method” này; framework sẽ xử lý phần còn lại, kết nối system call tới triển khai hệ thống tệp cụ thể, thực hiện các chức năng chung (ví dụ: caching) một cách tập trung, và cho phép nhiều hệ thống tệp cùng hoạt động trong một hệ điều hành.<br />
+Mặc dù một số chi tiết đã thay đổi, nhiều hệ thống hiện đại vẫn có một dạng lớp VFS/vnode, bao gồm Linux, các biến thể BSD, macOS, và thậm chí Windows (dưới dạng Installable File System). Ngay cả khi NFS trở nên ít quan trọng hơn, những nền tảng cần thiết bên dưới nó vẫn sẽ tồn tại.</p>
+</blockquote>
+</blockquote>
+<p>Để tránh vấn đề này, NFS server <strong>phải</strong> commit mỗi thao tác ghi xuống <strong>persistent storage</strong> trước khi thông báo thành công cho client; làm vậy cho phép client phát hiện lỗi server trong khi ghi và retry cho đến khi thành công. Điều này đảm bảo chúng ta sẽ không bao giờ gặp tình trạng nội dung file bị trộn lẫn như ví dụ trên.</p>
+<p>Vấn đề mà yêu cầu này gây ra trong triển khai NFS server là hiệu năng ghi, nếu không được xử lý tốt, có thể trở thành <strong>nút thắt cổ chai</strong>. Thực tế, một số công ty (ví dụ: Network Appliance) ra đời với mục tiêu đơn giản là xây dựng NFS server có khả năng ghi nhanh; một thủ thuật họ sử dụng là ghi dữ liệu vào <strong>bộ nhớ có pin dự phòng</strong> (battery-backed memory) trước, cho phép phản hồi nhanh các yêu cầu WRITE mà không sợ mất dữ liệu và không phải chịu chi phí ghi xuống đĩa ngay lập tức; thủ thuật thứ hai là sử dụng thiết kế hệ thống tệp được tối ưu hóa đặc biệt để ghi xuống đĩa nhanh chóng khi cần [HLM94, RO91].</p>
+<h2 id="4912-tóm-tắt-summary"><a class="header" href="#4912-tóm-tắt-summary">49.12 Tóm tắt (Summary)</a></h2>
+<p>Chúng ta đã tìm hiểu về <strong>NFS distributed file system</strong>. NFS tập trung vào ý tưởng <strong>khôi phục nhanh và đơn giản khi server bị lỗi</strong>, đạt được điều này thông qua thiết kế giao thức cẩn thận. <strong>Idempotency</strong> (tính idempotent) của các thao tác là yếu tố then chốt; vì client có thể an toàn thực hiện lại một thao tác thất bại, nên việc này là chấp nhận được dù server đã hay chưa thực hiện yêu cầu.</p>
+<p>Chúng ta cũng đã thấy việc đưa caching vào một hệ thống nhiều client – một server có thể làm mọi thứ phức tạp hơn. Đặc biệt, hệ thống phải giải quyết <strong>cache consistency problem</strong> (vấn đề nhất quán bộ nhớ đệm) để hoạt động hợp lý; tuy nhiên, NFS giải quyết theo cách hơi “ad hoc”, đôi khi dẫn đến hành vi kỳ lạ có thể quan sát được. Cuối cùng, chúng ta thấy caching phía server cũng phức tạp: các thao tác ghi phải được commit xuống <strong>stable storage</strong> trước khi trả về thành công (nếu không dữ liệu có thể bị mất).</p>
+<p>Chúng ta chưa bàn đến các vấn đề khác cũng rất quan trọng, đặc biệt là <strong>bảo mật</strong>. Bảo mật trong các phiên bản NFS đầu tiên cực kỳ lỏng lẻo; rất dễ để bất kỳ người dùng nào trên client giả mạo thành người dùng khác và truy cập hầu như bất kỳ file nào. Việc tích hợp sau này với các dịch vụ xác thực nghiêm ngặt hơn (ví dụ: <strong>Kerberos</strong> [NT94]) đã khắc phục những thiếu sót rõ ràng này.</p>
+<blockquote>
+<blockquote>
+<p><strong>ASIDE: CÁC THUẬT NGỮ CHÍNH TRONG NFS</strong></p>
+<ul>
+<li>Chìa khóa để đạt được mục tiêu khôi phục nhanh và đơn giản khi crash trong NFS nằm ở thiết kế giao thức <strong>stateless</strong>. Sau khi crash, server có thể nhanh chóng khởi động lại và phục vụ yêu cầu; client chỉ cần retry cho đến khi thành công.</li>
+<li>Làm cho các yêu cầu <strong>idempotent</strong> là một khía cạnh trung tâm của giao thức NFS. Một thao tác là idempotent khi việc thực hiện nó nhiều lần cho kết quả giống như thực hiện một lần. Trong NFS, idempotency cho phép client retry mà không lo lắng, và hợp nhất cơ chế gửi lại thông điệp bị mất với cách client xử lý crash của server.</li>
+<li>Các yêu cầu về hiệu năng đòi hỏi phải có <strong>client-side caching</strong> và <strong>write buffering</strong>, nhưng điều này lại dẫn đến vấn đề nhất quán bộ nhớ đệm.</li>
+<li>NFS triển khai giải pháp kỹ thuật cho vấn đề nhất quán bộ nhớ đệm thông qua nhiều cách: cơ chế <strong>flush-on-close</strong> (close-to-open) đảm bảo khi</li>
+</ul>
+</blockquote>
+</blockquote>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../48/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../50/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../48/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../50/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

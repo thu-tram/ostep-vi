@@ -1,0 +1,332 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Log-structured File Systems - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html" class="active"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="43-hệ-thống-tệp-cấu-trúc-nhật-ký-log-structured-file-systems"><a class="header" href="#43-hệ-thống-tệp-cấu-trúc-nhật-ký-log-structured-file-systems">43. Hệ thống tệp cấu trúc nhật ký (Log-structured File Systems)</a></h1>
+<p>Vào đầu những năm 1990, một nhóm nghiên cứu tại Berkeley do Giáo sư John Ousterhout và nghiên cứu sinh Mendel Rosenblum dẫn dắt đã phát triển một hệ thống tệp mới được gọi là <strong>log-structured file system</strong> (LFS) [RO91]. Động lực để họ thực hiện điều này dựa trên các quan sát sau:</p>
+<ul>
+<li><strong>Bộ nhớ hệ thống ngày càng lớn:</strong> Khi dung lượng bộ nhớ tăng, nhiều dữ liệu hơn có thể được lưu trong bộ nhớ đệm (cache). Khi nhiều dữ liệu được cache hơn, lưu lượng truy cập đĩa ngày càng bao gồm nhiều thao tác ghi, vì các thao tác đọc được phục vụ trực tiếp từ cache. Do đó, hiệu năng của file system phần lớn được quyết định bởi hiệu năng ghi.</li>
+<li><strong>Tồn tại khoảng cách lớn giữa hiệu năng I/O ngẫu nhiên và I/O tuần tự:</strong> Băng thông truyền dữ liệu của ổ cứng đã tăng đáng kể qua các năm [P98]; khi nhiều bit hơn được ghi trên bề mặt đĩa, băng thông khi truy cập các bit đó cũng tăng. Tuy nhiên, chi phí tìm kiếm (seek) và độ trễ quay (rotational delay) lại giảm chậm; việc chế tạo các động cơ nhỏ, giá rẻ để quay đĩa nhanh hơn hoặc di chuyển tay đọc nhanh hơn là một thách thức. Vì vậy, nếu có thể sử dụng đĩa theo cách tuần tự, bạn sẽ đạt được lợi thế hiệu năng đáng kể so với các phương pháp gây ra nhiều thao tác seek và quay.</li>
+<li><strong>Các file system hiện tại hoạt động kém trên nhiều loại workload phổ biến:</strong> Ví dụ, <strong>FFS</strong> [MJLF84] sẽ thực hiện một số lượng lớn thao tác ghi chỉ để tạo một file mới có kích thước một block: một lần ghi cho inode mới, một lần để cập nhật inode bitmap, một lần cho data block của thư mục chứa file, một lần cho inode của thư mục để cập nhật nó, một lần cho data block mới của file, và một lần cho data bitmap để đánh dấu block dữ liệu đã được cấp phát. Mặc dù FFS đặt tất cả các block này trong cùng một block group, nó vẫn phải thực hiện nhiều thao tác seek ngắn và các lần trễ quay tiếp theo, khiến hiệu năng thấp hơn nhiều so với băng thông tuần tự tối đa.</li>
+<li><strong>File system không nhận thức về RAID:</strong> Ví dụ, cả RAID-4 và RAID-5 đều gặp vấn đề <strong>small-write</strong> (ghi nhỏ), trong đó một thao tác ghi logic vào một block duy nhất sẽ gây ra 4 thao tác I/O vật lý. Các file system hiện tại không cố gắng tránh hành vi ghi tệ nhất này trên RAID.</li>
+</ul>
+<blockquote>
+<blockquote>
+<p><strong>TIP: CHI TIẾT LÀ QUAN TRỌNG</strong><br />
+Tất cả các hệ thống thú vị đều bao gồm một vài ý tưởng tổng quát và nhiều chi tiết. Đôi khi, khi học về các hệ thống này, bạn có thể nghĩ: “Ồ, tôi hiểu ý tưởng chung rồi; phần còn lại chỉ là chi tiết,” và từ đó chỉ học một nửa cách hệ thống thực sự hoạt động. Đừng làm vậy! Nhiều khi, chính các chi tiết mới là yếu tố then chốt. Như chúng ta sẽ thấy với LFS, ý tưởng tổng thể rất dễ hiểu, nhưng để xây dựng một hệ thống hoạt động thực sự, bạn phải suy nghĩ kỹ về tất cả các trường hợp phức tạp.</p>
+</blockquote>
+</blockquote>
+<p>Một file system lý tưởng sẽ tập trung vào hiệu năng ghi, và cố gắng tận dụng băng thông tuần tự của đĩa. Hơn nữa, nó sẽ hoạt động tốt với các workload phổ biến không chỉ ghi dữ liệu mà còn thường xuyên cập nhật các cấu trúc metadata trên đĩa. Cuối cùng, nó sẽ hoạt động tốt cả trên RAID lẫn ổ đĩa đơn.</p>
+<p>Loại file system mới mà Rosenblum và Ousterhout giới thiệu được gọi là <strong>LFS</strong> (Log-structured File System). Khi ghi xuống đĩa, LFS trước tiên sẽ <strong>buffer</strong> (đệm) tất cả các bản cập nhật (bao gồm cả metadata!) trong một <strong>segment</strong> (phân đoạn) nằm trong bộ nhớ; khi segment đầy, nó sẽ được ghi xuống đĩa trong một lần truyền tuần tự dài tới một vùng chưa sử dụng của đĩa. LFS <strong>không bao giờ</strong> ghi đè dữ liệu hiện có, mà luôn ghi các segment vào các vị trí trống. Vì các segment có kích thước lớn, đĩa (hoặc RAID) được sử dụng hiệu quả, và hiệu năng của file system đạt gần mức tối đa.</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ BIẾN MỌI GHI THÀNH GHI TUẦN TỰ?</strong><br />
+Làm thế nào một file system có thể biến tất cả các thao tác ghi thành ghi tuần tự? Đối với thao tác đọc, điều này là không thể, vì block cần đọc có thể nằm ở bất kỳ đâu trên đĩa. Tuy nhiên, đối với thao tác ghi, file system <strong>luôn có quyền lựa chọn</strong>, và chính lựa chọn này là điều chúng ta muốn khai thác.</p>
+</blockquote>
+</blockquote>
+<h2 id="431-ghi-tuần-tự-xuống-đĩa-writing-to-disk-sequentially"><a class="header" href="#431-ghi-tuần-tự-xuống-đĩa-writing-to-disk-sequentially">43.1 Ghi tuần tự xuống đĩa (Writing To Disk Sequentially)</a></h2>
+<p>Như vậy, chúng ta có thách thức đầu tiên: làm thế nào để biến tất cả các bản cập nhật trạng thái của file system (hệ thống tệp) thành một chuỗi các thao tác ghi tuần tự xuống đĩa? Để hiểu rõ hơn, hãy sử dụng một ví dụ đơn giản. Giả sử chúng ta đang ghi một <strong>data block</strong> (khối dữ liệu) D vào một file. Việc ghi data block này xuống đĩa có thể dẫn đến bố cục trên đĩa như sau, với D được ghi tại địa chỉ đĩa A0:</p>
+<p>...</p>
+<p>Tuy nhiên, khi người dùng ghi một data block, không chỉ dữ liệu được ghi xuống đĩa; còn có các <strong>metadata</strong> (siêu dữ liệu) khác cần được cập nhật. Trong trường hợp này, giả sử chúng ta cũng ghi <strong>inode</strong> (chỉ mục nút) I của file xuống đĩa, và inode này trỏ tới data block D. Khi được ghi xuống đĩa, data block và inode sẽ trông như sau (lưu ý rằng inode có vẻ lớn bằng data block, điều này thường không đúng; trong hầu hết các hệ thống, data block có kích thước 4 KB, trong khi inode nhỏ hơn nhiều, khoảng 128 byte):</p>
+<p>...</p>
+<p>Ý tưởng cơ bản này — đơn giản là ghi tất cả các bản cập nhật (như data block, inode, v.v.) xuống đĩa theo thứ tự tuần tự — chính là cốt lõi của LFS (Log-structured File System). Nếu bạn hiểu điều này, bạn đã nắm được ý tưởng chính. Nhưng như với mọi hệ thống phức tạp, “quỷ dữ nằm trong chi tiết” — các chi tiết mới là phần khó.</p>
+<h2 id="432-ghi-tuần-tự-và-hiệu-quả-writing-sequentially-and-effectively"><a class="header" href="#432-ghi-tuần-tự-và-hiệu-quả-writing-sequentially-and-effectively">43.2 Ghi tuần tự và hiệu quả (Writing Sequentially And Effectively)</a></h2>
+<p>Thật không may, chỉ ghi tuần tự xuống đĩa <strong>không</strong> đủ để đảm bảo hiệu năng ghi cao. Ví dụ, giả sử chúng ta ghi một block duy nhất vào địa chỉ A tại thời điểm T. Sau đó, chúng ta chờ một lúc, rồi ghi xuống đĩa tại địa chỉ A + 1 (địa chỉ block tiếp theo theo thứ tự tuần tự), nhưng ở thời điểm T + δ. Trong khoảng thời gian giữa lần ghi thứ nhất và thứ hai, đĩa đã quay; khi bạn phát lệnh ghi thứ hai, nó sẽ phải chờ gần như cả một vòng quay trước khi được ghi (cụ thể, nếu thời gian quay là $T_{rotation}$, thì đĩa sẽ phải chờ $T_{rotation} - δ$ trước khi có thể ghi block thứ hai xuống bề mặt đĩa).</p>
+<p>Do đó, bạn có thể thấy rằng chỉ ghi xuống đĩa theo thứ tự tuần tự là chưa đủ để đạt hiệu năng tối đa; thay vào đó, bạn phải phát lệnh ghi một số lượng lớn các block liên tiếp (hoặc một thao tác ghi lớn duy nhất) để đạt hiệu năng ghi tốt.</p>
+<p>Để đạt được điều này, LFS sử dụng một kỹ thuật lâu đời được gọi là <strong>write buffering</strong> (đệm ghi)^[1]. Trước khi ghi xuống đĩa, LFS lưu trữ các bản cập nhật trong bộ nhớ; khi đã nhận đủ số lượng bản cập nhật, nó sẽ ghi tất cả xuống đĩa cùng một lúc, đảm bảo sử dụng đĩa một cách hiệu quả.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Thực tế rất khó tìm một tài liệu tham khảo “chuẩn” cho ý tưởng này, vì nó có thể đã được phát minh bởi nhiều người từ rất sớm trong lịch sử ngành máy tính. Để tìm hiểu lợi ích của write buffering, xem Solworth và Orji [SO90]; để tìm hiểu các tác hại tiềm ẩn, xem Mogul [M94].</p>
+</div>
+<p>Phần dữ liệu lớn mà LFS ghi trong một lần được gọi là <strong>segment</strong> (phân đoạn). Mặc dù thuật ngữ này bị lạm dụng trong nhiều lĩnh vực của hệ thống máy tính, ở đây nó chỉ đơn giản là một khối dữ liệu lớn mà LFS dùng để gom nhóm các thao tác ghi. Do đó, khi ghi xuống đĩa, LFS sẽ buffer các bản cập nhật trong một segment nằm trong bộ nhớ, rồi ghi toàn bộ segment này xuống đĩa trong một lần. Miễn là segment đủ lớn, các thao tác ghi này sẽ đạt hiệu quả cao.</p>
+<p>Dưới đây là một ví dụ, trong đó LFS buffer hai nhóm bản cập nhật vào một segment nhỏ; các segment thực tế thường lớn hơn (vài MB). Bản cập nhật đầu tiên gồm bốn thao tác ghi block cho file <strong>j</strong>; bản cập nhật thứ hai là thêm một block vào file <strong>k</strong>. LFS sau đó commit toàn bộ segment gồm bảy block này xuống đĩa trong một lần. Bố cục trên đĩa của các block này sau khi ghi như sau:</p>
+<p>...</p>
+<h2 id="433-buffer-bao-nhiêu-là-đủ-how-much-to-buffer"><a class="header" href="#433-buffer-bao-nhiêu-là-đủ-how-much-to-buffer">43.3 Buffer bao nhiêu là đủ? (How Much To Buffer?)</a></h2>
+<p>Điều này dẫn đến câu hỏi: <strong>LFS</strong> (Log-structured File System) nên buffer (đệm) bao nhiêu bản cập nhật trước khi ghi xuống đĩa? Câu trả lời, tất nhiên, phụ thuộc vào chính ổ đĩa, cụ thể là mức <strong>positioning overhead</strong> (chi phí định vị – bao gồm thời gian quay và seek) so với <strong>transfer rate</strong> (tốc độ truyền dữ liệu); hãy xem lại chương về <strong>FFS</strong> để tham khảo một phân tích tương tự.</p>
+<p>Ví dụ, giả sử thời gian định vị (tức là chi phí quay và seek) trước mỗi lần ghi mất khoảng ( T_{position} ) giây. Giả sử thêm rằng tốc độ truyền dữ liệu cực đại của đĩa là ( R_{peak} ) MB/s. Vậy LFS nên buffer bao nhiêu dữ liệu trước khi ghi khi chạy trên loại đĩa này?</p>
+<p>Cách suy nghĩ ở đây là: mỗi lần ghi, bạn phải trả một chi phí cố định cho việc định vị. Vậy bạn cần ghi bao nhiêu dữ liệu để <strong>amortize</strong> (phân bổ) chi phí đó? Rõ ràng, càng ghi nhiều thì càng tốt, và bạn sẽ càng tiến gần đến việc đạt được băng thông cực đại.</p>
+<p>Để có câu trả lời cụ thể, giả sử chúng ta ghi ra ( D ) MB dữ liệu. Thời gian để ghi khối dữ liệu này (( T_{write} )) sẽ bằng thời gian định vị ( T_{position} ) cộng với thời gian truyền ( D ) MB dữ liệu (( \frac{D}{R_{peak}} )), tức là:</p>
+<p>[
+T_{write} = T_{position} + \frac{D}{R_{peak}}
+]</p>
+<p>Do đó, <strong>tốc độ ghi hiệu dụng</strong> (( R_{effective} )) — chính là lượng dữ liệu ghi được chia cho tổng thời gian ghi — sẽ là:</p>
+<p>[
+R_{effective} = \frac{D}{T_{position} + \frac{D}{R_{peak}}}
+]</p>
+<p>Điều chúng ta quan tâm là làm cho ( R_{effective} ) tiến gần tới ( R_{peak} ). Cụ thể, chúng ta muốn tốc độ hiệu dụng bằng một phần ( F ) của tốc độ cực đại, với ( 0 &lt; F &lt; 1 ) (một giá trị F điển hình có thể là 0.9, tức 90% tốc độ cực đại). Về mặt toán học, điều này có nghĩa là:</p>
+<p>[
+R_{effective} = F \times R_{peak}
+]</p>
+<p>Tại đây, chúng ta có thể giải ra ( D ):</p>
+<p>[
+D = \frac{F}{1 - F} \times R_{peak} \times T_{position}
+]</p>
+<p>Hãy làm một ví dụ: với một ổ đĩa có thời gian định vị là 10 mili-giây và tốc độ truyền cực đại là 100 MB/s; giả sử chúng ta muốn băng thông hiệu dụng đạt 90% tốc độ cực đại (F = 0.9). Khi đó:</p>
+<p>[
+D = \frac{0.9}{0.1} \times 100 \ \text{MB/s} \times 0.01 \ \text{giây} = 9 \ \text{MB}
+]</p>
+<p>Hãy thử một vài giá trị khác để xem cần buffer bao nhiêu để tiến gần tới băng thông cực đại. Cần bao nhiêu để đạt 95% tốc độ cực đại? 99%?</p>
+<h2 id="434-vấn-đề-tìm-inode-problem-finding-inodes"><a class="header" href="#434-vấn-đề-tìm-inode-problem-finding-inodes">43.4 Vấn đề: Tìm inode (Problem: Finding Inodes)</a></h2>
+<p>Để hiểu cách tìm một <strong>inode</strong> trong LFS, trước hết hãy xem lại cách tìm inode trong một file system UNIX điển hình. Trong một file system thông thường như <strong>FFS</strong>, hoặc thậm chí là hệ thống tệp UNIX cũ, việc tìm inode rất dễ, vì chúng được tổ chức thành một mảng và đặt trên đĩa ở các vị trí cố định.</p>
+<p>Ví dụ, hệ thống tệp UNIX cũ lưu tất cả inode ở một vùng cố định trên đĩa. Do đó, khi biết số inode (inode number) và địa chỉ bắt đầu, để tìm một inode cụ thể, bạn chỉ cần tính địa chỉ đĩa chính xác của nó bằng cách nhân số inode với kích thước của một inode, rồi cộng với địa chỉ bắt đầu của mảng inode trên đĩa; việc <strong>array-based indexing</strong> (đánh chỉ số dựa trên mảng) này, khi biết số inode, là nhanh và đơn giản.</p>
+<p>Việc tìm inode khi biết số inode trong FFS chỉ phức tạp hơn một chút, vì FFS chia bảng inode thành các khối (chunk) và đặt một nhóm inode trong mỗi <strong>cylinder group</strong>. Do đó, bạn cần biết kích thước của mỗi khối inode và địa chỉ bắt đầu của từng khối. Sau đó, các phép tính tương tự và cũng dễ dàng.</p>
+<p>Trong LFS, mọi thứ khó khăn hơn nhiều. Tại sao? Bởi vì chúng ta đã “rải” các inode khắp đĩa! Tệ hơn nữa, chúng ta <strong>không bao giờ ghi đè tại chỗ</strong> (overwrite in place), và do đó phiên bản mới nhất của một inode (tức là phiên bản mà chúng ta cần) liên tục thay đổi vị trí.</p>
+<h2 id="435-giải-pháp-thông-qua-gián-tiếp-inode-map-bản-đồ-inode"><a class="header" href="#435-giải-pháp-thông-qua-gián-tiếp-inode-map-bản-đồ-inode">43.5 Giải pháp thông qua gián tiếp: Inode Map (Bản đồ inode)</a></h2>
+<p>Để khắc phục vấn đề này, các nhà thiết kế của <strong>LFS</strong> (Log-structured File System) đã giới thiệu một lớp <strong>indirection</strong> (gián tiếp) giữa <strong>inode number</strong> (số inode) và chính inode, thông qua một cấu trúc dữ liệu gọi là <strong>inode map</strong> (imap – bản đồ inode). <strong>Imap</strong> là một cấu trúc nhận vào số inode và trả về <strong>địa chỉ đĩa</strong> (disk address) của phiên bản inode mới nhất.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: SỬ DỤNG MỘT LỚP GIÁN TIẾP</strong><br />
+Người ta thường nói rằng giải pháp cho mọi vấn đề trong Khoa học Máy tính chỉ đơn giản là thêm một lớp gián tiếp. Điều này rõ ràng không hoàn toàn đúng; nó chỉ là giải pháp cho <strong>hầu hết</strong> các vấn đề (vâng, nhận xét này vẫn hơi quá, nhưng bạn hiểu ý rồi đấy). Bạn hoàn toàn có thể coi mọi cơ chế ảo hóa (virtualization) mà chúng ta đã học, ví dụ như <strong>virtual memory</strong> (bộ nhớ ảo) hay khái niệm file, như là một lớp gián tiếp. Và chắc chắn <strong>inode map</strong> trong LFS là một dạng ảo hóa của inode number. Hy vọng bạn có thể thấy sức mạnh to lớn của gián tiếp trong các ví dụ này, cho phép chúng ta tự do di chuyển các cấu trúc (như page trong ví dụ VM, hoặc inode trong LFS) mà không cần thay đổi mọi tham chiếu tới chúng. Tất nhiên, gián tiếp cũng có mặt trái: chi phí bổ sung (overhead). Vì vậy, lần tới khi bạn gặp một vấn đề, hãy thử giải quyết nó bằng gián tiếp, nhưng nhớ cân nhắc kỹ chi phí của việc này. Như Wheeler đã nổi tiếng nói: “Mọi vấn đề trong khoa học máy tính đều có thể được giải quyết bằng một lớp gián tiếp khác, ngoại trừ vấn đề có quá nhiều lớp gián tiếp.”</p>
+</blockquote>
+</blockquote>
+<p>Vì vậy, bạn có thể hình dung imap thường được triển khai như một mảng đơn giản, với 4 byte (một con trỏ đĩa) cho mỗi phần tử. Mỗi khi một inode được ghi xuống đĩa, imap sẽ được cập nhật với vị trí mới của nó.</p>
+<p>Tuy nhiên, imap cần được lưu trữ <strong>persistent</strong> (bền vững – tức là ghi xuống đĩa); làm như vậy cho phép LFS theo dõi vị trí của các inode ngay cả khi hệ thống bị crash, và do đó hoạt động như mong muốn. Vậy câu hỏi đặt ra: <strong>imap nên được đặt ở đâu trên đĩa?</strong></p>
+<p>Tất nhiên, nó có thể nằm ở một vị trí cố định trên đĩa. Nhưng thật không may, vì nó được cập nhật thường xuyên, điều này sẽ yêu cầu mỗi lần cập nhật cấu trúc file phải kèm theo một lần ghi imap, và do đó hiệu năng sẽ giảm (tức là sẽ có nhiều thao tác <strong>disk seek</strong> hơn, giữa mỗi lần cập nhật và vị trí cố định của imap).</p>
+<p>Thay vào đó, LFS đặt các <strong>chunk</strong> (mảnh) của inode map ngay bên cạnh nơi nó đang ghi tất cả thông tin mới khác. Do đó, khi append (nối thêm) một data block vào file <em>k</em>, LFS thực tế sẽ ghi <strong>data block mới</strong>, <strong>inode</strong> của nó, và <strong>một phần của inode map</strong> cùng nhau xuống đĩa, như sau:</p>
+<p>...</p>
+<p>Trong hình minh họa này, phần của mảng imap được lưu trong block được đánh dấu “imap” cho LFS biết rằng inode <em>k</em> nằm ở địa chỉ đĩa A1; inode này, đến lượt nó, cho LFS biết rằng data block D của nó nằm ở địa chỉ A0.</p>
+<h2 id="436-hoàn-thiện-giải-pháp-checkpoint-region-vùng-điểm-kiểm"><a class="header" href="#436-hoàn-thiện-giải-pháp-checkpoint-region-vùng-điểm-kiểm">43.6 Hoàn thiện giải pháp: Checkpoint Region (Vùng điểm kiểm)</a></h2>
+<p>Người đọc tinh ý (chính là bạn, đúng không?) có thể nhận ra một vấn đề ở đây: <strong>Làm thế nào để tìm inode map, khi các phần của nó cũng đã được rải khắp đĩa?</strong> Cuối cùng thì không có phép màu nào cả: file system phải có một vị trí cố định và đã biết trên đĩa để bắt đầu quá trình tìm kiếm file.</p>
+<p>LFS có một vị trí cố định như vậy trên đĩa, được gọi là <strong>checkpoint region</strong> (CR – vùng điểm kiểm). Checkpoint region chứa các con trỏ (tức là địa chỉ) tới các phần mới nhất của inode map, và do đó có thể tìm thấy các phần của inode map bằng cách đọc CR trước. Lưu ý rằng checkpoint region chỉ được cập nhật định kỳ (ví dụ khoảng mỗi 30 giây), và do đó hiệu năng không bị ảnh hưởng đáng kể.</p>
+<p>Như vậy, cấu trúc tổng thể của bố cục trên đĩa sẽ bao gồm:</p>
+<ul>
+<li><strong>Checkpoint region</strong> (trỏ tới các phần mới nhất của inode map)</li>
+<li>Các phần của inode map (mỗi phần chứa địa chỉ của các inode)</li>
+<li>Các inode (trỏ tới file và thư mục) giống như trong các file system UNIX điển hình.</li>
+</ul>
+<p>Dưới đây là một ví dụ về checkpoint region (lưu ý nó nằm ngay ở đầu đĩa, tại địa chỉ 0), cùng với một <strong>imap chunk</strong>, một inode, và một data block. Một file system thực tế tất nhiên sẽ có CR lớn hơn nhiều (thực tế là có <strong>hai</strong> CR, như chúng ta sẽ tìm hiểu sau), nhiều imap chunk, và tất nhiên là nhiều inode, data block, v.v.</p>
+<p>...</p>
+<h2 id="437-Đọc-một-file-từ-đĩa-tóm-tắt-reading-a-file-from-disk-a-recap"><a class="header" href="#437-Đọc-một-file-từ-đĩa-tóm-tắt-reading-a-file-from-disk-a-recap">43.7 Đọc một file từ đĩa: Tóm tắt (Reading A File From Disk: A Recap)</a></h2>
+<p>Để đảm bảo bạn hiểu cách <strong>LFS</strong> (Log-structured File System) hoạt động, chúng ta hãy cùng đi qua các bước cần thực hiện để đọc một file từ đĩa. Giả sử ban đầu chúng ta <strong>không có gì trong bộ nhớ</strong>. Cấu trúc dữ liệu đầu tiên trên đĩa mà chúng ta phải đọc là <strong>checkpoint region</strong> (vùng điểm kiểm). Checkpoint region chứa các con trỏ (tức là địa chỉ đĩa) tới toàn bộ <strong>inode map</strong> (imap – bản đồ inode), và do đó LFS sẽ đọc toàn bộ inode map này vào bộ nhớ và lưu trong cache.</p>
+<p>Từ thời điểm này, khi được cung cấp <strong>inode number</strong> (số inode) của một file, LFS chỉ cần tra cứu ánh xạ từ inode number sang <strong>inode disk address</strong> (địa chỉ inode trên đĩa) trong imap, và đọc phiên bản inode mới nhất. Để đọc một block từ file, LFS sẽ tiến hành giống hệt như một file system UNIX điển hình, bằng cách sử dụng <strong>direct pointer</strong> (con trỏ trực tiếp), <strong>indirect pointer</strong> (con trỏ gián tiếp) hoặc <strong>doubly-indirect pointer</strong> (con trỏ gián tiếp kép) khi cần.</p>
+<p>Trong trường hợp thông thường, LFS sẽ thực hiện <strong>số lượng thao tác I/O</strong> tương đương với một file system điển hình khi đọc file từ đĩa; toàn bộ imap đã được cache, và công việc bổ sung duy nhất mà LFS thực hiện trong quá trình đọc là tra cứu địa chỉ inode trong imap.</p>
+<h2 id="438-còn-thư-mục-thì-sao-what-about-directories"><a class="header" href="#438-còn-thư-mục-thì-sao-what-about-directories">43.8 Còn thư mục thì sao? (What About Directories?)</a></h2>
+<p>Cho đến giờ, chúng ta đã đơn giản hóa phần thảo luận bằng cách chỉ xét đến inode và data block. Tuy nhiên, để truy cập một file trong file system (ví dụ <code>/home/remzi/foo</code> – một trong những tên file giả ưa thích của chúng tôi), một số <strong>directory</strong> (thư mục) cũng phải được truy cập. Vậy LFS lưu trữ dữ liệu thư mục như thế nào?</p>
+<p>May mắn thay, cấu trúc thư mục về cơ bản <strong>giống hệt</strong> như trong các file system UNIX cổ điển, ở chỗ một thư mục chỉ là một tập hợp các ánh xạ <strong>(tên, inode number)</strong>. Ví dụ, khi tạo một file trên đĩa, LFS phải ghi một inode mới, một số dữ liệu, cũng như dữ liệu thư mục và inode của thư mục tham chiếu đến file này. Hãy nhớ rằng LFS sẽ thực hiện việc này <strong>tuần tự</strong> trên đĩa (sau khi buffer các bản cập nhật trong một thời gian).</p>
+<p>Do đó, việc tạo một file <code>foo</code> trong một thư mục sẽ dẫn đến các cấu trúc mới trên đĩa như sau:</p>
+<p>...</p>
+<p>Phần của inode map sẽ chứa thông tin về vị trí của cả file thư mục <code>dir</code> và file mới tạo <code>f</code>. Do đó, khi truy cập file <code>foo</code> (có inode number <code>k</code>), bạn sẽ:</p>
+<ol>
+<li>Tra cứu trong inode map (thường được cache trong bộ nhớ) để tìm vị trí của inode của thư mục <code>dir</code> (A3).</li>
+<li>Đọc inode của thư mục, từ đó lấy vị trí của dữ liệu thư mục (A2).</li>
+<li>Đọc data block này để nhận được ánh xạ <strong>(tên, inode number)</strong> của (<code>foo</code>, <code>k</code>).</li>
+<li>Tra cứu lại inode map để tìm vị trí của inode number <code>k</code> (A1).</li>
+<li>Cuối cùng, đọc data block mong muốn tại địa chỉ A0.</li>
+</ol>
+<p>Có một vấn đề nghiêm trọng khác trong LFS mà inode map giải quyết, được gọi là <strong>recursive update problem</strong> (vấn đề cập nhật đệ quy) [Z+12]. Vấn đề này xuất hiện trong bất kỳ file system nào <strong>không bao giờ cập nhật tại chỗ</strong> (never updates in place) như LFS, mà thay vào đó di chuyển các bản cập nhật tới vị trí mới trên đĩa.</p>
+<p>Cụ thể, bất cứ khi nào một inode được cập nhật, vị trí của nó trên đĩa sẽ thay đổi. Nếu không cẩn thận, điều này sẽ kéo theo việc phải cập nhật cả thư mục trỏ tới file đó, rồi lại phải thay đổi thư mục cha của thư mục đó, và cứ thế lan lên toàn bộ cây thư mục của file system.</p>
+<p>LFS đã khéo léo tránh được vấn đề này nhờ inode map. Mặc dù vị trí của một inode có thể thay đổi, nhưng sự thay đổi này <strong>không bao giờ</strong> được phản ánh vào chính thư mục; thay vào đó, cấu trúc imap được cập nhật, trong khi thư mục vẫn giữ nguyên ánh xạ <strong>(tên, inode number)</strong>. Nhờ cơ chế gián tiếp này, LFS tránh được vấn đề cập nhật đệ quy.</p>
+<h2 id="439-một-vấn-đề-mới-thu-gom-rác-garbage-collection"><a class="header" href="#439-một-vấn-đề-mới-thu-gom-rác-garbage-collection">43.9 Một vấn đề mới: Thu gom rác (Garbage Collection)</a></h2>
+<p>Bạn có thể đã nhận thấy một vấn đề khác với <strong>LFS</strong> (Log-structured File System): nó liên tục ghi phiên bản mới nhất của một file (bao gồm cả inode và dữ liệu) vào các vị trí mới trên đĩa. Quá trình này, mặc dù giúp duy trì hiệu quả ghi, lại dẫn đến việc LFS để lại các phiên bản cũ của cấu trúc file rải rác khắp đĩa. Chúng ta (một cách không mấy trang trọng) gọi các phiên bản cũ này là <strong>garbage</strong> (rác).</p>
+<p>Ví dụ, hãy tưởng tượng trường hợp chúng ta có một file hiện có được tham chiếu bởi <strong>inode number</strong> (số inode) <em>k</em>, trỏ tới một <strong>data block</strong> (khối dữ liệu) duy nhất D0. Giờ chúng ta cập nhật block đó, tạo ra cả một inode mới và một data block mới. Bố cục trên đĩa của LFS sau đó sẽ trông như sau (lưu ý chúng ta bỏ qua imap và các cấu trúc khác để đơn giản hóa; một <strong>chunk</strong> mới của imap cũng sẽ phải được ghi xuống đĩa để trỏ tới inode mới):</p>
+<p>...</p>
+<p>Trong sơ đồ, bạn có thể thấy cả inode và data block đều có hai phiên bản trên đĩa: một phiên bản cũ (bên trái) và một phiên bản hiện tại, tức là <strong>live</strong> (đang được sử dụng – bên phải). Chỉ với hành động (logic) cập nhật một data block, một số cấu trúc mới phải được LFS ghi bền vững xuống đĩa, để lại các phiên bản cũ của các block đó trên đĩa.</p>
+<p>Một ví dụ khác: giả sử thay vì cập nhật, chúng ta <strong>append</strong> (nối thêm) một block vào file gốc <em>k</em>. Trong trường hợp này, một phiên bản inode mới được tạo ra, nhưng data block cũ vẫn được inode trỏ tới. Do đó, nó vẫn <strong>live</strong> và hoàn toàn là một phần của file system hiện tại:</p>
+<p>...</p>
+<p>Vậy chúng ta nên làm gì với các phiên bản cũ của inode, data block, và các cấu trúc khác? Một lựa chọn là giữ lại các phiên bản cũ này và cho phép người dùng khôi phục các phiên bản file trước đó (ví dụ, khi họ vô tình ghi đè hoặc xóa file, điều này có thể rất hữu ích); một file system như vậy được gọi là <strong>versioning file system</strong> vì nó lưu lại các phiên bản khác nhau của một file.</p>
+<p>Tuy nhiên, LFS chỉ giữ lại phiên bản <strong>live</strong> mới nhất của một file; do đó (ở chế độ nền), LFS phải định kỳ tìm các phiên bản cũ không còn sử dụng của dữ liệu file, inode, và các cấu trúc khác, rồi <strong>clean</strong> (dọn dẹp) chúng; việc dọn dẹp này sẽ giải phóng các block trên đĩa để sử dụng cho các lần ghi tiếp theo. Lưu ý rằng quá trình cleaning là một dạng <strong>garbage collection</strong> (thu gom rác), một kỹ thuật xuất hiện trong các ngôn ngữ lập trình có khả năng tự động giải phóng bộ nhớ không còn được sử dụng.</p>
+<p>Trước đây, chúng ta đã thảo luận về <strong>segment</strong> (phân đoạn) như một cơ chế quan trọng giúp LFS thực hiện các thao tác ghi lớn xuống đĩa. Hóa ra, segment cũng đóng vai trò then chốt trong việc cleaning hiệu quả. Hãy tưởng tượng điều gì sẽ xảy ra nếu <strong>LFS cleaner</strong> chỉ đơn giản đi qua và giải phóng từng data block, inode, v.v., riêng lẻ trong quá trình cleaning. Kết quả: một file system với một số lượng lỗ trống (free hole) xen kẽ giữa các vùng đã cấp phát trên đĩa. Hiệu năng ghi sẽ giảm đáng kể, vì LFS sẽ không thể tìm được một vùng liên tục đủ lớn để ghi tuần tự xuống đĩa với hiệu năng cao.</p>
+<p>Thay vào đó, LFS cleaner hoạt động theo <strong>từng segment</strong>, nhờ đó giải phóng các vùng lớn cho các lần ghi tiếp theo. Quá trình cleaning cơ bản diễn ra như sau: định kỳ, LFS cleaner đọc một số segment cũ (đang được sử dụng một phần), xác định block nào <strong>live</strong> trong các segment này, sau đó ghi ra một tập hợp segment mới chỉ chứa các block live, giải phóng các segment cũ để ghi mới. Cụ thể, chúng ta kỳ vọng cleaner sẽ đọc vào <strong>M</strong> segment hiện có, nén (compact) nội dung của chúng thành <strong>N</strong> segment mới (với N &lt; M), rồi ghi N segment này xuống đĩa ở các vị trí mới. M segment cũ sau đó được giải phóng và có thể được file system sử dụng cho các lần ghi tiếp theo.</p>
+<p>Tuy nhiên, bây giờ chúng ta còn lại hai vấn đề:</p>
+<ol>
+<li><strong>Cơ chế (mechanism):</strong> Làm thế nào để LFS biết block nào trong một segment là live, và block nào là dead?</li>
+<li><strong>Chính sách (policy):</strong> Cleaner nên chạy thường xuyên như thế nào, và nên chọn segment nào để dọn?</li>
+</ol>
+<h2 id="4310-xác-định-trạng-thái-sống-của-block-determining-block-liveness"><a class="header" href="#4310-xác-định-trạng-thái-sống-của-block-determining-block-liveness">43.10 Xác định trạng thái sống của block (Determining Block Liveness)</a></h2>
+<p>Chúng ta sẽ giải quyết vấn đề <strong>cơ chế</strong> trước. Với một <strong>data block</strong> D nằm trong một <strong>on-disk segment</strong> S, LFS phải có khả năng xác định liệu D có <strong>live</strong> hay không. Để làm điều này, LFS thêm một lượng nhỏ thông tin bổ sung vào mỗi segment để mô tả từng block. Cụ thể, LFS lưu kèm với mỗi data block D: <strong>inode number</strong> (số inode – cho biết block này thuộc file nào) và <strong>offset</strong> (chỉ số block trong file). Thông tin này được ghi trong một cấu trúc ở đầu segment, gọi là <strong>segment summary block</strong>.</p>
+<p>Với thông tin này, việc xác định một block là live hay dead trở nên đơn giản. Với một block D nằm trên đĩa tại địa chỉ A, hãy tra trong segment summary block để tìm <strong>inode number</strong> N và <strong>offset</strong> T của nó. Tiếp theo, tra trong <strong>imap</strong> để tìm vị trí hiện tại của inode N và đọc inode này từ đĩa (nếu inode đã ở trong bộ nhớ thì càng tốt). Cuối cùng, sử dụng offset T, tra trong inode (hoặc một indirect block) để xem inode cho rằng block thứ T của file này nằm ở đâu trên đĩa. Nếu nó trỏ chính xác tới địa chỉ đĩa A, LFS có thể kết luận block D là <strong>live</strong>. Nếu nó trỏ tới một địa chỉ khác, LFS có thể kết luận D không còn được sử dụng (tức là <strong>dead</strong>) và biết rằng phiên bản này không còn cần thiết.</p>
+<p>Dưới đây là phần tóm tắt dưới dạng <strong>pseudocode</strong>:</p>
+<p>Dưới đây là bản dịch tiếng Việt của đoạn văn bản bạn cung cấp, tuân thủ đầy đủ các yêu cầu đã nêu:</p>
+<p>Hình dưới đây mô tả cơ chế, trong đó <strong>segment summary block</strong> (khối tóm tắt phân đoạn, ký hiệu SS) ghi lại rằng data block tại địa chỉ A0 thực chất là một phần của file <em>k</em> tại offset 0. Bằng cách kiểm tra <strong>imap</strong> của <em>k</em>, bạn có thể tìm thấy inode và thấy rằng nó thực sự trỏ tới vị trí đó.</p>
+<p>...</p>
+<p>Có một số cách rút gọn mà LFS sử dụng để làm cho quá trình xác định trạng thái sống (liveness) hiệu quả hơn. Ví dụ, khi một file bị <strong>truncate</strong> (cắt ngắn) hoặc bị xóa, LFS sẽ tăng <strong>version number</strong> (số phiên bản) của nó và ghi số phiên bản mới này vào imap. Bằng cách cũng ghi số phiên bản này vào segment trên đĩa, LFS có thể bỏ qua bước kiểm tra dài dòng đã mô tả ở trên chỉ bằng cách so sánh số phiên bản trên đĩa với số phiên bản trong imap, từ đó tránh được các thao tác đọc bổ sung.</p>
+<h2 id="4311-câu-hỏi-về-chính-sách-block-nào-cần-clean-và-khi-nào-a-policy-question-which-blocks-to-clean-and-when"><a class="header" href="#4311-câu-hỏi-về-chính-sách-block-nào-cần-clean-và-khi-nào-a-policy-question-which-blocks-to-clean-and-when">43.11 Câu hỏi về chính sách: Block nào cần clean, và khi nào? (A Policy Question: Which Blocks To Clean, And When?)</a></h2>
+<p>Bên cạnh cơ chế đã mô tả ở trên, LFS phải bao gồm một tập hợp các <strong>policy</strong> (chính sách) để xác định cả <strong>khi nào</strong> cần clean và <strong>block nào</strong> đáng để clean. Việc xác định khi nào cần clean thì dễ hơn; có thể là định kỳ, trong thời gian hệ thống nhàn rỗi, hoặc khi bắt buộc vì đĩa đã đầy.</p>
+<p>Việc xác định block nào cần clean thì khó hơn, và đã là chủ đề của nhiều bài báo nghiên cứu. Trong bài báo LFS gốc [RO91], các tác giả mô tả một phương pháp cố gắng phân tách <strong>hot segment</strong> và <strong>cold segment</strong>. Một hot segment là segment có nội dung thường xuyên bị ghi đè; do đó, với segment như vậy, chính sách tốt nhất là chờ lâu trước khi clean, vì càng ngày càng có nhiều block bị ghi đè (trong các segment mới) và do đó được giải phóng để sử dụng. Ngược lại, một cold segment có thể chỉ có một vài block chết nhưng phần còn lại của nội dung tương đối ổn định. Vì vậy, các tác giả kết luận rằng nên clean các cold segment sớm hơn và hot segment muộn hơn, và phát triển một heuristic (thuật toán kinh nghiệm) để thực hiện chính xác điều đó. Tuy nhiên, như hầu hết các chính sách khác, chính sách này không hoàn hảo; các phương pháp sau này đã chỉ ra cách làm tốt hơn [MR+97].</p>
+<h2 id="4312-khôi-phục-sau-crash-và-log-crash-recovery-and-the-log"><a class="header" href="#4312-khôi-phục-sau-crash-và-log-crash-recovery-and-the-log">43.12 Khôi phục sau crash và Log (Crash Recovery And The Log)</a></h2>
+<p>Một vấn đề cuối cùng: điều gì xảy ra nếu hệ thống bị crash trong khi LFS đang ghi xuống đĩa? Như bạn có thể nhớ từ chương trước về journaling, crash trong quá trình cập nhật là một vấn đề khó đối với file system, và do đó LFS cũng phải xem xét.</p>
+<p>Trong hoạt động bình thường, LFS buffer các thao tác ghi trong một segment, và sau đó (khi segment đầy hoặc khi một khoảng thời gian nhất định đã trôi qua) ghi segment đó xuống đĩa. LFS tổ chức các thao tác ghi này trong một <strong>log</strong>, tức là checkpoint region trỏ tới <strong>head</strong> và <strong>tail segment</strong>, và mỗi segment trỏ tới segment tiếp theo sẽ được ghi. LFS cũng định kỳ cập nhật checkpoint region. Crash rõ ràng có thể xảy ra trong một trong hai thao tác này (ghi một segment, ghi CR). Vậy LFS xử lý crash khi ghi các cấu trúc này như thế nào?</p>
+<p>Hãy xét trường hợp thứ hai trước. Để đảm bảo việc cập nhật CR diễn ra <strong>atomically</strong> (nguyên tử), LFS thực tế giữ <strong>hai CR</strong>, một ở mỗi đầu của đĩa, và ghi luân phiên vào chúng. LFS cũng triển khai một giao thức cẩn thận khi cập nhật CR với các con trỏ mới nhất tới inode map và các thông tin khác; cụ thể, nó ghi ra một <strong>header</strong> (chứa timestamp), sau đó là phần thân của CR, và cuối cùng là một block cuối cùng (cũng chứa timestamp). Nếu hệ thống bị crash trong khi cập nhật CR, LFS có thể phát hiện điều này bằng cách thấy cặp timestamp không nhất quán. LFS sẽ luôn chọn sử dụng CR mới nhất có timestamp nhất quán, và do đó đảm bảo CR được cập nhật nhất quán.</p>
+<p>Bây giờ xét trường hợp thứ nhất. Vì LFS ghi CR khoảng mỗi 30 giây, snapshot nhất quán cuối cùng của file system có thể đã khá cũ. Do đó, khi khởi động lại, LFS có thể dễ dàng khôi phục bằng cách chỉ cần đọc checkpoint region, các phần imap mà nó trỏ tới, và các file và thư mục tiếp theo; tuy nhiên, nhiều giây cập nhật cuối cùng sẽ bị mất.</p>
+<p>Để cải thiện điều này, LFS cố gắng xây dựng lại nhiều segment đó thông qua một kỹ thuật được gọi là <strong>roll forward</strong> trong lĩnh vực cơ sở dữ liệu. Ý tưởng cơ bản là bắt đầu với checkpoint region cuối cùng, tìm điểm kết thúc của log (được bao gồm trong CR), và sau đó sử dụng nó để đọc qua các segment tiếp theo và xem có bản cập nhật hợp lệ nào trong đó không. Nếu có, LFS sẽ cập nhật file system tương ứng và do đó khôi phục được phần lớn dữ liệu và metadata đã ghi kể từ checkpoint cuối cùng. Xem luận án đoạt giải của Rosenblum để biết chi tiết [R92].</p>
+<h2 id="4313-tóm-tắt-summary"><a class="header" href="#4313-tóm-tắt-summary">43.13 Tóm tắt (Summary)</a></h2>
+<p>LFS giới thiệu một cách tiếp cận mới để cập nhật đĩa. Thay vì ghi đè file tại chỗ, LFS luôn ghi vào một phần chưa sử dụng của đĩa, và sau đó thu hồi lại không gian cũ thông qua quá trình cleaning. Cách tiếp cận này, trong hệ thống cơ sở dữ liệu được gọi là <strong>shadow paging</strong> [L77] và trong lĩnh vực file system đôi khi được gọi là <strong>copy-on-write</strong>, cho phép ghi với hiệu năng rất cao, vì LFS có thể gom tất cả các bản cập nhật vào một segment trong bộ nhớ và sau đó ghi chúng ra cùng nhau theo thứ tự tuần tự.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: BIẾN KHUYẾT ĐIỂM THÀNH ƯU ĐIỂM</strong><br />
+Bất cứ khi nào hệ thống của bạn có một khiếm khuyết cơ bản, hãy xem liệu bạn có thể biến nó thành một tính năng hoặc điều gì đó hữu ích hay không. <strong>WAFL</strong> của NetApp đã làm điều này với nội dung file cũ; bằng cách cung cấp các phiên bản cũ, WAFL không còn phải lo lắng về việc cleaning quá thường xuyên (mặc dù nó vẫn xóa các phiên bản cũ, cuối cùng, ở chế độ nền), và do đó vừa cung cấp một tính năng thú vị vừa loại bỏ phần lớn vấn đề cleaning của LFS chỉ trong một bước ngoặt tuyệt vời. Liệu có ví dụ nào khác như vậy trong các hệ thống không? Chắc chắn là có, nhưng bạn sẽ phải tự nghĩ ra, vì chương này đã kết thúc với chữ “O” viết hoa. Over. Done. Kaput. Hết. Peace!</p>
+</blockquote>
+</blockquote>
+<p>Các thao tác ghi lớn mà LFS tạo ra rất tốt cho hiệu năng trên nhiều loại thiết bị khác nhau. Trên ổ cứng, ghi lớn đảm bảo thời gian định vị được giảm thiểu; trên các RAID dựa trên parity như RAID-4 và RAID-5, chúng loại bỏ hoàn toàn vấn đề <strong>small-write</strong>. Các nghiên cứu gần đây thậm chí đã chỉ ra rằng các thao tác I/O lớn là cần thiết để đạt hiệu năng cao trên SSD dựa trên Flash [HK+17]; do đó, có thể khá bất ngờ, các file system kiểu LFS có thể là một lựa chọn tuyệt vời ngay cả cho các phương tiện lưu trữ mới này.</p>
+<p>Nhược điểm của cách tiếp cận này là nó tạo ra <strong>garbage</strong>; các bản sao cũ của dữ liệu bị rải rác khắp đĩa, và nếu muốn thu hồi không gian này cho các lần sử dụng tiếp theo, ta phải định kỳ clean các segment cũ. Cleaning đã trở thành tâm điểm của nhiều tranh luận trong LFS, và lo ngại về chi phí cleaning [SS+95] có lẽ đã hạn chế tác động ban đầu của LFS trong lĩnh vực này. Tuy nhiên, một số file system thương mại hiện đại, bao gồm <strong>WAFL</strong> của NetApp [HLM94], <strong>ZFS</strong> của Sun [B07], và <strong>btrfs</strong> của Linux [R+13], và thậm chí cả các SSD hiện đại dựa trên Flash [AD14], áp dụng cách tiếp cận copy-on-write tương tự khi ghi xuống đĩa, và do đó di sản trí tuệ của LFS vẫn tiếp tục tồn tại trong các file system hiện đại này. Đặc biệt, WAFL đã vượt qua vấn đề cleaning bằng cách biến nó thành một tính năng; bằng cách cung cấp các phiên bản cũ của file system thông qua <strong>snapshot</strong>, người dùng có thể truy cập các file cũ khi họ lỡ tay xóa.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../42/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../44/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../42/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../44/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

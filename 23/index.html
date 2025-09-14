@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The VAX/VMS Virtual Memory System - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html" class="active"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật như một chương trong giáo trình.</p>
+<h1 id="23-hệ-thống-bộ-nhớ-ảo-hoàn-chỉnh-complete-virtual-memory-systems"><a class="header" href="#23-hệ-thống-bộ-nhớ-ảo-hoàn-chỉnh-complete-virtual-memory-systems">23. Hệ thống bộ nhớ ảo hoàn chỉnh (Complete Virtual Memory Systems)</a></h1>
+<p>Trước khi kết thúc việc nghiên cứu về <strong>virtualizing memory</strong> (ảo hóa bộ nhớ), chúng ta hãy xem xét kỹ hơn cách mà toàn bộ một hệ thống <strong>virtual memory</strong> (bộ nhớ ảo) được xây dựng. Chúng ta đã thấy các thành phần then chốt của những hệ thống như vậy, bao gồm nhiều thiết kế <strong>page table</strong> (bảng trang), sự tương tác với <strong>TLB</strong> (đôi khi còn được OS xử lý trực tiếp), và các chiến lược quyết định page nào giữ lại trong bộ nhớ và page nào loại bỏ. Tuy nhiên, còn nhiều tính năng khác tạo nên một hệ thống bộ nhớ ảo hoàn chỉnh, bao gồm nhiều đặc tính về hiệu năng, chức năng và bảo mật. Và đây là vấn đề mấu chốt:</p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO BUILD A COMPLETE VM SYSTEM</strong><br />
+(Làm thế nào để xây dựng một hệ thống bộ nhớ ảo hoàn chỉnh)<br />
+Những tính năng nào là cần thiết để hiện thực hóa một hệ thống bộ nhớ ảo hoàn chỉnh? Chúng cải thiện hiệu năng, tăng cường bảo mật hoặc cải thiện hệ thống theo những cách nào?</p>
+</blockquote>
+<p>Chúng ta sẽ tìm hiểu điều này thông qua hai hệ thống. Hệ thống đầu tiên là một trong những ví dụ sớm nhất của một <strong>virtual memory manager</strong> (bộ quản lý bộ nhớ ảo) “hiện đại” — đó là hệ điều hành <strong>VAX/VMS</strong> [LL82], được phát triển trong những năm 1970 và đầu 1980; một số lượng đáng ngạc nhiên các kỹ thuật và phương pháp từ hệ thống này vẫn tồn tại đến ngày nay, vì vậy rất đáng để nghiên cứu. Một số ý tưởng, dù đã 50 năm tuổi, vẫn đáng để biết — điều này vốn quen thuộc trong nhiều lĩnh vực khác (ví dụ: Vật lý), nhưng lại cần được nhấn mạnh trong các ngành dựa trên công nghệ (ví dụ: Khoa học Máy tính). Hệ thống thứ hai là <strong>Linux</strong>, vì lý do hiển nhiên: Linux là một hệ thống được sử dụng rộng rãi, chạy hiệu quả từ các thiết bị nhỏ và yếu như điện thoại cho đến các hệ thống đa lõi có khả năng mở rộng cao trong các trung tâm dữ liệu hiện đại. Do đó, hệ thống VM của nó phải đủ linh hoạt để hoạt động thành công trong tất cả các kịch bản này. Chúng ta sẽ thảo luận từng hệ thống để minh họa cách các khái niệm đã trình bày ở các chương trước kết hợp lại thành một <strong>memory manager</strong> (bộ quản lý bộ nhớ) hoàn chỉnh.</p>
+<h2 id="231-vaxvms-virtual-memory"><a class="header" href="#231-vaxvms-virtual-memory">23.1 VAX/VMS Virtual Memory</a></h2>
+<p><strong>Kiến trúc VAX-11</strong> thuộc dòng <strong>minicomputer</strong> được giới thiệu vào cuối những năm 1970 bởi <strong>Digital Equipment Corporation (DEC)</strong>. DEC từng là một “ông lớn” trong ngành công nghiệp máy tính thời kỳ minicomputer; đáng tiếc là một loạt quyết định sai lầm cùng với sự xuất hiện của PC đã từ từ (nhưng chắc chắn) dẫn đến sự sụp đổ của họ [C03]. Kiến trúc này được hiện thực trong nhiều phiên bản, bao gồm <strong>VAX-11/780</strong> và phiên bản yếu hơn là <strong>VAX-11/750</strong>.</p>
+<p>Hệ điều hành cho hệ thống này được gọi là <strong>VAX/VMS</strong> (hoặc đơn giản là <strong>VMS</strong>), với một trong những kiến trúc sư chính là <strong>Dave Cutler</strong>, người sau này dẫn dắt việc phát triển <strong>Microsoft Windows NT</strong> [C93]. VMS phải đối mặt với vấn đề chung là nó sẽ chạy trên một dải rộng các loại máy, từ những máy VAX rất rẻ (vâng, “VAXen” là dạng số nhiều đúng) cho đến những máy cực kỳ mạnh mẽ trong cùng họ kiến trúc. Do đó, OS phải có các cơ chế và chính sách hoạt động tốt trên toàn bộ dải hệ thống này. Ngoài ra, VMS là một ví dụ điển hình về các cải tiến phần mềm được dùng để che giấu một số nhược điểm vốn có của kiến trúc phần cứng. Mặc dù OS thường dựa vào phần cứng để xây dựng các <strong>abstraction</strong> (trừu tượng) và <strong>illusion</strong> (ảo tưởng) hiệu quả, đôi khi các nhà thiết kế phần cứng không làm mọi thứ hoàn hảo; trong phần cứng VAX, chúng ta sẽ thấy một vài ví dụ về điều này, và cách mà VMS khắc phục để xây dựng một hệ thống hiệu quả, hoạt động tốt bất chấp các nhược điểm phần cứng.</p>
+<h3 id="memory-management-hardware"><a class="header" href="#memory-management-hardware">Memory Management Hardware</a></h3>
+<p>VAX-11 cung cấp <strong>virtual address space</strong> 32-bit cho mỗi <strong>process</strong> (tiến trình), được chia thành các <strong>page</strong> 512 byte. Do đó, một <strong>virtual address</strong> bao gồm <strong>VPN</strong> (virtual page number) 23-bit và <strong>offset</strong> 9-bit. Hơn nữa, 2 bit cao nhất của VPN được dùng để phân biệt <strong>segment</strong> (đoạn) mà page thuộc về; do đó, hệ thống này là một dạng <strong>hybrid</strong> (lai) giữa <strong>paging</strong> và <strong>segmentation</strong>, như chúng ta đã thấy trước đây.</p>
+<p>Nửa dưới của address space được gọi là <strong>process space</strong> và là duy nhất cho mỗi process. Trong nửa đầu của process space (gọi là <strong>P0</strong>), chứa chương trình người dùng và <strong>heap</strong> (vùng nhớ động) — heap này phát triển xuống dưới. Trong nửa sau của process space (<strong>P1</strong>), chứa <strong>stack</strong> (ngăn xếp) — stack này phát triển lên trên. Nửa trên của address space được gọi là <strong>system space</strong> (<strong>S</strong>), mặc dù chỉ một nửa của nó được sử dụng. <strong>OS code</strong> và dữ liệu được bảo vệ nằm ở đây, và theo cách này OS được chia sẻ giữa các process.</p>
+<p>Một mối quan tâm lớn của các nhà thiết kế VMS là kích thước page cực kỳ nhỏ trong phần cứng VAX (512 byte). Kích thước này, được chọn vì lý do lịch sử, dẫn đến vấn đề cơ bản là làm cho <strong>linear page table</strong> (bảng trang tuyến tính) trở nên quá lớn. Do đó, một trong những mục tiêu đầu tiên của các nhà thiết kế VMS là đảm bảo rằng VMS sẽ không làm tràn bộ nhớ với page table. Hệ thống giảm áp lực của page table lên bộ nhớ theo hai cách.</p>
+<p>Thứ nhất, bằng cách chia address space của người dùng thành hai phần, VAX-11 cung cấp một page table riêng cho mỗi vùng này (P0 và P1) trên mỗi process.</p>
+<blockquote>
+<p><strong>ASIDE: THE CURSE OF GENERALITY</strong><br />
+(Lời nguyền của tính tổng quát)<br />
+Hệ điều hành thường gặp một vấn đề gọi là <strong>curse of generality</strong> (lời nguyền của tính tổng quát), khi chúng phải hỗ trợ chung cho một lớp ứng dụng và hệ thống rất rộng. Kết quả cơ bản của lời nguyền này là OS khó có thể hỗ trợ tốt cho bất kỳ cài đặt cụ thể nào. Trong trường hợp của VMS, lời nguyền này là rất thực tế, vì kiến trúc VAX-11 được hiện thực trong nhiều phiên bản khác nhau. Điều này cũng đúng cho đến ngày nay, khi Linux được kỳ vọng chạy tốt trên điện thoại, TV set-top box, laptop, desktop, và cả máy chủ cao cấp chạy hàng nghìn process trong một <strong>cloud-based datacenter</strong> (trung tâm dữ liệu dựa trên đám mây).</p>
+</blockquote>
+<p>Nhờ vậy, không cần cấp phát không gian page table cho phần không sử dụng của address space giữa stack và heap. <strong>Base register</strong> (thanh ghi cơ sở) và <strong>bounds register</strong> (thanh ghi giới hạn) được sử dụng như mong đợi; base register giữ địa chỉ của page table cho segment đó, và bounds register giữ kích thước của nó (tức là số lượng <strong>page-table entry</strong>).</p>
+<p>Thứ hai, OS giảm áp lực bộ nhớ hơn nữa bằng cách đặt <strong>user page table</strong> (cho P0 và P1, tức là hai bảng trên mỗi process) vào <strong>kernel virtual memory</strong> (bộ nhớ ảo của nhân). Do đó, khi cấp phát hoặc mở rộng page table, kernel sẽ cấp phát không gian từ chính virtual memory của nó, trong segment S. Nếu bộ nhớ bị áp lực nghiêm trọng, kernel có thể <strong>swap</strong> (hoán đổi) các page của page table này ra đĩa, giải phóng physical memory cho các mục đích khác.</p>
+<p>Việc đặt page table vào kernel virtual memory khiến quá trình <strong>address translation</strong> (dịch địa chỉ) trở nên phức tạp hơn. Ví dụ, để dịch một virtual address trong P0 hoặc P1, phần cứng phải trước tiên tra cứu <strong>page-table entry</strong> cho page đó trong page table tương ứng (P0 hoặc P1 của process đó); tuy nhiên, để làm điều này, phần cứng có thể phải tham khảo <strong>system page table</strong> (nằm trong physical memory); sau khi dịch xong, phần cứng mới biết địa chỉ của page trong page table, và cuối cùng mới biết địa chỉ của dữ liệu cần truy cập. Tất cả những điều này, may mắn</p>
+<p>(TODO)</p>
+<h3 id="một-không-gian-địa-chỉ-thực-tế-a-real-address-space"><a class="header" href="#một-không-gian-địa-chỉ-thực-tế-a-real-address-space">Một không gian địa chỉ thực tế (A Real Address Space)</a></h3>
+<p>Một điểm thú vị khi nghiên cứu <strong>VMS</strong> là chúng ta có thể thấy cách một <strong>address space</strong> (không gian địa chỉ) thực tế được xây dựng (<em>Figure 23.1</em>). Cho đến nay, chúng ta giả định một address space đơn giản chỉ gồm <strong>user code</strong> (mã người dùng), <strong>user data</strong> (dữ liệu người dùng) và <strong>user heap</strong> (vùng nhớ động của người dùng), nhưng như có thể thấy, một address space thực tế phức tạp hơn đáng kể.</p>
+<p>Ví dụ, <strong>code segment</strong> (đoạn mã) không bao giờ bắt đầu tại <strong>page</strong> 0. Thay vào đó, page này được đánh dấu <strong>inaccessible</strong> (không thể truy cập), nhằm hỗ trợ việc phát hiện các truy cập <strong>null pointer</strong> (con trỏ null). Do đó, một mối quan tâm khi thiết kế address space là hỗ trợ <strong>debugging</strong> (gỡ lỗi), và page 0 không thể truy cập ở đây cung cấp một dạng hỗ trợ như vậy.</p>
+<p>Quan trọng hơn, <strong>kernel virtual address space</strong> (không gian địa chỉ ảo của nhân — bao gồm cấu trúc dữ liệu và mã của kernel) là một phần của mỗi user address space. Khi <strong>context switch</strong> (chuyển ngữ cảnh), OS thay đổi các thanh ghi <strong>P0</strong> và <strong>P1</strong> để trỏ tới page table thích hợp của process sắp chạy; tuy nhiên, nó <strong>không</strong> thay đổi các thanh ghi <strong>S base</strong> và <strong>S bound</strong>, và do đó các cấu trúc kernel “giống nhau” được ánh xạ vào mỗi user address space.</p>
+<p><strong>Figure 23.1: The VAX/VMS Address Space</strong><br />
+<em>(Không gian địa chỉ của VAX/VMS)</em></p>
+<p>Kernel được ánh xạ vào mỗi address space vì nhiều lý do. Cách xây dựng này giúp kernel dễ dàng hơn; ví dụ, khi OS nhận một <strong>pointer</strong> từ chương trình người dùng (ví dụ trong <strong>system call</strong> <code>write()</code>), việc sao chép dữ liệu từ con trỏ đó sang cấu trúc của kernel trở nên đơn giản. OS được viết và biên dịch một cách tự nhiên, không cần lo lắng dữ liệu nó truy cập đến từ đâu. Ngược lại, nếu kernel nằm hoàn toàn trong <strong>physical memory</strong> (bộ nhớ vật lý), sẽ rất khó thực hiện các thao tác như <strong>swap</strong> (hoán đổi) các page của page table ra đĩa; nếu kernel có address space riêng, việc di chuyển dữ liệu giữa ứng dụng người dùng và kernel sẽ lại phức tạp và tốn công. Với cách xây dựng này (hiện được sử dụng rộng rãi), kernel gần như xuất hiện như một thư viện đối với ứng dụng, dù là một thư viện được bảo vệ.</p>
+<blockquote>
+<p><strong>ASIDE: TẠI SAO TRUY CẬP NULL POINTER GÂY SEG FAULT</strong><br />
+Giờ bạn nên hiểu rõ điều gì xảy ra khi <strong>dereference</strong> (giải tham chiếu) một null pointer. Một process tạo ra virtual address bằng 0, bằng cách làm như sau:</p>
+<pre><code class="language-c">int *p = NULL; // gán p = 0
+// thử ghi giá trị 10 vào địa chỉ ảo 0
+*p = 10;
+</code></pre>
+<p>Phần cứng cố gắng tra VPN (cũng là 0) trong TLB, và gặp <strong>TLB miss</strong>. Page table được tra cứu, và entry cho VPN 0 được đánh dấu <strong>invalid</strong> (không hợp lệ). Do đó, đây là một truy cập không hợp lệ, dẫn đến việc chuyển quyền điều khiển cho OS, và OS có thể sẽ chấm dứt process (trên hệ thống UNIX, process sẽ nhận một <strong>signal</strong> cho phép nó phản ứng với lỗi này; nếu không bắt được signal, process sẽ bị kill).</p>
+</blockquote>
+<p>Một điểm cuối cùng về address space này liên quan đến <strong>protection</strong> (bảo vệ). Rõ ràng, OS không muốn ứng dụng người dùng đọc hoặc ghi dữ liệu/mã của OS. Do đó, phần cứng phải hỗ trợ các mức bảo vệ khác nhau cho page để thực hiện điều này. VAX làm điều đó bằng cách chỉ định, trong các <strong>protection bit</strong> của page table, mức đặc quyền (<strong>privilege level</strong>) mà CPU phải có để truy cập một page cụ thể. Nhờ vậy, dữ liệu và mã hệ thống được đặt ở mức bảo vệ cao hơn dữ liệu và mã người dùng; mọi nỗ lực truy cập thông tin như vậy từ mã người dùng sẽ tạo ra một <strong>trap</strong> vào OS, và (bạn đoán đúng) khả năng cao là process vi phạm sẽ bị chấm dứt.</p>
+<h3 id="page-replacement-thay-thế-trang"><a class="header" href="#page-replacement-thay-thế-trang">Page Replacement (Thay thế trang)</a></h3>
+<p><strong>Page table entry</strong> (PTE) trong VAX chứa các bit sau:</p>
+<ul>
+<li><strong>valid bit</strong> (bit hợp lệ)</li>
+<li><strong>protection field</strong> (trường bảo vệ, 4 bit)</li>
+<li><strong>modify bit</strong> (hoặc <strong>dirty bit</strong>)</li>
+<li>một trường dành riêng cho OS (5 bit)</li>
+<li>và cuối cùng là <strong>physical frame number</strong> (PFN) để lưu vị trí của page trong physical memory.</li>
+</ul>
+<p>Người đọc tinh ý sẽ nhận ra: <strong>không có reference bit</strong>! Do đó, thuật toán thay thế của VMS phải hoạt động mà không có hỗ trợ phần cứng để xác định page nào đang hoạt động.</p>
+<p>Các nhà phát triển cũng lo ngại về <strong>memory hogs</strong> — các chương trình sử dụng nhiều bộ nhớ và khiến các chương trình khác khó chạy. Hầu hết các chính sách chúng ta đã xem đều dễ bị ảnh hưởng bởi hiện tượng này; ví dụ, <strong>LRU</strong> là một chính sách toàn cục, không chia sẻ bộ nhớ công bằng giữa các process.</p>
+<blockquote>
+<p><strong>ASIDE: MÔ PHỎNG REFERENCE BIT</strong><br />
+Thực tế, bạn không cần reference bit phần cứng để biết page nào đang được sử dụng trong hệ thống. Vào đầu những năm 1980, <strong>Babaoglu</strong> và <strong>Joy</strong> đã chỉ ra rằng <strong>protection bit</strong> trên VAX có thể được dùng để mô phỏng reference bit [BJ81]. Ý tưởng cơ bản: nếu muốn biết page nào đang được sử dụng, hãy đánh dấu tất cả page trong page table là <strong>inaccessible</strong> (không thể truy cập) (nhưng vẫn lưu thông tin về page nào thực sự có thể truy cập bởi process, có thể trong trường “reserved OS field” của PTE). Khi process truy cập một page, nó sẽ tạo ra một <strong>trap</strong> vào OS; OS sẽ kiểm tra xem page đó thực sự có thể truy cập không, và nếu có, khôi phục lại quyền bảo vệ bình thường (ví dụ: read-only hoặc read-write). Khi thay thế, OS có thể kiểm tra page nào vẫn bị đánh dấu inaccessible, từ đó biết page nào không được sử dụng gần đây.<br />
+Mấu chốt của việc “mô phỏng” reference bit là giảm overhead nhưng vẫn thu được thông tin tốt về việc sử dụng page. OS không được quá tích cực trong việc đánh dấu inaccessible (overhead sẽ cao), cũng không được quá thụ động (mọi page sẽ bị truy cập và OS lại không biết page nào nên loại bỏ).</p>
+</blockquote>
+<p>Để giải quyết hai vấn đề này, các nhà phát triển đã đưa ra <strong>segmented FIFO replacement policy</strong> [RL81]. Ý tưởng đơn giản: mỗi process có một số lượng page tối đa có thể giữ trong bộ nhớ, gọi là <strong>resident set size</strong> (RSS). Mỗi page này được giữ trong một danh sách FIFO; khi process vượt quá RSS, page “first-in” sẽ bị loại bỏ. FIFO rõ ràng không cần hỗ trợ phần cứng, nên dễ triển khai.</p>
+<p>Tất nhiên, <strong>pure FIFO</strong> không hoạt động quá tốt, như chúng ta đã thấy. Để cải thiện hiệu năng của FIFO, VMS giới thiệu hai <strong>second-chance list</strong> (danh sách cơ hội thứ hai) toàn cục, nơi page được đặt trước khi bị loại bỏ khỏi bộ nhớ: một <strong>global clean-page free list</strong> và một <strong>dirty-page list</strong>. Khi process P vượt quá RSS, một page bị loại khỏi FIFO của process; nếu <strong>clean</strong> (không bị sửa đổi), nó được đặt vào cuối clean-page list; nếu <strong>dirty</strong> (bị sửa đổi), nó được đặt vào cuối dirty-page list.</p>
+<p>Nếu process Q khác cần một page trống, nó lấy page đầu tiên từ global clean list. Tuy nhiên, nếu process P ban đầu bị <strong>page fault</strong> trên page đó trước khi nó bị thu hồi, P sẽ lấy lại page từ clean (hoặc dirty) list, tránh được một lần truy cập đĩa tốn kém. Các second-chance list toàn cục càng lớn, thuật toán segmented FIFO càng tiệm cận hiệu năng của LRU [RL81].</p>
+<p>Một tối ưu hóa khác trong VMS cũng giúp khắc phục kích thước page nhỏ. Với page nhỏ như vậy, <strong>disk I/O</strong> trong quá trình swapping có thể kém hiệu quả, vì đĩa hoạt động tốt hơn với các lần truyền lớn. Để làm I/O swapping hiệu quả hơn, VMS bổ sung một số tối ưu hóa, quan trọng nhất là <strong>clustering</strong>. Với clustering, VMS nhóm các lô page lớn từ global dirty list và ghi chúng ra đĩa trong một lần (biến chúng thành clean). Clustering được sử dụng trong hầu hết các hệ thống hiện đại, vì khả năng đặt page ở bất kỳ đâu trong</p>
+<p>(TODO)</p>
+<h3 id="các-thủ-thuật-thú-vị-khác-other-neat-tricks"><a class="header" href="#các-thủ-thuật-thú-vị-khác-other-neat-tricks">Các thủ thuật thú vị khác (Other Neat Tricks)</a></h3>
+<p>VMS có hai thủ thuật khác, nay đã trở thành tiêu chuẩn: <strong>demand zeroing</strong> (khởi tạo trang bằng 0 khi cần) và <strong>copy-on-write</strong> (COW). Đây là những tối ưu hóa dạng “lười biếng” (lazy optimizations).</p>
+<p>Một dạng “lười biếng” trong VMS (và hầu hết các hệ thống hiện đại) là <strong>demand zeroing</strong> các page. Để hiểu rõ hơn, hãy xét ví dụ thêm một page vào <strong>address space</strong> (không gian địa chỉ) của bạn, chẳng hạn trong <strong>heap</strong>. Trong một triển khai ngây thơ, OS sẽ đáp ứng yêu cầu thêm page vào heap bằng cách tìm một page trong <strong>physical memory</strong> (bộ nhớ vật lý), ghi toàn bộ bằng số 0 (yêu cầu này nhằm đảm bảo bảo mật; nếu không, bạn có thể thấy dữ liệu còn sót lại từ process khác đã dùng page này trước đó!), rồi ánh xạ nó vào address space của bạn (tức là thiết lập page table để trỏ tới physical page đó). Nhưng cách triển khai ngây thơ này có thể tốn kém, đặc biệt nếu page đó không bao giờ được process sử dụng.</p>
+<p>Với <strong>demand zeroing</strong>, OS thay vào đó làm rất ít khi page được thêm vào address space; nó chỉ đặt một entry trong page table đánh dấu page là <strong>inaccessible</strong> (không thể truy cập). Nếu process sau đó đọc hoặc ghi vào page, một <strong>trap</strong> sẽ xảy ra và chuyển quyền điều khiển vào OS. Khi xử lý trap, OS nhận ra (thường thông qua một số bit được đánh dấu trong phần “reserved for OS” của page table entry) rằng đây thực chất là một demand-zero page; lúc này, OS mới thực hiện công việc cần thiết: tìm một physical page, ghi toàn bộ bằng 0, và ánh xạ nó vào address space của process. Nếu process không bao giờ truy cập page, toàn bộ công việc này được tránh, và đó chính là lợi ích của demand zeroing.</p>
+<p>Một tối ưu hóa thú vị khác trong VMS (và gần như mọi OS hiện đại) là <strong>copy-on-write</strong> (COW). Ý tưởng, vốn xuất hiện ít nhất từ hệ điều hành <strong>TENEX</strong> [BB+72], rất đơn giản: khi OS cần sao chép một page từ address space này sang address space khác, thay vì sao chép, nó có thể ánh xạ page đó vào address space đích và đánh dấu <strong>read-only</strong> trong cả hai address space. Nếu cả hai chỉ đọc page này, không cần hành động gì thêm, và OS đã thực hiện một bản sao “nhanh” mà không di chuyển dữ liệu.</p>
+<p>Tuy nhiên, nếu một trong hai address space thực sự cố ghi vào page, sẽ xảy ra trap vào OS. OS sẽ nhận ra đây là một COW page, và do đó (một cách lười biếng) cấp phát một page mới, sao chép dữ liệu vào đó, và ánh xạ page mới này vào address space của process gây fault. Process sau đó tiếp tục chạy và giờ có bản sao riêng của page.</p>
+<p>COW hữu ích vì nhiều lý do. Bất kỳ dạng <strong>shared library</strong> (thư viện dùng chung) nào cũng có thể được ánh xạ copy-on-write vào address space của nhiều process, tiết kiệm bộ nhớ quý giá. Trong hệ thống UNIX, COW còn quan trọng hơn do ngữ nghĩa của <code>fork()</code> và <code>exec()</code>. Như bạn nhớ, <code>fork()</code> tạo một bản sao chính xác của address space của process gọi; với address space lớn, việc sao chép này chậm và tốn dữ liệu. Tệ hơn, hầu hết address space này sẽ bị ghi đè ngay sau đó bởi lệnh <code>exec()</code>, vốn thay thế address space của process gọi bằng address space của chương trình mới. Bằng cách thực hiện <code>fork()</code> theo kiểu copy-on-write, OS tránh được phần lớn việc sao chép không cần thiết, vẫn giữ đúng ngữ nghĩa và cải thiện hiệu năng.</p>
+<blockquote>
+<p><strong>TIP: BE LAZY</strong><br />
+(Hãy “lười biếng”)<br />
+Sự “lười biếng” có thể là một đức tính, cả trong cuộc sống lẫn trong hệ điều hành. Lười biếng có thể trì hoãn công việc đến sau, điều này có lợi trong OS vì nhiều lý do. Thứ nhất, trì hoãn công việc có thể giảm độ trễ của thao tác hiện tại, cải thiện khả năng phản hồi; ví dụ, OS thường báo rằng thao tác ghi file đã thành công ngay lập tức, và chỉ thực sự ghi ra đĩa sau đó ở chế độ nền. Thứ hai, quan trọng hơn, lười biếng đôi khi loại bỏ hoàn toàn nhu cầu làm việc đó; ví dụ, trì hoãn ghi cho đến khi file bị xóa sẽ loại bỏ luôn việc ghi. Lười biếng cũng tốt trong đời sống: ví dụ, trì hoãn làm bài tập OS có thể giúp bạn tránh lỗi trong đề bài nhờ bạn học phát hiện; tuy nhiên, dự án khó mà bị hủy, nên quá lười có thể gây rắc rối, dẫn đến nộp muộn, điểm kém, và một giảng viên buồn. Đừng làm giảng viên buồn!</p>
+</blockquote>
+<h2 id="232-the-linux-virtual-memory-system"><a class="header" href="#232-the-linux-virtual-memory-system">23.2 The Linux Virtual Memory System</a></h2>
+<p>(Hệ thống bộ nhớ ảo của Linux)</p>
+<p>Giờ chúng ta sẽ thảo luận một số khía cạnh thú vị của hệ thống VM của Linux. Việc phát triển Linux được thúc đẩy bởi các kỹ sư thực sự giải quyết các vấn đề thực tế gặp phải trong môi trường sản xuất, và do đó nhiều tính năng đã dần được tích hợp, tạo thành một hệ thống bộ nhớ ảo đầy đủ chức năng và giàu tính năng.</p>
+<p>Chúng ta sẽ không thể bàn hết mọi khía cạnh của Linux VM, nhưng sẽ đề cập đến những điểm quan trọng nhất, đặc biệt là những nơi nó vượt xa các hệ thống VM cổ điển như VAX/VMS. Chúng ta cũng sẽ cố gắng chỉ ra những điểm chung giữa Linux và các hệ thống cũ.</p>
+<p>Trong phần này, chúng ta sẽ tập trung vào Linux cho <strong>Intel x86</strong>. Mặc dù Linux có thể và thực sự chạy trên nhiều kiến trúc bộ xử lý khác nhau, Linux trên x86 là triển khai phổ biến và quan trọng nhất, và do đó là trọng tâm của chúng ta.</p>
+<h3 id="the-linux-address-space"><a class="header" href="#the-linux-address-space">The Linux Address Space</a></h3>
+<p>(Không gian địa chỉ của Linux)</p>
+<p>Giống như các hệ điều hành hiện đại khác, và cũng giống VAX/VMS, một <strong>Linux virtual address space</strong><sup class="footnote-reference"><a href="#1">1</a></sup> gồm hai phần: <strong>user portion</strong> (phần người dùng — nơi chứa mã chương trình người dùng, stack, heap và các phần khác) và <strong>kernel portion</strong> (phần nhân — nơi chứa mã kernel, stack, heap và các phần khác). Giống các hệ thống khác, khi <strong>context switch</strong>, phần user của address space hiện tại sẽ thay đổi; phần kernel thì giống nhau giữa các process. Giống các hệ thống khác, một chương trình chạy ở <strong>user mode</strong> không thể truy cập các <strong>kernel virtual page</strong>; chỉ bằng cách trap vào kernel và chuyển sang <strong>privileged mode</strong> mới có thể truy cập bộ nhớ này.</p>
+<p><strong>Figure 23.2: The Linux Address Space</strong><br />
+<em>(Không gian địa chỉ của Linux)</em></p>
+<p>Trong Linux 32-bit cổ điển (tức là Linux với virtual address space 32-bit), ranh giới giữa phần user và kernel nằm tại địa chỉ <code>0xC0000000</code>, tức là ở vị trí ba phần tư của address space. Do đó, các địa chỉ ảo từ <code>0</code> đến <code>0xBFFFFFFF</code> là <strong>user virtual address</strong>; các địa chỉ còn lại (<code>0xC0000000</code> đến <code>0xFFFFFFFF</code>) thuộc <strong>kernel virtual address space</strong>. Linux 64-bit có cách chia tương tự nhưng tại các điểm hơi khác. <em>Figure 23.2</em> minh họa một address space điển hình (đã giản lược).</p>
+<p>Một điểm thú vị ở Linux là nó có hai loại <strong>kernel virtual address</strong>. Loại đầu tiên gọi là <strong>kernel logical addresses</strong> [O16]. Đây là phần bạn có thể coi là virtual address space “bình thường” của kernel; để có thêm bộ nhớ loại này, mã kernel chỉ cần gọi <code>kmalloc</code>. Hầu hết các cấu trúc dữ liệu của kernel nằm ở đây, như page table, <strong>per-process kernel stack</strong>, v.v. Không giống hầu hết bộ nhớ khác trong hệ thống, <strong>kernel logical memory</strong> không thể bị swap ra đĩa.</p>
+<p>Điểm thú vị nhất của kernel logical addresses là mối liên hệ của chúng với physical memory. Cụ thể, có một ánh xạ trực tiếp giữa kernel logical addresses và phần đầu của physical memory. Ví dụ, kernel logical address <code>0xC0000000</code> ánh xạ tới physical address <code>0x00000000</code>, <code>0xC0000FFF</code> tới <code>0x00000FFF</code>, v.v. Ánh xạ trực tiếp này có hai hệ quả:</p>
+<ol>
+<li>Dễ dàng dịch qua lại giữa kernel logical address và physical address; do đó, các địa chỉ này thường được coi như địa chỉ vật lý.</li>
+<li>Nếu một vùng bộ nhớ liên tục trong kernel logical address space, nó cũng liên tục trong physical memory. Điều này khiến bộ nhớ được cấp phát ở phần này của kernel address space phù hợp cho các thao tác cần physical memory liên tục để hoạt động đúng, chẳng hạn như truyền/nhận dữ liệu I/O</li>
+</ol>
+<p>(TODO)</p>
+<p>Loại địa chỉ kernel còn lại là <strong>kernel virtual address</strong> (địa chỉ ảo của nhân). Để cấp phát bộ nhớ kiểu này, mã trong kernel sẽ gọi một bộ cấp phát khác, <code>vmalloc</code>, hàm này trả về một con trỏ tới một vùng bộ nhớ <strong>virtually contiguous</strong> (liên tục về mặt địa chỉ ảo) với kích thước mong muốn. Không giống như <strong>kernel logical memory</strong> (bộ nhớ logic của nhân), <strong>kernel virtual memory</strong> thường <strong>không liên tục</strong> trong bộ nhớ vật lý; mỗi <strong>kernel virtual page</strong> có thể ánh xạ tới các <strong>physical page</strong> không liền kề (và do đó không phù hợp cho <strong>DMA</strong> — Direct Memory Access). Tuy nhiên, chính vì vậy mà loại bộ nhớ này dễ cấp phát hơn, và thường được dùng cho các <strong>buffer</strong> lớn, nơi việc tìm một khối bộ nhớ vật lý lớn, liên tục là rất khó khăn.</p>
+<p>Trong Linux 32-bit, một lý do khác cho sự tồn tại của kernel virtual address là nó cho phép kernel truy cập nhiều hơn (xấp xỉ) 1 GB bộ nhớ. Trước đây, máy tính có ít bộ nhớ hơn nhiều, nên việc truy cập quá 1 GB không phải là vấn đề. Tuy nhiên, công nghệ phát triển và sớm xuất hiện nhu cầu cho phép kernel sử dụng lượng bộ nhớ lớn hơn. Kernel virtual address, nhờ không bị ràng buộc bởi ánh xạ một-một nghiêm ngặt tới physical memory, đã giúp điều này khả thi. Tuy nhiên, với sự chuyển dịch sang Linux 64-bit, nhu cầu này ít cấp bách hơn, vì kernel không còn bị giới hạn chỉ trong 1 GB cuối của virtual address space.</p>
+<h3 id="page-table-structure-cấu-trúc-bảng-trang"><a class="header" href="#page-table-structure-cấu-trúc-bảng-trang">Page Table Structure (Cấu trúc bảng trang)</a></h3>
+<p>Vì chúng ta đang tập trung vào Linux trên kiến trúc x86, phần thảo luận sẽ xoay quanh loại cấu trúc <strong>page table</strong> mà x86 cung cấp, vì nó quyết định Linux có thể và không thể làm gì. Như đã đề cập, x86 cung cấp một cấu trúc page table nhiều cấp (<strong>multi-level page table</strong>) được phần cứng quản lý (<strong>hardware-managed</strong>), với một page table cho mỗi <strong>process</strong> (tiến trình); OS chỉ cần thiết lập các ánh xạ trong bộ nhớ, trỏ một thanh ghi đặc quyền (<strong>privileged register</strong>) tới đầu <strong>page directory</strong>, và phần cứng sẽ xử lý phần còn lại. OS tham gia, như mong đợi, khi tạo hoặc xóa process, và khi <strong>context switch</strong>, đảm bảo trong mỗi trường hợp rằng <strong>hardware MMU</strong> đang sử dụng đúng page table để thực hiện dịch địa chỉ.</p>
+<p>Có lẽ thay đổi lớn nhất trong những năm gần đây là chuyển từ x86 32-bit sang x86 64-bit, như đã đề cập ngắn gọn ở trên. Giống như trong hệ thống VAX/VMS, <strong>32-bit address space</strong> đã tồn tại từ lâu, và khi công nghệ thay đổi, nó bắt đầu trở thành giới hạn thực sự cho các chương trình. <strong>Virtual memory</strong> giúp việc lập trình hệ thống trở nên dễ dàng, nhưng với các hệ thống hiện đại chứa nhiều GB bộ nhớ, 32 bit không còn đủ để tham chiếu tới tất cả. Do đó, bước nhảy tiếp theo là cần thiết.</p>
+<p>Việc chuyển sang <strong>64-bit address</strong> ảnh hưởng đến cấu trúc page table trong x86 theo cách dễ đoán. Vì x86 sử dụng page table nhiều cấp, các hệ thống 64-bit hiện nay dùng <strong>bảng bốn cấp</strong> (four-level table). Tuy nhiên, toàn bộ không gian địa chỉ 64-bit chưa được sử dụng; mới chỉ dùng <strong>48 bit thấp</strong>. Do đó, một <strong>virtual address</strong> có thể được hình dung như sau:</p>
+<p>...</p>
+<p>Như có thể thấy trong hình minh họa, <strong>16 bit cao</strong> của virtual address không được sử dụng (và do đó không tham gia vào quá trình dịch địa chỉ), <strong>12 bit thấp</strong> (do kích thước page 4 KB) được dùng làm <strong>offset</strong> (vì vậy được sử dụng trực tiếp, không cần dịch), để lại <strong>36 bit ở giữa</strong> của virtual address tham gia vào quá trình dịch. Phần <strong>P1</strong> của địa chỉ được dùng để đánh chỉ số vào <strong>page directory</strong> cao nhất, và quá trình dịch tiếp tục từ đó, từng cấp một, cho đến khi page table thực sự được đánh chỉ số bởi <strong>P4</strong>, trả về <strong>page table entry</strong> mong muốn.</p>
+<p>Khi dung lượng bộ nhớ hệ thống tiếp tục tăng, nhiều phần hơn của không gian địa chỉ khổng lồ này sẽ được kích hoạt, dẫn đến cấu trúc page table năm cấp, và cuối cùng là sáu cấp. Hãy tưởng tượng: một lần tra cứu page table đơn giản có thể cần tới sáu cấp dịch địa chỉ, chỉ để tìm vị trí của một dữ liệu nào đó trong bộ nhớ.</p>
+<h3 id="large-page-support-hỗ-trợ-trang-lớn"><a class="header" href="#large-page-support-hỗ-trợ-trang-lớn">Large Page Support (Hỗ trợ trang lớn)</a></h3>
+<p><strong>Intel x86</strong> cho phép sử dụng nhiều kích thước page, không chỉ page chuẩn 4 KB. Cụ thể, các thiết kế gần đây hỗ trợ page 2 MB và thậm chí 1 GB trong phần cứng. Do đó, theo thời gian, Linux đã phát triển để cho phép ứng dụng sử dụng các <strong>huge page</strong> (trang lớn, theo cách gọi trong thế giới Linux).</p>
+<p>Việc sử dụng huge page, như đã gợi ý trước đó, mang lại nhiều lợi ích. Giống như trong VAX/VMS, điều này giúp giảm số lượng ánh xạ cần có trong page table; page càng lớn, số ánh xạ càng ít. Tuy nhiên, việc giảm số lượng <strong>page-table entry</strong> không phải là động lực chính của huge page; thay vào đó, lợi ích lớn nhất là <strong>cải thiện hành vi của TLB</strong> và hiệu năng liên quan. Khi một process sử dụng tích cực một lượng lớn bộ nhớ, nó nhanh chóng làm đầy TLB với các bản dịch địa chỉ. Nếu các bản dịch này là cho page 4 KB, chỉ một lượng nhỏ bộ nhớ tổng thể có thể được truy cập mà không gây ra <strong>TLB miss</strong>. Kết quả là, với các workload “big memory” hiện đại chạy trên máy có nhiều GB bộ nhớ, chi phí hiệu năng là đáng kể; nghiên cứu gần đây cho thấy một số ứng dụng tiêu tốn tới 10% chu kỳ CPU để xử lý TLB miss [B+13].</p>
+<p>Huge page cho phép một process truy cập một vùng bộ nhớ lớn mà không gặp TLB miss, bằng cách sử dụng ít slot hơn trong TLB — đây là lợi ích chính. Ngoài ra, huge page còn có các lợi ích khác: đường xử lý khi TLB miss ngắn hơn, nghĩa là khi TLB miss xảy ra, nó được xử lý nhanh hơn. Thêm vào đó, việc cấp phát có thể khá nhanh (trong một số kịch bản), một lợi ích nhỏ nhưng đôi khi quan trọng.</p>
+<blockquote>
+<p><strong>TIP: CONSIDER INCREMENTALISM</strong><br />
+(Hãy cân nhắc cách tiếp cận gia tăng)<br />
+Nhiều khi trong cuộc sống, bạn được khuyến khích trở thành một nhà cách mạng. “Hãy nghĩ lớn!”, họ nói. “Hãy thay đổi thế giới!”, họ hô hào. Và bạn có thể thấy tại sao điều đó hấp dẫn; trong một số trường hợp, những thay đổi lớn là cần thiết, và vì vậy việc thúc đẩy mạnh mẽ cho chúng là hợp lý. Và nếu bạn thử theo cách này, ít nhất họ có thể sẽ ngừng la hét vào bạn.</p>
+<p>Tuy nhiên, trong nhiều trường hợp, một cách tiếp cận chậm hơn, mang tính gia tăng có thể là điều đúng đắn nên làm. Ví dụ về <strong>Linux huge page</strong> trong chương này là một minh họa cho <strong>engineering incrementalism</strong> (cách tiếp cận kỹ thuật theo hướng gia tăng); thay vì giữ lập trường cứng nhắc và khẳng định rằng large page là tương lai, các nhà phát triển đã chọn cách tiếp cận thận trọng: trước tiên giới thiệu hỗ trợ chuyên biệt cho nó, tìm hiểu thêm về ưu và nhược điểm, và chỉ khi có lý do thực sự mới bổ sung hỗ trợ tổng quát cho tất cả ứng dụng.</p>
+<p>Incrementalism, dù đôi khi bị coi thường, thường dẫn đến tiến bộ chậm rãi, có suy nghĩ và hợp lý. Khi xây dựng hệ thống, cách tiếp cận này có thể chính là điều bạn cần. Thực tế, điều này cũng có thể đúng trong cuộc sống.</p>
+</blockquote>
+<p>Một khía cạnh thú vị trong việc Linux hỗ trợ huge page là cách nó được triển khai theo hướng gia tăng. Ban đầu, các nhà phát triển Linux biết rằng hỗ trợ này chỉ quan trọng với một số ít ứng dụng, chẳng hạn như các <strong>large database</strong> (cơ sở dữ liệu lớn) có yêu cầu hiệu năng nghiêm ngặt. Do đó, quyết định được đưa ra là cho phép ứng dụng <strong>explicitly request</strong> (yêu cầu rõ ràng) cấp phát bộ nhớ với large page (thông qua lời gọi <code>mmap()</code> hoặc <code>shmget()</code>). Bằng cách này, hầu hết ứng dụng sẽ không bị ảnh hưởng (và tiếp tục chỉ sử dụng page 4 KB); một số ít ứng dụng đòi hỏi cao sẽ phải thay đổi để dùng các giao diện này, nhưng với chúng thì điều đó là xứng đáng.</p>
+<p>Gần đây hơn, khi nhu cầu cải thiện hành vi của <strong>TLB</strong> trở nên phổ biến hơn ở nhiều ứng dụng, các nhà phát triển Linux đã bổ sung <strong>transparent huge page support</strong> (hỗ trợ large page trong suốt). Khi tính năng này được bật, hệ điều hành sẽ tự động tìm cơ hội để cấp phát huge page (thường là 2 MB, nhưng trên một số hệ thống là 1 GB) mà không cần sửa đổi ứng dụng.</p>
+<p>Huge page không phải không có chi phí. Chi phí tiềm ẩn lớn nhất là <strong>internal fragmentation</strong> (phân mảnh bên trong), tức là một page lớn nhưng chỉ được sử dụng thưa thớt. Dạng lãng phí này có thể làm đầy bộ nhớ với các page lớn nhưng ít được dùng. <strong>Swapping</strong>, nếu được bật, cũng hoạt động không tốt với huge page, đôi khi làm tăng đáng kể lượng I/O mà hệ thống thực hiện. <strong>Overhead</strong> của việc cấp phát cũng có thể tệ (trong một số trường hợp khác). Nhìn chung, một điều rõ ràng: kích thước page 4 KB, vốn phục vụ hệ thống rất tốt trong nhiều năm, không còn là giải pháp phổ quát như trước; dung lượng bộ nhớ ngày càng tăng đòi hỏi chúng ta phải cân nhắc large page và các giải pháp khác như một phần của sự tiến hóa tất yếu của hệ thống <strong>VM</strong> (virtual memory). Việc Linux chậm rãi áp dụng công nghệ dựa trên phần cứng này là bằng chứng cho sự thay đổi sắp tới.</p>
+<h3 id="the-page-cache"><a class="header" href="#the-page-cache">The Page Cache</a></h3>
+<p>(Bộ nhớ đệm trang)</p>
+<p>Để giảm chi phí truy cập <strong>persistent storage</strong> (lưu trữ lâu dài — nội dung trọng tâm của phần ba cuốn sách này), hầu hết các hệ thống sử dụng các <strong>caching subsystem</strong> (hệ thống con bộ nhớ đệm) mạnh mẽ để giữ các mục dữ liệu phổ biến trong bộ nhớ. Linux, về mặt này, không khác gì các hệ điều hành truyền thống.</p>
+<p><strong>Linux page cache</strong> là thống nhất, giữ các page trong bộ nhớ từ ba nguồn chính:</p>
+<ul>
+<li><strong>Memory-mapped files</strong> (các tệp được ánh xạ vào bộ nhớ)</li>
+<li><strong>File data</strong> và <strong>metadata</strong> từ thiết bị (thường được truy cập thông qua các lời gọi <code>read()</code> và <code>write()</code> tới <strong>file system</strong>)</li>
+<li><strong>Heap</strong> và <strong>stack page</strong> tạo thành mỗi process (đôi khi gọi là <strong>anonymous memory</strong>, vì không có tệp được đặt tên bên dưới, mà thay vào đó là <strong>swap space</strong>).</li>
+</ul>
+<p>Các thực thể này được lưu trong một <strong>page cache hash table</strong>, cho phép tra cứu nhanh khi cần dữ liệu.</p>
+<p>Page cache theo dõi xem các entry là <strong>clean</strong> (đã đọc nhưng chưa cập nhật) hay <strong>dirty</strong> (hay còn gọi là <strong>modified</strong> — đã sửa đổi). Dữ liệu dirty được ghi định kỳ ra <strong>backing store</strong> (tức là ra tệp cụ thể đối với dữ liệu tệp, hoặc ra swap space đối với vùng anonymous) bởi các <strong>background thread</strong> (luồng nền) gọi là <code>pdflush</code>, đảm bảo rằng dữ liệu đã sửa đổi cuối cùng sẽ được ghi trở lại lưu trữ lâu dài. Hoạt động nền này diễn ra sau một khoảng thời gian nhất định hoặc khi có quá nhiều page bị coi là dirty (cả hai đều là tham số cấu hình được).</p>
+<p>Trong một số trường hợp, hệ thống bị thiếu bộ nhớ, và Linux phải quyết định page nào cần loại bỏ khỏi bộ nhớ để giải phóng không gian. Để làm điều này, Linux sử dụng một dạng sửa đổi của <strong>2Q replacement</strong> [JS94], được mô tả dưới đây.</p>
+<p>Ý tưởng cơ bản rất đơn giản: <strong>standard LRU replacement</strong> (thay thế LRU tiêu chuẩn) hiệu quả, nhưng có thể bị phá vỡ bởi một số mẫu truy cập phổ biến. Ví dụ, nếu một process liên tục truy cập một tệp lớn (đặc biệt là tệp gần bằng hoặc lớn hơn kích thước bộ nhớ), LRU sẽ loại bỏ mọi tệp khác khỏi bộ nhớ. Tệ hơn: giữ lại một phần của tệp này trong bộ nhớ cũng không hữu ích, vì chúng không bao giờ được truy cập lại trước khi bị loại bỏ.</p>
+<p>Phiên bản 2Q replacement của Linux giải quyết vấn đề này bằng cách giữ hai danh sách và chia bộ nhớ giữa chúng. Khi được truy cập lần đầu, một page được đặt vào một hàng đợi (gọi là <strong>A1</strong> trong bài báo gốc, nhưng là <strong>inactive list</strong> trong Linux); khi được truy cập lại, page được <strong>promote</strong> (thăng hạng) sang hàng đợi khác (gọi là <strong>Aq</strong> trong bài báo gốc, nhưng là <strong>active list</strong> trong Linux). Khi cần thay thế, ứng viên bị loại bỏ được lấy từ inactive list. Linux cũng định kỳ di chuyển các page từ cuối active list sang inactive list, giữ active list ở mức khoảng hai phần ba tổng kích thước page cache [G04].</p>
+<p>Lý tưởng nhất, Linux sẽ quản lý các danh sách này theo thứ tự LRU hoàn hảo, nhưng như đã thảo luận ở các chương trước, làm như vậy là tốn kém. Do đó, giống như nhiều OS khác, một <strong>approximation of LRU</strong> (xấp xỉ LRU) — tương tự như <strong>clock replacement</strong> — được sử dụng.</p>
+<p>Cách tiếp cận 2Q này nhìn chung hoạt động khá giống LRU, nhưng đặc biệt xử lý tốt trường hợp truy cập tuần hoàn một tệp lớn bằng cách giới hạn các page của truy cập tuần hoàn đó trong inactive list. Vì các page này không bao giờ được truy cập lại trước khi bị loại bỏ, chúng không làm “trôi” các page hữu ích khác trong active list ra khỏi bộ nhớ.</p>
+<blockquote>
+<p><strong>ASIDE: THE UBIQUITY OF MEMORY-MAPPING</strong><br />
+(Tính phổ biến của kỹ thuật ánh xạ bộ nhớ)<br />
+Kỹ thuật <strong>memory mapping</strong> (ánh xạ bộ nhớ) đã xuất hiện trước Linux nhiều năm, và được sử dụng ở nhiều nơi trong Linux cũng như các hệ thống hiện đại khác. Ý tưởng rất đơn giản: bằng cách gọi <code>mmap()</code> trên một <strong>file descriptor</strong> (bộ mô tả tệp) đã được mở, một <strong>process</strong> (tiến trình) sẽ nhận về một con trỏ trỏ tới phần đầu của một vùng <strong>virtual memory</strong> (bộ nhớ ảo) nơi nội dung của tệp được “đặt” vào. Sau đó, bằng cách sử dụng con trỏ này, process có thể truy cập bất kỳ phần nào của tệp chỉ bằng một thao tác <strong>pointer dereference</strong> (giải tham chiếu con trỏ).</p>
+<p>Các truy cập tới những phần của tệp được ánh xạ bộ nhớ nhưng chưa được nạp vào bộ nhớ sẽ kích hoạt <strong>page fault</strong> (lỗi trang), tại thời điểm đó OS sẽ nạp (page in) dữ liệu liên quan và làm cho nó khả dụng bằng cách cập nhật <strong>page table</strong> (bảng trang) của process tương ứng (tức là <strong>demand paging</strong> — phân trang theo yêu cầu).</p>
+<p>Mọi process Linux thông thường đều sử dụng memory-mapped file, ngay cả khi mã trong <code>main()</code> không trực tiếp gọi <code>mmap()</code>, bởi vì cách Linux nạp mã từ tệp thực thi và mã từ <strong>shared library</strong> (thư viện dùng chung) vào bộ nhớ. Dưới đây là kết quả (đã rút gọn nhiều) của công cụ dòng lệnh <code>pmap</code>, cho thấy các ánh xạ khác nhau tạo thành virtual address space của một chương trình đang chạy (trong ví dụ này là shell <code>tcsh</code>). Kết quả hiển thị bốn cột: địa chỉ ảo của ánh xạ, kích thước của nó, các <strong>protection bit</strong> (bit bảo vệ) của vùng, và nguồn của ánh xạ:</p>
+<pre><code>0000000000400000     372K r-x-- tcsh
+00000000019d5000    1780K rw-- [anon ]
+00007f4e7cf06000    1792K r-x-- libc-2.23.so
+00007f4e7d2d0000      36K r-x-- libcrypt-2.23.so
+00007f4e7d508000     148K r-x-- libtinfo.so.5.9
+00007f4e7d731000     152K r-x-- ld-2.23.so
+00007f4e7d932000      16K rw-- [stack ]
+</code></pre>
+<p>Như bạn thấy từ kết quả này, mã từ tệp thực thi <code>tcsh</code>, cũng như mã từ <code>libc</code>, <code>libcrypt</code>, <code>libtinfo</code>, và mã từ <strong>dynamic linker</strong> (<code>ld.so</code>) đều được ánh xạ vào address space. Ngoài ra còn có hai vùng <strong>anonymous</strong> (ẩn danh): <strong>heap</strong> (mục thứ hai, được gắn nhãn <code>anon</code>) và <strong>stack</strong> (được gắn nhãn <code>stack</code>). Memory-mapped file cung cấp cho OS một cách đơn giản và hiệu quả để xây dựng một address space hiện đại.</p>
+</blockquote>
+<h3 id="security-and-buffer-overflows"><a class="header" href="#security-and-buffer-overflows">Security And Buffer Overflows</a></h3>
+<p>(Bảo mật và tràn bộ đệm)</p>
+<p>Có lẽ sự khác biệt lớn nhất giữa các hệ thống <strong>VM</strong> (virtual memory) hiện đại (Linux, Solaris, hoặc một trong các biến thể BSD) và các hệ thống cũ (VAX/VMS) là sự nhấn mạnh vào <strong>security</strong> (bảo mật) trong thời đại ngày nay. <strong>Protection</strong> (bảo vệ) luôn là một mối quan tâm nghiêm túc đối với hệ điều hành, nhưng với việc các máy tính ngày càng kết nối nhiều hơn, không có gì ngạc nhiên khi các nhà phát triển đã triển khai nhiều biện pháp phòng thủ để ngăn chặn những hacker tinh vi chiếm quyền điều khiển hệ thống.</p>
+<p>Một mối đe dọa lớn là <strong>buffer overflow attack</strong> (tấn công tràn bộ đệm)<sup class="footnote-reference"><a href="#2">2</a></sup>, có thể được sử dụng chống lại các chương trình người dùng thông thường và thậm chí cả kernel. Ý tưởng của các cuộc tấn công này là tìm một lỗi trong hệ thống mục tiêu cho phép kẻ tấn công chèn dữ liệu tùy ý vào address space của mục tiêu. Những lỗ hổng như vậy đôi khi xuất hiện vì lập trình viên <strong>giả định sai</strong> rằng một đầu vào sẽ không quá dài, và do đó (một cách tin tưởng) sao chép đầu vào vào một buffer; vì đầu vào thực tế quá dài, nó tràn ra ngoài buffer, ghi đè lên vùng nhớ của mục tiêu. Đoạn mã tưởng chừng vô hại dưới đây có thể là nguồn gốc của vấn đề:</p>
+<pre><code class="language-c">int some_function(char *input) {
+    char dest_buffer[100];
+    strcpy(dest_buffer, input); // oops, unbounded copy!
+}
+</code></pre>
+<p>Trong nhiều trường hợp, một tràn bộ đệm như vậy không gây hậu quả nghiêm trọng, ví dụ: dữ liệu đầu vào xấu được đưa vào một chương trình người dùng hoặc thậm chí OS có thể chỉ khiến nó bị crash, nhưng không tệ hơn. Tuy nhiên, các lập trình viên độc hại có thể cẩn thận tạo ra dữ liệu đầu vào tràn bộ đệm để chèn mã của riêng họ vào hệ thống mục tiêu, về cơ bản cho phép họ chiếm quyền điều khiển và thực thi ý đồ riêng. Nếu tấn công thành công vào một chương trình người dùng có kết nối mạng, kẻ tấn công có thể chạy các tính toán tùy ý hoặc thậm chí “cho thuê” chu kỳ CPU của hệ thống bị xâm nhập; nếu tấn công thành công vào chính hệ điều hành, cuộc tấn công có thể truy cập nhiều tài nguyên hơn nữa, và đây là một dạng <strong>privilege escalation</strong> (leo thang đặc quyền — tức là mã người dùng giành được quyền truy cập của kernel). Như bạn có thể đoán, đây đều là những điều <strong>rất tệ</strong>.</p>
+<p>Biện pháp phòng thủ đầu tiên và đơn giản nhất chống lại buffer overflow là ngăn chặn việc thực thi bất kỳ mã nào nằm trong một số vùng nhất định của address space (ví dụ: trong stack). <strong>NX bit</strong> (No-eXecute), được AMD giới thiệu vào phiên bản x86 của họ (Intel cũng có bit tương tự gọi là <strong>XD bit</strong>), là một biện pháp như vậy; nó chỉ đơn giản ngăn việc thực thi từ bất kỳ page nào có bit này được đặt trong page table entry tương ứng. Cách tiếp cận này ngăn mã được kẻ tấn công chèn vào stack của mục tiêu khỏi bị thực thi, và do đó giảm thiểu vấn đề.</p>
+<p>Tuy nhiên, kẻ tấn công thông minh thì… rất thông minh, và ngay cả khi mã chèn vào không thể được thêm trực tiếp, các chuỗi lệnh tùy ý vẫn có thể được thực thi bởi mã độc. Ý tưởng này, ở dạng tổng quát nhất, được gọi là <strong>return-oriented programming</strong> (ROP) [S07], và thực sự là một kỹ thuật rất tinh vi. Quan sát đằng sau ROP là trong bất kỳ address space của chương trình nào cũng có rất nhiều đoạn mã nhỏ (gọi là <strong>gadget</strong> trong thuật ngữ ROP), đặc biệt là các chương trình C liên kết với thư viện C khổng lồ. Do đó, kẻ tấn công có thể ghi đè stack sao cho <strong>return address</strong> trong hàm đang thực thi trỏ tới một lệnh độc hại mong muốn (hoặc một chuỗi lệnh), theo sau là một lệnh <code>return</code>. Bằng cách xâu chuỗi một số lượng lớn gadget (tức là đảm bảo mỗi lệnh <code>return</code> nhảy tới gadget tiếp theo), kẻ tấn công có thể thực thi mã tùy ý. Thật đáng kinh ngạc!</p>
+<p>Để phòng chống ROP (bao gồm cả dạng trước đó là <strong>return-to-libc attack</strong> [S+04]), Linux (và các hệ thống khác) bổ sung một biện pháp phòng thủ khác, gọi là <strong>address space layout randomization</strong> (ASLR). Thay vì đặt code, stack và heap ở các vị trí cố định trong virtual address space, OS sẽ <strong>randomize</strong> (ngẫu nhiên hóa) vị trí của chúng, khiến việc tạo ra chuỗi mã phức tạp cần thiết để thực hiện loại tấn công này trở nên khó khăn hơn nhiều. Hầu hết các cuộc tấn công vào chương trình người dùng dễ bị tổn thương sẽ chỉ gây crash, nhưng không thể chiếm quyền điều khiển chương trình đang chạy.</p>
+<p>Điều thú vị là bạn có thể quan sát sự ngẫu nhiên này trong thực tế khá dễ dàng. Dưới đây là một đoạn mã minh họa điều đó trên một hệ thống Linux hiện đại:</p>
+<p>Đoạn mã này chỉ đơn giản in ra địa chỉ (ảo) của một biến trên <strong>stack</strong>. Trong các hệ thống cũ không có <strong>ASLR</strong> (Address Space Layout Randomization — ngẫu nhiên hóa bố cục không gian địa chỉ), giá trị này sẽ giống nhau mỗi lần chạy. Nhưng như bạn thấy bên dưới, giá trị thay đổi theo từng lần chạy:</p>
+<pre><code>prompt&gt; ./random
+0x7ffd3e55d2b4
+prompt&gt; ./random
+0x7ffe1033b8f4
+prompt&gt; ./random
+0x7ffe45522e94
+</code></pre>
+<p><strong>ASLR</strong> là một cơ chế phòng thủ hữu ích đến mức nó đã được tích hợp cả vào <strong>kernel</strong>, trong một tính năng có tên khá trực diện là <strong>kernel address space layout randomization</strong> (<strong>KASLR</strong>). Tuy nhiên, hóa ra kernel còn có những vấn đề bảo mật lớn hơn cần xử lý, như chúng ta sẽ bàn tiếp theo.</p>
+<h3 id="other-security-problems-meltdown-and-spectre"><a class="header" href="#other-security-problems-meltdown-and-spectre">Other Security Problems: Meltdown And Spectre</a></h3>
+<p>(Các vấn đề bảo mật khác: Meltdown và Spectre)</p>
+<p>Tại thời điểm viết những dòng này (tháng 8 năm 2018), thế giới <strong>systems security</strong> (bảo mật hệ thống) đã bị đảo lộn bởi hai cuộc tấn công mới và có liên quan đến nhau. Cuộc tấn công đầu tiên được gọi là <strong>Meltdown</strong>, và cuộc thứ hai là <strong>Spectre</strong>. Chúng được phát hiện gần như cùng lúc bởi bốn nhóm nhà nghiên cứu/kỹ sư khác nhau, và đã dẫn đến những nghi vấn sâu sắc về các cơ chế bảo vệ cơ bản mà phần cứng máy tính và hệ điều hành cung cấp. Xem <code>spectreattack.com</code> để đọc các bài báo mô tả chi tiết từng cuộc tấn công; <strong>Spectre</strong> được xem là vấn đề nghiêm trọng hơn trong hai cái.</p>
+<p>Điểm yếu chung bị khai thác trong cả hai cuộc tấn công này là việc các <strong>CPU</strong> trong hệ thống hiện đại thực hiện nhiều kỹ thuật “hậu trường” phức tạp để cải thiện hiệu năng. Một lớp kỹ thuật nằm ở trung tâm của vấn đề được gọi là <strong>speculative execution</strong> (thực thi dự đoán), trong đó CPU đoán các lệnh nào sẽ được thực thi trong tương lai gần và bắt đầu thực thi chúng trước. Nếu dự đoán đúng, chương trình chạy nhanh hơn; nếu sai, CPU sẽ hoàn tác các tác động của chúng lên <strong>architectural state</strong> (trạng thái kiến trúc — ví dụ: các thanh ghi) và thử lại, lần này đi theo nhánh đúng.</p>
+<p>Vấn đề với speculative execution là nó thường để lại dấu vết của quá trình thực thi trong nhiều thành phần của hệ thống, như <strong>processor cache</strong>, <strong>branch predictor</strong>, v.v. Và đây chính là vấn đề: như các tác giả của các cuộc tấn công đã chỉ ra, trạng thái này có thể khiến nội dung bộ nhớ bị lộ, ngay cả những vùng bộ nhớ mà chúng ta nghĩ rằng đã được <strong>MMU</strong> bảo vệ.</p>
+<p>Một hướng tiếp cận để tăng cường bảo vệ kernel là loại bỏ càng nhiều càng tốt phần kernel address space khỏi mỗi user process và thay vào đó sử dụng một <strong>kernel page table</strong> riêng cho hầu hết dữ liệu của kernel (gọi là <strong>kernel page-table isolation</strong>, hay <strong>KPTI</strong>) [G+17]. Như vậy, thay vì ánh xạ mã và cấu trúc dữ liệu của kernel vào mỗi process, chỉ giữ lại phần tối thiểu cần thiết; khi chuyển vào kernel, hệ thống sẽ chuyển sang kernel page table. Cách làm này cải thiện bảo mật và tránh được một số hướng tấn công, nhưng phải trả giá: hiệu năng. Việc chuyển đổi page table là tốn kém. Đó chính là cái giá của bảo mật: sự tiện lợi và hiệu suất.</p>
+<p>Đáng tiếc, KPTI không giải quyết được tất cả các vấn đề bảo mật đã nêu ở trên, chỉ một phần trong số đó. Và các giải pháp đơn giản như tắt speculative execution sẽ không hợp lý, vì hệ thống sẽ chạy chậm hơn hàng nghìn lần. Vì vậy, đây là một thời điểm thú vị để sống, nếu bạn quan tâm đến bảo mật hệ thống.</p>
+<p>Để thực sự hiểu các cuộc tấn công này, bạn (có lẽ) sẽ phải học thêm nhiều điều trước tiên. Hãy bắt đầu bằng việc tìm hiểu <strong>kiến trúc máy tính hiện đại</strong>, như được trình bày trong các sách nâng cao về chủ đề này, tập trung vào speculative execution và tất cả các cơ chế cần thiết để triển khai nó. Chắc chắn hãy đọc về các cuộc tấn công Meltdown và Spectre tại các trang web đã đề cập ở trên; chúng cũng bao gồm phần giới thiệu hữu ích về speculative execution, vì vậy có thể là điểm khởi đầu không tồi. Và hãy nghiên cứu hệ điều hành để tìm thêm các lỗ hổng tiềm ẩn. Ai biết được còn những vấn đề gì đang tồn tại?</p>
+<h2 id="233-summary"><a class="header" href="#233-summary">23.3 Summary</a></h2>
+<p>(Tóm tắt)</p>
+<p>Bạn vừa xem một cái nhìn tổng quan từ trên xuống dưới về hai hệ thống <strong>virtual memory</strong> (bộ nhớ ảo). Hy vọng rằng hầu hết các chi tiết đều dễ theo dõi, vì bạn đã có hiểu biết tốt về các cơ chế và chính sách cơ bản. Thông tin chi tiết hơn về VAX/VMS có trong bài báo xuất sắc (và ngắn gọn) của <strong>Levy</strong> và <strong>Lipman</strong> [LL82]. Chúng tôi khuyến khích bạn đọc nó, vì đây là cách tuyệt vời để thấy được nguồn tài liệu gốc đằng sau các chương này.</p>
+<p>Bạn cũng đã tìm hiểu đôi chút về Linux. Dù là một hệ thống lớn và phức tạp, nó kế thừa nhiều ý tưởng hay từ quá khứ, nhiều ý tưởng trong số đó chúng tôi chưa có dịp bàn chi tiết. Ví dụ, Linux thực hiện <strong>lazy copy-on-write</strong> khi sao chép page trong <code>fork()</code>, nhờ đó giảm overhead bằng cách tránh sao chép không cần thiết. Linux cũng <strong>demand zero</strong> các page (sử dụng memory-mapping của thiết bị <code>/dev/zero</code>), và có một <strong>background swap daemon</strong> (<code>swapd</code>) để hoán đổi page ra đĩa nhằm giảm áp lực bộ nhớ. Thật vậy, hệ thống VM chứa đầy những ý tưởng hay được lấy từ quá khứ, đồng thời cũng bao gồm nhiều cải tiến riêng.</p>
+<p>Để tìm hiểu thêm, hãy tham khảo những cuốn sách hợp lý (nhưng tiếc là đã lỗi thời) [BC05, G04]. Chúng tôi khuyến khích bạn tự đọc, vì chúng tôi chỉ có thể cung cấp một giọt nước trong đại dương phức tạp này. Nhưng, bạn phải bắt đầu từ đâu đó. Và, “một đại dương chẳng qua cũng chỉ là tập hợp của vô số giọt nước” [M04].</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../22/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../26/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../22/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../26/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

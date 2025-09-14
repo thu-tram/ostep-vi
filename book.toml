@@ -1,9 +1,0 @@
-[book]
-authors = ["duykhanh471"]
-language = "vi"
-multilingual = false
-src = "src"
-title = "OS Bí truyền thư - OSTEP in Vietnamese"
-
-[build]
-build-dir = "public"

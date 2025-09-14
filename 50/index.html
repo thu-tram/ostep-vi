@@ -1,0 +1,411 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>The Andrew File System (AFS) - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html" class="active"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="50-hệ-thống-tệp-andrew-andrew-file-system--afs"><a class="header" href="#50-hệ-thống-tệp-andrew-andrew-file-system--afs">50. Hệ thống Tệp Andrew (Andrew File System – AFS)</a></h1>
+<p><strong>Andrew File System</strong> được giới thiệu tại <strong>Carnegie-Mellon University (CMU)</strong><sup class="footnote-reference"><a href="#1">1</a></sup> vào những năm 1980 [H+88]. Dưới sự dẫn dắt của Giáo sư nổi tiếng <strong>M. Satyanarayanan</strong> của CMU (thường được gọi tắt là “Satya”), mục tiêu chính của dự án này rất đơn giản: <strong>khả năng mở rộng</strong> (scale). Cụ thể, làm thế nào để thiết kế một <strong>distributed file system</strong> (hệ thống tệp phân tán) sao cho một server có thể hỗ trợ nhiều client nhất có thể?</p>
+<p>Điều thú vị là có rất nhiều khía cạnh trong thiết kế và triển khai ảnh hưởng đến khả năng mở rộng. Quan trọng nhất là thiết kế <strong>giao thức</strong> giữa client và server.<br />
+Ví dụ, trong <strong>NFS</strong>, giao thức buộc client phải định kỳ kiểm tra với server để xác định xem nội dung trong cache có thay đổi hay không; vì mỗi lần kiểm tra đều tiêu tốn tài nguyên server (bao gồm CPU và băng thông mạng), các lần kiểm tra thường xuyên như vậy sẽ giới hạn số lượng client mà server có thể phục vụ, và do đó giới hạn khả năng mở rộng.</p>
+<p>AFS cũng khác với NFS ở chỗ ngay từ đầu, <strong>hành vi hợp lý ở góc nhìn người dùng</strong> đã là một ưu tiên hàng đầu. Trong NFS, <strong>cache consistency</strong> (tính nhất quán của bộ nhớ đệm) rất khó mô tả vì nó phụ thuộc trực tiếp vào các chi tiết triển khai mức thấp, bao gồm cả thời gian timeout của cache phía client. Trong AFS, cache consistency đơn giản và dễ hiểu: khi file được mở, client sẽ nhận được bản sao mới nhất và nhất quán từ server.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Mặc dù ban đầu được gọi là “Carnegie-Mellon University”, sau này CMU bỏ dấu gạch nối, và từ đó có tên hiện đại “Carnegie Mellon University”. Vì AFS bắt nguồn từ công trình vào đầu những năm 80, chúng tôi sử dụng tên CMU ở dạng gốc có gạch nối đầy đủ. Xem thêm tại: https://www.quora.com/When-did-Carnegie-Mellon-University-remove-the-hyphen-in-the-university-name nếu bạn quan tâm đến chi tiết nhỏ này.</p>
+</div>
+<h2 id="501-phiên-bản-afs-1-afs-version-1"><a class="header" href="#501-phiên-bản-afs-1-afs-version-1">50.1 Phiên bản AFS 1 (AFS Version 1)</a></h2>
+<p>Chúng ta sẽ thảo luận về hai phiên bản của AFS [H+88, S+85]. Phiên bản đầu tiên (mà chúng ta sẽ gọi là <strong>AFSv1</strong>, nhưng thực tế hệ thống gốc được gọi là <strong>ITC distributed file system</strong> [S+85]) đã có một số thiết kế cơ bản, nhưng không mở rộng được như mong muốn, dẫn đến việc thiết kế lại và hình thành giao thức cuối cùng (mà chúng ta sẽ gọi là <strong>AFSv2</strong>, hoặc đơn giản là <strong>AFS</strong>) [H+88]. Sau đây là phần mô tả phiên bản đầu tiên.</p>
+<p><strong>Hình 50.1: Các điểm nổi bật của giao thức AFSv1</strong></p>
+<p>Một trong những nguyên tắc cơ bản của tất cả các phiên bản AFS là <strong>whole-file caching</strong> (bộ nhớ đệm toàn bộ file) trên <strong>local disk</strong> (đĩa cục bộ) của máy client đang truy cập file. Khi bạn gọi <code>open()</code> một file, toàn bộ file (nếu tồn tại) sẽ được lấy từ server và lưu thành một file trên đĩa cục bộ của bạn. Các thao tác <code>read()</code> và <code>write()</code> tiếp theo của ứng dụng sẽ được chuyển hướng tới <strong>local file system</strong> (hệ thống tệp cục bộ) nơi file được lưu; do đó, các thao tác này <strong>không cần giao tiếp mạng</strong> và rất nhanh. Cuối cùng, khi <code>close()</code>, file (nếu đã bị sửa đổi) sẽ được ghi trả lại server.<br />
+Lưu ý sự khác biệt rõ rệt với NFS, vốn cache theo <strong>block</strong> (không phải toàn bộ file, mặc dù NFS có thể cache tất cả các block của một file) và lưu trong bộ nhớ của client (không phải trên đĩa cục bộ).</p>
+<p>Đi sâu hơn một chút:</p>
+<ul>
+<li>Khi một ứng dụng client lần đầu gọi <code>open()</code>, mã phía client của AFS (mà các nhà thiết kế AFS gọi là <strong>Venus</strong>) sẽ gửi một thông điệp giao thức <strong><code>Fetch</code></strong> tới server.</li>
+<li>Thông điệp <code>Fetch</code> sẽ truyền toàn bộ <strong>pathname</strong> của file mong muốn (ví dụ: <code>/home/remzi/notes.txt</code>) tới <strong>file server</strong> (nhóm server này được gọi là <strong>Vice</strong>), server sẽ duyệt qua pathname, tìm file mong muốn và gửi toàn bộ file về cho client.</li>
+<li>Mã phía client sau đó sẽ cache file này trên đĩa cục bộ của client (bằng cách ghi nó xuống local disk).</li>
+</ul>
+<p>Như đã nói ở trên, các lời gọi <code>read()</code> và <code>write()</code> tiếp theo trong AFS hoàn toàn là <strong>local</strong> (không có giao tiếp với server); chúng chỉ được chuyển hướng tới bản sao cục bộ của file. Vì các lời gọi <code>read()</code> và <code>write()</code> hoạt động giống như trên một local file system, khi một block được truy cập, nó cũng có thể được cache trong bộ nhớ của client. Do đó, AFS cũng sử dụng bộ nhớ của client để cache các block mà nó đã lưu trên đĩa cục bộ.</p>
+<p>Cuối cùng, khi hoàn tất, AFS client sẽ kiểm tra xem file có bị sửa đổi hay không (tức là nó đã được mở để ghi); nếu có, nó sẽ ghi phiên bản mới trở lại server bằng thông điệp giao thức <strong><code>Store</code></strong>, gửi toàn bộ file và pathname tới server để lưu trữ lâu dài.</p>
+<p>Lần tiếp theo file được truy cập, <strong>AFSv1</strong> thực hiện hiệu quả hơn nhiều:</p>
+<ul>
+<li>Mã phía client trước tiên liên hệ với server (sử dụng thông điệp giao thức <strong><code>TestAuth</code></strong>) để xác định xem file có thay đổi hay không.</li>
+<li>Nếu không, client sẽ sử dụng bản sao đã cache cục bộ, nhờ đó cải thiện hiệu năng bằng cách tránh truyền dữ liệu qua mạng.</li>
+</ul>
+<p>Hình minh họa ở trên cho thấy một số thông điệp giao thức trong AFSv1. Lưu ý rằng phiên bản đầu tiên này chỉ cache <strong>nội dung file</strong>; ví dụ, các thư mục chỉ được lưu trên server.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: ĐO LƯỜNG RỒI MỚI XÂY DỰNG (PATTERSON’S LAW)</strong><br />
+Một trong những người cố vấn của chúng tôi, <strong>David Patterson</strong> (nổi tiếng với RISC và RAID), luôn khuyến khích chúng tôi <strong>đo lường hệ thống và chứng minh vấn đề</strong> trước khi xây dựng một hệ thống mới để khắc phục vấn đề đó.<br />
+Bằng cách sử dụng <strong>bằng chứng thực nghiệm</strong> thay vì chỉ dựa vào cảm tính, bạn có thể biến quá trình xây dựng hệ thống thành một nỗ lực khoa học hơn. Điều này còn có lợi ích phụ là buộc bạn phải suy nghĩ về <strong>cách đo lường hệ thống</strong> trước khi phiên bản cải tiến được phát triển.<br />
+Khi bạn bắt tay vào xây dựng hệ thống mới, sẽ có hai điều tốt hơn:</p>
+<ol>
+<li>Bạn có bằng chứng cho thấy mình đang giải quyết một vấn đề thực sự.</li>
+<li>Bạn đã có sẵn phương pháp đo lường để chứng minh rằng hệ thống mới thực sự cải thiện so với hiện trạng.<br />
+Và đó là lý do chúng tôi gọi đây là <strong>Patterson’s Law</strong>.</li>
+</ol>
+</blockquote>
+</blockquote>
+<h2 id="502-các-vấn-đề-với-phiên-bản-1"><a class="header" href="#502-các-vấn-đề-với-phiên-bản-1">50.2 Các vấn đề với Phiên bản 1</a></h2>
+<p>Một vài vấn đề then chốt trong phiên bản đầu tiên của <strong>AFS</strong> đã thúc đẩy các nhà thiết kế phải suy nghĩ lại về hệ thống tệp của mình. Để nghiên cứu chi tiết các vấn đề này, nhóm thiết kế AFS đã dành rất nhiều thời gian đo đạc nguyên mẫu hiện có để tìm ra nguyên nhân. Việc thử nghiệm như vậy là một điều tốt, bởi vì <strong>đo lường</strong> là chìa khóa để hiểu cách hệ thống hoạt động và cách cải thiện chúng; thu thập dữ liệu cụ thể, chính xác là một phần cần thiết trong quá trình xây dựng hệ thống. Trong nghiên cứu của mình, các tác giả đã tìm ra hai vấn đề chính với <strong>AFSv1</strong>:</p>
+<ul>
+<li>
+<p><strong>Chi phí duyệt đường dẫn (path-traversal) quá cao:</strong> Khi thực hiện một yêu cầu giao thức <code>Fetch</code> hoặc <code>Store</code>, client gửi toàn bộ <strong>pathname</strong> (ví dụ: <code>/home/remzi/notes.txt</code>) tới server. Để truy cập file, server phải thực hiện một quá trình duyệt toàn bộ đường dẫn, đầu tiên tìm <code>home</code> trong thư mục gốc, sau đó tìm <code>remzi</code> trong <code>home</code>, và cứ thế cho đến khi tìm thấy file mong muốn. Khi có nhiều client truy cập server cùng lúc, các nhà thiết kế AFS nhận thấy server tiêu tốn phần lớn thời gian CPU chỉ để duyệt cây thư mục.</p>
+</li>
+<li>
+<p><strong>Client gửi quá nhiều thông điệp giao thức <code>TestAuth</code>:</strong> Tương tự như NFS với số lượng lớn thông điệp <code>GETATTR</code>, AFSv1 tạo ra một lượng lớn lưu lượng mạng để kiểm tra xem một file cục bộ (hoặc thông tin <code>stat</code> của nó) có hợp lệ hay không thông qua thông điệp giao thức <code>TestAuth</code>. Do đó, server phải dành nhiều thời gian để trả lời client rằng chúng có thể sử dụng bản sao cache của file hay không. Phần lớn thời gian, câu trả lời là file không thay đổi.</p>
+</li>
+</ul>
+<p>Thực tế còn có hai vấn đề khác với AFSv1: tải (load) không được cân bằng giữa các server, và server sử dụng một <strong>process</strong> (tiến trình) riêng biệt cho mỗi client, dẫn đến <strong>context switching</strong> và các overhead khác. Vấn đề mất cân bằng tải được giải quyết bằng cách giới thiệu <strong>volume</strong>, cho phép quản trị viên di chuyển chúng giữa các server để cân bằng tải; vấn đề context-switch được giải quyết trong AFSv2 bằng cách xây dựng server sử dụng <strong>thread</strong> (luồng) thay vì process. Tuy nhiên, để tiết kiệm dung lượng, ở đây chúng ta tập trung vào hai vấn đề giao thức chính ở trên – những vấn đề đã giới hạn khả năng mở rộng của hệ thống.</p>
+<h2 id="503-cải-tiến-giao-thức-improving-the-protocol"><a class="header" href="#503-cải-tiến-giao-thức-improving-the-protocol">50.3 Cải tiến giao thức (Improving the Protocol)</a></h2>
+<p>Hai vấn đề trên đã giới hạn khả năng mở rộng của AFS; CPU của server trở thành <strong>nút thắt cổ chai</strong> của hệ thống, và mỗi server chỉ có thể phục vụ khoảng 20 client trước khi bị quá tải. Server nhận quá nhiều thông điệp <code>TestAuth</code>, và khi nhận thông điệp <code>Fetch</code> hoặc <code>Store</code>, chúng tiêu tốn quá nhiều thời gian để duyệt cây thư mục. Do đó, các nhà thiết kế AFS phải đối mặt với một câu hỏi:</p>
+<blockquote>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ THIẾT KẾ MỘT FILE PROTOCOL CÓ KHẢ NĂNG MỞ RỘNG</strong><br />
+Làm thế nào để thiết kế lại giao thức nhằm giảm thiểu số lần tương tác với server, tức là làm sao để giảm số lượng thông điệp <code>TestAuth</code>? Hơn nữa, làm thế nào để thiết kế giao thức sao cho các tương tác với server trở nên hiệu quả? Bằng cách giải quyết cả hai vấn đề này, một giao thức mới sẽ tạo ra một phiên bản AFS có khả năng mở rộng tốt hơn nhiều.</p>
+</blockquote>
+</blockquote>
+<h2 id="504-phiên-bản-afs-2-afs-version-2"><a class="header" href="#504-phiên-bản-afs-2-afs-version-2">50.4 Phiên bản AFS 2 (AFS Version 2)</a></h2>
+<p><strong>AFSv2</strong> giới thiệu khái niệm <strong>callback</strong> nhằm giảm số lượng tương tác giữa client và server. <strong>Callback</strong> đơn giản là một cam kết từ server tới client rằng server sẽ thông báo cho client khi một file mà client đang cache bị sửa đổi. Bằng cách thêm trạng thái này vào hệ thống, client không còn cần phải liên hệ với server để kiểm tra xem file trong cache có còn hợp lệ hay không. Thay vào đó, client giả định file vẫn hợp lệ cho đến khi server thông báo ngược lại; hãy chú ý sự tương đồng với mô hình <strong>polling</strong> (thăm dò) so với <strong>interrupts</strong> (ngắt).</p>
+<p>AFSv2 cũng giới thiệu khái niệm <strong>file identifier (FID)</strong> (tương tự như <strong>NFS file handle</strong>) thay vì sử dụng <strong>pathname</strong> để chỉ định file mà client quan tâm. Một FID trong AFS bao gồm:</p>
+<ul>
+<li><strong>Volume identifier</strong> (định danh volume)</li>
+<li><strong>File identifier</strong> (định danh file)</li>
+<li><strong>Uniquifier</strong> (giá trị duy nhất, cho phép tái sử dụng volume ID và file ID khi một file bị xóa)</li>
+</ul>
+<p>Nhờ đó, thay vì gửi toàn bộ pathname tới server và để server duyệt đường dẫn để tìm file mong muốn, client sẽ tự duyệt pathname, từng thành phần một, cache kết quả và hy vọng giảm tải cho server.</p>
+<p><strong>Ví dụ:</strong><br />
+Nếu một client truy cập file <code>/home/remzi/notes.txt</code>, và <code>home</code> là thư mục AFS được mount vào <code>/</code> (tức là <code>/</code> là thư mục gốc cục bộ, nhưng <code>home</code> và các thư mục con của nó nằm trong AFS), thì:</p>
+<ol>
+<li>Client sẽ <code>Fetch</code> nội dung thư mục <code>home</code>, lưu chúng vào <strong>local-disk cache</strong> (cache trên đĩa cục bộ), và thiết lập một <strong>callback</strong> trên <code>home</code>.</li>
+<li>Sau đó, client sẽ <code>Fetch</code> thư mục <code>remzi</code>, lưu vào local-disk cache, và thiết lập callback trên <code>remzi</code>.</li>
+<li>Cuối cùng, client sẽ <code>Fetch</code> file <code>notes.txt</code>, cache file thường này trên đĩa cục bộ, thiết lập callback, và trả về <strong>file descriptor</strong> cho ứng dụng gọi.</li>
+</ol>
+<p>Xem <strong>Hình 50.2</strong> để biết tóm tắt.</p>
+<p><strong>Hình 50.2: Đọc một file – Hoạt động của Client-side và File Server</strong></p>
+<p>Điểm khác biệt then chốt so với NFS là: với mỗi lần fetch một thư mục hoặc file, AFS client sẽ thiết lập một <strong>callback</strong> với server, đảm bảo rằng server sẽ thông báo cho client khi trạng thái cache của nó thay đổi.</p>
+<p>Lợi ích là rõ ràng: mặc dù lần truy cập đầu tiên tới <code>/home/remzi/notes.txt</code> tạo ra nhiều thông điệp client–server (như mô tả ở trên), nó cũng thiết lập callback cho tất cả các thư mục cũng như file <code>notes.txt</code>. Do đó, các lần truy cập sau hoàn toàn là <strong>local</strong> và không cần tương tác với server.</p>
+<p>Trong trường hợp phổ biến khi file đã được cache ở client, AFS hoạt động gần như giống hệt một <strong>local disk-based file system</strong> (hệ thống tệp dựa trên đĩa cục bộ). Nếu một file được truy cập nhiều hơn một lần, lần truy cập thứ hai sẽ nhanh như truy cập file cục bộ.</p>
+<blockquote>
+<blockquote>
+<p><strong>ASIDE: CACHE CONSISTENCY KHÔNG PHẢI LÀ “THUỐC CHỮA BÁCH BỆNH”</strong><br />
+Khi thảo luận về <strong>distributed file system</strong>, người ta thường nói nhiều về <strong>cache consistency</strong> (tính nhất quán của bộ nhớ đệm) mà hệ thống tệp cung cấp. Tuy nhiên, mức độ nhất quán cơ bản này <strong>không</strong> giải quyết được mọi vấn đề liên quan đến truy cập file từ nhiều client.<br />
+Ví dụ: nếu bạn xây dựng một <strong>code repository</strong> (kho mã nguồn), với nhiều client thực hiện <strong>check-in</strong> và <strong>check-out</strong> mã, bạn không thể chỉ dựa vào hệ thống tệp bên dưới để xử lý tất cả; thay vào đó, bạn phải sử dụng <strong>file-level locking</strong> (khóa ở mức file) rõ ràng để đảm bảo “điều đúng đắn” xảy ra khi có truy cập đồng thời.<br />
+Thực tế, bất kỳ ứng dụng nào thực sự quan tâm đến cập nhật đồng thời sẽ bổ sung cơ chế xử lý xung đột riêng. Mức độ nhất quán cơ bản được mô tả trong chương này và chương trước chủ yếu hữu ích cho các tình huống sử dụng thông thường, ví dụ: khi người dùng đăng nhập vào một client khác, họ mong đợi một phiên bản hợp lý của file của mình xuất hiện ở đó. Mong đợi nhiều hơn từ các giao thức này sẽ chỉ dẫn đến thất bại, thất vọng và… bực bội tràn trề.</p>
+</blockquote>
+</blockquote>
+<h2 id="505-tính-nhất-quán-của-bộ-nhớ-đệm-cache-consistency"><a class="header" href="#505-tính-nhất-quán-của-bộ-nhớ-đệm-cache-consistency">50.5 Tính nhất quán của bộ nhớ đệm (Cache Consistency)</a></h2>
+<p>Khi chúng ta thảo luận về <strong>NFS</strong>, có hai khía cạnh của <strong>cache consistency</strong> (tính nhất quán của bộ nhớ đệm) cần xem xét: <strong>update visibility</strong> (tính hiển thị của bản cập nhật) và <strong>cache staleness</strong> (tính lỗi thời của bộ nhớ đệm).</p>
+<ul>
+<li>Với <strong>update visibility</strong>, câu hỏi đặt ra là: <em>Khi nào server sẽ được cập nhật với phiên bản mới của một file?</em></li>
+<li>Với <strong>cache staleness</strong>, câu hỏi là: <em>Khi server đã có phiên bản mới, mất bao lâu để các client nhìn thấy phiên bản mới thay vì bản cũ trong cache?</em></li>
+</ul>
+<p>Nhờ cơ chế <strong>callback</strong> và <strong>whole-file caching</strong> (cache toàn bộ file), tính nhất quán bộ nhớ đệm mà <strong>AFS</strong> cung cấp rất dễ mô tả và hiểu. Có hai trường hợp quan trọng cần xem xét:</p>
+<ol>
+<li><strong>Tính nhất quán giữa các process trên các máy khác nhau</strong></li>
+<li><strong>Tính nhất quán giữa các process trên cùng một máy</strong></li>
+</ol>
+<p><strong>Giữa các máy khác nhau</strong>, AFS làm cho bản cập nhật trở nên hiển thị trên server và <strong>vô hiệu hóa</strong> (invalidate) các bản sao cache <strong>cùng một lúc</strong>, đó là khi file được đóng.</p>
+<ul>
+<li>Một client mở file, sau đó ghi vào nó (có thể nhiều lần).</li>
+<li>Khi file được đóng, phiên bản mới được ghi (flush) lên server (và do đó trở nên hiển thị).</li>
+<li>Tại thời điểm này, server sẽ “phá vỡ” (break) các callback của mọi client đang giữ bản sao cache; việc phá vỡ này được thực hiện bằng cách liên hệ với từng client và thông báo rằng callback của file đó không còn hợp lệ.</li>
+</ul>
+<p>Bước này đảm bảo rằng các client sẽ không đọc bản sao lỗi thời của file; các lần mở file tiếp theo trên các client đó sẽ yêu cầu <strong>fetch</strong> lại phiên bản mới từ server (và đồng thời thiết lập lại callback trên phiên bản mới).</p>
+<p><strong>AFS có một ngoại lệ</strong> cho mô hình đơn giản này khi xét giữa các process trên <strong>cùng một máy</strong>. Trong trường hợp này, các thao tác ghi vào file sẽ <strong>ngay lập tức</strong> hiển thị cho các process cục bộ khác (tức là một process không cần đợi đến khi file được đóng mới thấy các cập nhật mới nhất). Điều này làm cho việc sử dụng trên một máy duy nhất hoạt động đúng như mong đợi, vì hành vi này dựa trên <strong>UNIX semantics</strong> thông thường. Chỉ khi chuyển sang một máy khác, bạn mới nhận thấy cơ chế nhất quán tổng quát hơn của AFS.</p>
+<p>Có một trường hợp <strong>cross-machine</strong> (giữa các máy) thú vị đáng bàn thêm:</p>
+<ul>
+<li>Trong trường hợp hiếm hoi khi các process trên các máy khác nhau <strong>đồng thời</strong> sửa đổi một file, AFS áp dụng cơ chế <strong>last writer wins</strong> (chính xác hơn là <strong>last closer wins</strong>).</li>
+<li>Cụ thể, client nào gọi <code>close()</code> <strong>sau cùng</strong> sẽ cập nhật toàn bộ file trên server sau cùng và do đó trở thành “phiên bản thắng” – tức là file còn lại trên server để các client khác thấy.</li>
+<li>Kết quả là file được tạo ra hoàn chỉnh bởi <strong>một</strong> trong hai client.</li>
+</ul>
+<p>Lưu ý sự khác biệt so với giao thức dựa trên block như NFS:</p>
+<ul>
+<li>Trong NFS, các block riêng lẻ có thể được flush ra server khi mỗi client đang cập nhật file, và do đó file cuối cùng trên server có thể là <strong>sự pha trộn</strong> các cập nhật từ cả hai client.</li>
+<li>Trong nhiều trường hợp, một file bị trộn như vậy sẽ không hợp lý, ví dụ: một ảnh JPEG bị hai client chỉnh sửa từng phần; kết quả trộn các ghi này có thể không tạo thành một JPEG hợp lệ.</li>
+</ul>
+<p><strong>Hình 50.3: Dòng thời gian tính nhất quán bộ nhớ đệm (Cache Consistency Timeline)</strong></p>
+<p>Hình này minh họa một số kịch bản khác nhau. Các cột thể hiện hành vi của hai process (P1 và P2) trên Client1 và trạng thái cache của nó, một process (P3) trên Client2 và trạng thái cache của nó, và server (Server), tất cả cùng thao tác trên một file duy nhất tên là F.<br />
+Đối với server, hình chỉ hiển thị nội dung file sau khi thao tác ở cột bên trái hoàn tất. Hãy đọc và thử hiểu tại sao mỗi lần đọc lại trả về kết quả như vậy. Cột chú thích bên phải sẽ giúp bạn nếu gặp khó khăn.</p>
+<h2 id="506-khôi-phục-sau-crash-crash-recovery"><a class="header" href="#506-khôi-phục-sau-crash-crash-recovery">50.6 Khôi phục sau crash (Crash Recovery)</a></h2>
+<p>Từ mô tả ở trên, bạn có thể nhận thấy rằng <strong>crash recovery</strong> (khôi phục sau crash) trong AFS phức tạp hơn NFS. Và điều đó là đúng.</p>
+<p>Ví dụ:</p>
+<ul>
+<li>Giả sử có một khoảng thời gian ngắn khi server (S) không thể liên hệ với client (C1), chẳng hạn khi C1 đang khởi động lại.</li>
+<li>Trong lúc C1 không khả dụng, S có thể đã cố gửi cho nó một hoặc nhiều thông điệp <strong>callback recall</strong>; ví dụ: C1 có file F được cache trên đĩa cục bộ, và sau đó C2 (một client khác) cập nhật F, khiến S gửi thông điệp tới tất cả các client đang cache file này để xóa nó khỏi cache cục bộ.</li>
+<li>Vì C1 có thể bỏ lỡ các thông điệp quan trọng này khi đang khởi động lại, khi tham gia lại hệ thống, C1 nên coi toàn bộ nội dung cache của mình là <strong>không đáng tin cậy</strong>.</li>
+</ul>
+<p>Do đó, khi truy cập file F lần tiếp theo, C1 nên:</p>
+<ol>
+<li>Gửi thông điệp <code>TestAuth</code> tới server để hỏi xem bản cache của file F có còn hợp lệ không.</li>
+<li>Nếu hợp lệ, C1 có thể sử dụng nó.</li>
+<li>Nếu không, C1 phải fetch phiên bản mới hơn từ server.</li>
+</ol>
+<p><strong>Khôi phục server sau crash</strong> cũng phức tạp hơn:</p>
+<ul>
+<li>Vấn đề là các callback được lưu trong bộ nhớ; do đó, khi server khởi động lại, nó <strong>không biết</strong> máy client nào đang giữ file nào.</li>
+<li>Vì vậy, khi server khởi động lại, mỗi client phải nhận ra rằng server đã crash và coi toàn bộ nội dung cache của mình là <strong>không đáng tin cậy</strong>, và (như trên) phải xác minh lại tính hợp lệ của file trước khi sử dụng.</li>
+</ul>
+<p>Một <strong>server crash</strong> là một sự kiện lớn, vì cần đảm bảo rằng <strong>mọi client</strong> đều biết về crash kịp thời, nếu không sẽ có nguy cơ client truy cập file lỗi thời. Có nhiều cách để triển khai cơ chế khôi phục này, ví dụ:</p>
+<ul>
+<li>Server gửi thông điệp (“đừng tin nội dung cache của bạn!”) tới từng client khi nó hoạt động trở lại.</li>
+<li>Hoặc client định kỳ kiểm tra xem server có đang hoạt động không (bằng <strong>heartbeat message</strong>).</li>
+</ul>
+<p>Như bạn thấy, việc xây dựng một mô hình cache hợp lý và có khả năng mở rộng hơn phải trả giá; với NFS, client hầu như không nhận thấy khi server crash.</p>
+<p><strong>Hình 50.4: So sánh AFS và NFS (Comparison: AFS vs. NFS)</strong></p>
+<h2 id="507-khả-năng-mở-rộng-và-hiệu-năng-của-afsv2-scale-and-performance-of-afsv2"><a class="header" href="#507-khả-năng-mở-rộng-và-hiệu-năng-của-afsv2-scale-and-performance-of-afsv2">50.7 Khả năng mở rộng và hiệu năng của AFSv2 (Scale And Performance Of AFSv2)</a></h2>
+<p>Với giao thức mới được áp dụng, <strong>AFSv2</strong> đã được đo đạc và cho thấy khả năng mở rộng cao hơn nhiều so với phiên bản ban đầu. Thực tế, mỗi server có thể hỗ trợ khoảng <strong>50 client</strong> (thay vì chỉ 20). Một lợi ích khác là hiệu năng phía client thường gần tương đương với hiệu năng cục bộ, vì trong trường hợp phổ biến, tất cả các truy cập file đều là <strong>local</strong>; các thao tác đọc file thường được lấy từ <strong>local disk cache</strong> (và có thể là từ bộ nhớ cục bộ). Chỉ khi client tạo một file mới hoặc ghi vào một file hiện có thì mới cần gửi thông điệp <code>Store</code> tới server để cập nhật nội dung mới của file.</p>
+<p>Chúng ta cũng sẽ xem xét hiệu năng của AFS bằng cách so sánh các kịch bản truy cập hệ thống tệp phổ biến với <strong>NFS</strong>. <strong>Hình 50.4</strong> (trang 9) cho thấy kết quả so sánh định tính này.</p>
+<p>Trong hình, chúng ta phân tích các mẫu đọc và ghi điển hình cho các file có kích thước khác nhau:</p>
+<ul>
+<li><strong>Small file</strong>: chứa <strong>Ns block</strong></li>
+<li><strong>Medium file</strong>: chứa <strong>Nm block</strong></li>
+<li><strong>Large file</strong>: chứa <strong>NL block</strong></li>
+</ul>
+<p>Giả định rằng <strong>small</strong> và <strong>medium file</strong> vừa với bộ nhớ của client; <strong>large file</strong> vừa với đĩa cục bộ nhưng không vừa với bộ nhớ client.</p>
+<p>Chúng ta cũng giả định, để phân tích, rằng:</p>
+<ul>
+<li>Truy cập qua mạng tới server từ xa cho một block file mất <strong>Lnet</strong> đơn vị thời gian.</li>
+<li>Truy cập bộ nhớ cục bộ mất <strong>Lmem</strong>.</li>
+<li>Truy cập đĩa cục bộ mất <strong>Ldisk</strong>.</li>
+</ul>
+<p>Giả định chung:<br />
+$$ L_{net} &gt; L_{disk} &gt; L_{mem} $$</p>
+<p>Cuối cùng, giả định rằng lần truy cập đầu tiên tới một file <strong>không</strong> trúng cache nào. Các lần truy cập tiếp theo (“re-read”) sẽ trúng cache nếu cache liên quan đủ dung lượng để chứa file.</p>
+<p>Các cột trong hình cho thấy thời gian một thao tác cụ thể (ví dụ: đọc tuần tự một small file) mất bao lâu trên NFS hoặc AFS. Cột ngoài cùng bên phải hiển thị <strong>tỉ lệ thời gian AFS/NFS</strong>.</p>
+<h3 id="các-quan-sát-chính"><a class="header" href="#các-quan-sát-chính">Các quan sát chính:</a></h3>
+<ol>
+<li>
+<p><strong>Hiệu năng tương đương trong nhiều trường hợp</strong><br />
+Ví dụ: khi đọc file lần đầu (Workload 1, 3, 5), thời gian lấy file từ server từ xa chiếm ưu thế và tương tự trên cả hai hệ thống.</p>
+<ul>
+<li>Có thể bạn nghĩ AFS sẽ chậm hơn vì phải ghi file xuống đĩa cục bộ; tuy nhiên, các ghi này được <strong>buffer</strong> bởi cache của hệ thống tệp cục bộ phía client, nên chi phí này thường bị ẩn.</li>
+<li>Tương tự, bạn có thể nghĩ rằng đọc từ bản sao cache trên đĩa của AFS sẽ chậm hơn; nhưng AFS được hưởng lợi từ cache bộ nhớ của hệ thống tệp cục bộ, nên nhiều lần đọc sẽ trúng cache bộ nhớ và hiệu năng tương tự NFS.</li>
+</ul>
+</li>
+<li>
+<p><strong>Khác biệt khi re-read large file tuần tự (Workload 6)</strong></p>
+<ul>
+<li>AFS có <strong>local disk cache</strong> lớn, nên khi file được truy cập lại, nó sẽ đọc từ đó.</li>
+<li>NFS chỉ cache block trong bộ nhớ client; nếu file lớn hơn bộ nhớ cục bộ, NFS phải tải lại toàn bộ file từ server.</li>
+<li>Do đó, AFS nhanh hơn NFS trong trường hợp này với hệ số $$ L_{net} / L_{disk} $$ (giả sử truy cập từ xa chậm hơn đĩa cục bộ).</li>
+<li>Ngoài ra, NFS còn làm tăng tải server, ảnh hưởng đến khả năng mở rộng.</li>
+</ul>
+</li>
+<li>
+<p><strong>Ghi tuần tự file mới (Workload 8, 9)</strong></p>
+<ul>
+<li>AFS ghi file vào bản sao cache cục bộ; khi đóng file, client AFS sẽ gửi toàn bộ dữ liệu lên server.</li>
+<li>NFS buffer ghi trong bộ nhớ client, có thể gửi một số block lên server do áp lực bộ nhớ, nhưng chắc chắn sẽ ghi khi đóng file để đảm bảo <strong>flush-on-close consistency</strong>.</li>
+<li>Có thể nghĩ AFS chậm hơn vì ghi xuống đĩa cục bộ, nhưng thực tế ghi này được commit vào <strong>page cache</strong> trước, rồi mới ghi xuống đĩa nền, nên AFS vẫn hưởng lợi từ cơ chế cache bộ nhớ của hệ điều hành.</li>
+</ul>
+</li>
+<li>
+<p><strong>Ghi đè tuần tự file hiện có (Workload 10)</strong></p>
+<ul>
+<li>Đây là trường hợp AFS kém hơn: client phải fetch toàn bộ file cũ trước, rồi mới ghi đè.</li>
+<li>NFS chỉ ghi đè block, tránh được việc đọc ban đầu không cần thiết<sup class="footnote-reference"><a href="#2">2</a></sup>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Truy cập một phần nhỏ dữ liệu trong large file (Workload 7, 11)</strong></p>
+<ul>
+<li>NFS tốt hơn nhiều: AFS fetch toàn bộ file khi mở, dù chỉ đọc/ghi một phần nhỏ.</li>
+<li>Nếu file bị sửa đổi, AFS sẽ ghi lại toàn bộ file lên server, nhân đôi tác động hiệu năng.</li>
+<li>NFS, với giao thức dựa trên block, thực hiện I/O tỷ lệ thuận với kích thước thao tác.</li>
+</ul>
+</li>
+</ol>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Ở đây giả định NFS ghi theo kích thước block và căn chỉnh block; nếu không, NFS client cũng phải đọc block trước. Cũng giả định file không được mở với cờ <strong>O_TRUNC</strong>; nếu có, lần mở ban đầu trong AFS sẽ không fetch nội dung file sắp bị cắt.</p>
+</div>
+<blockquote>
+<blockquote>
+<p><strong>ASIDE: TẦM QUAN TRỌNG CỦA WORKLOAD</strong><br />
+Một thách thức khi đánh giá bất kỳ hệ thống nào là lựa chọn <strong>workload</strong> (tải công việc). Vì hệ thống máy tính được sử dụng theo nhiều cách khác nhau, có rất nhiều loại workload để lựa chọn. Nhà thiết kế hệ thống lưu trữ nên quyết định workload nào là quan trọng để đưa ra các quyết định thiết kế hợp lý.<br />
+Các nhà thiết kế AFS, dựa trên kinh nghiệm đo lường cách hệ thống tệp được sử dụng, đã đưa ra một số giả định: hầu hết file không được chia sẻ thường xuyên và được truy cập tuần tự toàn bộ. Với giả định này, thiết kế AFS là hoàn toàn hợp lý.<br />
+Tuy nhiên, giả định này không phải lúc nào cũng đúng. Ví dụ: một ứng dụng ghi nối thêm dữ liệu định kỳ vào log – các ghi nhỏ này vào một large file hiện có là vấn đề lớn với AFS. Nhiều workload khó khác cũng tồn tại, ví dụ: cập nhật ngẫu nhiên trong cơ sở dữ liệu giao dịch.<br />
+Một nguồn thông tin về các loại workload phổ biến là các nghiên cứu đã được thực hiện. Xem các nghiên cứu như [B+91, H+11, R+00, V99], bao gồm cả bản tổng kết AFS [H+88], để có ví dụ phân tích workload.</p>
+</blockquote>
+</blockquote>
+<p><strong>Tổng kết:</strong> NFS và AFS đưa ra các giả định khác nhau và do đó đạt được các kết quả hiệu năng khác nhau. Việc những khác biệt này có quan trọng hay không, như thường lệ, phụ thuộc vào <strong>workload</strong>.</p>
+<h2 id="508-afs-các-cải-tiến-khác-other-improvements"><a class="header" href="#508-afs-các-cải-tiến-khác-other-improvements">50.8 AFS: Các cải tiến khác (Other Improvements)</a></h2>
+<p>Tương tự như khi <strong>Berkeley FFS</strong> được giới thiệu (bổ sung <strong>symbolic link</strong> và nhiều tính năng khác), các nhà thiết kế <strong>AFS</strong> đã tận dụng cơ hội khi xây dựng hệ thống để bổ sung một số tính năng giúp hệ thống dễ sử dụng và quản lý hơn.</p>
+<p>Ví dụ: <strong>AFS</strong> cung cấp cho client một <strong>global namespace</strong> (không gian tên toàn cục) thực sự, đảm bảo rằng tất cả các file đều được đặt tên giống nhau trên mọi máy client.<br />
+Ngược lại, <strong>NFS</strong> cho phép mỗi client mount các NFS server theo bất kỳ cách nào họ muốn, và do đó chỉ bằng quy ước (và nỗ lực quản trị lớn) thì tên file mới có thể đồng nhất giữa các client.</p>
+<p>AFS cũng coi trọng vấn đề <strong>bảo mật</strong> và tích hợp các cơ chế để <strong>xác thực người dùng</strong> (authenticate users) và đảm bảo rằng một tập hợp file có thể được giữ riêng tư nếu người dùng mong muốn.<br />
+Ngược lại, NFS trong nhiều năm chỉ hỗ trợ bảo mật ở mức rất sơ khai.</p>
+<p>AFS còn bao gồm các công cụ cho phép <strong>user-managed access control</strong> (kiểm soát truy cập do người dùng quản lý) một cách linh hoạt. Khi sử dụng AFS, người dùng có quyền kiểm soát lớn đối với việc ai có thể truy cập file nào.<br />
+NFS, giống như hầu hết các hệ thống tệp UNIX, hỗ trợ rất hạn chế cho kiểu chia sẻ này.</p>
+<p>Cuối cùng, như đã đề cập trước đó, AFS bổ sung các công cụ giúp <strong>quản trị viên hệ thống</strong> quản lý server dễ dàng hơn. Về tư duy quản trị hệ thống, AFS đã đi trước phần còn lại của lĩnh vực này rất xa.</p>
+<h2 id="509-tóm-tắt-summary"><a class="header" href="#509-tóm-tắt-summary">50.9 Tóm tắt (Summary)</a></h2>
+<p>AFS cho chúng ta thấy rằng <strong>distributed file system</strong> (hệ thống tệp phân tán) có thể được xây dựng theo cách rất khác so với những gì ta thấy ở NFS.<br />
+Thiết kế giao thức của AFS đặc biệt quan trọng; bằng cách giảm thiểu tương tác với server (thông qua <strong>whole-file caching</strong> và <strong>callback</strong>), mỗi server có thể hỗ trợ nhiều client hơn và do đó giảm số lượng server cần thiết để quản lý một site nhất định.</p>
+<p>Nhiều tính năng khác, bao gồm <strong>single namespace</strong>, bảo mật, và <strong>access-control list</strong> (danh sách kiểm soát truy cập), khiến AFS trở nên thân thiện khi sử dụng.<br />
+Mô hình nhất quán (consistency model) mà AFS cung cấp đơn giản, dễ hiểu và suy luận, đồng thời không dẫn đến những hành vi kỳ lạ thỉnh thoảng thấy ở NFS.</p>
+<p>Có lẽ đáng tiếc là AFS đang trên đà suy giảm.<br />
+Vì NFS trở thành một <strong>open standard</strong> (tiêu chuẩn mở), nhiều nhà cung cấp đã hỗ trợ nó, và cùng với <strong>CIFS</strong> (giao thức hệ thống tệp phân tán dựa trên Windows), NFS thống trị thị trường.</p>
+<p>Mặc dù đôi khi vẫn thấy các hệ thống AFS được triển khai (ví dụ tại một số tổ chức giáo dục, bao gồm Wisconsin), ảnh hưởng lâu dài có lẽ sẽ đến từ <strong>các ý tưởng</strong> của AFS hơn là chính hệ thống này.<br />
+Thực tế, <strong>NFSv4</strong> hiện đã bổ sung <strong>server state</strong> (ví dụ: thông điệp giao thức “open”), và do đó ngày càng giống với giao thức cơ bản của AFS.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../49/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../49/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

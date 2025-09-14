@@ -1,0 +1,571 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Locks - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html" class="active"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="28-locks-khóa"><a class="header" href="#28-locks-khóa">28 Locks (Khóa)</a></h1>
+<p>Từ phần giới thiệu về <strong>concurrency</strong> (tính đồng thời), chúng ta đã thấy một trong những vấn đề cơ bản của lập trình đồng thời: chúng ta muốn thực thi một chuỗi lệnh một cách <strong>atomically</strong> (nguyên tử), nhưng do sự tồn tại của <strong>interrupt</strong> (ngắt) trên một bộ xử lý đơn (hoặc nhiều <strong>thread</strong> chạy đồng thời trên nhiều bộ xử lý), chúng ta không thể làm được. Trong chương này, chúng ta sẽ giải quyết trực tiếp vấn đề này bằng cách giới thiệu một cơ chế gọi là <strong>lock</strong> (khóa). Lập trình viên sẽ chú thích mã nguồn bằng các lock, đặt chúng bao quanh các <strong>critical section</strong> (vùng tới hạn), từ đó đảm bảo rằng bất kỳ critical section nào cũng được thực thi như thể nó là một lệnh nguyên tử duy nhất.</p>
+<h2 id="281-locks-Ý-tưởng-cơ-bản-locks-the-basic-idea"><a class="header" href="#281-locks-Ý-tưởng-cơ-bản-locks-the-basic-idea">28.1 Locks: Ý tưởng cơ bản (Locks: The Basic Idea)</a></h2>
+<p>Ví dụ, giả sử critical section của chúng ta trông như sau — đây là dạng cập nhật kinh điển của một biến chia sẻ:</p>
+<pre><code>balance = balance + 1;
+</code></pre>
+<p>Tất nhiên, các critical section khác cũng có thể xảy ra, chẳng hạn như thêm một phần tử vào <strong>linked list</strong> (danh sách liên kết) hoặc các cập nhật phức tạp hơn đối với các cấu trúc dữ liệu chia sẻ, nhưng ở đây chúng ta sẽ giữ ví dụ đơn giản này. Để sử dụng lock, ta thêm một số đoạn mã bao quanh critical section như sau:</p>
+<pre><code class="language-c">lock_t mutex; // một lock 'mutex' được cấp phát toàn cục
+...
+lock(&amp;mutex);
+balance = balance + 1;
+unlock(&amp;mutex);
+</code></pre>
+<p>Một lock chỉ là một biến, do đó để sử dụng, bạn phải khai báo một biến lock nào đó (như <code>mutex</code> ở trên). Biến lock này (hoặc gọi tắt là “lock”) lưu trạng thái của khóa tại mọi thời điểm. Nó có thể ở trạng thái <strong>available</strong> (có sẵn / unlocked / free) — nghĩa là không có thread nào giữ lock, hoặc ở trạng thái <strong>acquired</strong> (đã được giữ / locked / held) — nghĩa là đúng một thread đang giữ lock và giả định rằng nó đang ở trong critical section. Ta cũng có thể lưu trữ thêm thông tin khác trong kiểu dữ liệu này, chẳng hạn như thread nào đang giữ lock, hoặc một hàng đợi để sắp xếp thứ tự lấy lock, nhưng những thông tin như vậy thường được ẩn khỏi người dùng lock.</p>
+<p><strong>Ngữ nghĩa</strong> của các hàm <code>lock()</code> và <code>unlock()</code> khá đơn giản:</p>
+<ul>
+<li>Gọi hàm <code>lock()</code> sẽ cố gắng <strong>acquire</strong> (lấy) lock; nếu không có thread nào khác đang giữ lock (tức là lock đang free), thread sẽ lấy được lock và vào critical section; thread này đôi khi được gọi là <strong>owner</strong> (chủ sở hữu) của lock.</li>
+<li>Nếu một thread khác gọi <code>lock()</code> trên cùng biến lock đó (<code>mutex</code> trong ví dụ này) khi lock đang bị giữ, lời gọi sẽ <strong>không trả về</strong> cho đến khi lock được thread đang giữ <strong>release</strong> (nhả) ra; theo cách này, các thread khác bị ngăn không cho vào critical section khi thread đầu tiên vẫn đang ở trong đó.</li>
+</ul>
+<p>Khi <strong>owner</strong> của lock gọi <code>unlock()</code>, lock sẽ trở lại trạng thái free. Nếu không có thread nào khác đang chờ lock (tức là không có thread nào gọi <code>lock()</code> và bị kẹt ở đó), trạng thái lock đơn giản được chuyển sang free. Nếu có các thread đang chờ (bị kẹt trong <code>lock()</code>), một trong số chúng sẽ (cuối cùng) nhận ra (hoặc được thông báo) về sự thay đổi trạng thái này, lấy lock và vào critical section.</p>
+<p>Lock cung cấp cho lập trình viên một mức độ kiểm soát tối thiểu đối với <strong>scheduling</strong> (lập lịch). Thông thường, chúng ta coi thread là các thực thể được lập trình viên tạo ra nhưng được OS lập lịch theo bất kỳ cách nào OS muốn. Lock trả lại một phần quyền kiểm soát đó cho lập trình viên; bằng cách đặt lock quanh một đoạn mã, lập trình viên có thể đảm bảo rằng không bao giờ có nhiều hơn một thread hoạt động trong đoạn mã đó. Nhờ vậy, lock giúp biến sự hỗn loạn của lập lịch truyền thống trong OS thành một hoạt động có kiểm soát hơn.</p>
+<h2 id="282-pthread-locks"><a class="header" href="#282-pthread-locks">28.2 Pthread Locks</a></h2>
+<p>Tên mà thư viện <strong>POSIX</strong> dùng cho lock là <strong>mutex</strong> (viết tắt của <em>mutual exclusion</em> — loại trừ lẫn nhau), vì nó được dùng để đảm bảo rằng nếu một thread đang ở trong critical section, nó sẽ <strong>ngăn</strong> các thread khác vào cho đến khi hoàn tất. Do đó, khi bạn thấy đoạn code POSIX threads sau, bạn nên hiểu rằng nó thực hiện cùng chức năng như ví dụ ở trên (ở đây chúng ta lại dùng <strong>wrapper</strong> để kiểm tra lỗi khi lock và unlock):</p>
+<pre><code class="language-c">pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
+Pthread_mutex_lock(&amp;lock); // wrapper; thoát nếu lỗi
+balance = balance + 1;
+Pthread_mutex_unlock(&amp;lock);
+</code></pre>
+<p>Bạn cũng có thể nhận thấy rằng phiên bản POSIX truyền một biến vào hàm lock và unlock, vì chúng ta có thể dùng các lock khác nhau để bảo vệ các biến khác nhau. Cách làm này có thể <strong>tăng concurrency</strong> (tính đồng thời): thay vì dùng <strong>một big lock</strong> (khóa lớn) cho mọi critical section (chiến lược <strong>coarse-grained locking</strong> — khóa thô), người ta thường bảo vệ các dữ liệu và cấu trúc dữ liệu khác nhau bằng các lock khác nhau, cho phép nhiều thread cùng ở trong các đoạn mã đã khóa cùng lúc (<strong>fine-grained locking</strong> — khóa tinh).</p>
+<h2 id="283-xây-dựng-một-lock-building-a-lock"><a class="header" href="#283-xây-dựng-một-lock-building-a-lock">28.3 Xây dựng một Lock (Building A Lock)</a></h2>
+<p>Đến thời điểm này, bạn hẳn đã có một số hiểu biết về cách một <strong>lock</strong> (khóa) hoạt động, từ góc nhìn của lập trình viên. Nhưng làm thế nào để <strong>xây dựng</strong> một lock? Cần hỗ trợ gì từ <strong>hardware</strong> (phần cứng)? Cần hỗ trợ gì từ <strong>OS</strong> (hệ điều hành)? Đây chính là tập hợp các câu hỏi mà phần còn lại của chương này sẽ giải đáp.</p>
+<blockquote>
+<p><strong>THE CRUX: HOW TO BUILD A LOCK</strong><br />
+(Vấn đề cốt lõi: Làm thế nào để xây dựng một lock)<br />
+Làm thế nào để xây dựng một lock hiệu quả? Một lock hiệu quả phải cung cấp <strong>mutual exclusion</strong> (loại trừ lẫn nhau) với chi phí thấp, và có thể đạt được một số đặc tính khác mà chúng ta sẽ thảo luận bên dưới. Cần hỗ trợ gì từ phần cứng? Cần hỗ trợ gì từ hệ điều hành?</p>
+</blockquote>
+<p>Để xây dựng một lock hoạt động đúng, chúng ta sẽ cần sự trợ giúp từ “người bạn cũ” là phần cứng, cũng như “người bạn tốt” là hệ điều hành. Qua nhiều năm, một số <strong>hardware primitive</strong> (nguyên thủy phần cứng) khác nhau đã được bổ sung vào <strong>instruction set</strong> (tập lệnh) của nhiều kiến trúc máy tính; mặc dù chúng ta sẽ không nghiên cứu cách các lệnh này được triển khai (đó là chủ đề của môn kiến trúc máy tính), nhưng chúng ta sẽ nghiên cứu cách sử dụng chúng để xây dựng một <strong>mutual exclusion primitive</strong> như lock. Chúng ta cũng sẽ tìm hiểu cách hệ điều hành tham gia để hoàn thiện bức tranh và cho phép xây dựng một thư viện lock tinh vi.</p>
+<h2 id="284-Đánh-giá-lock-evaluating-locks"><a class="header" href="#284-Đánh-giá-lock-evaluating-locks">28.4 Đánh giá Lock (Evaluating Locks)</a></h2>
+<p>Trước khi xây dựng bất kỳ lock nào, chúng ta cần hiểu rõ mục tiêu, và do đó cần đặt câu hỏi: <strong>đánh giá hiệu quả của một lock như thế nào</strong>? Để đánh giá một lock có hoạt động (và hoạt động tốt) hay không, chúng ta cần thiết lập một số tiêu chí cơ bản.</p>
+<ul>
+<li>
+<p><strong>Tiêu chí đầu tiên</strong>: lock có thực hiện đúng nhiệm vụ cơ bản là cung cấp <strong>mutual exclusion</strong> hay không? Nói cách khác, lock có ngăn chặn nhiều thread cùng vào một critical section hay không?</p>
+</li>
+<li>
+<p><strong>Tiêu chí thứ hai</strong>: <strong>fairness</strong> (tính công bằng). Mỗi thread cạnh tranh lock có cơ hội công bằng để lấy lock khi nó được giải phóng hay không? Xét ở trường hợp cực đoan: có thread nào bị <strong>starvation</strong> (đói tài nguyên) khi cạnh tranh lock, dẫn đến không bao giờ lấy được lock hay không?</p>
+</li>
+<li>
+<p><strong>Tiêu chí cuối cùng</strong>: <strong>performance</strong> (hiệu năng), cụ thể là <strong>time overhead</strong> (độ trễ thời gian) do việc sử dụng lock gây ra. Có một số trường hợp đáng xem xét:</p>
+<ol>
+<li><strong>No contention</strong> (không tranh chấp): khi chỉ có một thread chạy và thực hiện lấy và nhả lock, chi phí của việc này là bao nhiêu?</li>
+<li><strong>Single CPU, multiple threads contending</strong> (một CPU, nhiều thread tranh chấp): trong trường hợp này, có vấn đề hiệu năng nào không?</li>
+<li><strong>Multiple CPUs contending</strong> (nhiều CPU, mỗi CPU có thread tranh chấp lock): lock hoạt động thế nào?</li>
+</ol>
+</li>
+</ul>
+<p>Bằng cách so sánh các kịch bản này, chúng ta có thể hiểu rõ hơn tác động hiệu năng của các kỹ thuật lock khác nhau.</p>
+<h2 id="285-kiểm-soát-interrupt-controlling-interrupts"><a class="header" href="#285-kiểm-soát-interrupt-controlling-interrupts">28.5 Kiểm soát Interrupt (Controlling Interrupts)</a></h2>
+<p>Một trong những giải pháp sớm nhất để cung cấp <strong>mutual exclusion</strong> là <strong>tắt interrupt</strong> cho critical section; giải pháp này được phát minh cho hệ thống <strong>single-processor</strong> (đơn xử lý). Mã nguồn sẽ như sau:</p>
+<pre><code class="language-c">void lock() {
+  DisableInterrupts();
+}
+void unlock() {
+  EnableInterrupts();
+}
+</code></pre>
+<p>Giả sử chúng ta đang chạy trên một hệ thống đơn xử lý như vậy. Bằng cách tắt interrupt (sử dụng một lệnh phần cứng đặc biệt) trước khi vào critical section, chúng ta đảm bảo rằng mã bên trong critical section sẽ không bị ngắt, và do đó sẽ thực thi như thể nó là nguyên tử. Khi xong, chúng ta bật lại interrupt (cũng bằng lệnh phần cứng) và chương trình tiếp tục như bình thường.</p>
+<p><strong>Ưu điểm chính</strong> của cách tiếp cận này là <strong>đơn giản</strong>. Bạn không cần phải suy nghĩ nhiều để hiểu tại sao nó hoạt động. Không có ngắt, một thread có thể chắc chắn rằng đoạn mã nó thực thi sẽ chạy trọn vẹn và không bị thread khác can thiệp.</p>
+<p><strong>Nhược điểm</strong>, đáng tiếc, lại nhiều:</p>
+<ol>
+<li>
+<p><strong>Vấn đề tin cậy</strong>: Cách này yêu cầu cho phép bất kỳ thread nào gọi hàm cũng có thể thực hiện một thao tác đặc quyền (bật/tắt interrupt), và do đó phải tin rằng khả năng này không bị lạm dụng. Như bạn đã biết, bất cứ khi nào phải tin tưởng một chương trình tùy ý, chúng ta có thể gặp rắc rối. Ví dụ:</p>
+<ul>
+<li>Một chương trình “tham lam” có thể gọi <code>lock()</code> ngay khi bắt đầu và chiếm dụng CPU.</li>
+<li>Tệ hơn, một chương trình lỗi hoặc độc hại có thể gọi <code>lock()</code> rồi chạy vòng lặp vô hạn. Trong trường hợp này, OS sẽ <strong>mất quyền kiểm soát</strong> hệ thống, và cách duy nhất để khắc phục là <strong>khởi động lại</strong>.<br />
+Việc dùng tắt interrupt như một giải pháp đồng bộ hóa tổng quát đòi hỏi quá nhiều sự tin tưởng vào ứng dụng.</li>
+</ul>
+</li>
+<li>
+<p><strong>Không hoạt động trên multiprocessor</strong>: Nếu nhiều thread chạy trên các CPU khác nhau và cùng cố vào một critical section, việc tắt interrupt không giúp ích gì; các thread vẫn có thể chạy trên CPU khác và vào critical section. Vì multiprocessor hiện nay rất phổ biến, giải pháp tổng quát của chúng ta phải tốt hơn.</p>
+</li>
+<li>
+<p><strong>Mất interrupt</strong>: Tắt interrupt trong thời gian dài có thể dẫn đến mất interrupt, gây ra các vấn đề nghiêm trọng cho hệ thống. Ví dụ: nếu CPU bỏ lỡ tín hiệu rằng một thiết bị đĩa đã hoàn tất yêu cầu đọc, OS sẽ không biết để đánh thức process đang chờ.</p>
+</li>
+</ol>
+<p>Vì những lý do này, việc tắt interrupt chỉ được dùng trong <strong>ngữ cảnh hạn chế</strong> như một primitive đảm bảo mutual exclusion. Ví dụ, trong một số trường hợp, chính hệ điều hành sẽ dùng <strong>interrupt masking</strong> (che ngắt) để đảm bảo tính nguyên tử khi truy cập các cấu trúc dữ liệu nội bộ, hoặc ít nhất để tránh một số tình huống xử lý ngắt phức tạp. Cách dùng này hợp lý, vì vấn đề tin cậy không tồn tại bên trong OS — vốn luôn tin tưởng chính nó để thực hiện các thao tác đặc quyền.</p>
+<h2 id="286-một-nỗ-lực-thất-bại-chỉ-sử-dụng-loadstore"><a class="header" href="#286-một-nỗ-lực-thất-bại-chỉ-sử-dụng-loadstore">28.6 Một nỗ lực thất bại: Chỉ sử dụng Load/Store</a></h2>
+<p>Để vượt ra khỏi các kỹ thuật dựa trên <strong>interrupt</strong> (ngắt), chúng ta sẽ phải dựa vào <strong>CPU hardware</strong> (phần cứng CPU) và các <strong>instruction</strong> (lệnh) mà nó cung cấp để xây dựng một <strong>lock</strong> (khóa) đúng nghĩa. Trước tiên, hãy thử xây dựng một lock đơn giản bằng cách sử dụng một biến cờ (<strong>flag</strong>) duy nhất. Trong nỗ lực thất bại này, chúng ta sẽ thấy một số ý tưởng cơ bản cần thiết để xây dựng lock, và (hy vọng) sẽ thấy lý do tại sao chỉ dùng một biến duy nhất và truy cập nó thông qua các thao tác load/store thông thường là <strong>không đủ</strong>.</p>
+<p>Trong nỗ lực đầu tiên này (<strong>Hình 28.1</strong>), ý tưởng khá đơn giản: sử dụng một biến (<code>flag</code>) để biểu thị việc một thread nào đó đang giữ lock. Thread đầu tiên vào <strong>critical section</strong> (vùng tới hạn) sẽ gọi <code>lock()</code>, hàm này sẽ kiểm tra xem <code>flag</code> có bằng 1 hay không (trong trường hợp này là không), và sau đó đặt <code>flag</code> thành 1 để biểu thị rằng thread hiện đang giữ lock. Khi hoàn tất critical section, thread sẽ gọi <code>unlock()</code> và xóa <code>flag</code>, cho biết lock không còn bị giữ nữa.</p>
+<pre><code class="language-c">typedef struct __lock_t { int flag; } lock_t;
+
+void init(lock_t *mutex) {
+  // 0 -&gt; lock đang rảnh, 1 -&gt; lock đang bị giữ
+  mutex-&gt;flag = 0;
+}
+
+void lock(lock_t *mutex) {
+  while (mutex-&gt;flag == 1) // KIỂM TRA flag
+    ; // spin-wait (không làm gì)
+  mutex-&gt;flag = 1;         // BÂY GIỜ đặt flag!
+}
+
+void unlock(lock_t *mutex) {
+  mutex-&gt;flag = 0;
+}
+</code></pre>
+<p><strong>Hình 28.1: Nỗ lực đầu tiên: Một biến cờ đơn giản</strong></p>
+<p>Nếu một thread khác gọi <code>lock()</code> trong khi thread đầu tiên đang ở trong critical section, nó sẽ chỉ đơn giản <strong>spin-wait</strong> (chờ bận) trong vòng lặp <code>while</code> cho đến khi thread kia gọi <code>unlock()</code> và xóa <code>flag</code>. Khi thread đầu tiên làm vậy, thread đang chờ sẽ thoát khỏi vòng lặp <code>while</code>, đặt <code>flag</code> thành 1 cho chính nó, và tiếp tục vào critical section.</p>
+<p>Đáng tiếc, đoạn code này có <strong>hai vấn đề</strong>: một về <strong>tính đúng đắn</strong> (correctness), và một về <strong>hiệu năng</strong> (performance).</p>
+<ul>
+<li><strong>Vấn đề tính đúng đắn</strong> rất dễ thấy khi bạn quen với tư duy lập trình đồng thời. Hãy tưởng tượng sự xen kẽ lệnh như trong <strong>Hình 28.2</strong>; giả sử ban đầu <code>flag = 0</code>:</li>
+</ul>
+<pre><code>Thread 1                  Thread 2
+call lock()
+while (flag == 1)
+interrupt: switch to Thread 2
+
+                          call lock()
+                          while (flag == 1)
+                          flag = 1;
+                          interrupt: switch to Thread 1
+flag = 1; // cũng đặt flag thành 1!
+</code></pre>
+<p><strong>Hình 28.2: Trace: Không có Mutual Exclusion</strong></p>
+<p>Như bạn thấy từ sự xen kẽ này, chỉ với một <strong>interrupt</strong> xảy ra “đúng lúc” (hay “sai lúc”), ta dễ dàng tạo ra tình huống cả hai thread đều đặt <code>flag</code> thành 1 và cả hai cùng vào critical section. Đây là hành vi mà dân chuyên gọi là “tệ” — rõ ràng chúng ta đã thất bại trong việc cung cấp yêu cầu cơ bản nhất: <strong>mutual exclusion</strong>.</p>
+<ul>
+<li><strong>Vấn đề hiệu năng</strong> (sẽ được bàn kỹ hơn sau) nằm ở cách một thread chờ để lấy lock đang bị giữ: nó liên tục kiểm tra giá trị của <code>flag</code>, kỹ thuật này gọi là <strong>spin-waiting</strong>. Spin-waiting lãng phí thời gian CPU để chờ thread khác nhả lock. Sự lãng phí này đặc biệt nghiêm trọng trên <strong>uniprocessor</strong> (bộ xử lý đơn), nơi thread mà thread chờ đang đợi thậm chí <strong>không thể chạy</strong> (ít nhất là cho đến khi xảy ra context switch)! Do đó, khi phát triển các giải pháp tinh vi hơn, chúng ta cũng nên xem xét cách tránh loại lãng phí này.</li>
+</ul>
+<h2 id="287-xây-dựng-spin-lock-hoạt-động-với-test-and-set"><a class="header" href="#287-xây-dựng-spin-lock-hoạt-động-với-test-and-set">28.7 Xây dựng Spin Lock hoạt động với Test-And-Set</a></h2>
+<p>Vì việc tắt interrupt không hoạt động trên <strong>multiprocessor</strong> (đa xử lý), và vì các cách tiếp cận đơn giản chỉ dùng load/store (như ở trên) không hiệu quả, các nhà thiết kế hệ thống đã bắt đầu phát minh ra <strong>hardware support</strong> (hỗ trợ phần cứng) cho việc khóa. Những hệ thống multiprocessor đầu tiên, như <strong>Burroughs B5000</strong> vào đầu những năm 1960 [M82], đã có hỗ trợ này; ngày nay, tất cả các hệ thống đều cung cấp loại hỗ trợ này, ngay cả với hệ thống chỉ có một CPU.</p>
+<p>Phần hỗ trợ phần cứng đơn giản nhất để hiểu được gọi là <strong>test-and-set</strong> (hoặc <strong>atomic exchange</strong><sup class="footnote-reference"><a href="#1">1</a></sup>). Chúng ta định nghĩa chức năng của lệnh test-and-set thông qua đoạn code C sau:</p>
+<pre><code class="language-c">int TestAndSet(int *old_ptr, int new) {
+  int old = *old_ptr; // lấy giá trị cũ tại old_ptr
+  // ghi 'new' vào old_ptr
+  *old_ptr = new;
+  return old;         // trả về giá trị cũ
+}
+</code></pre>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Mỗi kiến trúc hỗ trợ test-and-set lại gọi nó bằng tên khác nhau. Trên SPARC, nó được gọi là lệnh load/store unsigned byte (<code>ldstub</code>); trên x86, nó là phiên bản có khóa (<strong>locked</strong>) của lệnh atomic exchange (<code>xchg</code>).</p>
+</div>
+<blockquote>
+<p><strong>ASIDE: THUẬT TOÁN DEKKER VÀ PETERSON</strong></p>
+<p>Vào những năm 1960, <strong>Dijkstra</strong> đã nêu ra bài toán <strong>concurrency</strong> (tính đồng thời) cho bạn bè của mình, và một trong số họ — nhà toán học <strong>Theodorus Jozef Dekker</strong> — đã đưa ra một lời giải [D68]. Không giống như các giải pháp mà chúng ta thảo luận ở đây, vốn sử dụng các <strong>hardware instruction</strong> (lệnh phần cứng) đặc biệt và thậm chí cả sự hỗ trợ từ <strong>OS</strong> (hệ điều hành), thuật toán của Dekker chỉ dùng các thao tác <strong>load</strong> và <strong>store</strong> (giả định rằng chúng nguyên tử với nhau, điều này đúng trên phần cứng đời đầu).</p>
+<p>Cách tiếp cận của Dekker sau đó được <strong>Peterson</strong> cải tiến [P81]. Một lần nữa, chỉ dùng load và store, và ý tưởng là đảm bảo rằng hai <strong>thread</strong> (luồng) không bao giờ cùng vào <strong>critical section</strong> (vùng tới hạn) cùng lúc. Dưới đây là thuật toán Peterson (cho hai thread); hãy thử xem bạn có hiểu đoạn code này không. Các biến <code>flag</code> và <code>turn</code> được dùng để làm gì?</p>
+<pre><code class="language-c">int flag[2];
+int turn;
+
+void init() {
+  // biểu thị ý định giữ lock bằng 'flag'
+  flag[0] = flag[1] = 0;
+  // lượt của ai? (thread 0 hoặc 1)
+  turn = 0;
+}
+
+void lock() {
+  // 'self' là ID của thread gọi hàm
+  flag[self] = 1;
+  // nhường lượt cho thread kia
+  turn = 1 - self;
+  while ((flag[1-self] == 1) &amp;&amp; (turn == 1 - self))
+    ; // spin-wait khi chưa đến lượt
+}
+
+void unlock() {
+  // hủy ý định giữ lock
+  flag[self] = 0;
+}
+</code></pre>
+<p>Vì một lý do nào đó, việc phát triển các lock hoạt động mà không cần hỗ trợ phần cứng đặc biệt đã trở thành trào lưu một thời, mang lại cho giới nghiên cứu lý thuyết nhiều vấn đề để giải quyết. Tất nhiên, hướng nghiên cứu này trở nên khá vô dụng khi người ta nhận ra rằng dễ dàng hơn nhiều nếu giả định có một chút hỗ trợ phần cứng (và thực tế là hỗ trợ này đã tồn tại từ những ngày đầu của <strong>multiprocessing</strong>). Hơn nữa, các thuật toán như trên không hoạt động trên phần cứng hiện đại (do <strong>relaxed memory consistency model</strong> — mô hình nhất quán bộ nhớ lỏng), khiến chúng còn ít hữu ích hơn trước đây. Thêm một hướng nghiên cứu nữa bị xếp vào “ngăn lưu trữ lịch sử”...</p>
+</blockquote>
+<p>Lệnh <code>test-and-set</code> hoạt động như sau: nó trả về giá trị cũ tại địa chỉ mà <code>old_ptr</code> trỏ tới, đồng thời cập nhật giá trị đó thành <code>new</code>. Điểm mấu chốt là chuỗi thao tác này được thực hiện <strong>atomically</strong> (nguyên tử). Sở dĩ gọi là “test and set” là vì nó cho phép bạn “kiểm tra” (test) giá trị cũ (giá trị được trả về) đồng thời “đặt” (set) vị trí bộ nhớ đó thành giá trị mới; hóa ra, lệnh mạnh hơn một chút này là đủ để xây dựng một <strong>spin lock</strong> đơn giản, như chúng ta sẽ xem trong <strong>Hình 28.3</strong>. Hoặc tốt hơn: hãy thử tự mình suy luận trước!</p>
+<pre><code class="language-c">typedef struct __lock_t {
+  int flag;
+} lock_t;
+
+void init(lock_t *lock) {
+  // 0: lock đang rảnh, 1: lock đang bị giữ
+  lock-&gt;flag = 0;
+}
+
+void lock(lock_t *lock) {
+  while (TestAndSet(&amp;lock-&gt;flag, 1) == 1)
+    ; // spin-wait (không làm gì)
+}
+
+void unlock(lock_t *lock) {
+  lock-&gt;flag = 0;
+}
+</code></pre>
+<p><strong>Hình 28.3: Một Spin Lock đơn giản sử dụng Test-and-Set</strong></p>
+<p>Hãy đảm bảo rằng chúng ta hiểu tại sao lock này hoạt động. Trước hết, tưởng tượng trường hợp một thread gọi <code>lock()</code> và không có thread nào khác đang giữ lock; khi đó, <code>flag</code> sẽ bằng 0. Khi thread gọi <code>TestAndSet(flag, 1)</code>, hàm sẽ trả về giá trị cũ của <code>flag</code> (0); do đó, thread gọi hàm — khi kiểm tra giá trị <code>flag</code> — sẽ không bị kẹt trong vòng lặp <code>while</code> và sẽ lấy được lock. Thread này cũng đồng thời đặt giá trị <code>flag</code> thành 1 một cách nguyên tử, biểu thị rằng lock hiện đang bị giữ. Khi thread hoàn tất critical section, nó gọi <code>unlock()</code> để đặt lại <code>flag</code> về 0.</p>
+<p>Trường hợp thứ hai xảy ra khi một thread khác đã giữ lock (tức là <code>flag</code> = 1). Khi đó, thread này gọi <code>lock()</code> và tiếp tục gọi <code>TestAndSet(flag, 1)</code>. Lần này, <code>TestAndSet()</code> sẽ trả về giá trị cũ tại <code>flag</code> là 1 (vì lock đang bị giữ), đồng thời đặt lại nó thành 1. Chừng nào lock còn bị giữ bởi thread khác, <code>TestAndSet()</code> sẽ liên tục trả về 1, và thread này sẽ tiếp tục <strong>spin</strong> cho đến khi lock được nhả. Khi <code>flag</code> cuối cùng được đặt về 0 bởi thread khác, thread này sẽ gọi <code>TestAndSet()</code> lần nữa, lúc này trả về 0 đồng thời đặt giá trị thành 1, và do đó lấy được lock để vào critical section.</p>
+<blockquote>
+<p><strong>TIP: HÃY NGHĨ VỀ CONCURRENCY NHƯ MỘT BỘ LẬP LỊCH “XẤU TÍNH”</strong><br />
+Từ ví dụ này, bạn có thể hình dung cách tiếp cận cần có để hiểu việc thực thi đồng thời. Hãy thử tưởng tượng bạn là một <strong>scheduler</strong> (bộ lập lịch) “xấu tính”, người sẽ ngắt các thread vào những thời điểm tệ hại nhất để phá hỏng nỗ lực yếu ớt của chúng trong việc xây dựng các <strong>synchronization primitive</strong> (nguyên thủy đồng bộ hóa). Bạn thật là một scheduler độc ác! Mặc dù chuỗi ngắt chính xác có thể khó xảy ra, nhưng nó <strong>có thể</strong> xảy ra, và đó là tất cả những gì cần để chứng minh một cách tiếp cận nào đó là không hoạt động. Đôi khi, suy nghĩ theo hướng “xấu tính” lại hữu ích!</p>
+</blockquote>
+<p>Bằng cách biến cả thao tác kiểm tra (giá trị cũ của lock) và đặt (giá trị mới) thành một <strong>atomic operation</strong> (thao tác nguyên tử) duy nhất, chúng ta đảm bảo rằng chỉ một thread có thể lấy được lock. Và đó chính là cách xây dựng một <strong>mutual exclusion primitive</strong> hoạt động! Giờ đây, bạn cũng có thể hiểu tại sao loại lock này thường được gọi là <strong>spin lock</strong>. Đây là loại lock đơn giản nhất để xây dựng, và chỉ đơn giản là “quay vòng” (spin), tiêu tốn chu kỳ CPU, cho đến khi lock sẵn sàng. Để hoạt động đúng trên <strong>single processor</strong> (bộ xử lý đơn), nó cần một <strong>preemptive scheduler</strong> (bộ lập lịch ưu tiên ngắt) — tức là một bộ lập lịch sẽ ngắt một thread thông qua <strong>timer</strong> (bộ định thời) để chạy thread khác theo định kỳ. Nếu không có preemption, spin lock không có nhiều ý nghĩa trên một CPU đơn, vì một thread đang spin trên CPU sẽ không bao giờ tự nhường CPU.</p>
+<h2 id="288-Đánh-giá-spin-lock-evaluating-spin-locks"><a class="header" href="#288-Đánh-giá-spin-lock-evaluating-spin-locks">28.8 Đánh giá Spin Lock (Evaluating Spin Locks)</a></h2>
+<p>Với <strong>spin lock</strong> cơ bản mà chúng ta đã xây dựng, giờ đây ta có thể đánh giá mức độ hiệu quả của nó dựa trên các tiêu chí đã mô tả trước đó.</p>
+<p>Tiêu chí quan trọng nhất của một <strong>lock</strong> là <strong>correctness</strong> (tính đúng đắn): nó có cung cấp <strong>mutual exclusion</strong> (loại trừ lẫn nhau) hay không? Ở đây, câu trả lời là <strong>có</strong>: spin lock chỉ cho phép một <strong>thread</strong> (luồng) duy nhất vào <strong>critical section</strong> (vùng tới hạn) tại một thời điểm. Do đó, chúng ta có một lock đúng đắn.</p>
+<p>Tiêu chí tiếp theo là <strong>fairness</strong> (tính công bằng). Spin lock có công bằng với thread đang chờ hay không? Bạn có thể đảm bảo rằng một thread đang chờ sẽ <strong>luôn</strong> được vào critical section không? Đáng tiếc, câu trả lời là <strong>không</strong>: spin lock không cung cấp bất kỳ đảm bảo nào về tính công bằng. Thực tế, một thread có thể <strong>spin</strong> (quay vòng chờ) mãi mãi khi có tranh chấp. Spin lock đơn giản (như đã thảo luận) là <strong>không công bằng</strong> và có thể dẫn đến <strong>starvation</strong> (đói tài nguyên).</p>
+<p>Tiêu chí cuối cùng là <strong>performance</strong> (hiệu năng). Chi phí của việc sử dụng spin lock là gì? Để phân tích kỹ hơn, hãy xem xét một vài trường hợp khác nhau.</p>
+<ul>
+<li><strong>Trường hợp 1</strong>: Các thread cạnh tranh lock trên <strong>single processor</strong> (bộ xử lý đơn).</li>
+<li><strong>Trường hợp 2</strong>: Các thread phân bố trên nhiều CPU.</li>
+</ul>
+<p>Với spin lock, trong trường hợp <strong>single CPU</strong>, chi phí hiệu năng có thể rất tệ; hãy tưởng tượng khi thread đang giữ lock bị <strong>preempted</strong> (tạm dừng) ngay trong critical section. <strong>Scheduler</strong> (bộ lập lịch) có thể sẽ chạy tất cả các thread khác (giả sử có N − 1 thread khác), mỗi thread đều cố gắng lấy lock. Trong trường hợp này, mỗi thread sẽ spin trong suốt <strong>time slice</strong> (lượng thời gian CPU cấp cho một thread) trước khi nhường CPU, gây lãng phí chu kỳ CPU.</p>
+<p>Tuy nhiên, trên <strong>multiple CPUs</strong> (đa xử lý), spin lock hoạt động khá tốt (nếu số lượng thread xấp xỉ số lượng CPU). Lý do như sau: giả sử Thread A chạy trên CPU 1 và Thread B chạy trên CPU 2, cả hai cùng tranh chấp lock. Nếu Thread A (CPU 1) lấy được lock, và Thread B cố lấy, B sẽ spin (trên CPU 2). Tuy nhiên, giả định rằng critical section ngắn, lock sẽ sớm được nhả và Thread B sẽ lấy được. Trong trường hợp này, việc spin để chờ lock giữ trên CPU khác không lãng phí nhiều chu kỳ CPU, và do đó có thể hiệu quả.</p>
+<h2 id="289-compare-and-swap"><a class="header" href="#289-compare-and-swap">28.9 Compare-And-Swap</a></h2>
+<p>Một <strong>hardware primitive</strong> (nguyên thủy phần cứng) khác mà một số hệ thống cung cấp được gọi là <strong>compare-and-swap</strong> (trên SPARC) hoặc <strong>compare-and-exchange</strong> (trên x86). Mã giả C cho lệnh này được thể hiện trong <strong>Hình 28.4</strong>.</p>
+<pre><code class="language-c">int CompareAndSwap(int *ptr, int expected, int new) {
+  int original = *ptr;
+  if (original == expected)
+    *ptr = new;
+  return original;
+}
+</code></pre>
+<p><strong>Hình 28.4: Compare-and-swap</strong></p>
+<p>Ý tưởng cơ bản của <code>compare-and-swap</code> là kiểm tra xem giá trị tại địa chỉ <code>ptr</code> có bằng <code>expected</code> hay không; nếu có, cập nhật vị trí bộ nhớ đó thành giá trị <code>new</code>. Nếu không, không làm gì cả. Trong cả hai trường hợp, trả về giá trị gốc tại vị trí bộ nhớ đó, cho phép đoạn code gọi <code>compare-and-swap</code> biết được thao tác có thành công hay không.</p>
+<p>Với lệnh <code>compare-and-swap</code>, ta có thể xây dựng lock tương tự như với <code>test-and-set</code>. Ví dụ, ta chỉ cần thay hàm <code>lock()</code> ở trên bằng:</p>
+<pre><code class="language-c">void lock(lock_t *lock) {
+  while (CompareAndSwap(&amp;lock-&gt;flag, 0, 1) == 1)
+    ; // spin
+}
+</code></pre>
+<p>Phần còn lại của code giống như ví dụ <code>test-and-set</code> ở trên. Code này hoạt động tương tự: nó kiểm tra nếu <code>flag</code> bằng 0 thì nguyên tử thay bằng 1 để lấy lock. Các thread cố lấy lock khi nó đang bị giữ sẽ bị kẹt spin cho đến khi lock được nhả.</p>
+<p>Nếu bạn muốn xem cách triển khai <code>compare-and-swap</code> phiên bản x86 có thể gọi từ C, đoạn code (từ [S05]) có thể hữu ích<sup class="footnote-reference"><a href="#2">2</a></sup>.</p>
+<p>Cuối cùng, như bạn có thể nhận ra, <code>compare-and-swap</code> là một lệnh mạnh hơn <code>test-and-set</code>. Chúng ta sẽ tận dụng sức mạnh này trong tương lai khi tìm hiểu về <strong>lock-free synchronization</strong> (đồng bộ hóa không khóa) [H91]. Tuy nhiên, nếu chỉ xây dựng spin lock đơn giản với nó, hành vi sẽ giống hệt spin lock đã phân tích ở trên.</p>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>github.com/remzi-arpacidusseau/ostep-code/tree/master/threads-locks</p>
+</div>
+<h2 id="2810-load-linked-và-store-conditional"><a class="header" href="#2810-load-linked-và-store-conditional">28.10 Load-Linked và Store-Conditional</a></h2>
+<p>Một số nền tảng cung cấp cặp lệnh hoạt động cùng nhau để giúp xây dựng critical section. Trên kiến trúc <strong>MIPS</strong> [H93], ví dụ, lệnh <strong>load-linked</strong> và <strong>store-conditional</strong> có thể được dùng kết hợp để xây dựng lock và các cấu trúc đồng thời khác. Mã giả C cho các lệnh này được thể hiện trong <strong>Hình 28.5</strong>. Alpha, PowerPC và ARM cũng cung cấp các lệnh tương tự [W09].</p>
+<pre><code class="language-c">int LoadLinked(int *ptr) {
+  return *ptr;
+}
+
+int StoreConditional(int *ptr, int value) {
+  if (no update to *ptr since LL to this addr) {
+    *ptr = value;
+    return 1; // thành công!
+  } else {
+    return 0; // thất bại
+  }
+}
+</code></pre>
+<p><strong>Hình 28.5: Load-linked và Store-conditional</strong></p>
+<p><code>Load-linked</code> hoạt động gần giống như lệnh load thông thường, chỉ đơn giản là lấy giá trị từ bộ nhớ và đặt vào thanh ghi. Sự khác biệt chính nằm ở <code>store-conditional</code>, lệnh này chỉ thành công (và cập nhật giá trị tại địa chỉ vừa được load-linked) nếu <strong>không có</strong> thao tác store nào khác tới địa chỉ đó diễn ra trong khoảng thời gian từ lúc load-linked. Nếu thành công, <code>store-conditional</code> trả về 1 và cập nhật giá trị tại <code>ptr</code> thành <code>value</code>; nếu thất bại, giá trị tại <code>ptr</code> không thay đổi và trả về 0.</p>
+<p><strong>Thử thách</strong>: hãy tự nghĩ cách xây dựng lock bằng load-linked và store-conditional. Sau đó, so sánh với đoạn code dưới đây — một giải pháp đơn giản. Giải pháp được thể hiện trong <strong>Hình 28.6</strong>.</p>
+<pre><code class="language-c">void lock(lock_t *lock) {
+  while (1) {
+    while (LoadLinked(&amp;lock-&gt;flag) == 1)
+      ; // spin cho đến khi flag = 0
+    if (StoreConditional(&amp;lock-&gt;flag, 1) == 1)
+      return; // nếu đặt thành 1 thành công: xong
+    // nếu thất bại: thử lại
+  }
+}
+
+void unlock(lock_t *lock) {
+  lock-&gt;flag = 0;
+}
+</code></pre>
+<p><strong>Hình 28.6: Sử dụng LL/SC để xây dựng một Lock</strong></p>
+<p>Phần code <code>lock()</code> là phần thú vị nhất. Đầu tiên, một <strong>thread</strong> sẽ <strong>spin</strong> (quay vòng chờ) cho đến khi <code>flag</code> được đặt về 0 (biểu thị rằng lock đang không bị giữ). Khi điều kiện này thỏa mãn, thread sẽ cố gắng lấy lock thông qua lệnh <strong>store-conditional</strong>; nếu thành công, thread đã thay đổi giá trị của <code>flag</code> thành 1 một cách <strong>atomic</strong> (nguyên tử) và do đó có thể tiếp tục vào <strong>critical section</strong> (vùng tới hạn).</p>
+<p>Hãy lưu ý cách mà việc <strong>store-conditional</strong> có thể thất bại. Một thread gọi <code>lock()</code> và thực hiện <strong>load-linked</strong>, trả về 0 vì lock chưa bị giữ. Trước khi nó có thể thực hiện <strong>store-conditional</strong>, nó bị <strong>interrupt</strong> (ngắt) và một thread khác đi vào code lock, cũng thực hiện lệnh <strong>load-linked</strong>, cũng nhận được giá trị 0 và tiếp tục. Tại thời điểm này, cả hai thread đều đã thực hiện load-linked và đều chuẩn bị thực hiện store-conditional. Điểm mấu chốt của cặp lệnh này là <strong>chỉ một</strong> trong hai thread sẽ thành công trong việc cập nhật <code>flag</code> thành 1 và do đó lấy được lock; thread thứ hai khi thực hiện store-conditional sẽ thất bại (vì thread kia đã cập nhật giá trị của <code>flag</code> giữa thời điểm load-linked và store-conditional của nó) và do đó phải thử lấy lock lại từ đầu.</p>
+<p>Trong một buổi học vài năm trước, sinh viên đại học David Capel đã gợi ý một dạng rút gọn hơn của đoạn code trên, dành cho những ai thích <strong>short-circuiting boolean conditionals</strong> (rút gọn điều kiện logic). Hãy thử xem bạn có hiểu tại sao nó tương đương không. Rõ ràng là nó ngắn hơn!</p>
+<pre><code class="language-c">void lock(lock_t *lock) {
+  while (LoadLinked(&amp;lock-&gt;flag) ||
+         !StoreConditional(&amp;lock-&gt;flag, 1))
+    ; // spin
+}
+</code></pre>
+<h2 id="2811-fetch-and-add"><a class="header" href="#2811-fetch-and-add">28.11 Fetch-And-Add</a></h2>
+<p>Một <strong>hardware primitive</strong> (nguyên thủy phần cứng) cuối cùng là lệnh <strong>fetch-and-add</strong>, lệnh này sẽ <strong>tăng</strong> một giá trị một cách nguyên tử đồng thời trả về giá trị cũ tại một địa chỉ nhất định. Mã giả C cho lệnh fetch-and-add như sau:</p>
+<pre><code class="language-c">int FetchAndAdd(int *ptr) {
+  int old = *ptr;
+  *ptr = old + 1;
+  return old;
+}
+</code></pre>
+<blockquote>
+<p><strong>TIP: ÍT CODE HƠN LÀ CODE TỐT HƠN (LUẬT CỦA LAUER)</strong><br />
+Lập trình viên thường hay khoe khoang về việc họ đã viết bao nhiêu code để làm một việc gì đó. Cách nghĩ này là sai lầm cơ bản. Điều đáng khoe khoang hơn là bạn đã viết <strong>ít</strong> code như thế nào để hoàn thành một nhiệm vụ. Code ngắn gọn, súc tích luôn được ưu tiên; nó thường dễ hiểu hơn và ít lỗi hơn. Như Hugh Lauer đã nói khi bàn về việc xây dựng hệ điều hành Pilot: “Nếu cùng một nhóm người có gấp đôi thời gian, họ có thể tạo ra một hệ thống tốt tương đương chỉ với một nửa số dòng code.” [L81] Chúng ta sẽ gọi đây là <strong>Luật của Lauer</strong>, và nó rất đáng để ghi nhớ. Vì vậy, lần tới khi bạn định khoe về việc đã viết bao nhiêu code để hoàn thành bài tập, hãy suy nghĩ lại, hoặc tốt hơn, hãy quay lại, viết lại và làm cho code rõ ràng và ngắn gọn nhất có thể.</p>
+</blockquote>
+<p>Trong ví dụ này, chúng ta sẽ sử dụng <code>fetch-and-add</code> để xây dựng một <strong>ticket lock</strong> thú vị hơn, được giới thiệu bởi Mellor-Crummey và Scott [MS91]. Code cho lock và unlock được thể hiện trong <strong>Hình 28.7</strong> (trang 14).</p>
+<pre><code class="language-c">typedef struct __lock_t {
+  int ticket;
+  int turn;
+} lock_t;
+
+void lock_init(lock_t *lock) {
+  lock-&gt;ticket = 0;
+  lock-&gt;turn   = 0;
+}
+
+void lock(lock_t *lock) {
+  int myturn = FetchAndAdd(&amp;lock-&gt;ticket);
+  while (lock-&gt;turn != myturn)
+    ; // spin
+}
+
+void unlock(lock_t *lock) {
+  lock-&gt;turn = lock-&gt;turn + 1;
+}
+</code></pre>
+<p><strong>Hình 28.7: Ticket Locks</strong></p>
+<p>Thay vì chỉ dùng một giá trị, giải pháp này sử dụng kết hợp hai biến <code>ticket</code> và <code>turn</code> để xây dựng lock. Cách hoạt động cơ bản khá đơn giản: khi một thread muốn lấy lock, nó thực hiện một thao tác <code>fetch-and-add</code> nguyên tử trên giá trị <code>ticket</code>; giá trị trả về được coi là “lượt” (<code>myturn</code>) của thread đó. Biến <code>lock-&gt;turn</code> dùng chung toàn cục sẽ xác định lượt của thread nào; khi (<code>myturn == turn</code>) đối với một thread, đó là lượt của thread đó để vào critical section. Việc unlock chỉ đơn giản là tăng <code>turn</code> để thread đang chờ tiếp theo (nếu có) có thể vào critical section.</p>
+<p>Hãy lưu ý một điểm khác biệt quan trọng của giải pháp này so với các nỗ lực trước: nó đảm bảo <strong>progress</strong> (tiến triển) cho tất cả các thread. Một khi thread được gán giá trị ticket, nó sẽ được chạy vào một thời điểm nào đó trong tương lai (sau khi các thread trước nó đã đi qua critical section và nhả lock). Trong các nỗ lực trước, không có đảm bảo như vậy; một thread spin trên <code>test-and-set</code> (ví dụ) có thể spin mãi ngay cả khi các thread khác liên tục lấy và nhả lock.</p>
+<h2 id="2812-quá-nhiều-spinning-làm-gì-tiếp"><a class="header" href="#2812-quá-nhiều-spinning-làm-gì-tiếp">28.12 Quá nhiều spinning: Làm gì tiếp?</a></h2>
+<p>Các lock dựa trên phần cứng của chúng ta rất đơn giản (chỉ vài dòng code) và chúng hoạt động (bạn thậm chí có thể chứng minh điều đó nếu muốn, bằng cách viết code), đây là hai đặc tính tuyệt vời của bất kỳ hệ thống hoặc đoạn code nào. Tuy nhiên, trong một số trường hợp, các giải pháp này có thể khá <strong>kém hiệu quả</strong>. Hãy tưởng tượng bạn đang chạy hai thread trên một <strong>single processor</strong>. Giờ giả sử một thread (thread 0) đang ở trong critical section và giữ lock, và không may bị <strong>interrupt</strong>. Thread thứ hai (thread 1) lúc này cố gắng lấy lock, nhưng phát hiện nó đang bị giữ. Do đó, nó bắt đầu spin. Và spin. Rồi spin tiếp. Cuối cùng, một <strong>timer interrupt</strong> xảy ra, thread 0 được chạy lại, nhả lock, và cuối cùng (ở lần chạy tiếp theo chẳng hạn), thread 1 sẽ không phải spin nhiều nữa và có thể lấy được lock. Như vậy, bất cứ khi nào một thread bị kẹt spin trong tình huống như thế này, nó sẽ lãng phí <strong>toàn bộ time slice</strong> chỉ để kiểm tra một giá trị mà sẽ không thay đổi! Vấn đề còn tệ hơn khi có N thread tranh chấp lock; <strong>N − 1</strong> time slice có thể bị lãng phí theo cách tương tự, chỉ để spin và chờ một thread duy nhất nhả lock. Và do đó, chúng ta có vấn đề tiếp theo:</p>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ TRÁNH SPINNING</strong><br />
+Làm thế nào để phát triển một lock mà không lãng phí thời gian CPU vào việc spin vô ích?</p>
+</blockquote>
+<p>Chỉ hỗ trợ phần cứng thôi là <strong>không đủ</strong> để giải quyết vấn đề này. Chúng ta sẽ cần cả sự hỗ trợ từ <strong>OS</strong>! Hãy cùng tìm hiểu cách mà điều đó có thể hoạt động.</p>
+<h2 id="2813-một-cách-tiếp-cận-đơn-giản-just-yield-baby"><a class="header" href="#2813-một-cách-tiếp-cận-đơn-giản-just-yield-baby">28.13 Một cách tiếp cận đơn giản: <strong>Just Yield, Baby</strong></a></h2>
+<p><strong>Hardware support</strong> (hỗ trợ phần cứng) đã giúp chúng ta tiến khá xa: có được các <strong>lock</strong> (khóa) hoạt động, và thậm chí (như trong trường hợp <strong>ticket lock</strong>) còn đảm bảo <strong>fairness</strong> (tính công bằng) trong việc giành lock. Tuy nhiên, chúng ta vẫn còn một vấn đề: phải làm gì khi một <strong>context switch</strong> (chuyển ngữ cảnh) xảy ra trong <strong>critical section</strong> (vùng tới hạn), và các <strong>thread</strong> (luồng) bắt đầu <strong>spin</strong> (quay vòng chờ) vô tận, đợi thread đang giữ lock (và bị ngắt) được chạy lại?</p>
+<p>Cách thử đầu tiên của chúng ta là một phương pháp đơn giản và “thân thiện”: khi bạn sắp spin, hãy nhường CPU cho thread khác. Như Al Davis có thể nói: <em>“just yield, baby!”</em> [D91]. <strong>Hình 28.8</strong> (trang 15) minh họa cách tiếp cận này.</p>
+<pre><code class="language-c">void init() {
+  flag = 0;
+}
+
+void lock() {
+  while (TestAndSet(&amp;flag, 1) == 1)
+    yield(); // nhường CPU
+}
+
+void unlock() {
+  flag = 0;
+}
+</code></pre>
+<p><strong>Hình 28.8: Lock với Test-and-set và Yield</strong></p>
+<p>Trong cách tiếp cận này, chúng ta giả định có một <strong>OS primitive</strong> (nguyên thủy hệ điều hành) <code>yield()</code> mà một thread có thể gọi khi muốn nhường CPU và cho phép thread khác chạy. Một thread có thể ở một trong ba trạng thái (<strong>running</strong>, <strong>ready</strong>, hoặc <strong>blocked</strong>); <code>yield</code> đơn giản là một <strong>system call</strong> (lời gọi hệ thống) chuyển thread gọi hàm từ trạng thái running sang trạng thái ready, và do đó đưa một thread khác lên trạng thái running. Nói cách khác, thread gọi <code>yield</code> tự loại mình khỏi lịch chạy.</p>
+<p>Hãy nghĩ về ví dụ với hai thread trên một CPU; trong trường hợp này, cách tiếp cận dựa trên yield hoạt động khá tốt. Nếu một thread gọi <code>lock()</code> và phát hiện lock đang bị giữ, nó sẽ đơn giản nhường CPU, và do đó thread còn lại sẽ chạy và hoàn tất critical section của nó. Trong trường hợp đơn giản này, cách tiếp cận yield hoạt động hiệu quả.</p>
+<p>Bây giờ hãy xét trường hợp có nhiều thread (giả sử 100) liên tục tranh chấp lock. Trong trường hợp này, nếu một thread lấy được lock và bị <strong>preempted</strong> (tạm dừng) trước khi nhả lock, 99 thread còn lại sẽ lần lượt gọi <code>lock()</code>, phát hiện lock đang bị giữ, và nhường CPU. Giả sử <strong>scheduler</strong> (bộ lập lịch) dùng kiểu <strong>round-robin</strong>, cả 99 thread này sẽ thực hiện mô hình “chạy rồi yield” trước khi thread giữ lock được chạy lại. Mặc dù tốt hơn so với cách spin (vốn sẽ lãng phí 99 <strong>time slice</strong> chỉ để quay vòng chờ), cách này vẫn tốn kém; chi phí của một <strong>context switch</strong> có thể đáng kể, và do đó vẫn có nhiều lãng phí.</p>
+<p>Tệ hơn, cách này không giải quyết được <strong>starvation</strong> (đói tài nguyên). Một thread có thể bị kẹt trong vòng lặp yield vô tận trong khi các thread khác liên tục vào và ra khỏi critical section. Rõ ràng, chúng ta cần một cách tiếp cận giải quyết starvation một cách trực tiếp.</p>
+<h2 id="2814-sử-dụng-hàng-đợi-sleeping-thay-vì-spinning"><a class="header" href="#2814-sử-dụng-hàng-đợi-sleeping-thay-vì-spinning">28.14 Sử dụng hàng đợi: <strong>Sleeping thay vì Spinning</strong></a></h2>
+<p>Vấn đề thực sự với một số cách tiếp cận trước đây (ngoại trừ ticket lock) là chúng để quá nhiều thứ cho <strong>may rủi</strong>. <strong>Scheduler</strong> quyết định thread nào sẽ chạy tiếp theo; nếu scheduler chọn sai, một thread được chạy sẽ hoặc là spin chờ lock (cách tiếp cận đầu tiên của chúng ta), hoặc là yield CPU ngay lập tức (cách tiếp cận thứ hai). Dù theo cách nào, vẫn có khả năng lãng phí và không có cơ chế ngăn chặn starvation.</p>
+<p><strong>Hình 28.9: Lock với Queue, Test-and-set, Yield và Wakeup</strong></p>
+<p>Do đó, chúng ta phải <strong>chủ động kiểm soát</strong> thread nào sẽ được lấy lock tiếp theo sau khi thread hiện tại nhả lock. Để làm điều này, chúng ta cần thêm một chút hỗ trợ từ <strong>OS</strong> (hệ điều hành), cũng như một <strong>queue</strong> (hàng đợi) để theo dõi các thread đang chờ lấy lock.</p>
+<p>Để đơn giản, chúng ta sẽ sử dụng hỗ trợ do <strong>Solaris</strong> cung cấp, thông qua hai lời gọi:</p>
+<ul>
+<li><code>park()</code> để đưa thread gọi hàm vào trạng thái ngủ (<strong>sleep</strong>),</li>
+<li><code>unpark(threadID)</code> để đánh thức một thread cụ thể được chỉ định bởi <code>threadID</code>.</li>
+</ul>
+<p>Hai hàm này có thể được dùng kết hợp để xây dựng một lock mà sẽ đưa thread gọi hàm vào ngủ nếu nó cố lấy một lock đang bị giữ, và đánh thức nó khi lock được giải phóng. Hãy xem code trong <strong>Hình 28.9</strong> để hiểu một cách sử dụng các primitive này.</p>
+<blockquote>
+<p><strong>ASIDE: LÝ DO KHÁC ĐỂ TRÁNH SPINNING – PRIORITY INVERSION</strong><br />
+Một lý do tốt để tránh <strong>spin lock</strong> là hiệu năng: như đã mô tả trong phần chính, nếu một thread bị ngắt khi đang giữ lock, các thread khác dùng spin lock sẽ tiêu tốn rất nhiều thời gian CPU chỉ để chờ lock được giải phóng. Tuy nhiên, còn một lý do thú vị khác để tránh spin lock trên một số hệ thống: <strong>tính đúng đắn</strong>. Vấn đề cần cảnh giác được gọi là <strong>priority inversion</strong> (đảo ngược độ ưu tiên), một “tai họa liên hành tinh” đã xảy ra cả trên Trái Đất [M15] và Sao Hỏa [R97]!</p>
+<p>Giả sử có hai thread trong hệ thống. Thread 2 (T2) có <strong>scheduling priority</strong> (độ ưu tiên lập lịch) cao, và Thread 1 (T1) có độ ưu tiên thấp hơn. Giả sử <strong>CPU scheduler</strong> luôn chạy T2 thay vì T1 nếu cả hai đều sẵn sàng chạy; T1 chỉ chạy khi T2 không thể (ví dụ: khi T2 bị block do I/O).</p>
+<p>Bây giờ, vấn đề xảy ra: giả sử T2 bị block vì lý do nào đó. T1 chạy, lấy một spin lock và vào critical section. T2 được <strong>unblock</strong> (có thể vì một I/O hoàn tất), và scheduler lập tức chạy T2 (loại T1 ra). T2 cố lấy lock, nhưng không được (vì T1 đang giữ lock), nên nó cứ spin mãi. Vì lock là spin lock, T2 spin vô tận và hệ thống bị treo.</p>
+<p>Chỉ tránh dùng spin lock thôi thì đáng tiếc là <strong>không</strong> tránh được vấn đề inversion. Hãy tưởng tượng có ba thread: T1, T2, và T3, với T3 có độ ưu tiên cao nhất, T1 thấp nhất. Giả sử T1 lấy lock. T3 bắt đầu chạy và vì có độ ưu tiên cao hơn T1, nó lập tức chạy (preempt T1). T3 cố lấy lock mà T1 giữ, nhưng bị kẹt chờ. Nếu T2 bắt đầu chạy, nó có độ ưu tiên cao hơn T1, nên sẽ chạy. T3, dù có độ ưu tiên cao hơn T2, vẫn bị kẹt chờ T1, và T1 có thể không bao giờ chạy nếu T2 vẫn chạy. Thật trớ trêu khi T3 “hùng mạnh” không thể chạy, trong khi T2 “thấp kém” lại chiếm CPU.</p>
+<p>Có nhiều cách để xử lý vấn đề priority inversion. Trong trường hợp spin lock gây ra vấn đề, có thể tránh dùng spin lock (sẽ được mô tả bên dưới). Tổng quát hơn, một thread có độ ưu tiên cao đang chờ một thread có độ ưu tiên thấp có thể <strong>tạm thời nâng độ ưu tiên</strong> của thread thấp hơn, cho phép nó chạy và giải quyết inversion — kỹ thuật này gọi là <strong>priority inheritance</strong> (kế thừa độ ưu tiên). Giải pháp đơn giản nhất: đảm bảo tất cả thread có cùng độ ưu tiên.</p>
+</blockquote>
+<p>Trong ví dụ này, chúng ta làm hai việc thú vị:</p>
+<ol>
+<li>Kết hợp ý tưởng <code>test-and-set</code> cũ với một <strong>queue</strong> chứa các thread chờ lock để tạo ra một lock hiệu quả hơn.</li>
+<li>Sử dụng queue để kiểm soát thread nào sẽ lấy lock tiếp theo, từ đó tránh <strong>starvation</strong> (đói tài nguyên).</li>
+</ol>
+<p>Bạn có thể để ý cách <code>guard</code> được sử dụng (Hình 28.9, trang 16), về cơ bản là một spin lock bao quanh các thao tác trên <code>flag</code> và queue mà lock sử dụng. Cách này không loại bỏ hoàn toàn spin-waiting; một thread có thể bị ngắt khi đang acquire hoặc release lock, khiến các thread khác phải spin chờ nó chạy lại. Tuy nhiên, thời gian spin là rất ngắn (chỉ vài lệnh bên trong code <code>lock</code> và <code>unlock</code>, thay vì toàn bộ critical section do người dùng định nghĩa), nên cách này có thể chấp nhận được.</p>
+<p>Bạn cũng có thể thấy rằng trong <code>lock()</code>, khi một thread không thể lấy lock (lock đang bị giữ), chúng ta cẩn thận thêm thread đó vào queue (bằng cách gọi <code>gettid()</code> để lấy thread ID của thread hiện tại), đặt <code>guard</code> về 0, và nhường CPU. Một câu hỏi cho bạn: điều gì sẽ xảy ra nếu việc nhả guard lock diễn ra <strong>sau</strong> <code>park()</code> thay vì trước? Gợi ý: điều gì đó tệ sẽ xảy ra.</p>
+<p>Bạn cũng có thể nhận thấy rằng <code>flag</code> <strong>không</strong> được đặt lại về 0 khi một thread khác được đánh thức. Tại sao? Đây không phải lỗi, mà là <strong>bắt buộc</strong>! Khi một thread được đánh thức, nó sẽ như thể đang quay lại từ <code>park()</code>; tuy nhiên, tại thời điểm đó nó <strong>không giữ</strong> <code>guard</code> và do đó không thể đặt <code>flag</code> thành 1. Vì vậy, chúng ta chỉ đơn giản <strong>chuyển lock trực tiếp</strong> từ thread nhả lock sang thread tiếp theo lấy lock; <code>flag</code> không được đặt về 0 ở giữa.</p>
+<p>Cuối cùng, bạn có thể nhận thấy một race condition tiềm ẩn trong giải pháp, ngay trước lời gọi <code>park()</code>. Nếu thời điểm không may, một thread chuẩn bị park, giả định rằng nó sẽ ngủ cho đến khi lock được nhả. Nếu lúc đó chuyển sang một thread khác (ví dụ: thread đang giữ lock) và thread này nhả lock, thì lần park tiếp theo của thread đầu tiên có thể ngủ mãi mãi — vấn đề này gọi là <strong>wakeup/waiting race</strong>.</p>
+<p>Solaris giải quyết vấn đề này bằng cách thêm một system call thứ ba: <code>setpark()</code>. Khi gọi hàm này, thread báo rằng nó sắp park. Nếu sau đó nó bị ngắt và một thread khác gọi <code>unpark</code> trước khi <code>park</code> thực sự được gọi, thì lần <code>park</code> tiếp theo sẽ trả về ngay lập tức thay vì ngủ. Việc sửa code trong <code>lock()</code> là rất nhỏ:</p>
+<pre><code class="language-c">queue_add(m-&gt;q, gettid());
+setpark(); // code mới
+m-&gt;guard = 0;
+</code></pre>
+<p>Một giải pháp khác là truyền <code>guard</code> vào kernel. Khi đó, kernel có thể đảm bảo việc nhả lock và đưa thread ra khỏi hàng đợi diễn ra một cách nguyên tử.</p>
+<h2 id="2815-hệ-điều-hành-khác-hỗ-trợ-khác-nhau"><a class="header" href="#2815-hệ-điều-hành-khác-hỗ-trợ-khác-nhau">28.15 Hệ điều hành khác, hỗ trợ khác nhau</a></h2>
+<p>Cho đến giờ, chúng ta đã thấy một dạng hỗ trợ mà OS có thể cung cấp để xây dựng một lock hiệu quả hơn trong thư viện thread. Các OS khác cũng cung cấp hỗ trợ tương tự; chi tiết có thể khác nhau.</p>
+<p>Ví dụ, <strong>Linux</strong> cung cấp một cơ chế gọi là <strong>futex</strong> (fast userspace mutex), tương tự như giao diện của Solaris nhưng cung cấp nhiều chức năng hơn trong kernel. Cụ thể, mỗi futex gắn với một vị trí bộ nhớ vật lý cụ thể, cũng như một hàng đợi trong kernel cho mỗi futex. Các thread có thể dùng các lời gọi futex (mô tả bên dưới) để ngủ và thức khi cần.</p>
+<p>Cụ thể, có hai lời gọi:</p>
+<ul>
+<li><code>futex_wait(address, expected)</code> đưa thread gọi hàm vào trạng thái ngủ, giả sử giá trị tại địa chỉ <code>address</code> bằng <code>expected</code>. Nếu không bằng, lời gọi trả về ngay lập tức.</li>
+<li><code>futex_wake(address)</code> đánh thức một thread đang chờ trong hàng đợi.</li>
+</ul>
+<p>Cách sử dụng các lời gọi này trong một <strong>Linux mutex</strong> được minh họa trong <strong>Hình 28.10</strong> (trang 19).</p>
+<p><strong>Hình 28.10: Linux-based Futex Locks</strong></p>
+<p>Đoạn mã này trích từ tệp <code>lowlevellock.h</code> trong thư viện <strong>nptl</strong> (một phần của thư viện <strong>gnu libc</strong>) [L09] thú vị ở một vài điểm.</p>
+<p>Thứ nhất, nó sử dụng <strong>một số nguyên duy nhất</strong> để theo dõi cả việc lock đang bị giữ hay không (<strong>bit cao</strong> của số nguyên) và số lượng <strong>waiter</strong> (thread đang chờ lock) (<strong>các bit còn lại</strong>). Do đó, nếu giá trị của lock là <strong>số âm</strong>, điều đó có nghĩa là lock đang bị giữ (vì bit cao được đặt và bit này quyết định dấu của số nguyên).</p>
+<p>Thứ hai, đoạn mã này cho thấy cách <strong>tối ưu hóa cho trường hợp phổ biến</strong>, cụ thể là khi <strong>không có tranh chấp</strong> lock; với chỉ một thread thực hiện acquire và release lock, lượng công việc thực hiện là rất ít (một thao tác nguyên tử <code>test-and-set</code> để lock và một phép cộng nguyên tử để release lock).</p>
+<p>Hãy thử tự phân tích phần còn lại của lock “thực tế” này để hiểu cách nó hoạt động. Hãy làm điều đó và trở thành <strong>bậc thầy về Linux locking</strong>, hoặc ít nhất là một người biết lắng nghe khi sách bảo bạn làm gì<sup class="footnote-reference"><a href="#3">3</a></sup>.</p>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>Giống như việc mua một bản in của OSTEP! Dù cuốn sách có sẵn miễn phí trên mạng, nhưng chẳng phải bạn sẽ rất thích có một bản bìa cứng để trên bàn làm việc sao? Hoặc tốt hơn, mười bản để chia sẻ với bạn bè và gia đình? Và có thể thêm một bản nữa để… ném vào kẻ thù? (cuốn sách khá nặng, và do đó ném nó lại khá hiệu quả)</p>
+</div>
+<h2 id="2816-two-phase-locks"><a class="header" href="#2816-two-phase-locks">28.16 Two-Phase Locks</a></h2>
+<p>Một ghi chú cuối: cách tiếp cận của Linux mang hơi hướng của một phương pháp cũ đã được sử dụng không liên tục trong nhiều năm, ít nhất là từ thời <strong>Dahm Locks</strong> vào đầu những năm 1960 [M82], và hiện được gọi là <strong>two-phase lock</strong> (khóa hai pha).</p>
+<p>Một two-phase lock nhận ra rằng <strong>spinning</strong> (quay vòng chờ) có thể hữu ích, đặc biệt nếu lock sắp được nhả. Vì vậy, ở <strong>pha đầu tiên</strong>, lock sẽ spin trong một khoảng thời gian, hy vọng có thể acquire lock.</p>
+<p>Tuy nhiên, nếu lock không được acquire trong pha spin đầu tiên, sẽ chuyển sang <strong>pha thứ hai</strong>, trong đó thread gọi hàm sẽ được đưa vào trạng thái <strong>sleep</strong> (ngủ) và chỉ được đánh thức khi lock trở nên rảnh. Lock của Linux ở trên là một dạng của loại lock này, nhưng nó chỉ spin <strong>một lần</strong>; một phiên bản tổng quát hơn có thể spin trong vòng lặp một khoảng thời gian cố định trước khi sử dụng hỗ trợ <code>futex</code> để sleep.</p>
+<p>Two-phase lock là một ví dụ khác của <strong>hybrid approach</strong> (cách tiếp cận lai), nơi việc kết hợp hai ý tưởng tốt có thể tạo ra một ý tưởng tốt hơn. Tất nhiên, việc này phụ thuộc rất nhiều vào nhiều yếu tố, bao gồm môi trường phần cứng, số lượng thread, và đặc điểm tải công việc. Như thường lệ, việc tạo ra một loại lock <strong>general-purpose</strong> (dùng chung) tốt cho mọi trường hợp sử dụng là một thách thức lớn.</p>
+<h2 id="2817-tóm-tắt-summary"><a class="header" href="#2817-tóm-tắt-summary">28.17 Tóm tắt (Summary)</a></h2>
+<p>Cách tiếp cận ở trên cho thấy cách mà các <strong>real lock</strong> (lock thực tế) được xây dựng ngày nay: một phần <strong>hardware support</strong> (hỗ trợ phần cứng) (dưới dạng các lệnh mạnh hơn) kết hợp với một phần <strong>OS support</strong> (hỗ trợ từ hệ điều hành) (ví dụ: dưới dạng các primitive <code>park()</code> và <code>unpark()</code> trên Solaris, hoặc <code>futex</code> trên Linux).</p>
+<p>Tất nhiên, chi tiết sẽ khác nhau, và đoạn code chính xác để thực hiện việc locking như vậy thường được <strong>tinh chỉnh rất kỹ</strong>. Hãy xem mã nguồn của Solaris hoặc Linux nếu bạn muốn biết thêm chi tiết; chúng là những tài liệu rất thú vị để đọc [L09, S09]. Ngoài ra, hãy xem công trình xuất sắc của David và cộng sự để so sánh các chiến lược locking trên các hệ thống <strong>multiprocessor</strong> (đa xử lý) hiện đại [D+13].</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../27/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../29/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../27/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../29/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

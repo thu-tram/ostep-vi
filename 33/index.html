@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html lang="vi" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Event-based Concurrency (Advanced) - OS Bí truyền thư - OSTEP in Vietnamese</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../index.html"><strong aria-hidden="true">1.</strong> Trang chủ</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 1: Virtualization</li><li class="chapter-item expanded "><a href="../02/index.html"><strong aria-hidden="true">2.</strong> Introduction to Operating Systems</a></li><li class="chapter-item expanded "><a href="../03/index.html"><strong aria-hidden="true">3.</strong> A Dialogue on Virtualization</a></li><li class="chapter-item expanded "><a href="../04/index.html"><strong aria-hidden="true">4.</strong> The Abstraction: The Process</a></li><li class="chapter-item expanded "><a href="../05/index.html"><strong aria-hidden="true">5.</strong> Interlude: Process API</a></li><li class="chapter-item expanded "><a href="../06/index.html"><strong aria-hidden="true">6.</strong> Mechanism: Limited Direct Execution</a></li><li class="chapter-item expanded "><a href="../07/index.html"><strong aria-hidden="true">7.</strong> Scheduling: Introduction</a></li><li class="chapter-item expanded "><a href="../08/index.html"><strong aria-hidden="true">8.</strong> Scheduling:The Multi-Level Feedback Queue</a></li><li class="chapter-item expanded "><a href="../09/index.html"><strong aria-hidden="true">9.</strong> Scheduling: Proportional Share</a></li><li class="chapter-item expanded "><a href="../10/index.html"><strong aria-hidden="true">10.</strong> Multiprocessor Scheduling (Advanced)</a></li><li class="chapter-item expanded "><a href="../13/index.html"><strong aria-hidden="true">11.</strong> The Abstraction: Address Spaces</a></li><li class="chapter-item expanded "><a href="../14/index.html"><strong aria-hidden="true">12.</strong> Interlude: Memory API</a></li><li class="chapter-item expanded "><a href="../15/index.html"><strong aria-hidden="true">13.</strong> Mechanism: Address Translation</a></li><li class="chapter-item expanded "><a href="../16/index.html"><strong aria-hidden="true">14.</strong> Segmentation</a></li><li class="chapter-item expanded "><a href="../17/index.html"><strong aria-hidden="true">15.</strong> Free-Space Management</a></li><li class="chapter-item expanded "><a href="../18/index.html"><strong aria-hidden="true">16.</strong> Paging: Introduction</a></li><li class="chapter-item expanded "><a href="../19/index.html"><strong aria-hidden="true">17.</strong> Paging: Faster Translations (TLBs)</a></li><li class="chapter-item expanded "><a href="../20/index.html"><strong aria-hidden="true">18.</strong> Paging: Smaller Tables</a></li><li class="chapter-item expanded "><a href="../21/index.html"><strong aria-hidden="true">19.</strong> Beyond Physical Memory: Mechanisms</a></li><li class="chapter-item expanded "><a href="../22/index.html"><strong aria-hidden="true">20.</strong> Beyond Physical Memory: Policies</a></li><li class="chapter-item expanded "><a href="../23/index.html"><strong aria-hidden="true">21.</strong> The VAX/VMS Virtual Memory System</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 2: Concurrency</li><li class="chapter-item expanded "><a href="../26/index.html"><strong aria-hidden="true">22.</strong> Concurrency: An Introduction</a></li><li class="chapter-item expanded "><a href="../27/index.html"><strong aria-hidden="true">23.</strong> Interlude: Thread API</a></li><li class="chapter-item expanded "><a href="../28/index.html"><strong aria-hidden="true">24.</strong> Locks</a></li><li class="chapter-item expanded "><a href="../29/index.html"><strong aria-hidden="true">25.</strong> Lock-based Concurrent Data Structures</a></li><li class="chapter-item expanded "><a href="../30/index.html"><strong aria-hidden="true">26.</strong> Condition Variables</a></li><li class="chapter-item expanded "><a href="../31/index.html"><strong aria-hidden="true">27.</strong> Semaphores</a></li><li class="chapter-item expanded "><a href="../32/index.html"><strong aria-hidden="true">28.</strong> Common Concurrency Problems</a></li><li class="chapter-item expanded "><a href="../33/index.html" class="active"><strong aria-hidden="true">29.</strong> Event-based Concurrency (Advanced)</a></li><li class="chapter-item expanded affix "><li class="part-title">Phần 3 Persistence</li><li class="chapter-item expanded "><a href="../36/index.html"><strong aria-hidden="true">30.</strong> I/O Devices</a></li><li class="chapter-item expanded "><a href="../37/index.html"><strong aria-hidden="true">31.</strong> Hard Disk Drives</a></li><li class="chapter-item expanded "><a href="../38/index.html"><strong aria-hidden="true">32.</strong> Redundant Arrays of Inexpensive Disks (RAIDs)</a></li><li class="chapter-item expanded "><a href="../39/index.html"><strong aria-hidden="true">33.</strong> Interlude: Files and Directories</a></li><li class="chapter-item expanded "><a href="../40/index.html"><strong aria-hidden="true">34.</strong> File System Implementation</a></li><li class="chapter-item expanded "><a href="../41/index.html"><strong aria-hidden="true">35.</strong> Locality and The Fast File System</a></li><li class="chapter-item expanded "><a href="../42/index.html"><strong aria-hidden="true">36.</strong> Crash Consistency: FSCK and Journaling</a></li><li class="chapter-item expanded "><a href="../43/index.html"><strong aria-hidden="true">37.</strong> Log-structured File Systems</a></li><li class="chapter-item expanded "><a href="../44/index.html"><strong aria-hidden="true">38.</strong> Flash-based SSDs</a></li><li class="chapter-item expanded "><a href="../45/index.html"><strong aria-hidden="true">39.</strong> Data Integrity and Protection</a></li><li class="chapter-item expanded "><a href="../48/index.html"><strong aria-hidden="true">40.</strong> Distributed Systems</a></li><li class="chapter-item expanded "><a href="../49/index.html"><strong aria-hidden="true">41.</strong> Sun’s Network File System (NFS)</a></li><li class="chapter-item expanded "><a href="../50/index.html"><strong aria-hidden="true">42.</strong> The Andrew File System (AFS)</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">OS Bí truyền thư - OSTEP in Vietnamese</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="33-lập-trình-đồng-thời-dựa-trên-sự-kiện-nâng-cao"><a class="header" href="#33-lập-trình-đồng-thời-dựa-trên-sự-kiện-nâng-cao">33. Lập trình đồng thời dựa trên sự kiện (Nâng cao)</a></h1>
+<p>Cho đến nay, chúng ta đã viết về concurrency (tính đồng thời) như thể cách duy nhất để xây dựng các ứng dụng đồng thời là sử dụng threads (luồng). Giống như nhiều điều khác trong cuộc sống, điều này không hoàn toàn đúng. Cụ thể, một phong cách lập trình đồng thời khác thường được sử dụng trong cả các ứng dụng dựa trên GUI (giao diện đồ họa người dùng)^[1] [O96] cũng như một số loại internet servers (máy chủ Internet) [PDZ99]. Phong cách này, được gọi là <em>event-based concurrency</em> (đồng thời dựa trên sự kiện), đã trở nên phổ biến trong một số hệ thống hiện đại, bao gồm các framework phía server như <strong>node.js</strong> [N13], nhưng nguồn gốc của nó bắt đầu từ các hệ thống C/UNIX mà chúng ta sẽ thảo luận bên dưới.</p>
+<p>Vấn đề mà <em>event-based concurrency</em> giải quyết là hai mặt. Thứ nhất, việc quản lý concurrency một cách chính xác trong các ứng dụng multi-threaded (đa luồng) có thể rất thách thức; như chúng ta đã thảo luận, việc thiếu locks (khóa), deadlock (bế tắc) và các vấn đề nghiêm trọng khác có thể phát sinh. Thứ hai, trong một ứng dụng multi-threaded, lập trình viên hầu như không có hoặc hoàn toàn không có quyền kiểm soát việc <em>scheduling</em> (lập lịch) tại một thời điểm nhất định; thay vào đó, lập trình viên chỉ đơn giản tạo ra các threads và hy vọng rằng hệ điều hành (OS) bên dưới sẽ lập lịch chúng một cách hợp lý trên các CPU khả dụng. Do khó khăn trong việc xây dựng một <em>general-purpose scheduler</em> (bộ lập lịch đa dụng) hoạt động tốt trong mọi trường hợp và với mọi loại tải công việc, đôi khi OS sẽ lập lịch công việc theo cách kém tối ưu. Và vì thế, chúng ta có...</p>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ XÂY DỰNG MÁY CHỦ ĐỒNG THỜI MÀ KHÔNG CẦN THREADS</strong><br />
+Làm thế nào chúng ta có thể xây dựng một <em>concurrent server</em> (máy chủ đồng thời) mà không sử dụng threads, từ đó giữ quyền kiểm soát concurrency cũng như tránh một số vấn đề thường gặp trong các ứng dụng multi-threaded?</p>
+</blockquote>
+<h2 id="331-Ý-tưởng-cơ-bản-event-loop"><a class="header" href="#331-Ý-tưởng-cơ-bản-event-loop">33.1 Ý tưởng cơ bản: Event Loop</a></h2>
+<p>Cách tiếp cận cơ bản mà chúng ta sẽ sử dụng, như đã nêu ở trên, được gọi là <em>event-based concurrency</em>. Cách tiếp cận này khá đơn giản: bạn chỉ cần chờ một điều gì đó (tức là một “event” – sự kiện) xảy ra; khi nó xảy ra, bạn kiểm tra loại sự kiện đó là gì và thực hiện một lượng nhỏ công việc cần thiết (có thể bao gồm việc gửi yêu cầu I/O, hoặc <em>scheduling</em> các sự kiện khác để xử lý trong tương lai, v.v.). Và hết!</p>
+<p>Trước khi đi sâu vào chi tiết, hãy cùng xem một <em>event-based server</em> (máy chủ dựa trên sự kiện) điển hình trông như thế nào. Các ứng dụng như vậy được xây dựng xoay quanh một cấu trúc đơn giản gọi là <em>event loop</em> (vòng lặp sự kiện). Mã giả (pseudocode) cho một event loop như sau:</p>
+<pre><code class="language-c">while (1) {
+    events = getEvents();
+    for (e in events)
+        processEvent(e);
+}
+</code></pre>
+<p>Thực sự đơn giản như vậy. Vòng lặp chính chỉ chờ một việc gì đó để làm (bằng cách gọi <code>getEvents()</code> trong đoạn code trên) và sau đó, với mỗi sự kiện được trả về, xử lý chúng lần lượt từng cái một; đoạn code xử lý mỗi sự kiện được gọi là <em>event handler</em> (trình xử lý sự kiện). Điều quan trọng là, khi một handler xử lý một sự kiện, đó là hoạt động duy nhất đang diễn ra trong hệ thống; do đó, việc quyết định sự kiện nào sẽ được xử lý tiếp theo tương đương với <em>scheduling</em>. Quyền kiểm soát tường minh đối với <em>scheduling</em> này là một trong những ưu điểm cơ bản của phương pháp <em>event-based</em>.</p>
+<p>Tuy nhiên, phần thảo luận này để lại cho chúng ta một câu hỏi lớn hơn: chính xác thì một <em>event-based server</em> xác định các sự kiện đang diễn ra như thế nào, đặc biệt là đối với network I/O (I/O mạng) và disk I/O (I/O đĩa)? Cụ thể, làm thế nào một <em>event server</em> có thể biết rằng một thông điệp đã đến với nó?</p>
+<p>^[1]: GUI (Graphical User Interface) – Giao diện đồ họa người dùng, cho phép người dùng tương tác với hệ thống thông qua các thành phần trực quan như cửa sổ, nút bấm, biểu tượng.</p>
+<h2 id="332-một-api-quan-trọng-select-hoặc-poll"><a class="header" href="#332-một-api-quan-trọng-select-hoặc-poll">33.2 Một API quan trọng: <code>select()</code> (hoặc <code>poll()</code>)</a></h2>
+<p>Với <em>event loop</em> (vòng lặp sự kiện) cơ bản đã được đề cập, bước tiếp theo chúng ta cần giải quyết là câu hỏi: làm thế nào để nhận các sự kiện? Trong hầu hết các hệ thống, một API cơ bản có sẵn thông qua <em>system call</em> (lời gọi hệ thống) <code>select()</code> hoặc <code>poll()</code>.</p>
+<p>Những interface (giao diện lập trình) này cho phép một chương trình thực hiện một việc đơn giản: kiểm tra xem có I/O (nhập/xuất) đến nào cần được xử lý hay không. Ví dụ, hãy tưởng tượng một ứng dụng mạng (chẳng hạn như web server) muốn kiểm tra xem có gói tin mạng nào đã đến để xử lý hay chưa. Các <em>system call</em> này cho phép bạn làm chính xác điều đó.</p>
+<p>Lấy <code>select()</code> làm ví dụ. Trang <em>manual</em> (trang hướng dẫn sử dụng) trên macOS mô tả API này như sau:</p>
+<pre><code class="language-c">int select(int nfds,
+           fd_set *restrict readfds,
+           fd_set *restrict writefds,
+           fd_set *restrict errorfds,
+           struct timeval *restrict timeout);
+</code></pre>
+<blockquote>
+<p><strong>ASIDE: BLOCKING VS. NON-BLOCKING INTERFACES</strong><br />
+<em>Blocking</em> (hay <em>synchronous</em> – đồng bộ) interfaces thực hiện toàn bộ công việc của chúng trước khi trả quyền điều khiển về cho hàm gọi; <em>non-blocking</em> (hay <em>asynchronous</em> – bất đồng bộ) interfaces bắt đầu một công việc nhưng trả về ngay lập tức, cho phép phần công việc còn lại được thực hiện ở chế độ nền.<br />
+Thủ phạm phổ biến nhất gây ra blocking là một dạng I/O nào đó. Ví dụ, nếu một lời gọi hàm cần đọc dữ liệu từ đĩa để hoàn tất, nó có thể bị block, chờ cho đến khi yêu cầu I/O gửi đến đĩa hoàn thành và trả dữ liệu về.<br />
+<em>Non-blocking interfaces</em> có thể được sử dụng trong bất kỳ phong cách lập trình nào (ví dụ: với threads), nhưng là yếu tố thiết yếu trong phương pháp <em>event-based</em>, vì một lời gọi bị block sẽ làm dừng toàn bộ tiến trình xử lý.</p>
+</blockquote>
+<p>Mô tả thực tế từ <em>man page</em>: <code>select()</code> kiểm tra các tập hợp <em>I/O descriptor</em> (bộ mô tả I/O) có địa chỉ được truyền vào <code>readfds</code>, <code>writefds</code> và <code>errorfds</code> để xem liệu một số descriptor trong đó có sẵn sàng để đọc, sẵn sàng để ghi, hoặc đang có một điều kiện bất thường đang chờ xử lý hay không. <code>select()</code> sẽ kiểm tra các descriptor từ <code>0</code> đến <code>nfds-1</code> trong mỗi tập hợp. Khi trả về, <code>select()</code> thay thế các tập hợp descriptor đã cho bằng các tập hợp con chỉ bao gồm những descriptor sẵn sàng cho thao tác được yêu cầu. <code>select()</code> trả về tổng số descriptor sẵn sàng trong tất cả các tập hợp.</p>
+<p>Một vài điểm cần lưu ý về <code>select()</code>:</p>
+<ul>
+<li>Thứ nhất, <code>select()</code> cho phép bạn kiểm tra xem descriptor có thể đọc được hay ghi được. Khả năng đọc cho phép server xác định rằng một gói tin mới đã đến và cần được xử lý, trong khi khả năng ghi cho phép server biết khi nào có thể gửi phản hồi (tức là hàng đợi gửi đi chưa đầy).</li>
+<li>Thứ hai, lưu ý đối số <code>timeout</code>. Một cách sử dụng phổ biến là đặt <code>timeout</code> thành <code>NULL</code>, khiến <code>select()</code> block vô thời hạn cho đến khi một descriptor sẵn sàng. Tuy nhiên, các server mạnh mẽ hơn thường chỉ định một loại timeout nào đó; một kỹ thuật phổ biến là đặt timeout bằng 0, từ đó khiến lời gọi <code>select()</code> trả về ngay lập tức.</li>
+</ul>
+<p><em>System call</em> <code>poll()</code> khá giống với <code>select()</code>. Xem <em>man page</em> của nó hoặc tài liệu của Stevens và Rago [SR05] để biết chi tiết.</p>
+<p>Dù sử dụng cách nào, các primitive (nguyên thủy) cơ bản này cung cấp cho chúng ta một cách để xây dựng <em>non-blocking event loop</em> (vòng lặp sự kiện không chặn), vòng lặp này chỉ đơn giản kiểm tra các gói tin đến, đọc từ các socket có chứa thông điệp, và phản hồi khi cần thiết.</p>
+<h2 id="333-sử-dụng-select"><a class="header" href="#333-sử-dụng-select">33.3 Sử dụng <code>select()</code></a></h2>
+<p>Để làm rõ hơn, hãy xem cách sử dụng <code>select()</code> để xác định những <em>network descriptor</em> (bộ mô tả mạng) nào có thông điệp đến. <strong>Hình 33.1</strong> dưới đây minh họa một ví dụ đơn giản.</p>
+<p><img src="#" alt="Figure 33.1: Ví dụ đơn giản sử dụng select() để kiểm tra các network descriptor có dữ liệu đến" /></p>
+<h2 id="hình-331-mã-nguồn-đơn-giản-sử-dụng-select"><a class="header" href="#hình-331-mã-nguồn-đơn-giản-sử-dụng-select">Hình 33.1: Mã nguồn đơn giản sử dụng <code>select()</code></a></h2>
+<p>Mã nguồn này thực tế khá dễ hiểu. Sau một số bước khởi tạo, server đi vào một vòng lặp vô hạn. Bên trong vòng lặp, nó sử dụng macro <code>FD_ZERO()</code> để xóa tập hợp <em>file descriptor</em> (bộ mô tả tệp) hiện tại, sau đó dùng <code>FD_SET()</code> để thêm tất cả các <em>file descriptor</em> từ <code>minFD</code> đến <code>maxFD</code> vào tập hợp. Tập hợp các descriptor này có thể đại diện, ví dụ, cho tất cả các <em>network socket</em> (socket mạng) mà server đang theo dõi. Cuối cùng, server gọi <code>select()</code> để kiểm tra kết nối nào có dữ liệu sẵn sàng. Sau đó, bằng cách sử dụng <code>FD_ISSET()</code> trong một vòng lặp, <em>event server</em> (máy chủ dựa trên sự kiện) có thể xác định descriptor nào đã sẵn sàng dữ liệu và xử lý dữ liệu đến.</p>
+<p>Tất nhiên, một server thực tế sẽ phức tạp hơn nhiều, và cần thêm logic để xử lý việc gửi thông điệp, thực hiện <em>disk I/O</em> (I/O đĩa), và nhiều chi tiết khác. Để biết thêm thông tin, xem Stevens và Rago [SR05] để tìm hiểu về API, hoặc Pai et al. và Welsh et al. để có cái nhìn tổng quan về luồng xử lý của các <em>event-based server</em> [PDZ99, WCB01].</p>
+<blockquote>
+<p><strong>TIP: ĐỪNG ĐỂ BLOCK TRONG EVENT-BASED SERVER</strong><br />
+<em>Event-based server</em> cho phép kiểm soát chi tiết việc <em>scheduling</em> (lập lịch) các tác vụ. Tuy nhiên, để duy trì khả năng kiểm soát này, tuyệt đối không được thực hiện bất kỳ lời gọi nào khiến tiến trình của hàm gọi bị block; vi phạm nguyên tắc này sẽ dẫn đến việc <em>event-based server</em> bị treo, khách hàng (client) bị gián đoạn, và khiến người khác nghi ngờ liệu bạn có thực sự đọc phần này của sách hay không.</p>
+</blockquote>
+<h2 id="334-tại-sao-đơn-giản-hơn-không-cần-locks"><a class="header" href="#334-tại-sao-đơn-giản-hơn-không-cần-locks">33.4 Tại sao đơn giản hơn? Không cần Locks</a></h2>
+<p>Với một CPU đơn và một ứng dụng <em>event-based</em>, các vấn đề thường gặp trong lập trình đồng thời (concurrent programming) sẽ không còn. Cụ thể, vì chỉ có một sự kiện được xử lý tại một thời điểm, không cần phải <em>acquire</em> hoặc <em>release</em> locks (khóa); <em>event-based server</em> không thể bị gián đoạn bởi một thread khác vì nó hoàn toàn chạy ở chế độ <em>single-threaded</em> (đơn luồng). Do đó, các lỗi concurrency phổ biến trong chương trình đa luồng sẽ không xuất hiện trong phương pháp <em>event-based</em> cơ bản.</p>
+<h2 id="335-một-vấn-đề-blocking-system-calls"><a class="header" href="#335-một-vấn-đề-blocking-system-calls">33.5 Một vấn đề: Blocking System Calls</a></h2>
+<p>Cho đến giờ, lập trình <em>event-based</em> nghe có vẻ rất tuyệt, đúng không? Bạn lập trình một vòng lặp đơn giản và xử lý các sự kiện khi chúng xuất hiện. Bạn thậm chí không cần nghĩ đến việc dùng lock! Nhưng có một vấn đề: điều gì xảy ra nếu một sự kiện yêu cầu bạn thực hiện một <em>system call</em> (lời gọi hệ thống) có thể bị block?</p>
+<p>Ví dụ, hãy tưởng tượng một yêu cầu từ client gửi đến server để đọc một tệp từ đĩa và trả nội dung về cho client (giống như một yêu cầu HTTP đơn giản). Để xử lý yêu cầu này, một <em>event handler</em> (trình xử lý sự kiện) cuối cùng sẽ phải gọi <em>system call</em> <code>open()</code> để mở tệp, sau đó là một loạt lời gọi <code>read()</code> để đọc tệp. Khi tệp đã được đọc vào bộ nhớ, server có thể bắt đầu gửi kết quả về cho client.</p>
+<p>Cả <code>open()</code> và <code>read()</code> đều có thể gửi yêu cầu I/O đến hệ thống lưu trữ (nếu metadata hoặc dữ liệu cần thiết chưa có sẵn trong bộ nhớ), và do đó có thể mất nhiều thời gian để hoàn tất. Với một <em>thread-based server</em> (máy chủ dựa trên luồng), điều này không phải vấn đề: trong khi thread thực hiện yêu cầu I/O bị treo (chờ I/O hoàn tất), các thread khác vẫn có thể chạy, cho phép server tiếp tục xử lý. Thực tế, sự chồng lấp tự nhiên giữa I/O và tính toán khác chính là lý do khiến lập trình đa luồng trở nên tự nhiên và dễ hiểu.</p>
+<p>Tuy nhiên, với phương pháp <em>event-based</em>, không có thread nào khác để chạy: chỉ có vòng lặp sự kiện chính. Điều này có nghĩa là nếu một <em>event handler</em> thực hiện một lời gọi bị block, toàn bộ server sẽ bị block cho đến khi lời gọi đó hoàn tất. Khi <em>event loop</em> bị block, hệ thống sẽ ngồi chờ, gây lãng phí tài nguyên nghiêm trọng. Vì vậy, chúng ta có một nguyên tắc bắt buộc trong hệ thống <em>event-based</em>: <strong>không được phép có lời gọi blocking</strong>.</p>
+<h2 id="336-giải-pháp-asynchronous-io"><a class="header" href="#336-giải-pháp-asynchronous-io">33.6 Giải pháp: Asynchronous I/O</a></h2>
+<p>Để vượt qua giới hạn này, nhiều hệ điều hành hiện đại đã giới thiệu các phương thức mới để gửi yêu cầu I/O đến hệ thống đĩa, được gọi chung là <em>asynchronous I/O</em> (I/O bất đồng bộ). Các interface này cho phép ứng dụng gửi yêu cầu I/O và trả quyền điều khiển ngay lập tức cho hàm gọi, trước khi I/O hoàn tất; các interface bổ sung cho phép ứng dụng xác định xem các I/O đã hoàn tất hay chưa.</p>
+<p>Ví dụ, hãy xem interface được cung cấp trên macOS (các hệ thống khác có API tương tự). Các API này xoay quanh một cấu trúc cơ bản, <code>struct aiocb</code> hay còn gọi là <em>AIO control block</em> (khối điều khiển AIO). Phiên bản đơn giản hóa của cấu trúc này như sau (xem <em>man page</em> để biết thêm chi tiết):</p>
+<pre><code class="language-c">struct aiocb {
+    int            aio_fildes;    // File descriptor
+    off_t          aio_offset;    // File offset
+    volatile void  *aio_buf;      // Location of buffer
+    size_t         aio_nbytes;    // Length of transfer
+};
+</code></pre>
+<p>Để thực hiện một thao tác đọc bất đồng bộ từ tệp, ứng dụng cần điền vào cấu trúc này các thông tin liên quan: <em>file descriptor</em> của tệp cần đọc (<code>aio_fildes</code>), vị trí offset trong tệp (<code>aio_offset</code>), độ dài yêu cầu (<code>aio_nbytes</code>), và cuối cùng là vị trí bộ nhớ đích để sao chép dữ liệu đọc được (<code>aio_buf</code>).</p>
+<p>Sau khi cấu trúc này được điền đầy đủ, ứng dụng phải gọi API đọc bất đồng bộ; trên macOS, API này đơn giản là:</p>
+<pre><code class="language-c">int aio_read(struct aiocb *aiocbp);
+</code></pre>
+<p>Lời gọi này sẽ cố gắng gửi yêu cầu I/O; nếu thành công, nó trả về ngay lập tức và ứng dụng (tức <em>event-based server</em>) có thể tiếp tục công việc khác.</p>
+<p>Tuy nhiên, vẫn còn một phần quan trọng cần giải quyết: làm thế nào để biết khi nào một I/O đã hoàn tất, và do đó bộ đệm (<code>aio_buf</code>) đã chứa dữ liệu được yêu cầu?</p>
+<p>Cần thêm một API nữa. Trên macOS, API này được gọi (có phần gây nhầm lẫn) là <code>aio_error()</code>:</p>
+<pre><code class="language-c">int aio_error(const struct aiocb *aiocbp);
+</code></pre>
+<p><em>System call</em> này kiểm tra xem yêu cầu được tham chiếu bởi <code>aiocbp</code> đã hoàn tất hay chưa. Nếu đã hoàn tất, hàm trả về thành công (giá trị 0); nếu chưa, nó trả về <code>EINPROGRESS</code>. Do đó, với mỗi I/O bất đồng bộ đang chờ, ứng dụng có thể định kỳ gọi <code>aio_error()</code> để kiểm tra trạng thái.</p>
+<p>Một điều bạn có thể nhận thấy là việc kiểm tra I/O đã hoàn tất khá phiền toái; nếu một chương trình có hàng chục hoặc hàng trăm I/O đang chờ tại một thời điểm, liệu nó nên liên tục kiểm tra từng cái, hay chờ một lúc rồi mới kiểm tra, hay…?</p>
+<p>Để khắc phục vấn đề này, một số hệ thống cung cấp phương pháp dựa trên <em>interrupt</em> (ngắt). Phương pháp này sử dụng tín hiệu UNIX để thông báo cho ứng dụng khi một I/O bất đồng bộ hoàn tất, loại bỏ nhu cầu phải liên tục hỏi hệ thống. Vấn đề <em>polling</em> so với <em>interrupt</em> này cũng xuất hiện ở các thiết bị phần cứng, như bạn sẽ thấy (hoặc đã thấy) trong chương về thiết bị I/O.</p>
+<p>Trong các hệ thống không hỗ trợ <em>asynchronous I/O</em>, phương pháp <em>event-based</em> thuần túy không thể triển khai được. Tuy nhiên, các nhà nghiên cứu đã nghĩ ra những phương pháp thay thế hoạt động khá hiệu quả. Ví dụ, Pai et al. [PDZ99] mô tả một phương pháp lai, trong đó sự kiện được dùng để xử lý gói tin mạng, và một <em>thread pool</em> (bể luồng) được dùng để quản lý các I/O đang chờ. Bạn có thể đọc bài báo của họ để biết chi tiết.</p>
+<h2 id="337-một-vấn-đề-khác-quản-lý-trạng-thái-state-management"><a class="header" href="#337-một-vấn-đề-khác-quản-lý-trạng-thái-state-management">33.7 Một vấn đề khác: Quản lý trạng thái (State Management)</a></h2>
+<p>Một vấn đề khác với phương pháp <em>event-based</em> (dựa trên sự kiện) là mã nguồn kiểu này thường phức tạp hơn để viết so với mã nguồn <em>thread-based</em> (dựa trên luồng) truyền thống. Lý do như sau: khi một <em>event handler</em> (trình xử lý sự kiện) thực hiện một thao tác <em>asynchronous I/O</em> (I/O bất đồng bộ), nó phải đóng gói một số trạng thái của chương trình để <em>event handler</em> tiếp theo có thể sử dụng khi thao tác I/O đó cuối cùng hoàn tất; công việc bổ sung này không cần thiết trong các chương trình <em>thread-based</em>, vì trạng thái mà chương trình cần đã nằm trên <em>stack</em> (ngăn xếp) của thread. Adya và cộng sự gọi công việc này là <em>manual stack management</em> (quản lý ngăn xếp thủ công), và nó là một phần cơ bản của lập trình <em>event-based</em> [A+02].</p>
+<p>Để làm rõ hơn, hãy xem một ví dụ đơn giản trong đó một <em>thread-based server</em> (máy chủ dựa trên luồng) cần đọc từ một <em>file descriptor</em> (<code>fd</code>) và, khi hoàn tất, ghi dữ liệu đã đọc từ tệp đó vào một <em>network socket descriptor</em> (<code>sd</code>). Mã nguồn (bỏ qua phần kiểm tra lỗi) như sau:</p>
+<pre><code class="language-c">int rc = read(fd, buffer, size);
+rc = write(sd, buffer, size);
+</code></pre>
+<p>Như bạn thấy, trong một chương trình <em>multi-threaded</em> (đa luồng), việc thực hiện công việc kiểu này là rất đơn giản; khi <code>read()</code> trả về, mã nguồn ngay lập tức biết socket nào cần ghi dữ liệu vào vì thông tin đó đã có sẵn trên <em>stack</em> của thread (trong biến <code>sd</code>).</p>
+<p>Trong một hệ thống <em>event-based</em>, mọi thứ không đơn giản như vậy. Để thực hiện cùng một tác vụ, trước tiên chúng ta sẽ thực hiện thao tác đọc bất đồng bộ, sử dụng các lời gọi AIO đã mô tả ở trên. Giả sử sau đó chúng ta định kỳ kiểm tra việc đọc đã hoàn tất hay chưa bằng lời gọi <code>aio_error()</code>; khi lời gọi này thông báo rằng việc đọc đã hoàn tất, làm thế nào để <em>event-based server</em> biết cần phải làm gì tiếp theo?</p>
+<blockquote>
+<p><strong>ASIDE: UNIX SIGNALS</strong><br />
+Một hạ tầng lớn và thú vị được gọi là <em>signals</em> (tín hiệu) tồn tại trong tất cả các biến thể UNIX hiện đại. Ở mức đơn giản nhất, <em>signal</em> cung cấp một cách để giao tiếp với một <em>process</em> (tiến trình). Cụ thể, một <em>signal</em> có thể được gửi đến một ứng dụng; khi đó ứng dụng sẽ tạm dừng những gì nó đang làm để chạy một <em>signal handler</em> (trình xử lý tín hiệu), tức là một đoạn mã trong ứng dụng để xử lý tín hiệu đó. Khi hoàn tất, tiến trình sẽ tiếp tục hành vi trước đó.<br />
+Mỗi <em>signal</em> có một tên, chẳng hạn như <code>HUP</code> (<em>hang up</em>), <code>INT</code> (<em>interrupt</em>), <code>SEGV</code> (<em>segmentation violation</em>), v.v.; xem <em>man page</em> để biết chi tiết. Thú vị là đôi khi chính <em>kernel</em> (nhân hệ điều hành) sẽ gửi tín hiệu. Ví dụ, khi chương trình của bạn gặp lỗi <em>segmentation violation</em>, OS sẽ gửi cho nó một <code>SIGSEGV</code> (thêm tiền tố <code>SIG</code> vào tên tín hiệu là cách đặt tên phổ biến); nếu chương trình của bạn được cấu hình để bắt tín hiệu đó, bạn có thể chạy một đoạn mã để phản hồi hành vi lỗi này (hữu ích cho việc gỡ lỗi). Khi một tín hiệu được gửi đến một tiến trình không được cấu hình để xử lý tín hiệu đó, hành vi mặc định sẽ được thực thi; với <code>SEGV</code>, tiến trình sẽ bị kết thúc.<br />
+Dưới đây là một chương trình đơn giản chạy vòng lặp vô hạn, nhưng trước đó đã thiết lập một <em>signal handler</em> để bắt <code>SIGHUP</code>:</p>
+<pre><code class="language-c">void handle(int arg) {
+    printf(&quot;stop wakin’ me up...\n&quot;);
+}
+
+int main(int argc, char *argv[]) {
+    signal(SIGHUP, handle);
+    while (1)
+        ; // doin’ nothin’ except catchin’ some sigs
+    return 0;
+}
+</code></pre>
+<p>Bạn có thể gửi tín hiệu đến chương trình này bằng công cụ dòng lệnh <code>kill</code> (đúng, đây là một tên khá “mạnh bạo”). Việc này sẽ ngắt vòng lặp <code>while</code> chính trong chương trình và chạy đoạn mã xử lý <code>handle()</code>:</p>
+<pre><code class="language-bash">prompt&gt; ./main &amp;
+36705
+prompt&gt; kill -HUP 36705
+stop wakin’ me up...
+prompt&gt; kill -HUP 36705
+stop wakin’ me up...
+</code></pre>
+<p>Còn rất nhiều điều để tìm hiểu về <em>signals</em>, đến mức một chương riêng, chứ chưa nói một trang, cũng chưa đủ. Như thường lệ, có một nguồn tài liệu tuyệt vời: Stevens và Rago [SR05]. Hãy đọc thêm nếu bạn quan tâm.</p>
+</blockquote>
+<p>Giải pháp, như Adya và cộng sự [A+02] mô tả, là sử dụng một cấu trúc ngôn ngữ lập trình cũ được gọi là <em>continuation</em> [FHK84]. Nghe có vẻ phức tạp, nhưng ý tưởng khá đơn giản: về cơ bản, ghi lại thông tin cần thiết để hoàn tất xử lý sự kiện này vào một cấu trúc dữ liệu; khi sự kiện xảy ra (tức là khi <em>disk I/O</em> hoàn tất), tra cứu thông tin cần thiết và xử lý sự kiện.</p>
+<p>Trong trường hợp cụ thể này, giải pháp sẽ là ghi lại <em>socket descriptor</em> (<code>sd</code>) vào một cấu trúc dữ liệu nào đó (ví dụ: <em>hash table</em>), được đánh chỉ mục bởi <em>file descriptor</em> (<code>fd</code>). Khi <em>disk I/O</em> hoàn tất, <em>event handler</em> sẽ sử dụng <em>file descriptor</em> để tra cứu <em>continuation</em>, từ đó trả về giá trị của <em>socket descriptor</em> cho hàm gọi. Tại thời điểm này (cuối cùng), server có thể thực hiện bước cuối cùng là ghi dữ liệu vào socket.</p>
+<h2 id="338-Điều-gì-vẫn-còn-khó-khăn-với-events"><a class="header" href="#338-Điều-gì-vẫn-còn-khó-khăn-với-events">33.8 Điều gì vẫn còn khó khăn với Events</a></h2>
+<p>Có một số khó khăn khác với phương pháp <em>event-based</em> mà chúng ta cần đề cập. Ví dụ, khi hệ thống chuyển từ CPU đơn sang nhiều CPU, một phần sự đơn giản của phương pháp <em>event-based</em> biến mất. Cụ thể, để tận dụng nhiều hơn một CPU, <em>event server</em> phải chạy nhiều <em>event handler</em> song song; khi làm vậy, các vấn đề đồng bộ hóa thông thường (ví dụ: <em>critical section</em> – đoạn tới hạn) sẽ xuất hiện, và các giải pháp quen thuộc (ví dụ: <em>locks</em>) phải được áp dụng. Do đó, trên các hệ thống đa lõi hiện đại, việc xử lý sự kiện đơn giản mà không cần <em>lock</em> là không thể.</p>
+<p>Một vấn đề khác với phương pháp <em>event-based</em> là nó không tích hợp tốt với một số loại hoạt động của hệ thống, chẳng hạn như <em>paging</em> (phân trang bộ nhớ). Ví dụ, nếu một <em>event handler</em> gặp <em>page fault</em> (lỗi trang), nó sẽ bị block, và do đó server sẽ không thể tiếp tục cho đến khi lỗi trang được xử lý xong. Mặc dù server đã được thiết kế để tránh <em>blocking</em> tường minh, nhưng loại <em>blocking</em> ngầm này do <em>page fault</em> gây ra rất khó tránh và có thể dẫn đến các vấn đề hiệu năng nghiêm trọng khi xảy ra thường xuyên.</p>
+<p>Vấn đề thứ ba là mã nguồn <em>event-based</em> có thể khó bảo trì theo thời gian, vì ngữ nghĩa chính xác của các hàm có thể thay đổi [A+02]. Ví dụ, nếu một hàm thay đổi từ <em>non-blocking</em> sang <em>blocking</em>, <em>event handler</em> gọi hàm đó cũng phải thay đổi để thích ứng với bản chất mới của nó, bằng cách tách mã thành hai phần. Vì <em>blocking</em> gây hậu quả nghiêm trọng cho <em>event-based server</em>, lập trình viên phải luôn cảnh giác với những thay đổi về ngữ nghĩa của API mà mỗi sự kiện sử dụng.</p>
+<p>Cuối cùng, mặc dù <em>asynchronous disk I/O</em> hiện đã khả dụng trên hầu hết các nền tảng, nhưng phải mất một thời gian dài mới đạt được [PDZ99], và nó chưa bao giờ tích hợp hoàn toàn với <em>asynchronous network I/O</em> theo cách đơn giản và thống nhất như mong muốn. Ví dụ, mặc dù lý tưởng là chỉ cần sử dụng interface <code>select()</code> để quản lý tất cả các I/O đang chờ, nhưng trên thực tế thường phải kết hợp <code>select()</code> cho mạng và các lời gọi AIO cho <em>disk I/O</em>.</p>
+<h2 id="339-tóm-tắt"><a class="header" href="#339-tóm-tắt">33.9 Tóm tắt</a></h2>
+<p>Chúng ta đã trình bày một phần giới thiệu cơ bản về một phong cách <em>concurrency</em> (lập trình đồng thời) khác dựa trên sự kiện. <em>Event-based server</em> trao quyền kiểm soát <em>scheduling</em> (lập lịch) cho chính ứng dụng, nhưng phải trả giá bằng sự phức tạp và khó khăn khi tích hợp với các khía cạnh khác của hệ thống hiện đại (ví dụ: <em>paging</em>). Do những thách thức này, chưa có một phương pháp nào nổi lên như là tối ưu nhất; vì vậy, cả <em>threads</em> (luồng) và <em>events</em> (sự kiện) nhiều khả năng sẽ tiếp tục tồn tại song song như hai cách tiếp cận khác nhau cho cùng một vấn đề <em>concurrency</em> (lập trình đồng thời) trong nhiều năm tới.</p>
+<p>Hãy đọc một số bài báo nghiên cứu (ví dụ: [A+02, PDZ99, vB+03, WCB01]) hoặc, tốt hơn nữa, hãy tự viết một số mã nguồn <em>event-based</em> để tìm hiểu sâu hơn.</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../32/index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                            <a rel="next" href="../36/index.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../32/index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                    <a rel="next" href="../36/index.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>
