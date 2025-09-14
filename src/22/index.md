@@ -136,9 +136,6 @@ Workload này, phổ biến trong nhiều ứng dụng (bao gồm cả các ứn
 
 Điều thú vị là Random hoạt động tốt hơn đáng kể, dù không đạt tới optimal, nhưng ít nhất đạt được hit rate khác 0. Hóa ra Random có một số đặc tính thú vị; một trong số đó là không gặp các hành vi bất thường ở các trường hợp đặc biệt (corner-case) khó chịu.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như các phần trước.
-
-
 ## 22.7 Implementing Historical Algorithms  
 (Triển khai các thuật toán dựa trên lịch sử)
 

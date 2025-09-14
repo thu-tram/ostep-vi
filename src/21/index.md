@@ -1,6 +1,3 @@
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật.
-
-
 # 21 Beyond Physical Memory: Mechanisms  
 (Vượt ra ngoài bộ nhớ vật lý: Các cơ chế)
 
@@ -30,6 +27,7 @@ Không chỉ cho một process, việc bổ sung **swap space** (không gian ho�
 
 Để làm được điều này, OS cần ghi nhớ **địa chỉ trên đĩa** của một page nhất định. Kích thước của swap space rất quan trọng, vì nó quyết định số lượng tối đa các page bộ nhớ có thể được hệ thống sử dụng tại một thời điểm. Để đơn giản, tạm giả định rằng nó rất lớn.
 
+![](img/fig21_1.PNG)
 **Figure 21.1: Physical Memory and Swap Space**  
 *(Bộ nhớ vật lý và không gian hoán đổi)*
 
@@ -53,8 +51,6 @@ Tuy nhiên, nếu muốn cho phép page được hoán đổi ra đĩa, chúng t
 
 (TODO)
 
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật.
 
 
 > **ASIDE: SWAPPING TERMINOLOGY AND OTHER THINGS**  
@@ -98,9 +94,11 @@ Thực tế, đã có rất nhiều nghiên cứu để tạo ra một page-repl
 
 Với tất cả kiến thức này, chúng ta có thể phác thảo sơ bộ luồng điều khiển hoàn chỉnh của việc truy cập bộ nhớ. Nói cách khác, khi ai đó hỏi bạn “chuyện gì xảy ra khi một chương trình lấy dữ liệu từ bộ nhớ?”, bạn nên có ý tưởng khá rõ về tất cả các khả năng khác nhau. Xem luồng điều khiển trong *Figure 21.2* và *Figure 21.3* để biết chi tiết; hình đầu tiên cho thấy phần cứng làm gì trong quá trình dịch địa chỉ, và hình thứ hai cho thấy OS làm gì khi xảy ra page fault.
 
+![](img/fig21_2.PNG)
 **Figure 21.2: Page-Fault Control Flow Algorithm (Hardware)**  
 *(Thuật toán luồng điều khiển lỗi trang — phần cứng)*
 
+![](img/fig21_3.PNG)
 **Figure 21.3: Page-Fault Control Flow Algorithm (Software)**  
 *(Thuật toán luồng điều khiển lỗi trang — phần mềm)*
 
@@ -110,8 +108,6 @@ Từ sơ đồ luồng điều khiển phần cứng trong *Figure 21.2*, lưu �
 3. Truy cập tới một page **invalid** (kh
 
 (TODO)
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật.
 
 
 Để giữ một lượng nhỏ bộ nhớ trống, hầu hết các **operating system** (hệ điều hành) đều có một cơ chế **high watermark** (HW — ngưỡng cao) và **low watermark** (LW — ngưỡng thấp) để quyết định khi nào bắt đầu **evicting pages** (loại bỏ các trang) khỏi bộ nhớ. Cách hoạt động như sau: khi OS phát hiện số lượng page trống ít hơn LW, một **background thread** (luồng nền) chịu trách nhiệm giải phóng bộ nhớ sẽ chạy. Luồng này sẽ loại bỏ các page cho đến khi số lượng page trống đạt HW. Background thread này, đôi khi được gọi là **swap daemon** hoặc **page daemon**[^1], sau đó sẽ chuyển sang trạng thái ngủ, hài lòng vì đã giải phóng được một lượng bộ nhớ để các process đang chạy và OS có thể sử dụng.

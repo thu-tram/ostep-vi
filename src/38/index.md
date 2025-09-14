@@ -22,9 +22,6 @@ RAID mang lại nhiều lợi thế so với một ổ đĩa đơn:
 
 Tiếp theo, chúng ta sẽ thảo luận một số khía cạnh quan trọng của RAID. Chúng ta bắt đầu với **giao diện** (interface), **mô hình lỗi** (fault model), và sau đó bàn về cách đánh giá một thiết kế RAID theo ba tiêu chí quan trọng: **dung lượng** (capacity), **độ tin cậy** (reliability), và **hiệu năng** (performance). Cuối cùng, chúng ta sẽ đề cập đến một số vấn đề khác quan trọng đối với thiết kế và triển khai RAID.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 ## 38.1 Giao diện và cấu trúc bên trong của RAID (Interface And RAID Internals)
 
 Đối với **file system** (hệ thống tệp) ở tầng trên, một **RAID** trông giống như một ổ đĩa lớn, (hy vọng là) nhanh và (hy vọng là) đáng tin cậy. Giống như một ổ đĩa đơn, nó được trình bày như một mảng tuyến tính các **block**, mỗi block có thể được đọc hoặc ghi bởi file system (hoặc các client khác).
@@ -114,9 +111,6 @@ Trong ví dụ này, chúng ta đặt **hai block 4KB** trên mỗi ổ đĩa tr
 >  
 > Bạn có thể suy nghĩ về cách các công thức này sẽ được điều chỉnh để hỗ trợ các **chunk size** khác nhau. Hãy thử làm! Không quá khó đâu.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 ### Kích thước chunk (Chunk Sizes)
 
 **Chunk size** (kích thước khối dữ liệu trên mỗi ổ trong một stripe) chủ yếu ảnh hưởng đến **hiệu năng** của mảng đĩa.  
@@ -152,9 +146,6 @@ Khi phân tích hiệu năng RAID, ta có thể xem xét **hai chỉ số hiệu
 - **Random workload** (tải ngẫu nhiên): Mỗi yêu cầu tương đối nhỏ, và mỗi yêu cầu tới một vị trí ngẫu nhiên khác nhau trên đĩa.  
   Ví dụ: một luồng yêu cầu ngẫu nhiên có thể truy cập 4KB tại địa chỉ logic 10, sau đó tại địa chỉ 550.000, rồi tại 20.100, v.v.  
   Một số workload quan trọng, chẳng hạn như **transactional workload** (tải giao dịch) trên **database management system** (DBMS – hệ quản trị cơ sở dữ liệu), thể hiện kiểu truy cập này, và do đó cũng được coi là quan trọng.
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
 
 Tất nhiên, **workload** (khối lượng công việc) thực tế không đơn giản như vậy, và thường bao gồm sự pha trộn giữa các thành phần **sequential** (tuần tự) và **random-seeming** (có vẻ ngẫu nhiên), cũng như các hành vi nằm ở khoảng giữa hai loại này. Để đơn giản, chúng ta chỉ xét hai khả năng này.
 
@@ -223,9 +214,6 @@ Cấp RAID đầu tiên vượt ra ngoài striping được gọi là **RAID Lev
 
 **Hình 38.3: RAID-1 đơn giản – Mirroring**
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 Trong một hệ thống **mirrored** (nhân bản) điển hình, chúng ta giả định rằng với mỗi **logical block** (block logic), RAID sẽ lưu giữ **hai bản sao vật lý** của nó. Ví dụ: trong minh họa, **disk 0** và **disk 1** có nội dung giống hệt nhau, và **disk 2** và **disk 3** cũng vậy; dữ liệu được **striped** (phân dải) trên các cặp mirror này.  
 Thực tế, bạn có thể nhận thấy rằng có nhiều cách khác nhau để bố trí các bản sao block trên các ổ đĩa. Cách bố trí ở trên là một cách phổ biến và đôi khi được gọi là **RAID-10** (hoặc **RAID 1+0**, stripe of mirrors) vì nó sử dụng các cặp mirror (RAID-1) và sau đó **striping** (RAID-0) trên các cặp này; một cách bố trí phổ biến khác là **RAID-01** (hoặc **RAID 0+1**, mirror of stripes), bao gồm hai mảng striping (RAID-0) lớn, sau đó được mirror (RAID-1) ở tầng trên.  
 Trong phạm vi này, chúng ta sẽ chỉ nói về mirroring với giả định bố trí như ở trên.
@@ -247,9 +235,6 @@ Tuy nhiên, khi ghi một block, không có sự lựa chọn như vậy: RAID *
 - **Về hiệu năng (Performance)**:  
   + **Đọc (Read)**: Xét về độ trễ của một yêu cầu đọc đơn, thời gian gần như **tương đương** với một ổ đĩa đơn; RAID-1 chỉ đơn giản là chuyển yêu cầu đọc tới một trong các bản sao.  
   + **Ghi (Write)**: Khác một chút – cần **hai thao tác ghi vật lý** để hoàn tất. Hai thao tác này diễn ra song song, nên thời gian sẽ xấp xỉ thời gian của một thao tác ghi đơn; tuy nhiên, vì thao tác ghi logic phải **chờ cả hai ghi vật lý hoàn tất**, nó sẽ chịu **thời gian seek và độ trễ quay tệ nhất** trong hai yêu cầu, và do đó (trung bình) sẽ **hơi cao hơn** so với ghi trên một ổ đĩa đơn.
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
 
 > **ASIDE: VẤN ĐỀ CẬP NHẬT NHẤT QUÁN TRONG RAID (THE RAID CONSISTENT-UPDATE PROBLEM)**  
 >  
@@ -309,10 +294,6 @@ Mỗi thao tác ghi logic phải biến thành **hai thao tác ghi vật lý**, 
 Ngay cả khi một thao tác ghi vào **logical block x** biến thành **hai thao tác ghi song song** tới hai ổ đĩa vật lý khác nhau, băng thông của nhiều yêu cầu nhỏ chỉ đạt **một nửa** so với striping.  
 Như chúng ta sẽ thấy ngay sau đây, đạt được **một nửa băng thông khả dụng** thực ra đã là **khá tốt**!
 
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 ## 38.6 RAID Level 4: Tiết kiệm dung lượng với Parity (Saving Space With Parity)
 
 Chúng ta sẽ giới thiệu một phương pháp khác để bổ sung **redundancy** (dữ liệu dự phòng) cho một mảng đĩa, được gọi là **parity** (bit chẵn lẻ). Các phương pháp dựa trên parity cố gắng sử dụng ít dung lượng hơn, từ đó khắc phục nhược điểm lớn về dung lượng mà các hệ thống **mirrored** (nhân bản) phải trả. Tuy nhiên, chúng phải đánh đổi một yếu tố: **hiệu năng**.
@@ -362,9 +343,6 @@ Như bạn thấy từ hình minh họa, parity được tính cho từng bit c�
 
 
 **Hình 38.5: Ghi full-stripe trong RAID-4 (Full-stripe Writes In RAID-4)**
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
 
 Cuối cùng, chúng ta xét đến **hiệu năng**. Lần này, hãy bắt đầu bằng việc phân tích **steady-state throughput** (băng thông trạng thái ổn định).  
 Hiệu năng đọc tuần tự (**sequential read**) có thể tận dụng tất cả các ổ đĩa **ngoại trừ** ổ đĩa parity, và do đó đạt **băng thông hiệu dụng cực đại** là:

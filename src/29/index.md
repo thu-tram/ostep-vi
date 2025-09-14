@@ -33,9 +33,6 @@ Từ đường trên cùng trong hình (được gắn nhãn “Precise”), b�
 
 Lý tưởng nhất, bạn muốn các thread hoàn thành nhanh như trên nhiều bộ xử lý cũng giống như một thread trên một bộ xử lý. Đạt được điều này được gọi là **perfect scaling** (mở rộng hoàn hảo); mặc dù có nhiều công việc hơn, nhưng nó được thực hiện song song, và do đó thời gian hoàn thành nhiệm vụ không tăng lên.
 
-Dưới đây là bản dịch tiếng Việt của phần **Scalable Counting**, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 ### Đếm có khả năng mở rộng (Scalable Counting)
 
 Thật đáng kinh ngạc, các nhà nghiên cứu đã nghiên cứu cách xây dựng các **counter** (bộ đếm) có khả năng mở rộng tốt hơn trong nhiều năm [MS04]. Càng đáng kinh ngạc hơn là việc các bộ đếm có khả năng mở rộng thực sự quan trọng, như các nghiên cứu gần đây về phân tích hiệu năng hệ điều hành đã chỉ ra [B+10]; nếu không có khả năng đếm mở rộng, một số **workload** (tải công việc) chạy trên Linux sẽ gặp vấn đề nghiêm trọng về khả năng mở rộng trên các máy đa lõi (**multicore**). Nhiều kỹ thuật đã được phát triển để giải quyết vấn đề này. Chúng ta sẽ mô tả một phương pháp được gọi là **approximate counter** (bộ đếm xấp xỉ) [C06].
@@ -80,9 +77,6 @@ Một phiên bản sơ khai của approximate counter được thể hiện tron
 
 > **TIP: NHIỀU TÍNH ĐỒNG THỜI HƠN KHÔNG PHẢI LÚC NÀO CŨNG NHANH HƠN**  
 > Nếu thiết kế của bạn thêm quá nhiều chi phí phụ (ví dụ: liên tục acquire và release lock thay vì chỉ một lần), thì việc nó đồng thời hơn có thể không quan trọng. Các giải pháp đơn giản thường hoạt động tốt, đặc biệt nếu chúng hiếm khi sử dụng các thao tác tốn kém. Thêm nhiều khóa và sự phức tạp có thể là nguyên nhân khiến bạn thất bại. Tất cả những điều đó để nói rằng: chỉ có một cách thực sự để biết — hãy xây dựng cả hai phương án (đơn giản nhưng ít đồng thời hơn, và phức tạp nhưng đồng thời hơn) và đo lường hiệu năng. Cuối cùng, bạn không thể “ăn gian” hiệu năng; ý tưởng của bạn hoặc là nhanh hơn, hoặc là không.
-
-Dưới đây là bản dịch tiếng Việt của mục **29.2 Concurrent Linked Lists**, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
 
 ## 29.2 Danh sách liên kết đồng thời (Concurrent Linked Lists)
 

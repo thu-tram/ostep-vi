@@ -1,6 +1,3 @@
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh của chương, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 # 32 Các Vấn Đề Thường Gặp Trong Lập Trình Đồng Thời (Concurrency)
 
 Trong nhiều năm qua, các nhà nghiên cứu đã dành rất nhiều thời gian và công sức để tìm hiểu về các lỗi (bug) trong lập trình đồng thời (concurrency bugs). Phần lớn các nghiên cứu ban đầu tập trung vào **deadlock** (bế tắc), một chủ đề mà chúng ta đã đề cập ở các chương trước, nhưng giờ sẽ đi sâu hơn [C+71]. Các nghiên cứu gần đây hơn tập trung vào việc tìm hiểu các loại lỗi đồng thời phổ biến khác (tức là lỗi **non-deadlock** – không phải bế tắc). Trong chương này, chúng ta sẽ xem xét một số ví dụ về các vấn đề đồng thời được tìm thấy trong mã nguồn thực tế, nhằm hiểu rõ hơn những vấn đề cần chú ý. Và đây là vấn đề trọng tâm của chương:
@@ -98,9 +95,6 @@ Khi mã khởi tạo chạy, nó đặt `mtInit = 1` và gửi tín hiệu (sign
 
 Lưu ý: ta có thể dùng chính `mThread` làm biến trạng thái, nhưng ở đây tách riêng để đơn giản. Khi thứ tự giữa các thread quan trọng, **condition variable** hoặc **semaphore** là công cụ hữu ích.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh của đoạn văn bản bạn cung cấp, tuân thủ đầy đủ các yêu cầu đã nêu:
-
-
 ### Tóm tắt về Non-Deadlock Bugs
 
 Một tỷ lệ lớn (97%) các lỗi **non-deadlock** (không phải bế tắc) được Lu và cộng sự nghiên cứu là thuộc một trong hai loại: **atomicity violation** (vi phạm tính nguyên tử) hoặc **order violation** (vi phạm thứ tự). Do đó, bằng cách suy nghĩ cẩn thận về các mẫu lỗi này, lập trình viên có thể tránh được chúng hiệu quả hơn. Hơn nữa, khi các công cụ kiểm tra mã tự động ngày càng phát triển, chúng nên tập trung vào hai loại lỗi này, vì chúng chiếm phần lớn các lỗi non-deadlock được phát hiện trong môi trường triển khai thực tế.
@@ -152,7 +146,6 @@ v1.AddAll(v2);
 Bên trong, vì phương thức cần đảm bảo an toàn đa luồng (multi-thread safe), nên phải lấy khóa cho cả vector được thêm vào (`v1`) và vector tham số (`v2`). Phương thức này lấy các khóa theo một thứ tự tùy ý (giả sử `v1` trước rồi `v2`) để thêm nội dung của `v2` vào `v1`. Nếu một thread khác gọi `v2.AddAll(v1)` gần như cùng lúc, chúng ta có khả năng xảy ra deadlock — và điều này hoàn toàn ẩn đối với ứng dụng gọi.
 
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 ### Các điều kiện để xảy ra Deadlock
@@ -204,7 +197,6 @@ Như bạn có thể hình dung, cả **total ordering** và **partial ordering*
 
 ^[1]: “Từ D” ở đây ám chỉ “Deadlock”.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 Bằng cách trước tiên lấy **lock** `prevention`, đoạn mã này đảm bảo rằng sẽ không có sự chuyển đổi **thread** (luồng) không đúng thời điểm xảy ra trong quá trình lấy lock, và do đó deadlock (bế tắc) một lần nữa có thể được tránh. Tất nhiên, điều này yêu cầu rằng bất cứ khi nào một thread muốn lấy một lock nào đó, nó phải lấy lock toàn cục `prevention` trước. Ví dụ, nếu một thread khác đang cố lấy các lock L1 và L2 theo một thứ tự khác, điều đó vẫn ổn, vì nó sẽ giữ lock `prevention` trong khi thực hiện.
@@ -240,7 +232,6 @@ Ví dụ đơn giản, giả sử chúng ta có một lệnh **`compare-and-swap
 (TODO)
 
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 Giả sử bây giờ chúng ta muốn **tăng một giá trị một cách nguyên tử** (atomically increment) thêm một lượng nhất định, sử dụng lệnh `compare-and-swap`. Chúng ta có thể thực hiện điều đó với hàm đơn giản sau:
@@ -310,7 +301,6 @@ Hãy xem thêm một ví dụ nữa. Trong ví dụ này, có nhiều sự tranh
 ...
 ```
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 > **TIP: ĐỪNG LÚC NÀO CŨNG CỐ LÀM HOÀN HẢO (ĐỊNH LUẬT CỦA TOM WEST)**  

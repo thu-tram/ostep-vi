@@ -202,9 +202,7 @@ Với thông tin này, việc xác định một block là live hay dead trở n
 
 Dưới đây là phần tóm tắt dưới dạng **pseudocode**:
 
-
-Dưới đây là bản dịch tiếng Việt của đoạn văn bản bạn cung cấp, tuân thủ đầy đủ các yêu cầu đã nêu:
-
+...
 
 Hình dưới đây mô tả cơ chế, trong đó **segment summary block** (khối tóm tắt phân đoạn, ký hiệu SS) ghi lại rằng data block tại địa chỉ A0 thực chất là một phần của file *k* tại offset 0. Bằng cách kiểm tra **imap** của *k*, bạn có thể tìm thấy inode và thấy rằng nó thực sự trỏ tới vị trí đó.
 

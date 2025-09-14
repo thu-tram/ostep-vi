@@ -102,9 +102,6 @@ Do đó, ta dịch địa chỉ ảo này bằng cách thay VPN bằng PFN, rồ
 **Hình 18.4: Example: Page Table in Kernel Physical Memory**  
 ![Figure 18.4: Example: Page Table in Kernel Physical Memory](figure18_4.png)
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
-
 Lưu ý rằng **offset** (độ lệch) vẫn giữ nguyên (tức là không được dịch), vì offset chỉ cho biết byte nào **bên trong** page (trang) mà chúng ta muốn truy cập. Địa chỉ vật lý (physical address) cuối cùng của chúng ta là `1110101` (117 ở hệ thập phân), và đây chính xác là nơi mà lệnh load sẽ lấy dữ liệu (xem **Hình 18.2**, trang 2).
 
 Với phần tổng quan cơ bản này, giờ đây chúng ta có thể đặt ra (và hy vọng trả lời) một số câu hỏi cơ bản về **paging** (phân trang).  

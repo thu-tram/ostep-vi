@@ -1,4 +1,3 @@
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 # 36 Thiết bị I/O (I/O Devices)
@@ -46,7 +45,6 @@ Trong sơ đồ trên, **giao diện thiết bị** (được đơn giản hóa)
 
 Bằng cách đọc và ghi vào các register này, hệ điều hành có thể điều khiển hành vi của thiết bị.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 Bây giờ, hãy mô tả một tương tác điển hình mà **hệ điều hành** (OS) có thể thực hiện với thiết bị để yêu cầu thiết bị làm một việc nào đó thay cho nó. **Giao thức** (protocol) như sau:
@@ -105,7 +103,6 @@ Vì vậy, nếu thiết bị **nhanh**, tốt nhất là polling; nếu thiết
 > **TIP: INTERRUPTS KHÔNG PHẢI LÚC NÀO CŨNG TỐT HƠN POLLING**  
 > Mặc dù interrupts cho phép chồng lấp giữa tính toán và I/O, chúng chỉ thực sự hợp lý cho các thiết bị chậm. Nếu không, chi phí xử lý interrupt và context switch có thể lớn hơn lợi ích mà interrupts mang lại. Cũng có những trường hợp một lượng lớn interrupts có thể làm quá tải hệ thống và dẫn đến **livelock** [MR96]; trong những trường hợp như vậy, polling mang lại cho OS khả năng kiểm soát tốt hơn trong việc lập lịch, và do đó lại trở nên hữu ích.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 Một lý do khác để **không** sử dụng **interrupts** (ngắt) xuất hiện trong lĩnh vực **mạng máy tính** [MR96]. Khi một luồng lớn các gói tin (packet) đến, và mỗi gói đều tạo ra một interrupt, hệ điều hành (OS) có thể rơi vào trạng thái **livelock** — tức là chỉ xử lý các interrupt mà không bao giờ cho phép một **process** (tiến trình) ở mức người dùng chạy để thực sự phục vụ các yêu cầu.  
@@ -159,7 +156,6 @@ Theo thời gian, đã phát triển hai phương pháp chính để giao tiếp
 
 Không có ưu thế vượt trội tuyệt đối giữa hai phương pháp. **Memory-mapped I/O** có ưu điểm là không cần thêm lệnh mới để hỗ trợ, nhưng cả hai phương pháp vẫn đang được sử dụng song song cho đến ngày nay.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 ## 36.7 Tích hợp vào Hệ điều hành: Device Driver

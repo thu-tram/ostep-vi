@@ -1,4 +1,3 @@
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 # 37. Ổ đĩa cứng (Hard Disk Drives)
@@ -45,7 +44,6 @@ Hãy tìm hiểu cách ổ đĩa hoạt động bằng cách xây dựng một m
 
 Tất nhiên, chỉ có track thôi thì chưa đủ thú vị; chúng ta muốn có thể đọc hoặc ghi các sector đó, và do đó cần một **disk head** gắn vào một **disk arm**, như minh họa trong **Hình 37.2**. Trong hình, đầu đọc/ghi đĩa, gắn ở cuối cần đĩa, đang được định vị trên sector số 6, và surface đang quay theo chiều ngược kim đồng hồ.
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 ### Độ trễ trên một track: **Rotational Delay** (độ trễ quay)
@@ -155,7 +153,6 @@ Chi tiết của cả hai được thể hiện trong **Hình 37.5**.
 
 **Hình 37.5: Thông số ổ đĩa – SCSI so với SATA**
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
 
 
 Như bạn có thể thấy, hai ổ đĩa có các đặc tính khá khác nhau, và theo nhiều cách, chúng tóm tắt khá rõ hai phân khúc quan trọng của thị trường ổ đĩa. Phân khúc thứ nhất là thị trường **“high performance”** (hiệu năng cao), nơi các ổ đĩa được thiết kế để quay nhanh nhất có thể, đạt thời gian seek thấp và truyền dữ liệu nhanh. Phân khúc thứ hai là thị trường **“capacity”** (dung lượng), nơi chi phí trên mỗi byte là yếu tố quan trọng nhất; do đó, các ổ đĩa này chậm hơn nhưng lưu trữ được nhiều bit nhất có thể trong không gian sẵn có.
@@ -214,9 +211,6 @@ Bảng trên cho thấy một số điểm quan trọng. Thứ nhất, và quan 
 > ```  
 > Nhớ rằng ta vẫn phải chia cho tổng số seek (\(N^2\)) để tính khoảng cách seek trung bình: \(((1/3)N^3) / N^2 = (1/3)N\).  
 > Do đó, khoảng cách seek trung bình trên một ổ đĩa, xét trên tất cả các seek có thể, là **một phần ba khoảng cách toàn phần**. Và bây giờ, khi nghe rằng seek trung bình bằng một phần ba seek toàn phần, bạn sẽ biết nó đến từ đâu.
-
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:
-
 
 ## 37.5 Lập lịch đĩa (Disk Scheduling)
 

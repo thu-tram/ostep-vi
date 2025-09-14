@@ -1,6 +1,3 @@
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật như một chương trong giáo trình.
-
-
 # 23. Hệ thống bộ nhớ ảo hoàn chỉnh (Complete Virtual Memory Systems)
 
 Trước khi kết thúc việc nghiên cứu về **virtualizing memory** (ảo hóa bộ nhớ), chúng ta hãy xem xét kỹ hơn cách mà toàn bộ một hệ thống **virtual memory** (bộ nhớ ảo) được xây dựng. Chúng ta đã thấy các thành phần then chốt của những hệ thống như vậy, bao gồm nhiều thiết kế **page table** (bảng trang), sự tương tác với **TLB** (đôi khi còn được OS xử lý trực tiếp), và các chiến lược quyết định page nào giữ lại trong bộ nhớ và page nào loại bỏ. Tuy nhiên, còn nhiều tính năng khác tạo nên một hệ thống bộ nhớ ảo hoàn chỉnh, bao gồm nhiều đặc tính về hiệu năng, chức năng và bảo mật. Và đây là vấn đề mấu chốt:
@@ -49,6 +46,8 @@ Một điểm thú vị khi nghiên cứu **VMS** là chúng ta có thể thấy
 Ví dụ, **code segment** (đoạn mã) không bao giờ bắt đầu tại **page** 0. Thay vào đó, page này được đánh dấu **inaccessible** (không thể truy cập), nhằm hỗ trợ việc phát hiện các truy cập **null pointer** (con trỏ null). Do đó, một mối quan tâm khi thiết kế address space là hỗ trợ **debugging** (gỡ lỗi), và page 0 không thể truy cập ở đây cung cấp một dạng hỗ trợ như vậy.
 
 Quan trọng hơn, **kernel virtual address space** (không gian địa chỉ ảo của nhân — bao gồm cấu trúc dữ liệu và mã của kernel) là một phần của mỗi user address space. Khi **context switch** (chuyển ngữ cảnh), OS thay đổi các thanh ghi **P0** và **P1** để trỏ tới page table thích hợp của process sắp chạy; tuy nhiên, nó **không** thay đổi các thanh ghi **S base** và **S bound**, và do đó các cấu trúc kernel “giống nhau” được ánh xạ vào mỗi user address space.
+
+![](img/fig23_1.PNG)
 
 **Figure 23.1: The VAX/VMS Address Space**  
 *(Không gian địa chỉ của VAX/VMS)*
@@ -128,6 +127,7 @@ Trong phần này, chúng ta sẽ tập trung vào Linux cho **Intel x86**. Mặ
 
 Giống như các hệ điều hành hiện đại khác, và cũng giống VAX/VMS, một **Linux virtual address space**[^1] gồm hai phần: **user portion** (phần người dùng — nơi chứa mã chương trình người dùng, stack, heap và các phần khác) và **kernel portion** (phần nhân — nơi chứa mã kernel, stack, heap và các phần khác). Giống các hệ thống khác, khi **context switch**, phần user của address space hiện tại sẽ thay đổi; phần kernel thì giống nhau giữa các process. Giống các hệ thống khác, một chương trình chạy ở **user mode** không thể truy cập các **kernel virtual page**; chỉ bằng cách trap vào kernel và chuyển sang **privileged mode** mới có thể truy cập bộ nhớ này.
 
+![](img/fig23_2.PNG)
 **Figure 23.2: The Linux Address Space**  
 *(Không gian địa chỉ của Linux)*
 

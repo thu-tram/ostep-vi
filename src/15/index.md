@@ -65,9 +65,6 @@ Tóm tắt lại, phần cứng cần hỗ trợ những gì (xem thêm *Figure 
 
 [^1]: Is there anything other than “havoc” that can be “wreaked”? [W17]
 
-Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như yêu cầu.
-
-
 > **ASIDE: DATA STRUCTURE — THE FREE LIST**  
 > Hệ điều hành (OS) phải theo dõi những phần bộ nhớ trống (free memory) chưa được sử dụng, để có thể cấp phát bộ nhớ cho các process (tiến trình). Có thể sử dụng nhiều cấu trúc dữ liệu khác nhau cho nhiệm vụ này; cấu trúc đơn giản nhất (mà chúng ta giả định ở đây) là **free list** (danh sách vùng trống), đơn giản chỉ là một danh sách các khoảng (range) của physical memory (bộ nhớ vật lý) hiện chưa được sử dụng.
 
