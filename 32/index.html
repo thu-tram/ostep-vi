@@ -134,8 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh của chương, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
-<h1 id="32-các-vấn-Đề-thường-gặp-trong-lập-trình-Đồng-thời-concurrency"><a class="header" href="#32-các-vấn-Đề-thường-gặp-trong-lập-trình-Đồng-thời-concurrency">32 Các Vấn Đề Thường Gặp Trong Lập Trình Đồng Thời (Concurrency)</a></h1>
+                        <h1 id="32-các-vấn-Đề-thường-gặp-trong-lập-trình-Đồng-thời-concurrency"><a class="header" href="#32-các-vấn-Đề-thường-gặp-trong-lập-trình-Đồng-thời-concurrency">32 Các Vấn Đề Thường Gặp Trong Lập Trình Đồng Thời (Concurrency)</a></h1>
 <p>Trong nhiều năm qua, các nhà nghiên cứu đã dành rất nhiều thời gian và công sức để tìm hiểu về các lỗi (bug) trong lập trình đồng thời (concurrency bugs). Phần lớn các nghiên cứu ban đầu tập trung vào <strong>deadlock</strong> (bế tắc), một chủ đề mà chúng ta đã đề cập ở các chương trước, nhưng giờ sẽ đi sâu hơn [C+71]. Các nghiên cứu gần đây hơn tập trung vào việc tìm hiểu các loại lỗi đồng thời phổ biến khác (tức là lỗi <strong>non-deadlock</strong> – không phải bế tắc). Trong chương này, chúng ta sẽ xem xét một số ví dụ về các vấn đề đồng thời được tìm thấy trong mã nguồn thực tế, nhằm hiểu rõ hơn những vấn đề cần chú ý. Và đây là vấn đề trọng tâm của chương:</p>
 <blockquote>
 <p><strong>THE CRUX: CÁCH XỬ LÝ CÁC LỖI ĐỒNG THỜI PHỔ BIẾN</strong><br />
@@ -153,6 +152,7 @@ Câu hỏi này khó trả lời một cách tổng quát, nhưng may mắn là 
 </ul>
 <p>Trong nghiên cứu, các tác giả xem xét các lỗi đồng thời đã được phát hiện và sửa trong từng mã nguồn này, biến công việc của lập trình viên thành một phân tích định lượng về lỗi. Hiểu được kết quả này sẽ giúp bạn biết những vấn đề nào thực sự xảy ra trong các hệ thống phần mềm đã trưởng thành.</p>
 <p>Hình dưới đây (Hình 32.1) tóm tắt các lỗi mà Lu và cộng sự đã nghiên cứu. Từ bảng, ta thấy có tổng cộng <strong>105 lỗi</strong>, trong đó <strong>74 lỗi là non-deadlock</strong> và <strong>31 lỗi là deadlock</strong>. Ngoài ra, số lượng lỗi ở mỗi ứng dụng cũng khác nhau: OpenOffice chỉ có 8 lỗi đồng thời, trong khi Mozilla có gần 60.</p>
+<p><img src="img/fig32_1.PNG" alt="" /></p>
 <p><strong>Hình 32.1: Các lỗi trong ứng dụng hiện đại</strong><br />
 | Application | Chức năng         | Non-Deadlock | Deadlock |
 | :---------- | :---------------- | :----------- | :------- |
@@ -175,6 +175,7 @@ Lu và cộng sự chỉ ra hai loại lỗi non-deadlock chính:</p>
 </ol>
 <h3 id="lỗi-atomicity-violation"><a class="header" href="#lỗi-atomicity-violation">Lỗi Atomicity Violation</a></h3>
 <p>Loại lỗi đầu tiên là <strong>atomicity violation</strong>. Dưới đây là một ví dụ đơn giản được tìm thấy trong MySQL. Trước khi đọc lời giải thích, hãy thử tìm lỗi.</p>
+<p><img src="img/fig32_2.PNG" alt="" /></p>
 <p><strong>Hình 32.2: Atomicity Violation (atomicity.c)</strong></p>
 <p>Trong ví dụ này, hai <strong>thread</strong> (luồng) khác nhau truy cập trường <code>proc_info</code> trong cấu trúc <code>thd</code>.</p>
 <ul>
@@ -184,18 +185,21 @@ Lu và cộng sự chỉ ra hai loại lỗi non-deadlock chính:</p>
 <p>Rõ ràng, nếu thread thứ nhất kiểm tra xong nhưng bị ngắt trước khi gọi <code>fputs</code>, thì thread thứ hai có thể chạy xen vào và đặt con trỏ thành NULL. Khi thread thứ nhất tiếp tục, nó sẽ bị crash vì <code>fputs</code> sẽ dereference một con trỏ NULL.</p>
 <p><strong>Định nghĩa chính thức</strong> của atomicity violation theo Lu et al.:</p>
 <blockquote>
-<p>“Tính tuần tự mong muốn giữa nhiều truy cập bộ nhớ bị vi phạm (tức là một đoạn mã được dự định là nguyên tử, nhưng tính nguyên tử không được đảm bảo khi thực thi).”</p>
+<p>“Tính tuần tự mong muốn giữa nhiều truy cập bộ nhớ bị vi phạm (tức là một đoạn code được dự định là nguyên tử, nhưng tính nguyên tử không được đảm bảo khi thực thi).”</p>
 </blockquote>
-<p>Trong ví dụ trên, đoạn mã giả định rằng việc kiểm tra <code>proc_info</code> khác NULL và việc sử dụng <code>proc_info</code> trong <code>fputs()</code> là nguyên tử. Khi giả định này sai, chương trình sẽ không hoạt động như mong muốn.</p>
+<p>Trong ví dụ trên, đoạn code giả định rằng việc kiểm tra <code>proc_info</code> khác NULL và việc sử dụng <code>proc_info</code> trong <code>fputs()</code> là nguyên tử. Khi giả định này sai, chương trình sẽ không hoạt động như mong muốn.</p>
 <p><strong>Cách sửa:</strong><br />
 Giải pháp thường (nhưng không phải luôn) khá đơn giản: thêm <strong>lock</strong> (khóa) quanh các truy cập biến chia sẻ.<br />
-Trong ví dụ sửa (Hình 32.3), ta thêm khóa <code>proc_info_lock</code> để đảm bảo rằng khi bất kỳ thread nào truy cập <code>proc_info</code>, nó phải giữ khóa này. Tất nhiên, mọi đoạn mã khác truy cập cấu trúc này cũng phải lấy cùng khóa.</p>
+Trong ví dụ sửa (Hình 32.3), ta thêm khóa <code>proc_info_lock</code> để đảm bảo rằng khi bất kỳ thread nào truy cập <code>proc_info</code>, nó phải giữ khóa này. Tất nhiên, mọi đoạn code khác truy cập cấu trúc này cũng phải lấy cùng khóa.</p>
+<p><img src="img/fig32_3.PNG" alt="" /></p>
 <p><strong>Hình 32.3: Atomicity Violation Fixed (atomicity_fixed.c)</strong></p>
 <h3 id="lỗi-order-violation"><a class="header" href="#lỗi-order-violation">Lỗi Order Violation</a></h3>
 <p>Loại lỗi non-deadlock phổ biến thứ hai là <strong>order violation</strong>. Đây là một ví dụ khác; hãy thử tìm lỗi.</p>
+<p><img src="img/fig32_4.PNG" alt="" /></p>
 <p><strong>Hình 32.4: Ordering Bug (ordering.c)</strong></p>
 <p>Như bạn có thể đoán, mã trong Thread 2 giả định rằng biến <code>mThread</code> đã được khởi tạo (và khác NULL). Tuy nhiên, nếu Thread 2 chạy ngay sau khi được tạo, <code>mThread</code> vẫn chưa được gán giá trị khi được truy cập trong <code>mMain()</code> của Thread 2, dẫn đến crash do dereference con trỏ NULL.<br />
 Giả sử <code>mThread</code> ban đầu là NULL; nếu không, lỗi còn có thể nghiêm trọng hơn khi truy cập vào vùng nhớ tùy ý.</p>
+<p><img src="img/fig32_5.PNG" alt="" /></p>
 <p><strong>Hình 32.5: Fixing The Ordering Violation (ordering_fixed.c)</strong></p>
 <p><strong>Định nghĩa chính thức</strong> của order violation:</p>
 <blockquote>
@@ -215,12 +219,11 @@ Giải pháp là <strong>ép buộc thứ tự thực thi</strong>. Như đã b�
 <li>Nếu Thread 2 chạy sau, nó sẽ thấy <code>mtInit = 1</code> và tiếp tục bình thường.</li>
 </ul>
 <p>Lưu ý: ta có thể dùng chính <code>mThread</code> làm biến trạng thái, nhưng ở đây tách riêng để đơn giản. Khi thứ tự giữa các thread quan trọng, <strong>condition variable</strong> hoặc <strong>semaphore</strong> là công cụ hữu ích.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh của đoạn văn bản bạn cung cấp, tuân thủ đầy đủ các yêu cầu đã nêu:</p>
 <h3 id="tóm-tắt-về-non-deadlock-bugs"><a class="header" href="#tóm-tắt-về-non-deadlock-bugs">Tóm tắt về Non-Deadlock Bugs</a></h3>
 <p>Một tỷ lệ lớn (97%) các lỗi <strong>non-deadlock</strong> (không phải bế tắc) được Lu và cộng sự nghiên cứu là thuộc một trong hai loại: <strong>atomicity violation</strong> (vi phạm tính nguyên tử) hoặc <strong>order violation</strong> (vi phạm thứ tự). Do đó, bằng cách suy nghĩ cẩn thận về các mẫu lỗi này, lập trình viên có thể tránh được chúng hiệu quả hơn. Hơn nữa, khi các công cụ kiểm tra mã tự động ngày càng phát triển, chúng nên tập trung vào hai loại lỗi này, vì chúng chiếm phần lớn các lỗi non-deadlock được phát hiện trong môi trường triển khai thực tế.</p>
 <p>Tuy nhiên, không phải tất cả các lỗi đều dễ sửa như các ví dụ chúng ta đã xem ở trên. Một số lỗi đòi hỏi phải hiểu sâu hơn về hoạt động của chương trình, hoặc cần tái cấu trúc một lượng lớn mã hoặc cấu trúc dữ liệu để khắc phục. Để biết thêm chi tiết, hãy đọc bài báo xuất sắc (và dễ đọc) của Lu và cộng sự.</p>
 <h2 id="323-deadlock-bugs"><a class="header" href="#323-deadlock-bugs">32.3 Deadlock Bugs</a></h2>
-<p>Ngoài các lỗi đồng thời đã đề cập ở trên, một vấn đề kinh điển thường xuất hiện trong nhiều hệ thống đồng thời với giao thức khóa (locking protocol) phức tạp được gọi là <strong>deadlock</strong> (bế tắc). Deadlock xảy ra, ví dụ, khi một <strong>thread</strong> (luồng) — giả sử Thread 1 — đang giữ một khóa (L1) và chờ một khóa khác (L2); không may, <strong>thread</strong> khác (Thread 2) đang giữ L2 lại chờ L1 được giải phóng. Dưới đây là một đoạn mã minh họa khả năng xảy ra deadlock như vậy:</p>
+<p>Ngoài các lỗi đồng thời đã đề cập ở trên, một vấn đề kinh điển thường xuất hiện trong nhiều hệ thống đồng thời với giao thức khóa (locking protocol) phức tạp được gọi là <strong>deadlock</strong> (bế tắc). Deadlock xảy ra, ví dụ, khi một <strong>thread</strong> (luồng) — giả sử Thread 1 — đang giữ một khóa (L1) và chờ một khóa khác (L2); không may, <strong>thread</strong> khác (Thread 2) đang giữ L2 lại chờ L1 được giải phóng. Dưới đây là một đoạn code minh họa khả năng xảy ra deadlock như vậy:</p>
 <p><strong>Thread 1:</strong></p>
 <pre><code class="language-c">pthread_mutex_lock(L1);
 pthread_mutex_lock(L2);
@@ -229,8 +232,10 @@ pthread_mutex_lock(L2);
 <pre><code class="language-c">pthread_mutex_lock(L2);
 pthread_mutex_lock(L1);
 </code></pre>
+<p><img src="img/fig32_6.PNG" alt="" /></p>
 <p><strong>Hình 32.6: Simple Deadlock (deadlock.c)</strong></p>
-<p>Lưu ý rằng khi chạy đoạn mã này, deadlock không nhất thiết xảy ra; nó chỉ xảy ra nếu, ví dụ, Thread 1 lấy được L1 trước, sau đó xảy ra <strong>context switch</strong> (chuyển ngữ cảnh) sang Thread 2. Lúc này, Thread 2 lấy L2 và cố gắng lấy L1. Kết quả là chúng ta có deadlock, vì mỗi thread đang chờ thread kia và không thread nào có thể tiếp tục chạy. Xem <strong>Hình 32.7</strong> để thấy minh họa trực quan; sự xuất hiện của một chu trình (cycle) trong đồ thị là dấu hiệu của deadlock.</p>
+<p>Lưu ý rằng khi chạy đoạn code này, deadlock không nhất thiết xảy ra; nó chỉ xảy ra nếu, ví dụ, Thread 1 lấy được L1 trước, sau đó xảy ra <strong>context switch</strong> (chuyển ngữ cảnh) sang Thread 2. Lúc này, Thread 2 lấy L2 và cố gắng lấy L1. Kết quả là chúng ta có deadlock, vì mỗi thread đang chờ thread kia và không thread nào có thể tiếp tục chạy. Xem <strong>Hình 32.7</strong> để thấy minh họa trực quan; sự xuất hiện của một chu trình (cycle) trong đồ thị là dấu hiệu của deadlock.</p>
+<p><img src="img/fig32_7.PNG" alt="" /></p>
 <p><strong>Hình 32.7: The Deadlock Dependency Graph</strong></p>
 <p>Hình này cho thấy vấn đề một cách rõ ràng. Vậy lập trình viên nên viết mã như thế nào để xử lý deadlock?</p>
 <blockquote>
@@ -245,7 +250,6 @@ Chúng ta nên xây dựng hệ thống như thế nào để <strong>phòng ng�
 v1.AddAll(v2);
 </code></pre>
 <p>Bên trong, vì phương thức cần đảm bảo an toàn đa luồng (multi-thread safe), nên phải lấy khóa cho cả vector được thêm vào (<code>v1</code>) và vector tham số (<code>v2</code>). Phương thức này lấy các khóa theo một thứ tự tùy ý (giả sử <code>v1</code> trước rồi <code>v2</code>) để thêm nội dung của <code>v2</code> vào <code>v1</code>. Nếu một thread khác gọi <code>v2.AddAll(v1)</code> gần như cùng lúc, chúng ta có khả năng xảy ra deadlock — và điều này hoàn toàn ẩn đối với ứng dụng gọi.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h3 id="các-điều-kiện-để-xảy-ra-deadlock"><a class="header" href="#các-điều-kiện-để-xảy-ra-deadlock">Các điều kiện để xảy ra Deadlock</a></h3>
 <p>Bốn điều kiện cần đồng thời thỏa mãn để một <strong>deadlock</strong> (bế tắc) xảy ra [C+71]:</p>
 <ul>
@@ -282,39 +286,69 @@ Ví dụ mã:</p>
 <h4 id="hold-and-wait"><a class="header" href="#hold-and-wait">Hold-and-wait</a></h4>
 <p>Điều kiện <strong>hold-and-wait</strong> để xảy ra deadlock có thể được loại bỏ bằng cách <strong>lấy tất cả lock cùng một lúc</strong>, theo cách nguyên tử (atomically). Trong thực tế, điều này có thể được thực hiện như sau:</p>
 <p>^[1]: “Từ D” ở đây ám chỉ “Deadlock”.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
-<p>Bằng cách trước tiên lấy <strong>lock</strong> <code>prevention</code>, đoạn mã này đảm bảo rằng sẽ không có sự chuyển đổi <strong>thread</strong> (luồng) không đúng thời điểm xảy ra trong quá trình lấy lock, và do đó deadlock (bế tắc) một lần nữa có thể được tránh. Tất nhiên, điều này yêu cầu rằng bất cứ khi nào một thread muốn lấy một lock nào đó, nó phải lấy lock toàn cục <code>prevention</code> trước. Ví dụ, nếu một thread khác đang cố lấy các lock L1 và L2 theo một thứ tự khác, điều đó vẫn ổn, vì nó sẽ giữ lock <code>prevention</code> trong khi thực hiện.</p>
+<p>Bằng cách trước tiên lấy <strong>lock</strong> <code>prevention</code>, đoạn code này đảm bảo rằng sẽ không có sự chuyển đổi <strong>thread</strong> (luồng) không đúng thời điểm xảy ra trong quá trình lấy lock, và do đó deadlock (bế tắc) một lần nữa có thể được tránh. Tất nhiên, điều này yêu cầu rằng bất cứ khi nào một thread muốn lấy một lock nào đó, nó phải lấy lock toàn cục <code>prevention</code> trước. Ví dụ, nếu một thread khác đang cố lấy các lock L1 và L2 theo một thứ tự khác, điều đó vẫn ổn, vì nó sẽ giữ lock <code>prevention</code> trong khi thực hiện.</p>
 <p>Lưu ý rằng giải pháp này có một số vấn đề. Giống như trước đây, <strong>encapsulation</strong> (đóng gói) lại gây bất lợi: khi gọi một routine (hàm/thủ tục), cách tiếp cận này yêu cầu chúng ta phải biết chính xác những lock nào cần giữ và lấy chúng trước. Kỹ thuật này cũng có khả năng làm giảm <strong>concurrency</strong> (mức độ đồng thời), vì tất cả lock phải được lấy sớm (cùng lúc) thay vì chỉ khi thực sự cần.</p>
 <h4 id="no-preemption"><a class="header" href="#no-preemption">No Preemption</a></h4>
 <p>Bởi vì thông thường chúng ta coi lock được giữ cho đến khi <code>unlock</code> được gọi, việc lấy nhiều lock cùng lúc thường gây rắc rối, vì khi đang chờ một lock, ta lại đang giữ một lock khác. Nhiều thư viện thread cung cấp một tập hợp giao diện linh hoạt hơn để giúp tránh tình huống này. Cụ thể, routine <code>pthread_mutex_trylock()</code> hoặc sẽ lấy được lock (nếu nó đang rảnh) và trả về thành công, hoặc trả về mã lỗi cho biết lock đang bị giữ; trong trường hợp thứ hai, bạn có thể thử lại sau nếu muốn lấy lock đó.</p>
 <p>Giao diện này có thể được sử dụng như sau để xây dựng một giao thức lấy lock <strong>không deadlock</strong> và <strong>ổn định về thứ tự</strong>:</p>
 <pre><code>...
 </code></pre>
-<p>Lưu ý rằng một thread khác có thể tuân theo cùng giao thức nhưng lấy lock theo thứ tự ngược lại (L2 rồi L1) và chương trình vẫn không bị deadlock. Tuy nhiên, một vấn đề mới có thể phát sinh: <strong>livelock</strong>. Có khả năng (dù có thể hiếm) rằng hai thread đều liên tục thử thực hiện chuỗi thao tác này và liên tục thất bại trong việc lấy cả hai lock. Trong trường hợp này, cả hai hệ thống đều chạy qua đoạn mã này lặp đi lặp lại (và do đó không phải deadlock), nhưng không có tiến triển nào được thực hiện, vì vậy mới có tên là livelock. Có những giải pháp cho vấn đề livelock, ví dụ: thêm một khoảng trễ ngẫu nhiên trước khi quay lại vòng lặp và thử lại toàn bộ, từ đó giảm khả năng xung đột lặp lại giữa các thread cạnh tranh.</p>
-<p>Một điểm cần lưu ý về giải pháp này: nó né tránh những phần khó của việc sử dụng phương pháp <code>trylock</code>. Vấn đề đầu tiên có thể xuất hiện lại là do <strong>encapsulation</strong>: nếu một trong các lock này nằm sâu bên trong một routine được gọi, việc quay lại từ đầu trở nên phức tạp hơn để triển khai. Nếu đoạn mã đã lấy một số tài nguyên khác (ngoài L1) trong quá trình, nó phải đảm bảo giải phóng chúng cẩn thận; ví dụ, nếu sau khi lấy L1, đoạn mã đã cấp phát một vùng bộ nhớ, thì phải giải phóng vùng nhớ đó khi không lấy được L2, trước khi quay lại đầu để thử lại toàn bộ chuỗi. Tuy nhiên, trong một số trường hợp hạn chế (ví dụ: phương thức <code>Vector.AddAll()</code> trong Java được đề cập trước đó), cách tiếp cận này có thể hoạt động tốt.</p>
+<p>Lưu ý rằng một thread khác có thể tuân theo cùng giao thức nhưng lấy lock theo thứ tự ngược lại (L2 rồi L1) và chương trình vẫn không bị deadlock. Tuy nhiên, một vấn đề mới có thể phát sinh: <strong>livelock</strong>. Có khả năng (dù có thể hiếm) rằng hai thread đều liên tục thử thực hiện chuỗi thao tác này và liên tục thất bại trong việc lấy cả hai lock. Trong trường hợp này, cả hai hệ thống đều chạy qua đoạn code này lặp đi lặp lại (và do đó không phải deadlock), nhưng không có tiến triển nào được thực hiện, vì vậy mới có tên là livelock. Có những giải pháp cho vấn đề livelock, ví dụ: thêm một khoảng trễ ngẫu nhiên trước khi quay lại vòng lặp và thử lại toàn bộ, từ đó giảm khả năng xung đột lặp lại giữa các thread cạnh tranh.</p>
+<p>Một điểm cần lưu ý về giải pháp này: nó né tránh những phần khó của việc sử dụng phương pháp <code>trylock</code>. Vấn đề đầu tiên có thể xuất hiện lại là do <strong>encapsulation</strong>: nếu một trong các lock này nằm sâu bên trong một routine được gọi, việc quay lại từ đầu trở nên phức tạp hơn để triển khai. Nếu đoạn code đã lấy một số tài nguyên khác (ngoài L1) trong quá trình, nó phải đảm bảo giải phóng chúng cẩn thận; ví dụ, nếu sau khi lấy L1, đoạn code đã cấp phát một vùng bộ nhớ, thì phải giải phóng vùng nhớ đó khi không lấy được L2, trước khi quay lại đầu để thử lại toàn bộ chuỗi. Tuy nhiên, trong một số trường hợp hạn chế (ví dụ: phương thức <code>Vector.AddAll()</code> trong Java được đề cập trước đó), cách tiếp cận này có thể hoạt động tốt.</p>
 <p>Bạn cũng có thể nhận thấy rằng cách tiếp cận này thực ra không bổ sung <strong>preemption</strong> (hành động cưỡng bức lấy lock từ một thread đang giữ nó), mà thay vào đó sử dụng phương pháp <code>trylock</code> để cho phép lập trình viên <strong>tự từ bỏ quyền sở hữu lock</strong> (tức là tự preempt quyền sở hữu của mình) một cách an toàn. Tuy nhiên, đây là một cách tiếp cận thực tiễn, và vì vậy chúng tôi đưa nó vào đây, dù nó chưa hoàn hảo ở khía cạnh này.</p>
 <h4 id="mutual-exclusion"><a class="header" href="#mutual-exclusion">Mutual Exclusion</a></h4>
-<p>Kỹ thuật phòng ngừa cuối cùng là tránh hoàn toàn nhu cầu <strong>mutual exclusion</strong> (loại trừ lẫn nhau). Nói chung, chúng ta biết điều này là khó, vì đoạn mã mà chúng ta muốn chạy thực sự có các <strong>critical section</strong> (vùng găng). Vậy chúng ta có thể làm gì?</p>
+<p>Kỹ thuật phòng ngừa cuối cùng là tránh hoàn toàn nhu cầu <strong>mutual exclusion</strong> (loại trừ lẫn nhau). Nói chung, chúng ta biết điều này là khó, vì đoạn code mà chúng ta muốn chạy thực sự có các <strong>critical section</strong> (vùng găng). Vậy chúng ta có thể làm gì?</p>
 <p>Herlihy đã đưa ra ý tưởng rằng có thể thiết kế nhiều cấu trúc dữ liệu <strong>không dùng lock</strong> [H91, H93]. Ý tưởng đằng sau các phương pháp <strong>lock-free</strong> (không khóa) và liên quan là <strong>wait-free</strong> (không chờ) này khá đơn giản: sử dụng các lệnh phần cứng mạnh mẽ, bạn có thể xây dựng các cấu trúc dữ liệu theo cách không cần khóa tường minh.</p>
 <p>Ví dụ đơn giản, giả sử chúng ta có một lệnh <strong><code>compare-and-swap</code></strong>, mà như bạn có thể nhớ, đây là một lệnh nguyên tử (atomic instruction) do phần cứng cung cấp, thực hiện như sau:</p>
-<p>(TODO)</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
+<pre><code class="language-c">int CompareAndSwap(int *address, int expected, int new) {
+    if (*address == expected) {
+        *address = new;
+        return 1; // success
+    }
+    return 0; // failure
+}
+</code></pre>
 <p>Giả sử bây giờ chúng ta muốn <strong>tăng một giá trị một cách nguyên tử</strong> (atomically increment) thêm một lượng nhất định, sử dụng lệnh <code>compare-and-swap</code>. Chúng ta có thể thực hiện điều đó với hàm đơn giản sau:</p>
-<pre><code>...
+<pre><code class="language-c">void AtomicIncrement(int *value, int amount) {
+    do {
+        int old = *value;
+    } while (CompareAndSwap(value, old, old + amount) == 0);
+}
 </code></pre>
-<p>Thay vì lấy một <strong>lock</strong>, thực hiện cập nhật, rồi giải phóng lock, chúng ta xây dựng một cách tiếp cận khác: liên tục thử cập nhật giá trị lên giá trị mới và sử dụng <code>compare-and-swap</code> để thực hiện. Theo cách này, không có lock nào được lấy, và do đó không thể xảy ra <strong>deadlock</strong> (bế tắc) (mặc dù <strong>livelock</strong> vẫn có thể xảy ra, và vì vậy một giải pháp vững chắc sẽ phức tạp hơn đoạn mã đơn giản ở trên).</p>
-<p>Hãy xem xét một ví dụ phức tạp hơn một chút: <strong>chèn phần tử vào danh sách</strong> (list insertion). Dưới đây là đoạn mã chèn một phần tử vào đầu danh sách:</p>
-<pre><code>...
+<p>Thay vì lấy một <strong>lock</strong>, thực hiện cập nhật, rồi giải phóng lock, chúng ta xây dựng một cách tiếp cận khác: liên tục thử cập nhật giá trị lên giá trị mới và sử dụng <code>compare-and-swap</code> để thực hiện. Theo cách này, không có lock nào được lấy, và do đó không thể xảy ra <strong>deadlock</strong> (bế tắc) (mặc dù <strong>livelock</strong> vẫn có thể xảy ra, và vì vậy một giải pháp vững chắc sẽ phức tạp hơn đoạn code đơn giản ở trên).</p>
+<p>Hãy xem xét một ví dụ phức tạp hơn một chút: <strong>chèn phần tử vào danh sách</strong> (list insertion). Dưới đây là đoạn code chèn một phần tử vào đầu danh sách:</p>
+<pre><code class="language-c">void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n-&gt;value = value;
+    n-&gt;next = head;
+    head = n;
+}
 </code></pre>
-<p>Đoạn mã này thực hiện một phép chèn đơn giản, nhưng nếu được gọi bởi nhiều <strong>thread</strong> (luồng) “cùng lúc”, sẽ xuất hiện <strong>race condition</strong> (điều kiện tranh chấp). Bạn có thể tìm ra lý do không? (Hãy vẽ một sơ đồ về những gì có thể xảy ra với danh sách nếu hai phép chèn đồng thời diễn ra, giả sử như thường lệ rằng có một sự xen kẽ lịch trình (scheduling interleaving) bất lợi).<br />
-Tất nhiên, chúng ta có thể giải quyết vấn đề này bằng cách bao quanh đoạn mã với thao tác lấy lock và giải phóng lock:</p>
-<pre><code>...
+<p>Đoạn code này thực hiện một phép chèn đơn giản, nhưng nếu được gọi bởi nhiều <strong>thread</strong> (luồng) “cùng lúc”, sẽ xuất hiện <strong>race condition</strong> (điều kiện tranh chấp). Bạn có thể tìm ra lý do không? (Hãy vẽ một sơ đồ về những gì có thể xảy ra với danh sách nếu hai phép chèn đồng thời diễn ra, giả sử như thường lệ rằng có một sự xen kẽ lịch trình (scheduling interleaving) bất lợi).<br />
+Tất nhiên, chúng ta có thể giải quyết vấn đề này bằng cách bao quanh đoạn code với thao tác lấy lock và giải phóng lock:</p>
+<pre><code class="language-c">void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n-&gt;value = value;
+    pthread_mutex_lock(listlock); // begin critical section
+    n-&gt;next = head;
+    head = n;
+    pthread_mutex_unlock(listlock); // end critical section
+}
 </code></pre>
 <p>Trong giải pháp này, chúng ta đang sử dụng lock theo cách truyền thống². Thay vào đó, hãy thử thực hiện phép chèn này theo cách <strong>lock-free</strong> (không dùng khóa) chỉ với lệnh <code>compare-and-swap</code>. Dưới đây là một cách tiếp cận khả thi:</p>
-<pre><code>...
+<pre><code class="language-c">void insert(int value) {
+    node_t *n = malloc(sizeof(node_t));
+    assert(n != NULL);
+    n-&gt;value = value;
+    do {
+        n-&gt;next = head;
+    } while (CompareAndSwap(&amp;head, n-&gt;next, n) == 0);
+}
 </code></pre>
-<p>²Người đọc tinh ý có thể sẽ hỏi tại sao chúng ta lại lấy lock muộn như vậy, thay vì ngay khi bước vào hàm <code>insert()</code>; bạn có thể, với sự tinh ý, tìm ra lý do tại sao điều đó có khả năng là đúng không? Ví dụ, đoạn mã đưa ra giả định gì về lời gọi <code>malloc()</code>?</p>
-<p>Trong đoạn mã này, con trỏ <code>next</code> của nút mới được cập nhật để trỏ tới phần tử đầu hiện tại, sau đó cố gắng hoán đổi (swap) nút mới vào vị trí đầu danh sách bằng <code>compare-and-swap</code>. Tuy nhiên, thao tác này sẽ thất bại nếu một thread khác đã thành công trong việc hoán đổi một nút mới vào đầu danh sách trong khoảng thời gian đó, khiến thread này phải thử lại với phần tử đầu mới.</p>
+<p>²Người đọc tinh ý có thể sẽ hỏi tại sao chúng ta lại lấy lock muộn như vậy, thay vì ngay khi bước vào hàm <code>insert()</code>; bạn có thể, với sự tinh ý, tìm ra lý do tại sao điều đó có khả năng là đúng không? Ví dụ, đoạn code đưa ra giả định gì về call <code>malloc()</code>?</p>
+<p>Trong đoạn code này, con trỏ <code>next</code> của nút mới được cập nhật để trỏ tới phần tử đầu hiện tại, sau đó cố gắng hoán đổi (swap) nút mới vào vị trí đầu danh sách bằng <code>compare-and-swap</code>. Tuy nhiên, thao tác này sẽ thất bại nếu một thread khác đã thành công trong việc hoán đổi một nút mới vào đầu danh sách trong khoảng thời gian đó, khiến thread này phải thử lại với phần tử đầu mới.</p>
 <p>Tất nhiên, việc xây dựng một danh sách hữu ích đòi hỏi nhiều hơn là chỉ thao tác chèn; và không ngạc nhiên khi việc xây dựng một danh sách có thể chèn, xóa và tìm kiếm theo cách lock-free là <strong>không hề đơn giản</strong>. Hãy đọc thêm các tài liệu nghiên cứu phong phú về <strong>lock-free</strong> và <strong>wait-free synchronization</strong> (đồng bộ hóa không khóa và không chờ) để tìm hiểu thêm [H01, H91, H93].</p>
 <h3 id="tránh-deadlock-thông-qua-scheduling"><a class="header" href="#tránh-deadlock-thông-qua-scheduling">Tránh Deadlock thông qua Scheduling</a></h3>
 <p>Thay vì <strong>phòng ngừa deadlock</strong> (deadlock prevention), trong một số tình huống, <strong>tránh deadlock</strong> (deadlock avoidance) là lựa chọn tốt hơn. Tránh deadlock yêu cầu có kiến thức toàn cục về những lock mà các thread có thể lấy trong quá trình thực thi, và sau đó lập lịch (schedule) các thread đó theo cách đảm bảo rằng deadlock không thể xảy ra.</p>
@@ -335,7 +369,6 @@ Tất nhiên, chúng ta có thể giải quyết vấn đề này bằng cách b
 <p>Hãy xem thêm một ví dụ nữa. Trong ví dụ này, có nhiều sự tranh chấp hơn đối với cùng một tài nguyên (vẫn là các lock L1 và L2), như được chỉ ra trong bảng tranh chấp (contention table) sau:</p>
 <pre><code>...
 </code></pre>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <blockquote>
 <p><strong>TIP: ĐỪNG LÚC NÀO CŨNG CỐ LÀM HOÀN HẢO (ĐỊNH LUẬT CỦA TOM WEST)</strong><br />
 Tom West, nổi tiếng với vai trò là nhân vật chính trong cuốn sách kinh điển về ngành công nghiệp máy tính <em>Soul of a New Machine</em> [K81], đã từng nói một câu nổi tiếng:<br />

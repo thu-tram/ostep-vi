@@ -134,8 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như một chương trong giáo trình.</p>
-<h1 id="20-paging-smaller-tables"><a class="header" href="#20-paging-smaller-tables">20 Paging: Smaller Tables</a></h1>
+                        <h1 id="20-paging-smaller-tables"><a class="header" href="#20-paging-smaller-tables">20 Paging: Smaller Tables</a></h1>
 <p>(Paging: Bảng trang nhỏ hơn)</p>
 <p>Chúng ta sẽ giải quyết vấn đề thứ hai mà <strong>paging</strong> (phân trang) gây ra: <strong>page table</strong> (bảng trang) quá lớn và tiêu tốn quá nhiều bộ nhớ. Hãy bắt đầu với <strong>linear page table</strong> (bảng trang tuyến tính). Như bạn có thể nhớ<sup class="footnote-reference"><a href="#1">1</a></sup>, linear page table có thể rất lớn. Giả sử một <strong>address space</strong> (không gian địa chỉ) 32-bit (2^32 byte), với <strong>page</strong> 4KB (2^12 byte) và mỗi <strong>page-table entry</strong> (PTE — mục bảng trang) có kích thước 4 byte. Một address space như vậy sẽ có khoảng một triệu <strong>virtual pages</strong> (trang ảo) (2^32 / 2^12); nhân với kích thước mỗi PTE, ta thấy page table có kích thước 4MB. Cũng cần nhớ: thông thường, mỗi <strong>process</strong> (tiến trình) trong hệ thống sẽ có một page table riêng! Với 100 process đang hoạt động (không hiếm trong hệ thống hiện đại), chúng ta sẽ phải cấp phát hàng trăm MB bộ nhớ chỉ để lưu page table! Do đó, chúng ta cần tìm các kỹ thuật để giảm gánh nặng này. Có khá nhiều kỹ thuật, vậy hãy bắt đầu. Nhưng trước tiên, là một điểm mấu chốt:</p>
 <blockquote>
@@ -159,10 +158,12 @@ Nhiều kiến trúc (ví dụ: MIPS, SPARC, x86-64) hiện hỗ trợ nhiều k
 <p>(Cách tiếp cận lai: Paging và Segmentation)</p>
 <p>Khi bạn có hai cách tiếp cận hợp lý nhưng khác nhau, bạn nên xem xét việc kết hợp chúng để tận dụng ưu điểm của cả hai. Chúng ta gọi sự kết hợp này là <strong>hybrid</strong> (lai). Ví dụ, tại sao chỉ ăn sô-cô-la hoặc chỉ bơ đậu phộng khi bạn có thể kết hợp chúng thành một món tuyệt vời như Reese’s Peanut Butter Cup [M28]?</p>
 <p>Nhiều năm trước, những người tạo ra hệ thống <strong>Multics</strong> (đặc biệt là Jack Dennis) đã nảy ra ý tưởng này khi xây dựng hệ thống virtual memory của Multics [M07]. Cụ thể, Dennis đã nghĩ đến việc kết hợp paging và segmentation để giảm chi phí bộ nhớ của page table. Chúng ta có thể thấy tại sao điều này hiệu quả bằng cách xem xét kỹ hơn một linear page table điển hình. Giả sử chúng ta có một address space mà phần heap và stack được sử dụng rất nhỏ. Trong ví dụ này, ta dùng một address space 16KB với page 1KB (<em>Figure 20.1</em>); page table cho address space này được thể hiện trong <em>Figure 20.2</em>.</p>
-<p><strong>Figure 20.1: A 16KB Address Space With 1KB Pages</strong><br />
-<em>(Không gian địa chỉ 16KB với page 1KB)</em></p>
-<p><strong>Figure 20.2: A Page Table For 16KB Address Space</strong><br />
-<em>(Page table cho không gian địa chỉ 16KB)</em></p>
+<p><img src="img/fig20_1.PNG" alt="" /></p>
+<p><strong>Figure 20.1: A 16KB Address Space With 1KB Pages</strong></p>
+<p><em>(Không gian địa chỉ 16KB với page 1KB)</em></p>
+<p><img src="img/fig20_2.PNG" alt="" /></p>
+<p><strong>Figure 20.2: A Page Table For 16KB Address Space</strong></p>
+<p><em>(Page table cho không gian địa chỉ 16KB)</em></p>
 <p>Ví dụ này giả định:</p>
 <ul>
 <li>Page code duy nhất (VPN 0) ánh xạ tới <strong>physical page</strong> 10</li>
@@ -184,21 +185,28 @@ Nhiều kiến trúc (ví dụ: MIPS, SPARC, x86-64) hiện hỗ trợ nhiều k
 <pre><code>31 30 29 ... 12 11 ... 0
 Seg      VPN      Offset
 </code></pre>
-<p>Trong phần cứng, giả sử có ba cặp base/bounds, mỗi cặp cho code, heap, stack. Khi process chạy, base register của mỗi segment chứa địa chỉ vật lý của linear page table</p>
-<p>(TODO)</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật.</p>
-<p>Điểm khác biệt then chốt trong mô hình <strong>hybrid</strong> (lai) của chúng ta là sự tồn tại của một <strong>bounds register</strong> (thanh ghi giới hạn) cho mỗi <strong>segment</strong> (đoạn). Mỗi bounds register lưu giá trị của <strong>page</strong> (trang) hợp lệ lớn nhất trong segment đó. Ví dụ, nếu <strong>code segment</strong> (đoạn mã) đang sử dụng ba page đầu tiên (0, 1 và 2), thì <strong>page table</strong> (bảng trang) của code segment sẽ chỉ có ba entry được cấp phát và bounds register sẽ được đặt là 3; mọi truy cập bộ nhớ vượt quá cuối segment sẽ tạo ra một <strong>exception</strong> (ngoại lệ) và nhiều khả năng dẫn đến việc chấm dứt <strong>process</strong> (tiến trình). Theo cách này, mô hình hybrid của chúng ta tiết kiệm đáng kể bộ nhớ so với <strong>linear page table</strong> (bảng trang tuyến tính); các page chưa cấp phát giữa <strong>stack</strong> và <strong>heap</strong> sẽ không còn chiếm chỗ trong page table (chỉ để đánh dấu là không hợp lệ).</p>
+<p>Trong phần cứng, giả sử rằng tồn tại ba cặp <strong>base/bounds</strong> (địa chỉ cơ sở/giới hạn), mỗi cặp dành riêng cho <strong>code</strong>, <strong>heap</strong> và <strong>stack</strong>. Khi một <strong>process</strong> (tiến trình) đang chạy, thanh ghi <strong>base</strong> của mỗi segment (đoạn) sẽ chứa địa chỉ vật lý của một <strong>linear page table</strong> (bảng trang tuyến tính) dành cho segment đó; do đó, mỗi process trong hệ thống hiện có ba page table liên kết với nó. Khi xảy ra <strong>context switch</strong> (chuyển ngữ cảnh), các thanh ghi này phải được thay đổi để phản ánh vị trí của các page table thuộc process mới được chuyển sang chạy.</p>
+<p>Khi xảy ra <strong>TLB miss</strong> (trượt TLB – tình huống khi địa chỉ cần tìm không có trong Translation Lookaside Buffer), giả sử đây là <strong>hardware-managed TLB</strong> (TLB được phần cứng quản lý, tức phần cứng chịu trách nhiệm xử lý TLB miss), phần cứng sẽ sử dụng các bit <strong>segment</strong> (SN) để xác định cặp base/bounds nào cần dùng. Sau đó, phần cứng lấy địa chỉ vật lý trong thanh ghi base tương ứng và kết hợp nó với <strong>VPN</strong> (Virtual Page Number – số trang ảo) như sau để tạo ra địa chỉ của <strong>page table entry</strong> (PTE – mục nhập bảng trang):</p>
+<pre><code>SN      = (VirtualAddress &amp; SEG_MASK) &gt;&gt; SN_SHIFT
+VPN     = (VirtualAddress &amp; VPN_MASK) &gt;&gt; VPN_SHIFT
+AddressOfPTE = Base[SN] + (VPN * sizeof(PTE))
+</code></pre>
+<p>Chuỗi thao tác này có thể trông quen thuộc; nó gần như giống hệt với những gì chúng ta đã thấy trước đây khi làm việc với <strong>linear page table</strong>. Điểm khác biệt duy nhất, tất nhiên, là việc sử dụng một trong ba thanh ghi base của segment thay vì chỉ một thanh ghi base của page table duy nhất.</p>
+<blockquote>
+<blockquote>
+<p><strong>TIP: USE HYBRIDS</strong></p>
+<p>Khi bạn có hai ý tưởng tốt nhưng dường như đối lập nhau, bạn nên xem xét khả năng kết hợp chúng thành một <strong>hybrid</strong> (lai ghép) để tận dụng được ưu điểm của cả hai. Ví dụ, các giống ngô lai được biết là khỏe mạnh và bền bỉ hơn bất kỳ giống ngô tự nhiên nào. Tất nhiên, không phải mọi hybrid đều là ý tưởng hay; hãy xem loài <strong>Zeedonk</strong> (hay <strong>Zonkey</strong>), là kết quả lai giữa <strong>Zebra</strong> (ngựa vằn) và <strong>Donkey</strong> (lừa). Nếu bạn không tin rằng sinh vật này tồn tại, hãy tra cứu và chuẩn bị để ngạc nhiên.</p>
+</blockquote>
+</blockquote>
+<p>Điểm khác biệt then chốt trong mô hình <strong>hybrid</strong> (lai) của chúng ta là sự tồn tại của một <strong>bounds register</strong> (thanh ghi giới hạn) cho mỗi <strong>segment</strong> (đoạn). Mỗi bounds register lưu giá trị của <strong>page</strong> (trang) hợp lệ lớn nhất trong segment đó. Ví dụ, nếu <strong>code segment</strong> (đoạn code) đang sử dụng ba page đầu tiên (0, 1 và 2), thì <strong>page table</strong> (bảng trang) của code segment sẽ chỉ có ba entry được cấp phát và bounds register sẽ được đặt là 3; mọi truy cập bộ nhớ vượt quá cuối segment sẽ tạo ra một <strong>exception</strong> (ngoại lệ) và nhiều khả năng dẫn đến việc chấm dứt <strong>process</strong> (tiến trình). Theo cách này, mô hình hybrid của chúng ta tiết kiệm đáng kể bộ nhớ so với <strong>linear page table</strong> (bảng trang tuyến tính); các page chưa cấp phát giữa <strong>stack</strong> và <strong>heap</strong> sẽ không còn chiếm chỗ trong page table (chỉ để đánh dấu là không hợp lệ).</p>
 <p>Tuy nhiên, như bạn có thể nhận thấy, cách tiếp cận này không phải không có vấn đề. Thứ nhất, nó vẫn yêu cầu chúng ta sử dụng segmentation; như đã thảo luận trước đây, segmentation không linh hoạt như mong muốn, vì nó giả định một mô hình sử dụng address space nhất định; nếu chúng ta có một heap lớn nhưng sử dụng thưa thớt, chẳng hạn, ta vẫn có thể gặp nhiều lãng phí trong page table. Thứ hai, mô hình hybrid này khiến <strong>external fragmentation</strong> (phân mảnh bên ngoài) xuất hiện trở lại. Trong khi phần lớn bộ nhớ được quản lý theo đơn vị kích thước page, thì các page table giờ đây có thể có kích thước tùy ý (theo bội số của PTE). Do đó, việc tìm không gian trống cho chúng trong bộ nhớ trở nên phức tạp hơn. Vì những lý do này, các nhà thiết kế hệ thống tiếp tục tìm kiếm những cách tốt hơn để triển khai các page table nhỏ hơn.</p>
 <h2 id="203-multi-level-page-tables"><a class="header" href="#203-multi-level-page-tables">20.3 Multi-level Page Tables</a></h2>
 <p>(Bảng trang nhiều cấp)</p>
 <p>Một cách tiếp cận khác không dựa vào segmentation nhưng giải quyết cùng vấn đề: làm thế nào để loại bỏ tất cả các vùng <strong>invalid</strong> (không hợp lệ) trong page table thay vì giữ chúng trong bộ nhớ? Chúng ta gọi cách tiếp cận này là <strong>multi-level page table</strong> (bảng trang nhiều cấp), vì nó biến linear page table thành một cấu trúc giống như cây. Cách tiếp cận này hiệu quả đến mức nhiều hệ thống hiện đại áp dụng nó (ví dụ: x86 [BOH10]). Sau đây, chúng ta sẽ mô tả chi tiết.</p>
-<p>Ý tưởng cơ bản của multi-level page table rất đơn giản:</p>
-<ul>
-<li>Đầu tiên, chia nhỏ page table thành các đơn vị kích thước bằng một page.</li>
-<li>Sau đó, nếu toàn bộ một page của các <strong>page-table entries</strong> (PTE) là invalid, thì không cấp phát page đó trong page table.</li>
-</ul>
+<p>Ý tưởng cơ bản của multi-level page table rất đơn giản. Đầu tiên, chia nhỏ page table thành các đơn vị kích thước bằng một page. Sau đó, nếu toàn bộ một page của các <strong>page-table entries</strong> (PTE) là invalid, thì không cấp phát page đó trong page table.</p>
 <p>Để theo dõi xem một page của page table có hợp lệ hay không (và nếu hợp lệ thì nằm ở đâu trong bộ nhớ), ta sử dụng một cấu trúc mới gọi là <strong>page directory</strong> (thư mục trang). Page directory có thể cho biết vị trí của một page trong page table, hoặc cho biết toàn bộ page đó không chứa page hợp lệ nào.</p>
-<p><strong>Figure 20.3: Linear (Left) And Multi-Level (Right) Page Tables</strong><br />
+<p><img src="img/fig20_3.PNG" alt="" />
+<strong>Figure 20.3: Linear (Left) And Multi-Level (Right) Page Tables</strong><br />
 <em>(Bảng trang tuyến tính — trái, và bảng trang nhiều cấp — phải)</em></p>
 <p><em>Figure 20.3</em> minh họa ví dụ:</p>
 <ul>
@@ -231,7 +239,8 @@ Khi xây dựng một cấu trúc dữ liệu, luôn cần cân nhắc sự đá
 <li>Page 64 byte</li>
 </ul>
 <p>Như vậy, ta có virtual address 14-bit, với 8 bit cho VPN và 6 bit cho offset. Linear page table sẽ có 2^8 (256) entry, ngay cả khi chỉ một phần nhỏ address space được sử dụng. <em>Figure 20.4</em> minh họa một ví dụ như vậy.</p>
-<p><strong>Figure 20.4: A 16KB Address Space With 64-byte Pages</strong><br />
+<p><img src="img/fig20_4.PNG" alt="" />
+<strong>Figure 20.4: A 16KB Address Space With 64-byte Pages</strong><br />
 <em>(Không gian địa chỉ 16KB với page 64 byte)</em></p>
 <p>Trong ví dụ này:</p>
 <ul>
@@ -246,13 +255,13 @@ Khi xây dựng một cấu trúc dữ liệu, luôn cần cân nhắc sự đá
 <li>Mỗi PTE = 4 byte → page table = 1KB (256 × 4 byte)</li>
 <li>Với page 64 byte, page table 1KB được chia thành 16 page</li>
 </ul>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành và trình bày theo phong cách học thuật.</p>
 <p>Chỉ số <strong>page-table index</strong> (viết tắt là <strong>PTIndex</strong>) này có thể được dùng để đánh chỉ số vào chính <strong>page table</strong>, từ đó cho chúng ta địa chỉ của <strong>PTE</strong> (page-table entry — mục bảng trang):</p>
 <pre><code>PTEAddr = (PDE.PFN &lt;&lt; SHIFT) + (PTIndex * sizeof(PTE))
 </code></pre>
 <p>Lưu ý rằng <strong>page-frame number</strong> (PFN — số khung trang vật lý) lấy từ <strong>page-directory entry</strong> (PDE — mục thư mục trang) phải được dịch trái (left-shift) vào đúng vị trí trước khi kết hợp với chỉ số page table để tạo thành địa chỉ của PTE.</p>
 <p>Để xem toàn bộ quá trình này có hợp lý không, chúng ta sẽ điền một số giá trị thực tế vào <strong>multi-level page table</strong> (bảng trang nhiều cấp) và dịch một địa chỉ ảo cụ thể. Hãy bắt đầu với <strong>page directory</strong> (thư mục trang) cho ví dụ này (bên trái <em>Figure 20.5</em>).</p>
-<p><strong>Figure 20.5: A Page Directory, And Pieces Of Page Table</strong><br />
+<p><img src="img/fig20_5.PNG" alt="" />
+<strong>Figure 20.5: A Page Directory, And Pieces Of Page Table</strong><br />
 <em>(Một thư mục trang và các phần của bảng trang)</em></p>
 <p>Trong hình, bạn có thể thấy mỗi PDE mô tả thông tin về một page của page table trong address space. Trong ví dụ này, chúng ta có hai vùng hợp lệ trong address space (ở đầu và cuối), và một số lượng lớn ánh xạ không hợp lệ ở giữa.</p>
 <p>Trong <strong>physical page</strong> 100 (PFN của page 0 trong page table), chúng ta có page đầu tiên chứa 16 PTE cho 16 VPN đầu tiên trong address space. Xem phần giữa của <em>Figure 20.5</em> để biết nội dung của phần này trong page table.</p>
@@ -277,12 +286,12 @@ Các nhà thiết kế hệ thống nên thận trọng khi thêm độ phức t
 <p>Hãy lấy một ví dụ đơn giản để thấy tại sao multi-level table sâu hơn lại hữu ích. Trong ví dụ này, giả sử chúng ta có <strong>virtual address space</strong> 30-bit, và <strong>page</strong> nhỏ (512 byte). Khi đó, virtual address có thành phần <strong>virtual page number</strong> (VPN) 21-bit và <strong>offset</strong> 9-bit.</p>
 <p>Hãy nhớ mục tiêu khi xây dựng multi-level page table: làm cho mỗi phần của page table vừa trong một page. Cho đến giờ, chúng ta mới chỉ xét bản thân page table; nhưng nếu page directory trở nên quá lớn thì sao?</p>
 <p>Để xác định cần bao nhiêu cấp trong multi-level table để tất cả các phần của page table vừa trong một page, ta bắt đầu bằng việc xác định số lượng PTE có thể chứa trong một page. Với kích thước page 512 byte và giả sử mỗi PTE là 4 byte, ta có thể chứa 128 PTE trên một page. Khi đánh chỉ số vào một page của page table, ta sẽ cần <strong>7 bit</strong> ít quan trọng nhất (log₂ 128) của VPN làm chỉ số:</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật.</p>
 <p>Bây giờ, khi đánh chỉ số vào <strong>upper-level page directory</strong> (thư mục trang cấp cao), chúng ta sử dụng các bit cao nhất của <strong>virtual address</strong> (PD Index 0 trong sơ đồ); chỉ số này được dùng để lấy <strong>page-directory entry</strong> (PDE — mục thư mục trang) từ page directory cấp cao nhất. Nếu hợp lệ, cấp thứ hai của page directory sẽ được tra cứu bằng cách kết hợp <strong>physical frame number</strong> (PFN — số khung trang vật lý) từ PDE cấp cao nhất với phần tiếp theo của <strong>VPN</strong> (PD Index 1). Cuối cùng, nếu hợp lệ, địa chỉ của <strong>PTE</strong> (page-table entry — mục bảng trang) có thể được hình thành bằng cách sử dụng <strong>page-table index</strong> kết hợp với địa chỉ từ PDE cấp thứ hai. Ồ! Khá nhiều bước chỉ để tra cứu một mục trong <strong>multi-level table</strong> (bảng nhiều cấp).</p>
 <h3 id="the-translation-process-remember-the-tlb"><a class="header" href="#the-translation-process-remember-the-tlb">The Translation Process: Remember the TLB</a></h3>
 <p>(Quy trình dịch địa chỉ: Đừng quên TLB)</p>
 <p>Để tóm tắt toàn bộ quá trình dịch địa chỉ sử dụng <strong>two-level page table</strong> (bảng trang hai cấp), chúng ta một lần nữa trình bày luồng điều khiển dưới dạng thuật toán (<em>Figure 20.6</em>). Hình này cho thấy điều gì xảy ra trong phần cứng (giả sử <strong>hardware-managed TLB</strong> — TLB do phần cứng quản lý) khi có mỗi lần tham chiếu bộ nhớ.</p>
-<p><strong>Figure 20.6: Multi-level Page Table Control Flow</strong><br />
+<p><img src="img/fig20_6.PNG" alt="" />
+<strong>Figure 20.6: Multi-level Page Table Control Flow</strong><br />
 <em>(Luồng điều khiển bảng trang nhiều cấp)</em></p>
 <p>Như bạn thấy trong hình, trước khi bất kỳ truy cập phức tạp nào tới multi-level page table diễn ra, phần cứng sẽ kiểm tra TLB trước; nếu <strong>hit</strong>, <strong>physical address</strong> (địa chỉ vật lý) sẽ được tạo trực tiếp mà không cần truy cập page table, giống như trước đây. Chỉ khi <strong>TLB miss</strong> xảy ra, phần cứng mới cần thực hiện toàn bộ quá trình tra cứu nhiều cấp. Trên đường này, bạn có thể thấy chi phí của two-level page table truyền thống: cần thêm hai lần truy cập bộ nhớ để tìm một bản dịch hợp lệ.</p>
 <h2 id="204-inverted-page-tables"><a class="header" href="#204-inverted-page-tables">20.4 Inverted Page Tables</a></h2>

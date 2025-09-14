@@ -136,6 +136,7 @@
                     <main>
                         <h1 id="49-hệ-thống-tệp-mạng-của-sun-suns-network-file-system--nfs"><a class="header" href="#49-hệ-thống-tệp-mạng-của-sun-suns-network-file-system--nfs">49. Hệ thống Tệp Mạng của Sun (Sun’s Network File System – NFS)</a></h1>
 <p>Một trong những ứng dụng đầu tiên của mô hình tính toán <strong>client/server</strong> phân tán là trong lĩnh vực <strong>distributed file system</strong> (hệ thống tệp phân tán). Trong môi trường như vậy, có một số máy client và một máy server (hoặc một vài máy); server lưu trữ dữ liệu trên các ổ đĩa của nó, và các client yêu cầu dữ liệu thông qua các thông điệp giao thức được định dạng chuẩn.</p>
+<p><img src="img/fig49_1.PNG" alt="" /></p>
 <p><strong>Hình 49.1: Một hệ thống Client/Server tổng quát</strong></p>
 <p>Như bạn có thể thấy từ hình minh họa, server sở hữu các ổ đĩa, và các client gửi thông điệp qua mạng để truy cập thư mục và tệp trên các ổ đĩa đó.</p>
 <p>Tại sao chúng ta lại sử dụng mô hình này? (tức là, tại sao không để client dùng ổ đĩa cục bộ của chính nó?)</p>
@@ -165,6 +166,7 @@ Client-side file system sau đó sẽ sao chép dữ liệu vào <strong>user bu
 Lưu ý rằng, một lần <code>read()</code> tiếp theo của cùng block đó trên client có thể được lấy từ bộ nhớ cache của client hoặc thậm chí từ đĩa cục bộ của client; trong trường hợp tốt nhất, sẽ <strong>không cần</strong> tạo ra lưu lượng mạng nào.</p>
 </li>
 </ul>
+<p><img src="img/fig49_2.PNG" alt="" /></p>
 <p><strong>Hình 49.2: Kiến trúc Distributed File System</strong></p>
 <p>Từ cái nhìn tổng quan đơn giản này, bạn có thể thấy rằng có <strong>hai thành phần phần mềm quan trọng</strong> trong một distributed file system kiểu client/server:</p>
 <ol>
@@ -189,7 +191,7 @@ Trước khi đi sâu vào chi tiết của giao thức NFSv2, bạn có thể t
 <p>Mục tiêu đơn giản này được hiện thực hóa trong NFSv2 bằng cách thiết kế một giao thức <strong>stateless</strong> (không lưu trạng thái). Theo thiết kế, server <strong>không</strong> theo dõi bất kỳ thông tin nào về những gì đang diễn ra ở mỗi client.<br />
 Ví dụ: server không biết client nào đang cache block nào, hoặc file nào đang được mở ở mỗi client, hoặc vị trí con trỏ file hiện tại của một file, v.v. Nói ngắn gọn, server không theo dõi bất kỳ hoạt động nào của client; thay vào đó, giao thức được thiết kế sao cho <strong>mỗi yêu cầu giao thức đều chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu đó</strong>. Nếu điều này chưa rõ ràng, cách tiếp cận stateless sẽ trở nên dễ hiểu hơn khi chúng ta phân tích chi tiết giao thức ở phần sau.</p>
 <p>Ví dụ về một giao thức <strong>stateful</strong> (có lưu trạng thái, tức là không stateless) là system call <code>open()</code>.<br />
-Với một <strong>pathname</strong>, <code>open()</code> trả về một <strong>file descriptor</strong> (một số nguyên). Descriptor này được sử dụng trong các lời gọi <code>read()</code> hoặc <code>write()</code> tiếp theo để truy cập các block dữ liệu của file, như trong đoạn mã ứng dụng sau (lưu ý: phần kiểm tra lỗi của system call được lược bỏ để tiết kiệm không gian):</p>
+Với một <strong>pathname</strong>, <code>open()</code> trả về một <strong>file descriptor</strong> (một số nguyên). Descriptor này được sử dụng trong các call <code>read()</code> hoặc <code>write()</code> tiếp theo để truy cập các block dữ liệu của file, như trong đoạn code ứng dụng sau (lưu ý: phần kiểm tra lỗi của system call được lược bỏ để tiết kiệm không gian):</p>
 <pre><code class="language-c">char buffer[MAX];
 int fd = open(&quot;foo&quot;, O_RDONLY); // lấy descriptor &quot;fd&quot;
 read(fd, buffer, MAX);          // đọc MAX byte từ foo qua &quot;fd&quot;
@@ -198,6 +200,7 @@ read(fd, buffer, MAX);          // đọc MAX byte lần nữa
 read(fd, buffer, MAX);          // đọc MAX byte lần nữa
 close(fd);                      // đóng file
 </code></pre>
+<p><img src="img/fig49_3.PNG" alt="" /></p>
 <p><strong>Hình 49.3: Mã phía client – Đọc từ một file</strong></p>
 <p>Bây giờ hãy tưởng tượng <strong>client-side file system</strong> mở file bằng cách gửi một thông điệp giao thức tới server với nội dung: “mở file ‘foo’ và trả lại cho tôi một descriptor”. <strong>File server</strong> sau đó mở file cục bộ ở phía nó và gửi descriptor này về cho client.<br />
 Trong các lần đọc tiếp theo, ứng dụng client sử dụng descriptor đó để gọi system call <code>read()</code>; client-side file system sẽ truyền descriptor này trong thông điệp gửi tới file server, với nội dung: “đọc một số byte từ file được tham chiếu bởi descriptor mà tôi đang gửi cho bạn”.</p>
@@ -214,7 +217,7 @@ Không cần cơ chế khôi phục phức tạp; server chỉ cần khởi đ�
 <blockquote>
 <blockquote>
 <p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ ĐỊNH NGHĨA MỘT FILE PROTOCOL THEO KIỂU STATELESS</strong><br />
-Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động ở chế độ <strong>stateless</strong> (không lưu trạng thái)? Rõ ràng, các lời gọi <strong>stateful</strong> như <code>open()</code> không thể nằm trong phạm vi thảo luận (vì nó yêu cầu server phải theo dõi các file đang mở); tuy nhiên, ứng dụng phía client vẫn muốn gọi <code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code> và các lời gọi API chuẩn khác để truy cập file và thư mục. Do đó, câu hỏi chi tiết hơn là: làm thế nào để định nghĩa giao thức vừa <strong>stateless</strong> vừa hỗ trợ API hệ thống tệp <strong>POSIX</strong>?</p>
+Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động ở chế độ <strong>stateless</strong> (không lưu trạng thái)? Rõ ràng, các call <strong>stateful</strong> như <code>open()</code> không thể nằm trong phạm vi thảo luận (vì nó yêu cầu server phải theo dõi các file đang mở); tuy nhiên, ứng dụng phía client vẫn muốn gọi <code>open()</code>, <code>read()</code>, <code>write()</code>, <code>close()</code> và các call API chuẩn khác để truy cập file và thư mục. Do đó, câu hỏi chi tiết hơn là: làm thế nào để định nghĩa giao thức vừa <strong>stateless</strong> vừa hỗ trợ API hệ thống tệp <strong>POSIX</strong>?</p>
 </blockquote>
 </blockquote>
 <p>Một yếu tố then chốt để hiểu thiết kế của giao thức NFS là <strong>file handle</strong>. <strong>File handle</strong> được dùng để mô tả duy nhất file hoặc thư mục mà một thao tác cụ thể sẽ thực hiện; do đó, nhiều yêu cầu giao thức sẽ bao gồm một file handle.</p>
@@ -231,6 +234,7 @@ Làm thế nào để định nghĩa giao thức mạng cho phép hoạt động
 <li><strong>Generation number</strong> cần thiết khi tái sử dụng một inode number; bằng cách tăng giá trị này mỗi khi inode number được tái sử dụng, server đảm bảo rằng một client với file handle cũ sẽ không thể vô tình truy cập vào file mới được cấp phát.</li>
 </ul>
 <p>Dưới đây là tóm tắt một số thành phần quan trọng của giao thức; toàn bộ giao thức có thể tìm thấy ở nơi khác (xem sách của Callaghan để có cái nhìn chi tiết và xuất sắc về NFS [C00]).</p>
+<p><img src="img/fig49_4.PNG" alt="" /></p>
 <p><strong>Hình 49.4: Giao thức NFS – Ví dụ</strong></p>
 <p>Một số thành phần quan trọng của giao thức:</p>
 <ul>
@@ -258,7 +262,8 @@ Ví dụ: giả sử client đã có file handle của thư mục gốc <code>/<
 <li><strong>Client-side file system</strong> theo dõi các file đang mở và thường dịch các yêu cầu của ứng dụng thành tập hợp các thông điệp giao thức tương ứng.</li>
 <li><strong>Server</strong> chỉ đơn giản phản hồi các thông điệp giao thức, mỗi thông điệp chứa toàn bộ thông tin cần thiết để hoàn tất yêu cầu.</li>
 </ul>
-<p>Ví dụ, hãy xét một ứng dụng đơn giản đọc một file. Trong sơ đồ (<strong>Hình 49.5</strong>), chúng ta thấy các system call mà ứng dụng thực hiện, và cách client-side file system cùng file server xử lý các lời gọi này.</p>
+<p>Ví dụ, hãy xét một ứng dụng đơn giản đọc một file. Trong sơ đồ (<strong>Hình 49.5</strong>), chúng ta thấy các system call mà ứng dụng thực hiện, và cách client-side file system cùng file server xử lý các call này.</p>
+<p><img src="img/fig49_5.PNG" alt="" /></p>
 <p><strong>Hình 49.5: Đọc một file – Hoạt động của Client-side và File Server</strong></p>
 <p>Một vài nhận xét về hình minh họa:</p>
 <ol>
@@ -303,6 +308,7 @@ Nếu server phản hồi, mọi thứ lại ổn và client đã xử lý gọn
 <li><strong>LOOKUP</strong> và <strong>READ</strong> là idempotent một cách hiển nhiên, vì chúng chỉ đọc thông tin từ file server và không cập nhật gì.</li>
 <li>Thú vị hơn, <strong>WRITE</strong> cũng là idempotent. Nếu một WRITE thất bại, client có thể đơn giản gửi lại. Thông điệp WRITE chứa dữ liệu, số byte (count), và <strong>offset chính xác</strong> để ghi dữ liệu. Do đó, nó có thể được lặp lại với đảm bảo rằng kết quả của nhiều lần ghi giống hệt kết quả của một lần ghi.</li>
 </ul>
+<p><img src="img/fig49_6.PNG" alt="" /></p>
 <p><strong>Hình 49.6: Ba loại mất mát (The Three Types Of Loss)</strong></p>
 <p>Theo cách này, client có thể xử lý tất cả các timeout theo một cách thống nhất:</p>
 <ul>
@@ -322,7 +328,7 @@ Ngay cả khi bạn thiết kế một hệ thống tuyệt vời, đôi khi cá
 <h2 id="498-cải-thiện-hiệu-năng-client-side-caching-bộ-nhớ-đệm-phía-client"><a class="header" href="#498-cải-thiện-hiệu-năng-client-side-caching-bộ-nhớ-đệm-phía-client">49.8 Cải thiện hiệu năng: Client-side Caching (Bộ nhớ đệm phía client)</a></h2>
 <p><strong>Distributed file system</strong> (hệ thống tệp phân tán) có nhiều ưu điểm, nhưng việc gửi tất cả các yêu cầu đọc và ghi qua mạng có thể dẫn đến một vấn đề lớn về hiệu năng: mạng thường không nhanh, đặc biệt khi so với bộ nhớ hoặc đĩa cục bộ. Do đó, một câu hỏi khác được đặt ra: <strong>làm thế nào để cải thiện hiệu năng của một distributed file system?</strong></p>
 <p>Câu trả lời, như bạn có thể đoán từ tiêu đề, là <strong>client-side caching</strong> (bộ nhớ đệm phía client). <strong>NFS client-side file system</strong> lưu trữ dữ liệu file (và metadata) mà nó đã đọc từ server trong bộ nhớ của client. Nhờ vậy, trong khi lần truy cập đầu tiên tốn kém (vì cần giao tiếp qua mạng), các lần truy cập sau được phục vụ rất nhanh từ bộ nhớ của client.</p>
-<p>Bộ nhớ đệm này cũng đóng vai trò như một bộ đệm tạm thời cho các thao tác ghi. Khi một ứng dụng client ghi vào file, dữ liệu sẽ được lưu tạm trong bộ nhớ của client (trong cùng bộ nhớ đệm với dữ liệu đọc từ file server) trước khi được ghi ra server. Cơ chế <strong>write buffering</strong> này hữu ích vì nó tách độ trễ của lời gọi <code>write()</code> trong ứng dụng khỏi hiệu năng ghi thực tế, tức là lời gọi <code>write()</code> của ứng dụng sẽ trả về ngay lập tức (chỉ đưa dữ liệu vào cache của client-side file system); dữ liệu chỉ được ghi ra file server sau đó.</p>
+<p>Bộ nhớ đệm này cũng đóng vai trò như một bộ đệm tạm thời cho các thao tác ghi. Khi một ứng dụng client ghi vào file, dữ liệu sẽ được lưu tạm trong bộ nhớ của client (trong cùng bộ nhớ đệm với dữ liệu đọc từ file server) trước khi được ghi ra server. Cơ chế <strong>write buffering</strong> này hữu ích vì nó tách độ trễ của call <code>write()</code> trong ứng dụng khỏi hiệu năng ghi thực tế, tức là call <code>write()</code> của ứng dụng sẽ trả về ngay lập tức (chỉ đưa dữ liệu vào cache của client-side file system); dữ liệu chỉ được ghi ra file server sau đó.</p>
 <p>Vậy là NFS client cache dữ liệu và hiệu năng thường rất tốt, xong rồi phải không? Đáng tiếc là chưa hẳn. Việc thêm cơ chế cache vào bất kỳ hệ thống nào có nhiều client cache sẽ dẫn đến một thách thức lớn và thú vị, gọi là <strong>cache consistency problem</strong> (vấn đề nhất quán bộ nhớ đệm).</p>
 <h2 id="499-vấn-đề-nhất-quán-bộ-nhớ-đệm-the-cache-consistency-problem"><a class="header" href="#499-vấn-đề-nhất-quán-bộ-nhớ-đệm-the-cache-consistency-problem">49.9 Vấn đề nhất quán bộ nhớ đệm (The Cache Consistency Problem)</a></h2>
 <p>Vấn đề này được minh họa rõ nhất với ba client và một server.</p>
@@ -331,6 +337,7 @@ Ngay cả khi bạn thiết kế một hệ thống tuyệt vời, đôi khi cá
 <li>Tiếp theo, một client khác, <strong>C2</strong>, ghi đè file <strong>F</strong>, thay đổi nội dung của nó; gọi phiên bản mới là <strong>F[v2]</strong> và phiên bản cũ là <strong>F[v1]</strong> (file vẫn cùng tên, chỉ khác nội dung).</li>
 <li>Cuối cùng, có một client thứ ba, <strong>C3</strong>, chưa từng truy cập file <strong>F</strong>.</li>
 </ul>
+<p><img src="img/fig49_7.PNG" alt="" /></p>
 <p><strong>Hình 49.7: Vấn đề nhất quán bộ nhớ đệm</strong></p>
 <p>Có thể bạn đã thấy vấn đề (Hình 49.7). Thực tế, có <strong>hai tiểu vấn đề</strong>:</p>
 <ol>

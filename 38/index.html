@@ -154,7 +154,6 @@ Khi xem xét cách bổ sung chức năng mới cho một hệ thống, ta nên 
 </blockquote>
 <p>Điều đáng kinh ngạc là RAID cung cấp những lợi thế này <strong>một cách minh bạch</strong> đối với các hệ thống sử dụng nó, tức là một RAID chỉ đơn giản xuất hiện như một ổ đĩa lớn đối với hệ thống chủ. Vẻ đẹp của tính minh bạch nằm ở chỗ: bạn chỉ cần thay thế một ổ đĩa bằng một RAID mà không phải thay đổi một dòng mã phần mềm nào; hệ điều hành và các ứng dụng khách vẫn tiếp tục hoạt động mà không cần chỉnh sửa. Theo cách này, tính minh bạch cải thiện đáng kể khả năng triển khai RAID, cho phép người dùng và quản trị viên đưa RAID vào sử dụng mà không phải lo lắng về khả năng tương thích phần mềm.</p>
 <p>Tiếp theo, chúng ta sẽ thảo luận một số khía cạnh quan trọng của RAID. Chúng ta bắt đầu với <strong>giao diện</strong> (interface), <strong>mô hình lỗi</strong> (fault model), và sau đó bàn về cách đánh giá một thiết kế RAID theo ba tiêu chí quan trọng: <strong>dung lượng</strong> (capacity), <strong>độ tin cậy</strong> (reliability), và <strong>hiệu năng</strong> (performance). Cuối cùng, chúng ta sẽ đề cập đến một số vấn đề khác quan trọng đối với thiết kế và triển khai RAID.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h2 id="381-giao-diện-và-cấu-trúc-bên-trong-của-raid-interface-and-raid-internals"><a class="header" href="#381-giao-diện-và-cấu-trúc-bên-trong-của-raid-interface-and-raid-internals">38.1 Giao diện và cấu trúc bên trong của RAID (Interface And RAID Internals)</a></h2>
 <p>Đối với <strong>file system</strong> (hệ thống tệp) ở tầng trên, một <strong>RAID</strong> trông giống như một ổ đĩa lớn, (hy vọng là) nhanh và (hy vọng là) đáng tin cậy. Giống như một ổ đĩa đơn, nó được trình bày như một mảng tuyến tính các <strong>block</strong>, mỗi block có thể được đọc hoặc ghi bởi file system (hoặc các client khác).</p>
 <p>Khi một file system gửi một yêu cầu <strong>logical I/O</strong> (I/O logic) tới RAID, bên trong RAID phải tính toán xem cần truy cập ổ đĩa (hoặc các ổ đĩa) nào để hoàn tất yêu cầu, và sau đó phát ra một hoặc nhiều <strong>physical I/O</strong> (I/O vật lý) để thực hiện. Bản chất chính xác của các I/O vật lý này phụ thuộc vào <strong>RAID level</strong> (cấp RAID), như chúng ta sẽ thảo luận chi tiết bên dưới. Tuy nhiên, như một ví dụ đơn giản, hãy xem xét một RAID lưu hai bản sao của mỗi block (mỗi bản trên một ổ đĩa riêng biệt); khi ghi vào một hệ thống RAID dạng <strong>mirrored</strong> (nhân bản), RAID sẽ phải thực hiện hai I/O vật lý cho mỗi một I/O logic được gửi tới.</p>
@@ -197,12 +196,14 @@ Do đó, trước khi đánh giá hiệu năng, chúng ta sẽ trình bày một
 <p>Cấp RAID đầu tiên thực ra <strong>không phải</strong> là một cấp RAID đúng nghĩa, vì nó <strong>không có redundancy</strong>. Tuy nhiên, <strong>RAID Level 0</strong>, hay còn được biết đến nhiều hơn với tên <strong>striping</strong> (phân dải dữ liệu), đóng vai trò như một <strong>giới hạn trên</strong> tuyệt vời về hiệu năng và dung lượng, và do đó rất đáng để tìm hiểu.</p>
 <p>Hình thức striping đơn giản nhất sẽ phân bố các block trên các ổ đĩa của hệ thống như sau (giả sử ở đây là một mảng 4 ổ đĩa):</p>
 <p>...</p>
+<p><img src="img/fig38_1.PNG" alt="" /></p>
 <p><strong>Hình 38.1: RAID-0 – Striping đơn giản</strong></p>
 <p>Từ <strong>Hình 38.1</strong>, bạn có thể thấy ý tưởng cơ bản: phân tán các block của mảng dữ liệu lên các ổ đĩa theo kiểu <strong>round-robin</strong> (xoay vòng). Cách tiếp cận này được thiết kế để khai thác tối đa khả năng <strong>song song</strong> của mảng khi có các yêu cầu truy cập tới các khối dữ liệu liên tiếp (ví dụ: một thao tác đọc tuần tự lớn).<br />
 Chúng ta gọi các block nằm trên cùng một hàng là một <strong>stripe</strong>; do đó, các block 0, 1, 2 và 3 ở trên thuộc cùng một stripe.</p>
 <p>Trong ví dụ này, chúng ta đã đơn giản hóa bằng cách giả định rằng chỉ <strong>1 block</strong> (mỗi block giả sử có kích thước 4KB) được đặt trên mỗi ổ đĩa trước khi chuyển sang ổ tiếp theo. Tuy nhiên, cách sắp xếp này <strong>không bắt buộc</strong> phải như vậy.<br />
 Ví dụ, chúng ta có thể sắp xếp các block trên các ổ đĩa như trong <strong>Hình 38.2</strong>:</p>
 <p>...</p>
+<p><img src="img/fig38_2.PNG" alt="" /></p>
 <p><strong>Hình 38.2: Striping với kích thước chunk lớn hơn</strong></p>
 <p>Trong ví dụ này, chúng ta đặt <strong>hai block 4KB</strong> trên mỗi ổ đĩa trước khi chuyển sang ổ tiếp theo. Do đó, <strong>chunk size</strong> (kích thước khối dữ liệu trên mỗi ổ trong một stripe) của mảng RAID này là <strong>8KB</strong>, và một stripe sẽ bao gồm <strong>4 chunk</strong>, tức <strong>32KB dữ liệu</strong>.</p>
 <blockquote>
@@ -220,7 +221,6 @@ Giả sử trong RAID đầu tiên ở trên, có một yêu cầu tới block 1
 Như vậy, block 14 sẽ nằm ở <strong>block thứ tư</strong> (block 3, tính từ 0) của <strong>ổ đĩa thứ ba</strong> (disk 2, tính từ 0), và đó chính xác là vị trí của nó.</p>
 <p>Bạn có thể suy nghĩ về cách các công thức này sẽ được điều chỉnh để hỗ trợ các <strong>chunk size</strong> khác nhau. Hãy thử làm! Không quá khó đâu.</p>
 </blockquote>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h3 id="kích-thước-chunk-chunk-sizes"><a class="header" href="#kích-thước-chunk-chunk-sizes">Kích thước chunk (Chunk Sizes)</a></h3>
 <p><strong>Chunk size</strong> (kích thước khối dữ liệu trên mỗi ổ trong một stripe) chủ yếu ảnh hưởng đến <strong>hiệu năng</strong> của mảng đĩa.<br />
 Ví dụ, một chunk size nhỏ có nghĩa là nhiều tệp sẽ được <strong>striped</strong> (phân dải) trên nhiều ổ đĩa, từ đó <strong>tăng mức độ song song</strong> của các thao tác đọc và ghi đối với một tệp duy nhất; tuy nhiên, <strong>thời gian định vị</strong> (positioning time) để truy cập các block trên nhiều ổ đĩa sẽ tăng lên, vì thời gian định vị cho toàn bộ yêu cầu được xác định bởi <strong>giá trị lớn nhất</strong> của thời gian định vị trong số các yêu cầu trên tất cả các ổ.</p>
@@ -252,7 +252,6 @@ Ví dụ: một luồng yêu cầu ngẫu nhiên có thể truy cập 4KB tại 
 Một số workload quan trọng, chẳng hạn như <strong>transactional workload</strong> (tải giao dịch) trên <strong>database management system</strong> (DBMS – hệ quản trị cơ sở dữ liệu), thể hiện kiểu truy cập này, và do đó cũng được coi là quan trọng.</p>
 </li>
 </ul>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Tất nhiên, <strong>workload</strong> (khối lượng công việc) thực tế không đơn giản như vậy, và thường bao gồm sự pha trộn giữa các thành phần <strong>sequential</strong> (tuần tự) và <strong>random-seeming</strong> (có vẻ ngẫu nhiên), cũng như các hành vi nằm ở khoảng giữa hai loại này. Để đơn giản, chúng ta chỉ xét hai khả năng này.</p>
 <p>Như bạn có thể thấy, <strong>sequential workload</strong> và <strong>random workload</strong> sẽ tạo ra các đặc tính hiệu năng rất khác nhau đối với một ổ đĩa.</p>
 <ul>
@@ -303,8 +302,8 @@ R = \frac{\text{Amount of Data}}{\text{Time to access}} = \frac{10 \ \text{KB}}{
 <h2 id="385-raid-level-1-mirroring"><a class="header" href="#385-raid-level-1-mirroring">38.5 RAID Level 1: Mirroring</a></h2>
 <p>Cấp RAID đầu tiên vượt ra ngoài striping được gọi là <strong>RAID Level 1</strong>, hay <strong>mirroring</strong> (nhân bản dữ liệu). Với một hệ thống mirrored, chúng ta đơn giản tạo <strong>nhiều hơn một bản sao</strong> của mỗi block trong hệ thống; tất nhiên, mỗi bản sao phải được đặt trên một ổ đĩa riêng biệt. Bằng cách này, hệ thống có thể <strong>chịu được lỗi hỏng ổ đĩa</strong>.</p>
 <p>...</p>
+<p><img src="img/fig38_3.PNG" alt="" /></p>
 <p><strong>Hình 38.3: RAID-1 đơn giản – Mirroring</strong></p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Trong một hệ thống <strong>mirrored</strong> (nhân bản) điển hình, chúng ta giả định rằng với mỗi <strong>logical block</strong> (block logic), RAID sẽ lưu giữ <strong>hai bản sao vật lý</strong> của nó. Ví dụ: trong minh họa, <strong>disk 0</strong> và <strong>disk 1</strong> có nội dung giống hệt nhau, và <strong>disk 2</strong> và <strong>disk 3</strong> cũng vậy; dữ liệu được <strong>striped</strong> (phân dải) trên các cặp mirror này.<br />
 Thực tế, bạn có thể nhận thấy rằng có nhiều cách khác nhau để bố trí các bản sao block trên các ổ đĩa. Cách bố trí ở trên là một cách phổ biến và đôi khi được gọi là <strong>RAID-10</strong> (hoặc <strong>RAID 1+0</strong>, stripe of mirrors) vì nó sử dụng các cặp mirror (RAID-1) và sau đó <strong>striping</strong> (RAID-0) trên các cặp này; một cách bố trí phổ biến khác là <strong>RAID-01</strong> (hoặc <strong>RAID 0+1</strong>, mirror of stripes), bao gồm hai mảng striping (RAID-0) lớn, sau đó được mirror (RAID-1) ở tầng trên.<br />
 Trong phạm vi này, chúng ta sẽ chỉ nói về mirroring với giả định bố trí như ở trên.</p>
@@ -330,7 +329,6 @@ Tuy nhiên, trong thực tế, chúng ta thường không muốn phụ thuộc v
 </ul>
 </li>
 </ul>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <blockquote>
 <p><strong>ASIDE: VẤN ĐỀ CẬP NHẬT NHẤT QUÁN TRONG RAID (THE RAID CONSISTENT-UPDATE PROBLEM)</strong></p>
 <p>Trước khi phân tích RAID-1, hãy cùng thảo luận về một vấn đề có thể xảy ra trong bất kỳ hệ thống RAID nhiều ổ đĩa nào, được gọi là <strong>consistent-update problem</strong> (vấn đề cập nhật nhất quán) [DAA05]. Vấn đề này xảy ra khi một thao tác ghi (write) tới RAID phải cập nhật <strong>nhiều ổ đĩa</strong> trong một thao tác logic duy nhất. Trong trường hợp này, giả sử chúng ta đang xét một mảng đĩa <strong>mirrored</strong> (nhân bản).</p>
@@ -371,9 +369,9 @@ N \cdot R \ \text{MB/s}
 <p>Mỗi thao tác ghi logic phải biến thành <strong>hai thao tác ghi vật lý</strong>, và do đó mặc dù tất cả các ổ đĩa đều được sử dụng, client chỉ nhận thấy <strong>một nửa băng thông khả dụng</strong>.<br />
 Ngay cả khi một thao tác ghi vào <strong>logical block x</strong> biến thành <strong>hai thao tác ghi song song</strong> tới hai ổ đĩa vật lý khác nhau, băng thông của nhiều yêu cầu nhỏ chỉ đạt <strong>một nửa</strong> so với striping.<br />
 Như chúng ta sẽ thấy ngay sau đây, đạt được <strong>một nửa băng thông khả dụng</strong> thực ra đã là <strong>khá tốt</strong>!</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h2 id="386-raid-level-4-tiết-kiệm-dung-lượng-với-parity-saving-space-with-parity"><a class="header" href="#386-raid-level-4-tiết-kiệm-dung-lượng-với-parity-saving-space-with-parity">38.6 RAID Level 4: Tiết kiệm dung lượng với Parity (Saving Space With Parity)</a></h2>
 <p>Chúng ta sẽ giới thiệu một phương pháp khác để bổ sung <strong>redundancy</strong> (dữ liệu dự phòng) cho một mảng đĩa, được gọi là <strong>parity</strong> (bit chẵn lẻ). Các phương pháp dựa trên parity cố gắng sử dụng ít dung lượng hơn, từ đó khắc phục nhược điểm lớn về dung lượng mà các hệ thống <strong>mirrored</strong> (nhân bản) phải trả. Tuy nhiên, chúng phải đánh đổi một yếu tố: <strong>hiệu năng</strong>.</p>
+<p><img src="img/fig38_4.PNG" alt="" /></p>
 <p><strong>Hình 38.4: RAID-4 với Parity (RAID-4 With Parity)</strong></p>
 <p>Dưới đây là ví dụ về một hệ thống RAID-4 gồm 5 ổ đĩa (<strong>Hình 38.4</strong>). Với mỗi <strong>stripe</strong> (dải dữ liệu), chúng ta thêm một <strong>parity block</strong> (block chẵn lẻ) lưu trữ thông tin dự phòng cho stripe đó.<br />
 Ví dụ: parity block <strong>P1</strong> chứa thông tin dự phòng được tính toán từ các block 4, 5, 6 và 7.</p>
@@ -404,8 +402,8 @@ Ví dụ, nếu chúng ta có các block kích thước 4 bit (vâng, điều n�
 <ul>
 <li><strong>Về độ tin cậy (Reliability)</strong>: RAID-4 có thể chịu được <strong>1 lỗi ổ đĩa</strong> và không hơn. Nếu mất nhiều hơn một ổ đĩa, sẽ <strong>không có cách nào</strong> để tái tạo dữ liệu đã mất.</li>
 </ul>
+<p><img src="img/fig38_5.PNG" alt="" /></p>
 <p><strong>Hình 38.5: Ghi full-stripe trong RAID-4 (Full-stripe Writes In RAID-4)</strong></p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Cuối cùng, chúng ta xét đến <strong>hiệu năng</strong>. Lần này, hãy bắt đầu bằng việc phân tích <strong>steady-state throughput</strong> (băng thông trạng thái ổn định).<br />
 Hiệu năng đọc tuần tự (<strong>sequential read</strong>) có thể tận dụng tất cả các ổ đĩa <strong>ngoại trừ</strong> ổ đĩa parity, và do đó đạt <strong>băng thông hiệu dụng cực đại</strong> là:</p>
 <p>[
@@ -480,6 +478,7 @@ Hãy nghĩ về số lượng ổ đĩa trong hệ thống để phương pháp 
 Như vậy, với mỗi thao tác ghi, RAID phải thực hiện <strong>4 I/O vật lý</strong> (2 lần đọc và 2 lần ghi).<br />
 Bây giờ, giả sử có rất nhiều yêu cầu ghi được gửi tới RAID; câu hỏi là: <strong>RAID-4 có thể thực hiện bao nhiêu thao tác song song?</strong><br />
 Để hiểu điều này, hãy cùng xem lại <strong>bố trí RAID-4</strong> (<strong>Hình 38.6</strong>).</p>
+<p><img src="img/fig38_6.PNG" alt="" /></p>
 <p><strong>Hình 38.6: Ví dụ – Ghi vào block 4, 13 và các block parity tương ứng</strong></p>
 <p>Giờ hãy tưởng tượng có <strong>2 thao tác ghi nhỏ</strong> được gửi tới RAID-4 gần như cùng lúc, tới các block 4 và 13 (được đánh dấu ∗ trong sơ đồ).<br />
 Dữ liệu của các block này nằm trên <strong>disk 0</strong> và <strong>disk 1</strong>, do đó thao tác đọc và ghi dữ liệu có thể diễn ra <strong>song song</strong> – đây là điểm tốt.<br />
@@ -497,6 +496,7 @@ Như bạn đã biết, một thao tác đọc đơn (giả sử không có lỗ
 <h2 id="387-raid-level-5-rotating-parity"><a class="header" href="#387-raid-level-5-rotating-parity">38.7 RAID Level 5: Rotating Parity</a></h2>
 <p>Để giải quyết <strong>small-write problem</strong> (ít nhất là một phần), Patterson, Gibson và Katz đã giới thiệu <strong>RAID-5</strong>.<br />
 RAID-5 hoạt động gần như giống hệt RAID-4, ngoại trừ việc <strong>xoay vòng (rotate)</strong> block parity qua các ổ đĩa (<strong>Hình 38.7</strong>).</p>
+<p><img src="img/fig38_7.PNG" alt="" /></p>
 <p><strong>Hình 38.7: RAID-5 với parity xoay vòng (RAID-5 With Rotated Parity)</strong></p>
 <p>Như bạn thấy, block parity cho mỗi stripe giờ được <strong>xoay vòng</strong> qua các ổ đĩa, nhằm loại bỏ nút thắt cổ chai của ổ parity trong RAID-4.</p>
 <h3 id="phân-tích-raid-5-raid-5-analysis"><a class="header" href="#phân-tích-raid-5-raid-5-analysis">Phân tích RAID-5 (RAID-5 Analysis)</a></h3>
@@ -531,6 +531,7 @@ Do đó, hiệu năng ghi ngẫu nhiên tới hai ổ đĩa thường sẽ <stro
 <li>Nhưng lần ghi thứ hai của parity chỉ gây ra <strong>quay</strong></li>
 </ul>
 <p>Cuối cùng, <strong>I/O tuần tự</strong> tới RAID mirrored chịu <strong>mức phạt hiệu năng gấp đôi (2×)</strong> so với các phương pháp khác<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p><img src="img/fig38_8.PNG" alt="" /></p>
 <p><strong>Hình 38.8: Dung lượng, độ tin cậy và hiệu năng của RAID (RAID Capacity, Reliability, and Performance)</strong></p>
 <p>Tuy nhiên, so sánh trong <strong>Hình 38.8</strong> đã nêu bật được những khác biệt cốt lõi và hữu ích để hiểu các <strong>trade-off</strong> (đánh đổi) giữa các cấp RAID.<br />
 Trong phân tích độ trễ (<strong>latency analysis</strong>), chúng ta đơn giản sử dụng <strong>T</strong> để biểu diễn thời gian mà một yêu cầu tới một ổ đĩa đơn sẽ mất.</p>

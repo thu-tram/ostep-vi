@@ -167,6 +167,7 @@ Bằng cách đặt các directory bên trong các directory khác, người dù
 Ví dụ: nếu một người dùng tạo một thư mục <code>foo</code> trong thư mục gốc <code>/</code>, và sau đó tạo một file <code>bar.txt</code> trong thư mục <code>foo</code>, chúng ta có thể tham chiếu tới file này bằng <strong>absolute pathname</strong> (đường dẫn tuyệt đối), trong trường hợp này sẽ là:</p>
 <pre><code>/foo/bar.txt
 </code></pre>
+<p><img src="img/fig39_1.PNG" alt="" /></p>
 <p><strong>Hình 39.1: Ví dụ về cây thư mục (An Example Directory Tree)</strong></p>
 <blockquote>
 <p><strong>TIP: SUY NGHĨ CẨN THẬN VỀ VIỆC ĐẶT TÊN</strong></p>
@@ -214,7 +215,7 @@ prompt&gt;
 </code></pre>
 <p>Để tìm hiểu điều gì thực sự xảy ra, chúng ta sẽ sử dụng một công cụ cực kỳ hữu ích để <strong>theo dõi các system call</strong> mà một chương trình thực hiện.<br />
 Trên Linux, công cụ này được gọi là <code>strace</code>.<br />
-Dưới đây là ví dụ sử dụng <code>strace</code> để tìm hiểu <code>cat</code> đang làm gì (một số lời gọi đã được lược bỏ để dễ đọc):</p>
+Dưới đây là ví dụ sử dụng <code>strace</code> để tìm hiểu <code>cat</code> đang làm gì (một số call đã được lược bỏ để dễ đọc):</p>
 <p>...</p>
 <p>Tại sao lần gọi <code>open()</code> đầu tiên lại trả về <strong>3</strong>, chứ không phải <strong>0</strong> hoặc <strong>1</strong>?<br />
 Hóa ra, mỗi <strong>process</strong> (tiến trình) đang chạy đã mặc định mở sẵn <strong>ba file</strong>:</p>
@@ -261,6 +262,7 @@ Gọi <code>lseek()</code> có thể dẫn đến một disk seek trong thao tá
 <p>Trong nhiều trường hợp, ánh xạ từ <strong>file descriptor</strong> (bộ mô tả tệp) tới một entry trong <strong>open file table</strong> (bảng file mở) là ánh xạ <strong>một-một</strong>.<br />
 Tuy nhiên, có một số trường hợp thú vị khi một entry trong open file table được <strong>chia sẻ</strong>.<br />
 Một trong những trường hợp đó xảy ra khi <strong>process cha</strong> tạo ra <strong>process con</strong> bằng <code>fork()</code>.</p>
+<p><img src="img/fig39_2.PNG" alt="" /></p>
 <p><strong>Hình 39.2: Chia sẻ entry bảng file giữa tiến trình cha/con (fork-seek.c)</strong></p>
 <p>Khi chạy chương trình này, chúng ta thấy kết quả sau:</p>
 <pre><code class="language-sh">prompt&gt; ./fork-seek
@@ -271,6 +273,7 @@ prompt&gt;
 <p>Một trường hợp chia sẻ khác xảy ra với <strong>system call</strong> <code>dup()</code>.<br />
 Lời gọi <code>dup()</code> cho phép một <strong>process</strong> (tiến trình) tạo ra một <strong>file descriptor</strong> (bộ mô tả tệp) mới tham chiếu tới <strong>cùng một file đã mở</strong> (open file) như một descriptor hiện có.</p>
 <p>...</p>
+<p><img src="img/fig39_3.PNG" alt="" /></p>
 <p><strong>Hình 39.4: Chia sẻ entry bảng file với dup() (dup.c)</strong></p>
 <h2 id="397-ghi-ngay-lập-tức-với-fsync-writing-immediately-with-fsync"><a class="header" href="#397-ghi-ngay-lập-tức-với-fsync-writing-immediately-with-fsync">39.7 Ghi ngay lập tức với fsync() (Writing Immediately With fsync())</a></h2>
 <p>Thông thường, khi một chương trình gọi <code>write()</code>, <strong>file system</strong> (hệ thống tệp) sẽ <strong>buffer</strong> (đệm) các thao tác ghi này trong bộ nhớ một thời gian vì lý do hiệu năng.<br />
@@ -283,7 +286,7 @@ Tuy nhiên, một số ứng dụng yêu cầu khả năng <strong>ép</strong> 
 <p>Để đổi tên một file, lệnh <code>mv</code> sử dụng <strong>system call</strong>:</p>
 <pre><code class="language-c">int rename(char *old, char *new);
 </code></pre>
-<p>Một đảm bảo thú vị mà <code>rename()</code> cung cấp là nó (thường) được triển khai như một lời gọi <strong>atomic</strong> (nguyên tử) đối với các sự cố <strong>system crash</strong> (sập hệ thống).<br />
+<p>Một đảm bảo thú vị mà <code>rename()</code> cung cấp là nó (thường) được triển khai như một call <strong>atomic</strong> (nguyên tử) đối với các sự cố <strong>system crash</strong> (sập hệ thống).<br />
 Điều này rất quan trọng đối với các ứng dụng yêu cầu cập nhật trạng thái file một cách nguyên tử.<br />
 Ví dụ, một trình soạn thảo file có thể thực hiện các bước sau để lưu thay đổi một cách an toàn:</p>
 <p>...</p>
@@ -291,13 +294,278 @@ Ví dụ, một trình soạn thảo file có thể thực hiện các bước s
 <h2 id="399-lấy-thông-tin-về-file-getting-information-about-files"><a class="header" href="#399-lấy-thông-tin-về-file-getting-information-about-files">39.9 Lấy thông tin về file (Getting Information About Files)</a></h2>
 <p>File system lưu trữ khá nhiều thông tin về mỗi file, mà chúng ta thường gọi là <strong>metadata</strong> (siêu dữ liệu).<br />
 Để xem metadata của một file cụ thể, chúng ta có thể sử dụng <strong>system call</strong> <code>stat()</code> hoặc <code>fstat()</code>.<br />
-Các lời gọi này sẽ điền thông tin vào một cấu trúc <code>stat</code>:</p>
+Các call này sẽ điền thông tin vào một cấu trúc <code>stat</code>:</p>
 <p>...</p>
+<p><img src="img/fig39_4.PNG" alt="" /></p>
 <p><strong>Hình 39.5: Cấu trúc stat (The stat structure)</strong></p>
 <p>Bạn cũng có thể sử dụng công cụ dòng lệnh <code>stat</code> để xem thông tin này.</p>
 <h2 id="3910-xóa-file-removing-files"><a class="header" href="#3910-xóa-file-removing-files">39.10 Xóa file (Removing Files)</a></h2>
-<p>...</p>
-<p>(TODO)</p>
+<p>Tại thời điểm này, chúng ta đã biết cách tạo tập tin (file) và truy cập chúng, theo tuần tự hoặc không tuần tự. Nhưng làm thế nào để xóa tập tin? Nếu bạn đã từng sử dụng UNIX, có lẽ bạn nghĩ mình biết: chỉ cần chạy chương trình <code>rm</code>. Nhưng <code>rm</code> sử dụng <strong>system call</strong> (lời gọi hệ thống) nào để xóa một tập tin?<sup class="footnote-reference"><a href="#1">1</a></sup></p>
+<p>Hãy dùng lại công cụ quen thuộc <code>strace</code> để tìm hiểu. Dưới đây là ví dụ khi chúng ta xóa tập tin <code>foo</code>:</p>
+<pre><code class="language-bash">prompt&gt; strace rm foo
+...
+unlink(&quot;foo&quot;) = 0
+...
+</code></pre>
+<p>Chúng ta đã loại bỏ nhiều phần thông tin không liên quan từ kết quả <code>strace</code>, chỉ giữ lại một lời gọi duy nhất tới <strong>system call</strong> có tên khá bí ẩn <code>unlink()</code>. Như bạn thấy, <code>unlink()</code> chỉ nhận tên của tập tin cần xóa và trả về giá trị 0 khi thành công. Nhưng điều này dẫn đến một câu hỏi thú vị: tại sao lời gọi hệ thống này lại có tên là <code>unlink</code>? Tại sao không đặt là <code>remove</code> hoặc <code>delete</code>? Để trả lời câu hỏi này, chúng ta cần hiểu không chỉ về tập tin, mà còn về thư mục (directory).</p>
+<h2 id="tạo-thư-mục-making-directories"><a class="header" href="#tạo-thư-mục-making-directories">Tạo thư mục (Making Directories)</a></h2>
+<p>Ngoài tập tin, một tập hợp các <strong>system call</strong> liên quan đến thư mục cho phép bạn tạo, đọc và xóa thư mục. Lưu ý rằng bạn không bao giờ có thể ghi trực tiếp vào một thư mục. Nguyên nhân là vì định dạng của thư mục được xem là <strong>metadata</strong> (siêu dữ liệu) của hệ thống tập tin, và hệ thống tập tin chịu trách nhiệm đảm bảo tính toàn vẹn của dữ liệu thư mục. Do đó, bạn chỉ có thể cập nhật thư mục một cách gián tiếp, ví dụ: bằng cách tạo tập tin, thư mục con hoặc các loại đối tượng khác bên trong nó. Bằng cách này, hệ thống tập tin đảm bảo nội dung thư mục luôn đúng như mong đợi.</p>
+<p>Để tạo một thư mục, có một <strong>system call</strong> duy nhất là <code>mkdir()</code>. Chương trình <code>mkdir</code> cùng tên có thể được dùng để tạo thư mục. Hãy xem điều gì xảy ra khi chúng ta chạy <code>mkdir</code> để tạo một thư mục đơn giản tên <code>foo</code>:</p>
+<pre><code class="language-bash">prompt&gt; strace mkdir foo
+...
+mkdir(&quot;foo&quot;, 0777) = 0
+...
+prompt&gt;
+</code></pre>
+<p>Khi một thư mục được tạo, nó được xem là “rỗng”, mặc dù thực tế nó vẫn chứa một số nội dung tối thiểu. Cụ thể, một thư mục rỗng có hai mục (entry): một mục tham chiếu đến chính nó, và một mục tham chiếu đến thư mục cha. Mục thứ nhất được gọi là “.” (dot), và mục thứ hai là “..” (dot-dot). Bạn có thể thấy các mục này bằng cách truyền tùy chọn (<code>-a</code>) cho chương trình <code>ls</code>:</p>
+<pre><code class="language-bash">prompt&gt; ls -a
+./ ../
+prompt&gt; ls -al
+total 8
+drwxr-x--- 2 remzi remzi    6 Apr 30 16:17 ./
+drwxr-x--- 26 remzi remzi 4096 Apr 30 16:17 ../
+</code></pre>
+<blockquote>
+<p><strong>TIP: CẨN TRỌNG VỚI CÁC LỆNH MẠNH</strong>
+Chương trình <code>rm</code> là một ví dụ điển hình về các lệnh mạnh mẽ, và đôi khi sức mạnh quá mức có thể gây hại. Ví dụ, để xóa nhiều tập tin cùng lúc, bạn có thể gõ:</p>
+<pre><code class="language-bash">prompt&gt; rm *
+</code></pre>
+<p>Trong đó, ký tự <code>*</code> sẽ khớp với tất cả các tập tin trong thư mục hiện tại. Nhưng đôi khi bạn cũng muốn xóa cả thư mục và toàn bộ nội dung của chúng. Bạn có thể làm điều này bằng cách yêu cầu <code>rm</code> đệ quy đi vào từng thư mục và xóa nội dung bên trong:</p>
+<pre><code class="language-bash">prompt&gt; rm -rf *
+</code></pre>
+<p>Vấn đề nghiêm trọng xảy ra khi bạn vô tình chạy lệnh này từ thư mục gốc của hệ thống tập tin, dẫn đến việc xóa toàn bộ tập tin và thư mục. Vì vậy, hãy nhớ rằng các lệnh mạnh mẽ giống như con dao hai lưỡi: chúng cho phép bạn làm được rất nhiều việc chỉ với vài phím bấm, nhưng cũng có thể gây ra thiệt hại lớn trong chớp mắt.</p>
+</blockquote>
+<h2 id="Đọc-thư-mục-reading-directories"><a class="header" href="#Đọc-thư-mục-reading-directories">Đọc thư mục (Reading Directories)</a></h2>
+<p>Bây giờ chúng ta đã tạo được một thư mục, có thể chúng ta cũng muốn đọc nội dung của nó. Thực tế, đó chính là điều mà chương trình <code>ls</code> thực hiện. Hãy thử viết một công cụ nhỏ giống <code>ls</code> để xem cách làm. Thay vì chỉ mở thư mục như một tập tin, chúng ta sẽ dùng một tập hợp lời gọi mới. Dưới đây là chương trình ví dụ in ra nội dung của một thư mục. Chương trình sử dụng ba lời gọi <code>opendir()</code>, <code>readdir()</code> và <code>closedir()</code> để thực hiện công việc. Giao diện này khá đơn giản: chỉ cần một vòng lặp để đọc từng mục thư mục một, rồi in ra tên và số inode của mỗi tập tin.</p>
+<pre><code class="language-c">int main(int argc, char *argv[]) {
+    DIR *dp = opendir(&quot;.&quot;);
+    assert(dp != NULL);
+    struct dirent *d;
+    while ((d = readdir(dp)) != NULL) {
+        printf(&quot;%lu %s\n&quot;, (unsigned long) d-&gt;d_ino, d-&gt;d_name);
+    }
+    closedir(dp);
+    return 0;
+}
+</code></pre>
+<p>Khai báo dưới đây cho thấy thông tin có trong mỗi mục thư mục, được lưu trong cấu trúc dữ liệu <code>struct dirent</code>:</p>
+<pre><code class="language-c">struct dirent {
+    char          d_name[256]; // tên tập tin
+    ino_t         d_ino;       // số inode
+    off_t         d_off;       // vị trí (offset) tới mục tiếp theo
+    unsigned short d_reclen;   // độ dài bản ghi này
+    unsigned char d_type;      // loại tập tin
+};
+</code></pre>
+<p>Vì thư mục chứa rất ít thông tin (về cơ bản chỉ ánh xạ tên sang số inode, cùng một vài chi tiết khác), một chương trình có thể muốn gọi <code>stat()</code> trên từng tập tin để lấy thêm thông tin, chẳng hạn như kích thước hoặc các thuộc tính chi tiết khác. Thực tế, đây chính là điều <code>ls</code> làm khi bạn truyền cho nó tùy chọn <code>-l</code>. Hãy thử dùng <code>strace</code> trên <code>ls</code> với và không có tùy chọn này để tự kiểm chứng.</p>
+<h2 id="xóa-thư-mục-deleting-directories"><a class="header" href="#xóa-thư-mục-deleting-directories">Xóa thư mục (Deleting Directories)</a></h2>
+<p>Cuối cùng, bạn có thể xóa một thư mục bằng lời gọi <code>rmdir()</code> (được sử dụng bởi chương trình cùng tên <code>rmdir</code>). Không giống như việc xóa tập tin, xóa thư mục nguy hiểm hơn, vì bạn có thể xóa một lượng lớn dữ liệu chỉ với một lệnh. Do đó, <code>rmdir()</code> yêu cầu thư mục phải rỗng (tức là chỉ chứa các mục “.” và “..”) trước khi bị xóa. Nếu bạn cố gắng xóa một thư mục không rỗng, lời gọi <code>rmdir()</code> sẽ thất bại.</p>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p><code>strace</code> là công cụ theo dõi các <strong>system call</strong> mà một tiến trình thực hiện, rất hữu ích để tìm hiểu cách chương trình tương tác với kernel.</p>
+</div>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra, giữ nguyên thuật ngữ kỹ thuật phổ biến, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật dành cho sinh viên ngành Khoa học Máy tính.</p>
+<h2 id="hard-links-liên-kết-cứng"><a class="header" href="#hard-links-liên-kết-cứng">Hard Links (Liên kết cứng)</a></h2>
+<p>Bây giờ chúng ta quay lại câu hỏi bí ẩn: tại sao việc xóa một tập tin lại được thực hiện thông qua <code>unlink()</code>? Để hiểu điều này, ta cần biết một cách khác để tạo một mục (entry) trong cây hệ thống tập tin, thông qua một <strong>system call</strong> (lời gọi hệ thống) có tên <code>link()</code>. Lời gọi <code>link()</code> nhận hai tham số: một đường dẫn cũ và một đường dẫn mới; khi bạn “link” (liên kết) một tên tập tin mới tới một tên tập tin cũ, bạn thực chất đang tạo thêm một cách khác để tham chiếu đến cùng một tập tin. Chương trình dòng lệnh <code>ln</code> được dùng để làm việc này, như trong ví dụ sau:</p>
+<pre><code class="language-bash">prompt&gt; echo hello &gt; file
+prompt&gt; cat file
+hello
+prompt&gt; ln file file2
+prompt&gt; cat file2
+hello
+</code></pre>
+<p>Ở đây, chúng ta tạo một tập tin chứa từ “hello” và đặt tên là <code>file</code>. Sau đó, chúng ta tạo một <strong>hard link</strong> (liên kết cứng) tới tập tin đó bằng chương trình <code>ln</code>. Sau bước này, chúng ta có thể đọc nội dung tập tin bằng cách mở <code>file</code> hoặc <code>file2</code>. Cách <code>link()</code> hoạt động là: nó chỉ đơn giản tạo thêm một tên mới trong thư mục mà bạn đang tạo liên kết, và trỏ tên đó tới cùng <strong>inode number</strong> (số inode – định danh mức thấp của tập tin) của tập tin gốc. Tập tin không hề được sao chép; thay vào đó, bạn có hai tên dễ đọc (<code>file</code> và <code>file2</code>) cùng trỏ tới cùng một tập tin. Chúng ta có thể thấy điều này ngay trong thư mục, bằng cách in ra số inode của từng tập tin:</p>
+<pre><code class="language-bash">prompt&gt; ls -i file file2
+67158084 file
+67158084 file2
+prompt&gt;
+</code></pre>
+<p>Khi truyền tùy chọn <code>-i</code> cho <code>ls</code>, nó sẽ in ra số inode của mỗi tập tin (cùng với tên tập tin). Như vậy, bạn có thể thấy <code>link</code> thực chất đã làm gì: chỉ tạo một tham chiếu mới tới cùng một số inode (67158084 trong ví dụ này).</p>
+<p>Đến đây, bạn có thể bắt đầu hiểu tại sao <code>unlink()</code> lại có tên như vậy. Khi bạn tạo một tập tin, thực chất bạn đang làm hai việc:</p>
+<ol>
+<li>Tạo một cấu trúc dữ liệu (inode) để lưu hầu hết thông tin liên quan đến tập tin, bao gồm kích thước, vị trí các block trên đĩa, v.v.</li>
+<li>Liên kết một tên dễ đọc với tập tin đó, và đặt liên kết này vào một thư mục.</li>
+</ol>
+<p>Sau khi tạo một hard link tới tập tin, hệ thống tập tin không phân biệt giữa tên gốc (<code>file</code>) và tên mới (<code>file2</code>); cả hai chỉ là các liên kết tới metadata (siêu dữ liệu) của tập tin, được lưu trong inode số 67158084.</p>
+<p>Vì vậy, để xóa một tập tin khỏi hệ thống tập tin, ta gọi <code>unlink()</code>. Trong ví dụ trên, ta có thể xóa tập tin <code>file</code> và vẫn truy cập được nội dung qua <code>file2</code>:</p>
+<pre><code class="language-bash">prompt&gt; rm file
+removed ‘file’
+prompt&gt; cat file2
+hello
+</code></pre>
+<p>Điều này hoạt động được vì khi hệ thống tập tin thực hiện <code>unlink()</code> trên <code>file</code>, nó sẽ kiểm tra <strong>reference count</strong> (bộ đếm tham chiếu, đôi khi gọi là link count) trong inode. Reference count cho biết có bao nhiêu tên tập tin khác nhau đang liên kết tới inode này. Khi <code>unlink()</code> được gọi, nó xóa liên kết giữa tên dễ đọc (tập tin bị xóa) và inode tương ứng, đồng thời giảm reference count đi 1; chỉ khi reference count giảm xuống 0, hệ thống tập tin mới giải phóng inode và các block dữ liệu liên quan, và khi đó tập tin mới thực sự bị “xóa” khỏi đĩa.<sup class="footnote-reference"><a href="#2">2</a></sup></p>
+<p>Bạn có thể xem reference count của một tập tin bằng cách dùng <code>stat()</code>. Hãy xem ví dụ khi chúng ta tạo và xóa các hard link tới một tập tin. Trong ví dụ này, ta sẽ tạo ba liên kết tới cùng một tập tin, rồi xóa chúng. Hãy chú ý đến link count:</p>
+<pre><code class="language-bash">prompt&gt; echo hello &gt; file
+prompt&gt; stat file
+... Inode: 67158084 Links: 1 ...
+prompt&gt; ln file file2
+prompt&gt; stat file
+... Inode: 67158084 Links: 2 ...
+prompt&gt; stat file2
+... Inode: 67158084 Links: 2 ...
+prompt&gt; ln file2 file3
+prompt&gt; stat file
+... Inode: 67158084 Links: 3 ...
+prompt&gt; rm file
+prompt&gt; stat file2
+... Inode: 67158084 Links: 2 ...
+prompt&gt; rm file2
+prompt&gt; stat file3
+... Inode: 67158084 Links: 1 ...
+prompt&gt; rm file3
+</code></pre>
+<h2 id="symbolic-links-liên-kết-tượng-trưng"><a class="header" href="#symbolic-links-liên-kết-tượng-trưng">Symbolic Links (Liên kết tượng trưng)</a></h2>
+<p>Có một loại liên kết khác rất hữu ích, gọi là <strong>symbolic link</strong> (liên kết tượng trưng) hoặc đôi khi là <strong>soft link</strong> (liên kết mềm). Hard link có một số hạn chế: bạn không thể tạo hard link tới một thư mục (để tránh tạo vòng lặp trong cây thư mục); bạn không thể hard link tới tập tin ở phân vùng đĩa khác (vì số inode chỉ là duy nhất trong một hệ thống tập tin, không phải giữa các hệ thống tập tin khác nhau); v.v. Vì vậy, một loại liên kết mới – symbolic link – đã được tạo ra.<sup class="footnote-reference"><a href="#3">3</a></sup></p>
+<p>Để tạo symbolic link, bạn vẫn dùng chương trình <code>ln</code>, nhưng thêm tùy chọn <code>-s</code>. Ví dụ:</p>
+<pre><code class="language-bash">prompt&gt; echo hello &gt; file
+prompt&gt; ln -s file file2
+prompt&gt; cat file2
+hello
+</code></pre>
+<p>Như bạn thấy, việc tạo soft link trông khá giống với hard link, và tập tin gốc giờ có thể được truy cập qua tên <code>file</code> hoặc qua symbolic link <code>file2</code>. Tuy nhiên, ngoài sự giống nhau bề ngoài này, symbolic link thực chất khác hard link ở nhiều điểm. Điểm khác biệt đầu tiên là symbolic link thực chất là một tập tin riêng, thuộc loại khác. Chúng ta đã nói về regular file (tập tin thường) và directory (thư mục); symbolic link là loại thứ ba mà hệ thống tập tin nhận biết. Khi chạy <code>stat</code> trên symbolic link, bạn sẽ thấy:</p>
+<pre><code class="language-bash">prompt&gt; stat file
+... regular file ...
+prompt&gt; stat file2
+... symbolic link ...
+</code></pre>
+<p>Chạy <code>ls</code> cũng cho thấy điều này. Nếu bạn để ý ký tự đầu tiên trong cột ngoài cùng bên trái của kết quả <code>ls -l</code>, bạn sẽ thấy: ký tự <code>-</code> cho regular file, <code>d</code> cho directory, và <code>l</code> cho symbolic link. Bạn cũng có thể thấy kích thước của symbolic link (4 byte trong trường hợp này) và tập tin mà nó trỏ tới (<code>file</code>):</p>
+<pre><code class="language-bash">prompt&gt; ls -al
+drwxr-x--- 2 remzi remzi   29 May  3 19:10 ./
+drwxr-x--- 27 remzi remzi 4096 May  3 15:14 ../
+-rw-r----- 1 remzi remzi    6 May  3 19:10 file
+lrwxrwxrwx 1 remzi remzi    4 May  3 19:10 file2 -&gt; file
+</code></pre>
+<p>Lý do <code>file2</code> có kích thước 4 byte là vì symbolic link lưu <strong>pathname</strong> (đường dẫn) của tập tin mà nó trỏ tới như dữ liệu của chính symbolic link đó. Vì chúng ta liên kết tới tập tin tên <code>file</code>, symbolic link <code>file2</code> chỉ dài 4 byte. Nếu liên kết tới một đường dẫn dài hơn, symbolic link sẽ lớn hơn:</p>
+<pre><code class="language-bash">prompt&gt; echo hello &gt; alongerfilename
+prompt&gt; ln -s alongerfilename file3
+prompt&gt; ls -al alongerfilename file3
+-rw-r----- 1 remzi remzi  6 May 3 19:17 alongerfilename
+lrwxrwxrwx 1 remzi remzi 15 May 3 19:17 file3 -&gt; alongerfilename
+</code></pre>
+<p>Cuối cùng, do cách symbolic link được tạo ra, nó có thể dẫn đến tình huống gọi là <strong>dangling reference</strong> (tham chiếu treo):</p>
+<pre><code class="language-bash">prompt&gt; echo hello &gt; file
+prompt&gt; ln -s file file2
+prompt&gt; cat file2
+hello
+prompt&gt; rm file
+prompt&gt; cat file2
+cat: file2: No such file or directory
+</code></pre>
+<p>Như bạn thấy, khác với hard link, khi xóa tập tin gốc <code>file</code>, symbolic link sẽ trỏ tới một đường dẫn không còn tồn tại.</p>
+<h2 id="permission-bits-và-access-control-lists-danh-sách-kiểm-soát-truy-cập"><a class="header" href="#permission-bits-và-access-control-lists-danh-sách-kiểm-soát-truy-cập">Permission Bits và Access Control Lists (Danh sách kiểm soát truy cập)</a></h2>
+<p>Khái niệm trừu tượng (abstraction) của <strong>process</strong> (tiến trình) cung cấp hai dạng ảo hóa (virtualization) trung tâm: ảo hóa CPU và ảo hóa bộ nhớ. Mỗi dạng ảo hóa này tạo cho tiến trình ảo giác rằng nó có CPU riêng và bộ nhớ riêng; trên thực tế, <strong>OS</strong> (hệ điều hành) bên dưới sử dụng nhiều kỹ thuật khác nhau để chia sẻ tài nguyên vật lý hạn chế giữa các thực thể cạnh tranh một cách an toàn và bảo mật.</p>
+<p><strong>File system</strong> (hệ thống tập tin) cũng cung cấp một cái nhìn ảo về đĩa, biến nó từ một tập hợp các block thô thành các tập tin và thư mục thân thiện hơn với người dùng, như đã mô tả trong chương này. Tuy nhiên, sự trừu tượng này khác đáng kể so với CPU và bộ nhớ, ở chỗ tập tin thường được chia sẻ giữa nhiều người dùng và tiến trình, và không phải lúc nào cũng là riêng tư. Do đó, trong file system thường tồn tại một tập hợp cơ chế toàn diện hơn để cho phép các mức độ chia sẻ khác nhau.</p>
+<p>Hình thức cơ bản đầu tiên của các cơ chế này là <strong>permission bits</strong> (các bit quyền truy cập) kiểu UNIX cổ điển. Để xem quyền truy cập của một tập tin <code>foo.txt</code>, chỉ cần gõ:</p>
+<pre><code class="language-bash">prompt&gt; ls -l foo.txt
+-rw-r--r-- 1 remzi wheel 0 Aug 24 16:29 foo.txt
+</code></pre>
+<p>Chúng ta sẽ chỉ tập trung vào phần đầu tiên của kết quả này, cụ thể là <code>-rw-r--r--</code>. Ký tự đầu tiên cho biết loại tập tin: <code>-</code> cho <strong>regular file</strong> (tập tin thường, như <code>foo.txt</code>), <code>d</code> cho <strong>directory</strong> (thư mục), <code>l</code> cho <strong>symbolic link</strong> (liên kết tượng trưng), v.v.; phần này (hầu hết) không liên quan đến quyền truy cập, nên tạm thời bỏ qua.</p>
+<p>Phần chúng ta quan tâm là <strong>permission bits</strong>, được biểu diễn bởi chín ký tự tiếp theo (<code>rw-r--r--</code>). Các bit này xác định, đối với mỗi tập tin thường, thư mục hoặc thực thể khác, ai có thể truy cập và truy cập như thế nào. Quyền được chia thành ba nhóm: quyền của <strong>owner</strong> (chủ sở hữu tập tin), quyền của <strong>group</strong> (nhóm) mà tập tin thuộc về, và quyền của <strong>others</strong> (người dùng khác). Các quyền này bao gồm: đọc (read), ghi (write) và thực thi (execute) tập tin.</p>
+<p>Trong ví dụ trên, ba ký tự đầu tiên (<code>rw-</code>) cho biết tập tin có thể đọc và ghi bởi owner; ba ký tự tiếp theo (<code>r--</code>) cho biết chỉ có thể đọc bởi các thành viên của group <code>wheel</code>; và ba ký tự cuối (<code>r--</code>) cho biết chỉ có thể đọc bởi mọi người khác trong hệ thống.</p>
+<p>Owner của tập tin có thể thay đổi các quyền này, ví dụ bằng lệnh <code>chmod</code> (change mode). Để loại bỏ quyền truy cập của tất cả mọi người trừ owner, bạn có thể gõ:</p>
+<pre><code class="language-bash">prompt&gt; chmod 600 foo.txt
+</code></pre>
+<blockquote>
+<p><strong>ASIDE: SUPERUSER TRONG FILE SYSTEM</strong>
+Người dùng nào được phép thực hiện các thao tác đặc quyền để quản trị file system? Ví dụ, nếu cần xóa tập tin của một người dùng không hoạt động để giải phóng dung lượng, ai có quyền làm điều đó? Trong file system cục bộ, mặc định phổ biến là có một <strong>superuser</strong> (người dùng siêu cấp, thường là <code>root</code>) có thể truy cập tất cả tập tin bất kể quyền hạn. Trong file system phân tán như AFS (có <strong>access control lists</strong>), một nhóm gọi là <code>system:administrators</code> chứa các người dùng được tin cậy để làm việc này. Trong cả hai trường hợp, các người dùng đặc quyền này tiềm ẩn rủi ro bảo mật; nếu kẻ tấn công giả mạo được họ, toàn bộ dữ liệu trong hệ thống có thể bị truy cập, vi phạm tính riêng tư và bảo vệ dữ liệu.</p>
+</blockquote>
+<p>Lệnh trên bật bit đọc (4) và bit ghi (2) cho owner (OR hai giá trị này được 6), nhưng đặt quyền của group và others về 0, tạo thành quyền <code>rw-------</code>.</p>
+<p>Bit thực thi (<strong>execute bit</strong>) đặc biệt thú vị. Đối với regular file, bit này quyết định chương trình có thể chạy hay không. Ví dụ, nếu có một shell script tên <code>hello.csh</code>, ta có thể chạy nó bằng:</p>
+<pre><code class="language-bash">prompt&gt; ./hello.csh
+hello, from shell world.
+</code></pre>
+<p>Tuy nhiên, nếu không đặt bit thực thi đúng cách:</p>
+<pre><code class="language-bash">prompt&gt; chmod 600 hello.csh
+prompt&gt; ./hello.csh
+./hello.csh: Permission denied.
+</code></pre>
+<p>Đối với directory, bit thực thi hoạt động khác: nó cho phép người dùng (hoặc group, hoặc mọi người) có thể <strong>cd</strong> vào thư mục đó, và kết hợp với bit ghi, có thể tạo tập tin bên trong. Cách tốt nhất để hiểu rõ là tự thử nghiệm.</p>
+<p>Ngoài permission bits, một số file system như AFS (được đề cập ở chương sau) cung cấp cơ chế kiểm soát tinh vi hơn, dưới dạng <strong>Access Control List</strong> (ACL) cho mỗi thư mục. ACL cho phép xác định chính xác ai có thể truy cập tài nguyên. Trong file system, ACL cho phép tạo danh sách cụ thể ai được và không được đọc một tập hợp tập tin, khác với mô hình owner/group/others hạn chế của permission bits.</p>
+<p>Ví dụ, đây là quyền truy cập của một thư mục riêng tư trong tài khoản AFS của một tác giả, hiển thị bằng lệnh <code>fs listacl</code>:</p>
+<pre><code class="language-bash">prompt&gt; fs listacl private
+Access list for private is
+Normal rights:
+  system:administrators rlidwka
+  remzi rlidwka
+</code></pre>
+<p>Danh sách này cho thấy cả system administrators và người dùng <code>remzi</code> đều có quyền lookup, insert, delete, quản trị thư mục, cũng như đọc, ghi và khóa tập tin. Để cho phép người khác (ở đây là tác giả còn lại) truy cập thư mục này, <code>remzi</code> chỉ cần gõ:</p>
+<pre><code class="language-bash">prompt&gt; fs setacl private/ andrea rl
+</code></pre>
+<p>Vậy là quyền riêng tư của remzi đã mất! Nhưng bạn cũng học được một bài học quan trọng hơn: trong một cuộc hôn nhân tốt đẹp, không có bí mật — ngay cả trong file system.<sup class="footnote-reference"><a href="#4">4</a></sup></p>
+<h2 id="tạo-và-mount-một-file-system"><a class="header" href="#tạo-và-mount-một-file-system">Tạo và Mount một File System</a></h2>
+<p>Chúng ta đã tìm hiểu các giao diện cơ bản để truy cập tập tin, thư mục và một số loại liên kết đặc biệt. Nhưng còn một chủ đề nữa: làm thế nào để ghép một cây thư mục hoàn chỉnh từ nhiều file system bên dưới. Việc này được thực hiện bằng cách tạo file system, sau đó <strong>mount</strong> chúng để nội dung có thể truy cập.</p>
+<p>Để tạo file system, hầu hết các hệ thống cung cấp công cụ <code>mkfs</code> (viết tắt của “make file system”), thực hiện đúng nhiệm vụ này. Ý tưởng: cung cấp cho công cụ một thiết bị (ví dụ: phân vùng đĩa <code>/dev/sda1</code>) và loại file system (ví dụ: <code>ext3</code>), nó sẽ ghi một file system trống, bắt đầu với thư mục gốc, vào phân vùng đó.</p>
+<p>Tuy nhiên, sau khi tạo, file system cần được gắn vào cây thư mục thống nhất. Việc này được thực hiện bằng chương trình <code>mount</code> (gọi <strong>system call</strong> <code>mount()</code> để thực hiện). <code>mount</code> sẽ lấy một thư mục hiện có làm <strong>mount point</strong> (điểm gắn) và “dán” file system mới vào cây thư mục tại đó.</p>
+<p>Ví dụ: giả sử ta có một file system <code>ext3</code> chưa mount, nằm ở phân vùng <code>/dev/sda1</code>, chứa thư mục gốc với hai thư mục con <code>a</code> và <code>b</code>, mỗi thư mục chứa một tập tin <code>foo</code>. Ta muốn mount nó vào <code>/home/users</code>:</p>
+<pre><code class="language-bash">prompt&gt; mount -t ext3 /dev/sda1 /home/users
+</code></pre>
+<p>Nếu thành công, file system mới sẽ khả dụng. Để xem nội dung thư mục gốc của nó:</p>
+<pre><code class="language-bash">prompt&gt; ls /home/users/
+a b
+</code></pre>
+<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu của bạn, giữ nguyên thuật ngữ kỹ thuật phổ biến, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật dành cho sinh viên ngành Khoa học Máy tính.</p>
+<hr />
+<p>Như bạn thấy, <strong>pathname</strong> <code>/home/users/</code> giờ đây trỏ tới thư mục gốc của thư mục vừa được <strong>mount</strong> (gắn kết). Tương tự, chúng ta có thể truy cập các thư mục <code>a</code> và <code>b</code> thông qua các pathname <code>/home/users/a</code> và <code>/home/users/b</code>. Cuối cùng, các tập tin tên <code>foo</code> có thể được truy cập qua <code>/home/users/a/foo</code> và <code>/home/users/b/foo</code>. Đây chính là ưu điểm của <code>mount</code>: thay vì có nhiều file system riêng biệt, <code>mount</code> hợp nhất tất cả các file system thành một cây duy nhất, giúp việc đặt tên trở nên thống nhất và thuận tiện.</p>
+<p>Để xem những gì đang được mount trên hệ thống của bạn, và tại các điểm mount nào, chỉ cần chạy chương trình <code>mount</code>. Bạn sẽ thấy kết quả tương tự như sau:</p>
+<pre><code class="language-bash">/dev/sda1 on / type ext3 (rw)
+proc on /proc type proc (rw)
+sysfs on /sys type sysfs (rw)
+/dev/sda5 on /tmp type ext3 (rw)
+/dev/sda7 on /var/vice/cache type ext3 (rw)
+tmpfs on /dev/shm type tmpfs (rw)
+AFS on /afs type afs (rw)
+</code></pre>
+<p>Sự kết hợp “hỗn hợp” này cho thấy nhiều loại file system khác nhau, bao gồm <code>ext3</code> (một file system tiêu chuẩn dựa trên đĩa), file system <code>proc</code> (dùng để truy cập thông tin về các <strong>process</strong> – tiến trình – đang chạy), <code>tmpfs</code> (file system dành cho các tập tin tạm thời), và <code>AFS</code> (một file system phân tán), tất cả đều được “ghép” vào cùng một cây file system của máy.</p>
+<blockquote>
+<p><strong>TIP: CẨN TRỌNG VỚI TOCTTOU</strong></p>
+<p>Năm 1974, McPhee phát hiện một vấn đề trong các hệ thống máy tính. Cụ thể, McPhee nhận thấy rằng: “... nếu tồn tại một khoảng thời gian giữa bước kiểm tra tính hợp lệ (validity-check) và thao tác liên quan đến bước kiểm tra đó, [và,] thông qua <strong>multitasking</strong> (đa nhiệm), các biến được kiểm tra có thể bị thay đổi có chủ đích trong khoảng thời gian này, dẫn đến việc chương trình điều khiển thực hiện một thao tác không hợp lệ.” Ngày nay, chúng ta gọi đây là vấn đề <strong>Time Of Check To Time Of Use</strong> (TOCTTOU – từ lúc kiểm tra đến lúc sử dụng), và đáng tiếc là nó vẫn có thể xảy ra.</p>
+<p>Một ví dụ đơn giản, được mô tả bởi Bishop và Dilger<sup class="footnote-reference"><a href="#5">5</a></sup>, cho thấy cách một người dùng có thể đánh lừa một dịch vụ đáng tin cậy hơn và gây ra sự cố. Hãy tưởng tượng một dịch vụ email chạy với quyền <code>root</code> (và do đó có đặc quyền truy cập tất cả tập tin trên hệ thống). Dịch vụ này nối thêm một thông điệp mới vào tập tin hộp thư đến (inbox) của người dùng như sau: đầu tiên, nó gọi <code>lstat()</code> để lấy thông tin về tập tin, đảm bảo rằng đây thực sự là một <strong>regular file</strong> (tập tin thường) thuộc sở hữu của người dùng đích, và không phải là một liên kết (link) tới tập tin khác mà máy chủ email không nên cập nhật. Sau khi kiểm tra thành công, máy chủ sẽ cập nhật tập tin với thông điệp mới.</p>
+<p>Vấn đề là khoảng trống giữa bước kiểm tra và bước cập nhật: kẻ tấn công (trong trường hợp này là chính người nhận email, và do đó có quyền truy cập hộp thư đến) thay thế tập tin inbox (thông qua lời gọi <code>rename()</code>) để trỏ tới một tập tin nhạy cảm như <code>/etc/passwd</code> (chứa thông tin về người dùng và mật khẩu). Nếu việc thay thế này xảy ra đúng thời điểm (giữa bước kiểm tra và bước truy cập), máy chủ sẽ vô tình cập nhật tập tin nhạy cảm với nội dung email. Khi đó, kẻ tấn công có thể ghi vào tập tin nhạy cảm chỉ bằng cách gửi email – một hình thức leo thang đặc quyền; bằng cách cập nhật <code>/etc/passwd</code>, kẻ tấn công có thể thêm một tài khoản với quyền root và chiếm quyền điều khiển hệ thống.</p>
+<p>Không có giải pháp đơn giản và hoàn hảo cho vấn đề TOCTTOU<sup class="footnote-reference"><a href="#6">6</a></sup>. Một cách tiếp cận là giảm số lượng dịch vụ cần chạy với quyền root, điều này giúp giảm rủi ro. Cờ <code>O_NOFOLLOW</code> khiến <code>open()</code> thất bại nếu mục tiêu là một symbolic link, từ đó tránh được các tấn công dựa trên liên kết này. Các phương pháp triệt để hơn, như sử dụng <strong>transactional file system</strong> (file system giao dịch)<sup class="footnote-reference"><a href="#7">7</a></sup>, có thể giải quyết vấn đề, nhưng hiện chưa có nhiều hệ thống như vậy được triển khai rộng rãi. Vì vậy, lời khuyên (có phần yếu ớt) thường là: hãy cẩn thận khi viết mã chạy với đặc quyền cao!</p>
+</blockquote>
+<hr />
+<h2 id="tóm-tắt-summary"><a class="header" href="#tóm-tắt-summary">Tóm tắt (Summary)</a></h2>
+<p>Giao diện file system trong các hệ thống UNIX (và thực tế là trong bất kỳ hệ thống nào) thoạt nhìn có vẻ khá đơn giản, nhưng để thành thạo, bạn cần hiểu rất nhiều khía cạnh. Không gì tốt hơn là <strong>thực hành sử dụng thường xuyên</strong>. Và tất nhiên, hãy đọc thêm; như thường lệ, Stevens<sup class="footnote-reference"><a href="#8">8</a></sup> là điểm khởi đầu tuyệt vời.</p>
+<blockquote>
+<p><strong>ASIDE: CÁC THUẬT NGỮ QUAN TRỌNG TRONG FILE SYSTEM</strong></p>
+<ul>
+<li><strong>File</strong> (tập tin) là một mảng byte có thể được tạo, đọc, ghi và xóa. Nó có một tên mức thấp (low-level name, tức là một số) để định danh duy nhất. Tên mức thấp này thường được gọi là <strong>i-number</strong>.</li>
+<li><strong>Directory</strong> (thư mục) là một tập hợp các bộ dữ liệu (tuple), mỗi bộ chứa một tên dễ đọc và tên mức thấp mà nó ánh xạ tới. Mỗi mục (entry) trỏ tới một thư mục khác hoặc một tập tin. Mỗi thư mục cũng có một i-number riêng. Một thư mục luôn có hai mục đặc biệt: <code>.</code> trỏ tới chính nó, và <code>..</code> trỏ tới thư mục cha.</li>
+<li><strong>Directory tree</strong> hoặc <strong>directory hierarchy</strong> (cây thư mục) tổ chức tất cả tập tin và thư mục thành một cây lớn, bắt đầu từ thư mục gốc (root).</li>
+<li>Để truy cập một tập tin, một <strong>process</strong> (tiến trình) phải sử dụng một <strong>system call</strong> (thường là <code>open()</code>) để yêu cầu quyền từ hệ điều hành. Nếu được cấp quyền, OS trả về một <strong>file descriptor</strong>, có thể dùng để đọc hoặc ghi tùy theo quyền và mục đích.</li>
+<li>Mỗi file descriptor là một thực thể riêng tư, thuộc về từng process, trỏ tới một mục trong <strong>open file table</strong>. Mục này lưu thông tin tập tin được truy cập, vị trí hiện tại (offset) trong tập tin (tức là phần nào của tập tin sẽ được đọc hoặc ghi tiếp theo), và các thông tin liên quan khác.</li>
+<li>Các lời gọi <code>read()</code> và <code>write()</code> sẽ tự động cập nhật offset hiện tại; ngoài ra, process có thể dùng <code>lseek()</code> để thay đổi giá trị này, cho phép truy cập ngẫu nhiên tới các phần khác nhau của tập tin.</li>
+<li>Để buộc cập nhật dữ liệu xuống thiết bị lưu trữ lâu dài (persistent media), process phải dùng <code>fsync()</code> hoặc các lời gọi liên quan. Tuy nhiên, làm điều này đúng cách mà vẫn duy trì hiệu năng cao là một thách thức<sup class="footnote-reference"><a href="#9">9</a></sup>, nên cần cân nhắc kỹ.</li>
+<li>Để có nhiều tên dễ đọc trong file system cùng trỏ tới một tập tin gốc, hãy dùng <strong>hard link</strong> hoặc <strong>symbolic link</strong>. Mỗi loại có ưu và nhược điểm riêng, nên cân nhắc trước khi sử dụng. Và nhớ rằng, xóa một tập tin thực chất là thực hiện lần <code>unlink()</code> cuối cùng của nó khỏi cây thư mục.</li>
+<li>Hầu hết các file system có cơ chế bật/tắt chia sẻ. Dạng cơ bản là <strong>permission bits</strong>; dạng nâng cao hơn là <strong>access control list</strong> cho phép kiểm soát chính xác hơn ai có thể truy cập và thao tác dữ liệu.</li>
+</ul>
+</blockquote>
+<div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
+<p>Some file systems call these structures similar, but slightly different, names, such as dnodes; the basic idea is similar however.</p>
+</div>
+<div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
+<p>Note again how creative the authors of this book are. We also used to have a cat named “Cat” (true story). However, she died, and we now have a hamster named “Hammy.” Update: Hammy is now dead too. The pet bodies are piling up.</p>
+</div>
+<div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
+<p>“A Fast File System for UNIX” by Marshall K. McKusick, William N. Joy, Sam J. Leffler, Robert S. Fabry. ACM TOCS, 2:3, August 1984. We’ll talk about the Fast File System (FFS) explicitly later on. Here, we refer to it because of all the other random fun things it introduced, like long file names and symbolic links. Sometimes, when you are building a system to improve one thing, you improve a lot of other things along the way.</p>
+</div>
+<div class="footnote-definition" id="4"><sup class="footnote-definition-label">4</sup>
+<p>Married happily since 1996, if you were wondering. We know, you weren’t.</p>
+</div>
+<div class="footnote-definition" id="5"><sup class="footnote-definition-label">5</sup>
+<p>“Checking for Race Conditions in File Accesses” by Matt Bishop, Michael Dilger. Computing Systems 9:2, 1996. A great description of the TOCTTOU problem and its presence in file systems.</p>
+</div>
+<div class="footnote-definition" id="6"><sup class="footnote-definition-label">6</sup>
+<p>“Portably Solving File TOCTTOU Races with Hardness Amplification” by D. Tsafrir, T. Hertz, D. Wagner, D. Da Silva. FAST ’08, San Jose, California, 2008. Not the paper that introduced TOCTTOU, but a recent-ish and well-done description of the problem and a way to solve the problem in a portable manner.</p>
+</div>
+<div class="footnote-definition" id="7"><sup class="footnote-definition-label">7</sup>
+<p>“TxFS: Leveraging File-System Crash Consistency to Provide ACID Transactions” by Y. Hu, Z. Zhu, I. Neal, Y. Kwon, T. Cheng, V. Chidambaram, E. Witchel. USENIX ATC ’18, June 2018. The best paper at USENIX ATC ’18, and a good recent place to start to learn about transactional file systems.</p>
+</div>
+<div class="footnote-definition" id="8"><sup class="footnote-definition-label">8</sup>
+<p>“Advanced Programming in the UNIX Environment” by W. Richard Stevens and Stephen A. Rago. Addison-Wesley, 2005. We have probably referenced this book a few hundred thousand times. It is that useful to you, if you care to become an awesome systems programmer.</p>
+</div>
+<div class="footnote-definition" id="9"><sup class="footnote-definition-label">9</sup>
+<p>“All File Systems Are Not Created Equal: On the Complexity of Crafting Crash-Consistent Applications” by Thanumalayan S. Pillai, Vijay Chidambaram, Ramnatthan Alagappan, Samer Al-Kiswany, Andrea C. Arpaci-Dusseau, and Remzi H. Arpaci-Dusseau. OSDI ’14, Broomfield, Colorado, October 2014. The full conference paper on this topic – with many more details and interesting tidbits than the first workshop paper above.</p>
+</div>
 
                     </main>
 

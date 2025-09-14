@@ -163,11 +163,11 @@ Như chúng ta đã thảo luận trước đây, <strong>mental model</strong> 
 <li>Điều gì xảy ra khi một <strong>process</strong> mở một file?</li>
 <li>Những cấu trúc nào trên đĩa được truy cập trong quá trình đọc hoặc ghi?</li>
 </ul>
-<p>Bằng cách làm việc và cải thiện mental model của mình, bạn sẽ phát triển một sự hiểu biết trừu tượng về những gì đang diễn ra, thay vì chỉ cố gắng hiểu các chi tiết cụ thể của một đoạn mã hệ thống tệp nào đó (mặc dù điều đó cũng hữu ích, tất nhiên!).</p>
+<p>Bằng cách làm việc và cải thiện mental model của mình, bạn sẽ phát triển một sự hiểu biết trừu tượng về những gì đang diễn ra, thay vì chỉ cố gắng hiểu các chi tiết cụ thể của một đoạn code hệ thống tệp nào đó (mặc dù điều đó cũng hữu ích, tất nhiên!).</p>
 </blockquote>
 <p>Trong khi đó, các hệ thống tệp tinh vi hơn, như <strong>SGI’s XFS</strong>, sử dụng các cấu trúc dạng cây (<strong>tree-based structures</strong>) phức tạp hơn [S+96].</p>
 <p><strong>Khía cạnh thứ hai</strong> của một hệ thống tệp là <strong>các phương thức truy cập</strong> (<strong>access methods</strong>).<br />
-Hệ thống tệp ánh xạ các lời gọi (<strong>system call</strong>) do một process thực hiện, chẳng hạn như <code>open()</code>, <code>read()</code>, <code>write()</code>, v.v., vào các cấu trúc của nó như thế nào?<br />
+Hệ thống tệp ánh xạ các call (<strong>system call</strong>) do một process thực hiện, chẳng hạn như <code>open()</code>, <code>read()</code>, <code>write()</code>, v.v., vào các cấu trúc của nó như thế nào?<br />
 Những cấu trúc nào được đọc trong quá trình thực thi một system call cụ thể?<br />
 Những cấu trúc nào được ghi?<br />
 Tất cả các bước này được thực hiện hiệu quả đến mức nào?</p>
@@ -314,6 +314,7 @@ Một phát hiện như vậy là <strong>hầu hết các file đều nhỏ</st
 Thiết kế mất cân bằng này phản ánh thực tế đó; nếu hầu hết file thực sự nhỏ, thì hợp lý khi tối ưu cho trường hợp này.<br />
 Do đó, với một số lượng nhỏ <strong>direct pointer</strong> (12 là con số điển hình), một inode có thể trỏ trực tiếp tới <strong>48 KB</strong> dữ liệu, và chỉ cần một (hoặc nhiều hơn) block gián tiếp cho các file lớn hơn.</p>
 <p>Xem nghiên cứu gần đây của <strong>Agrawal et al.</strong> [A+07]; <strong>Hình 40.2</strong> tóm tắt các kết quả đó.</p>
+<p><img src="img/fig40_1.PNG" alt="" /></p>
 <p><strong>Hình 40.2: Tóm tắt đo lường hệ thống tệp (File System Measurement Summary)</strong></p>
 <p>Tất nhiên, trong không gian thiết kế inode, còn rất nhiều khả năng khác; suy cho cùng, inode chỉ là một <strong>cấu trúc dữ liệu</strong>, và bất kỳ cấu trúc dữ liệu nào lưu trữ thông tin liên quan và có thể truy vấn hiệu quả đều là đủ.<br />
 Vì phần mềm hệ thống tệp có thể dễ dàng thay đổi, bạn nên sẵn sàng khám phá các thiết kế khác nhau nếu <strong>workload</strong> hoặc công nghệ thay đổi.</p>
@@ -382,6 +383,7 @@ Chính sách <strong>pre-allocation</strong> (cấp phát trước) như vậy l
 Hiểu được điều gì xảy ra trên <strong>đường truy cập</strong> (access path) này là <strong>yếu tố then chốt thứ hai</strong> để nắm bắt cách một hệ thống tệp hoạt động; hãy chú ý!</p>
 <p>Trong các ví dụ sau, giả sử rằng hệ thống tệp đã được <strong>mount</strong> (gắn kết) và do đó <strong>superblock</strong> đã nằm trong bộ nhớ.<br />
 Mọi thứ khác (ví dụ: inode, thư mục) vẫn nằm trên đĩa.</p>
+<p><img src="img/fig40_2.PNG" alt="" /></p>
 <p><strong>Hình 40.3: Dòng thời gian đọc file (File Read Timeline – thời gian tăng dần từ trên xuống)</strong></p>
 <h3 id="Đọc-một-tệp-từ-đĩa-reading-a-file-from-disk"><a class="header" href="#Đọc-một-tệp-từ-đĩa-reading-a-file-from-disk">Đọc một tệp từ đĩa (Reading A File From Disk)</a></h3>
 <p>Trong ví dụ đơn giản này, giả sử bạn muốn mở một tệp (ví dụ: <code>/foo/bar</code>), đọc nội dung của nó, rồi đóng lại.<br />
@@ -412,7 +414,7 @@ Nhiều sinh viên thường nhầm lẫn về các cấu trúc cấp phát như
 <p>Bước cuối cùng của <code>open()</code> là đọc inode của <code>bar</code> vào bộ nhớ; sau đó FS (file system) thực hiện kiểm tra quyền truy cập (permissions) lần cuối, cấp phát một file descriptor cho tiến trình này trong bảng file mở theo tiến trình (per-process open-file table), và trả về descriptor đó cho người dùng.</p>
 <p>Khi đã mở, chương trình có thể gọi system call <code>read()</code> để đọc từ file. Lần đọc đầu tiên (tại offset 0 trừ khi đã gọi <code>lseek()</code>) sẽ đọc block đầu tiên của file, tham chiếu inode để tìm vị trí của block đó; FS cũng có thể cập nhật inode với thời điểm truy cập lần cuối (last-accessed time) mới. Lời gọi read này cũng cập nhật bảng file mở trong bộ nhớ (in-memory open file table) cho file descriptor này, cập nhật file offset để lần đọc tiếp theo sẽ đọc block thứ hai của file, v.v.</p>
 <p>Tới một thời điểm nào đó, file sẽ được đóng (close). Công việc ở đây ít hơn nhiều; rõ ràng file descriptor cần được giải phóng (deallocate), nhưng tạm thời đó là tất cả những gì FS cần làm. Không có I/O đĩa nào diễn ra.</p>
-<p>Toàn bộ quá trình này được minh họa trong Hình 40.3 (trang 11); thời gian tăng dần từ trên xuống trong hình. Trong hình, lời gọi open dẫn đến nhiều lần đọc để cuối cùng tìm ra inode của file. Sau đó, mỗi lần đọc block yêu cầu file system trước hết tham chiếu inode, rồi đọc block, và sau đó cập nhật trường thời gian truy cập lần cuối (last-accessed-time) của inode bằng một lần ghi (write). Hãy dành thời gian để hiểu kỹ điều gì đang diễn ra.</p>
+<p>Toàn bộ quá trình này được minh họa trong Hình 40.3 (trang 11); thời gian tăng dần từ trên xuống trong hình. Trong hình, call open dẫn đến nhiều lần đọc để cuối cùng tìm ra inode của file. Sau đó, mỗi lần đọc block yêu cầu file system trước hết tham chiếu inode, rồi đọc block, và sau đó cập nhật trường thời gian truy cập lần cuối (last-accessed-time) của inode bằng một lần ghi (write). Hãy dành thời gian để hiểu kỹ điều gì đang diễn ra.</p>
 <p>Cũng lưu ý rằng lượng I/O phát sinh bởi open tỉ lệ với độ dài của pathname (đường dẫn). Với mỗi thư mục bổ sung trong đường dẫn, chúng ta phải đọc inode của nó cũng như dữ liệu của nó. Tệ hơn nữa là sự hiện diện của các thư mục lớn; ở đây, chúng ta chỉ phải đọc một block để lấy nội dung của một thư mục, trong khi với một thư mục lớn, chúng ta có thể phải đọc nhiều data block để tìm được entry mong muốn. Đúng vậy, việc đọc một file có thể khá “đau đớn”; và như bạn sắp thấy, việc ghi một file (đặc biệt là tạo mới) thậm chí còn tệ hơn.</p>
 <h3 id="ghi-một-tệp-xuống-đĩa-writing-a-file-to-disk"><a class="header" href="#ghi-một-tệp-xuống-đĩa-writing-a-file-to-disk">Ghi một tệp xuống đĩa (Writing A File To Disk)</a></h3>
 <p>Quy trình ghi vào một tệp tương tự như đọc.<br />
@@ -429,6 +431,7 @@ Khi ghi một tệp mới, mỗi thao tác ghi không chỉ phải ghi dữ li�
 <li><strong>Ghi inode</strong> (đã được cập nhật với vị trí block mới)</li>
 <li><strong>Ghi block dữ liệu thực tế</strong></li>
 </ol>
+<p><img src="img/fig40_3.PNG" alt="" /></p>
 <p><strong>Hình 40.4: Dòng thời gian tạo tệp (File Creation Timeline – thời gian tăng dần từ trên xuống)</strong></p>
 <p>Lượng <strong>ghi</strong> còn tệ hơn nữa khi xét đến một thao tác đơn giản và phổ biến như <strong>tạo tệp</strong>.<br />
 Để tạo một tệp, hệ thống tệp không chỉ phải <strong>cấp phát một inode</strong>, mà còn phải <strong>cấp phát không gian trong thư mục</strong> chứa tệp mới đó.</p>
@@ -442,8 +445,8 @@ Khi ghi một tệp mới, mỗi thao tác ghi không chỉ phải ghi dữ li�
 </ul>
 <p>Nếu thư mục cần mở rộng để chứa entry mới, sẽ cần thêm các thao tác I/O bổ sung (ví dụ: tới <strong>data bitmap</strong> và block thư mục mới).<br />
 Tất cả những điều đó chỉ để <strong>tạo một tệp</strong>!</p>
-<p>Hãy xem một ví dụ cụ thể, khi tệp <code>/foo/bar</code> được tạo và <strong>ba block</strong> được ghi vào nó.<br />
-<strong>Hình 40.4</strong> (trang 13) cho thấy điều gì xảy ra trong quá trình <code>open()</code> (tạo tệp) và trong mỗi lần ghi 4KB.</p>
+<p>Hãy xem một ví dụ cụ thể, khi tệp <code>/foo/bar</code> được tạo và <strong>ba block</strong> được ghi vào nó.</p>
+<p><strong>Hình 40.4</strong> (trang 13) cho thấy điều gì xảy ra trong quá trình <code>open()</code> (tạo tệp) và trong mỗi lần ghi 4KB.</p>
 <p>Trong hình, các thao tác đọc và ghi xuống đĩa được nhóm theo <strong>system call</strong> nào đã gây ra chúng, và thứ tự thực hiện xấp xỉ được sắp xếp từ trên xuống dưới.<br />
 Bạn có thể thấy khối lượng công việc để tạo tệp: <strong>10 thao tác I/O</strong> trong trường hợp này, để duyệt qua pathname và cuối cùng tạo tệp.<br />
 Bạn cũng có thể thấy rằng <strong>mỗi thao tác ghi có cấp phát</strong> tốn <strong>5 thao tác I/O</strong>:</p>

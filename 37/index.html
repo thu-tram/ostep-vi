@@ -134,8 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
-<h1 id="37-Ổ-đĩa-cứng-hard-disk-drives"><a class="header" href="#37-Ổ-đĩa-cứng-hard-disk-drives">37. Ổ đĩa cứng (Hard Disk Drives)</a></h1>
+                        <h1 id="37-Ổ-đĩa-cứng-hard-disk-drives"><a class="header" href="#37-Ổ-đĩa-cứng-hard-disk-drives">37. Ổ đĩa cứng (Hard Disk Drives)</a></h1>
 <p>Chương trước đã giới thiệu khái niệm tổng quát về <strong>thiết bị I/O</strong> (I/O device) và cho thấy hệ điều hành (OS) có thể tương tác với loại thiết bị này như thế nào. Trong chương này, chúng ta sẽ đi sâu hơn vào chi tiết của một thiết bị cụ thể: <strong>ổ đĩa cứng</strong> (hard disk drive). Trong nhiều thập kỷ, các ổ đĩa này đã là hình thức lưu trữ dữ liệu bền vững (persistent storage) chính trong các hệ thống máy tính, và phần lớn sự phát triển của công nghệ <strong>file system</strong> (hệ thống tệp – sẽ được đề cập ở các chương sau) đều dựa trên hành vi của chúng. Do đó, việc hiểu rõ chi tiết hoạt động của ổ đĩa là rất cần thiết trước khi xây dựng phần mềm file system để quản lý nó. Nhiều chi tiết trong số này có thể tìm thấy trong các bài báo xuất sắc của Ruemmler và Wilkes [RW92], cũng như Anderson, Dykes và Riedel [ADR03].</p>
 <blockquote>
 <p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ LƯU TRỮ VÀ TRUY XUẤT DỮ LIỆU TRÊN Ổ ĐĨA</strong><br />
@@ -149,18 +148,19 @@
 <li>Thông thường, có thể giả định rằng việc truy cập hai <strong>block</strong>¹ gần nhau trong không gian địa chỉ của ổ đĩa sẽ nhanh hơn so với truy cập hai block ở xa nhau.</li>
 <li>Cũng thường có thể giả định rằng việc truy cập các block liền kề (tức là đọc hoặc ghi tuần tự – sequential read/write) là chế độ truy cập nhanh nhất, và thường nhanh hơn nhiều so với bất kỳ mẫu truy cập ngẫu nhiên nào.</li>
 </ul>
+<p><img src="img/fig37_1.PNG" alt="" /></p>
 <p><strong>Hình 37.1: Ổ đĩa với chỉ một track</strong></p>
 <h2 id="372-hình-học-cơ-bản-basic-geometry"><a class="header" href="#372-hình-học-cơ-bản-basic-geometry">37.2 Hình học cơ bản (Basic Geometry)</a></h2>
 <p>Hãy bắt đầu tìm hiểu một số thành phần của ổ đĩa hiện đại. Chúng ta bắt đầu với <strong>platter</strong> – một bề mặt cứng hình tròn, nơi dữ liệu được lưu trữ bền vững bằng cách tạo ra các thay đổi từ tính trên nó. Một ổ đĩa có thể có một hoặc nhiều platter; mỗi platter có 2 mặt, mỗi mặt được gọi là một <strong>surface</strong>. Các platter này thường được làm từ vật liệu cứng (như nhôm), sau đó phủ một lớp từ tính mỏng cho phép ổ đĩa lưu trữ bit dữ liệu một cách bền vững ngay cả khi tắt nguồn.</p>
 <p>Tất cả các platter được gắn chung quanh <strong>spindle</strong> (trục quay), trục này được nối với một <strong>motor</strong> (động cơ) để quay các platter (khi ổ đĩa được cấp nguồn) ở một tốc độ cố định. Tốc độ quay thường được đo bằng <strong>RPM</strong> (rotations per minute – vòng quay mỗi phút), và các giá trị phổ biến hiện nay nằm trong khoảng 7.200 RPM đến 15.000 RPM. Lưu ý rằng chúng ta thường quan tâm đến thời gian của một vòng quay đơn; ví dụ, một ổ đĩa quay ở 10.000 RPM nghĩa là một vòng quay mất khoảng 6 mili-giây (6 ms).</p>
 <p>Dữ liệu được mã hóa trên mỗi surface thành các vòng tròn đồng tâm của các sector; mỗi vòng tròn như vậy được gọi là một <strong>track</strong>. Một surface duy nhất chứa hàng nghìn track, được xếp sát nhau, với hàng trăm track có thể nằm gọn trong bề rộng của một sợi tóc người.</p>
 <p>Để đọc và ghi từ surface, chúng ta cần một cơ chế cho phép <strong>cảm nhận</strong> (read) các mẫu từ tính trên đĩa hoặc <strong>tạo ra thay đổi</strong> (write) chúng. Quá trình đọc và ghi này được thực hiện bởi <strong>disk head</strong> (đầu đọc/ghi đĩa); mỗi surface của ổ đĩa có một đầu đọc/ghi. Đầu đọc/ghi được gắn vào một <strong>disk arm</strong> (cần đĩa), di chuyển ngang qua surface để định vị đầu đọc/ghi trên track mong muốn.</p>
+<p><img src="img/fig37_2.PNG" alt="" /></p>
 <p><strong>Hình 37.2: Một track đơn và một đầu đọc/ghi</strong></p>
 <p>¹Chúng tôi (và nhiều tác giả khác) thường sử dụng các thuật ngữ <strong>block</strong> và <strong>sector</strong> thay thế cho nhau, với giả định rằng người đọc sẽ hiểu rõ ý nghĩa trong từng ngữ cảnh. Xin lỗi vì sự bất tiện này!</p>
 <h2 id="373-một-ổ-đĩa-đơn-giản-a-simple-disk-drive"><a class="header" href="#373-một-ổ-đĩa-đơn-giản-a-simple-disk-drive">37.3 Một ổ đĩa đơn giản (A Simple Disk Drive)</a></h2>
 <p>Hãy tìm hiểu cách ổ đĩa hoạt động bằng cách xây dựng một mô hình từng track một. Giả sử chúng ta có một ổ đĩa đơn giản với một track duy nhất (<strong>Hình 37.1</strong>). Track này chỉ có 12 sector, mỗi sector có kích thước 512 byte (kích thước sector tiêu chuẩn, như đã nhắc lại) và được đánh địa chỉ từ 0 đến 11. Platter duy nhất này quay quanh spindle, được nối với một motor.</p>
 <p>Tất nhiên, chỉ có track thôi thì chưa đủ thú vị; chúng ta muốn có thể đọc hoặc ghi các sector đó, và do đó cần một <strong>disk head</strong> gắn vào một <strong>disk arm</strong>, như minh họa trong <strong>Hình 37.2</strong>. Trong hình, đầu đọc/ghi đĩa, gắn ở cuối cần đĩa, đang được định vị trên sector số 6, và surface đang quay theo chiều ngược kim đồng hồ.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h3 id="Độ-trễ-trên-một-track-rotational-delay-độ-trễ-quay"><a class="header" href="#Độ-trễ-trên-một-track-rotational-delay-độ-trễ-quay">Độ trễ trên một track: <strong>Rotational Delay</strong> (độ trễ quay)</a></h3>
 <p>Để hiểu cách một yêu cầu được xử lý trên ổ đĩa đơn giản chỉ có một track, hãy tưởng tượng chúng ta nhận được một yêu cầu đọc block 0. Ổ đĩa sẽ phục vụ yêu cầu này như thế nào?</p>
 <p>Trong ổ đĩa đơn giản này, ổ đĩa không cần làm nhiều việc. Cụ thể, nó chỉ cần <strong>chờ</strong> cho sector mong muốn quay đến vị trí ngay dưới <strong>disk head</strong> (đầu đọc/ghi). Việc chờ này xảy ra khá thường xuyên ở các ổ đĩa hiện đại và là một thành phần đủ quan trọng trong <strong>I/O service time</strong> (thời gian phục vụ I/O) để có một tên riêng: <strong>rotational delay</strong> (độ trễ quay – đôi khi gọi là rotation delay, nhưng nghe hơi lạ).<br />
@@ -177,6 +177,7 @@ Trong ví dụ, nếu độ trễ quay toàn phần là <strong>R</strong>, ổ 
 </ul>
 <p>Thời gian ổn định thường khá đáng kể, ví dụ từ 0,5 đến 2 ms, vì ổ đĩa phải chắc chắn tìm đúng track (hãy tưởng tượng nếu nó chỉ “gần đúng” thì sẽ ra sao!).</p>
 <p>Sau khi seek, cần đĩa đã đưa đầu đọc/ghi đến đúng track. Minh họa seek được thể hiện trong <strong>Hình 37.3</strong> (bên phải).</p>
+<p><img src="img/fig37_3.PNG" alt="" /></p>
 <p><strong>Hình 37.3: Ba track và một đầu đọc/ghi (phải: với seek)</strong></p>
 <p>Như ta thấy, trong quá trình seek, cần đĩa đã di chuyển tới track mong muốn, và platter tất nhiên vẫn quay — trong ví dụ này là khoảng 3 sector. Do đó, sector 9 sắp đi qua dưới đầu đọc/ghi, và chúng ta chỉ cần chịu một độ trễ quay ngắn để hoàn tất việc truyền dữ liệu.</p>
 <p>Khi sector 11 đi qua dưới đầu đọc/ghi, giai đoạn cuối của I/O sẽ diễn ra, gọi là <strong>transfer</strong> (truyền dữ liệu), nơi dữ liệu được đọc từ hoặc ghi xuống bề mặt đĩa. Như vậy, ta có bức tranh hoàn chỉnh về <strong>I/O time</strong> (thời gian I/O): đầu tiên là <strong>seek</strong>, sau đó là <strong>rotational delay</strong>, và cuối cùng là <strong>transfer</strong>.</p>
@@ -185,6 +186,7 @@ Trong ví dụ, nếu độ trễ quay toàn phần là <strong>R</strong>, ổ 
 <ul>
 <li>Nhiều ổ đĩa sử dụng một dạng <strong>track skew</strong> (độ lệch track) để đảm bảo rằng các thao tác đọc tuần tự (sequential read) có thể được phục vụ chính xác ngay cả khi vượt qua ranh giới giữa các track. Trong ổ đĩa ví dụ đơn giản của chúng ta, điều này có thể trông như trong <strong>Hình 37.4</strong>.</li>
 </ul>
+<p><img src="img/fig37_4.PNG" alt="" /></p>
 <p><strong>Hình 37.4: Ba track với track skew bằng 2</strong></p>
 <p>Các sector thường được sắp xếp lệch như vậy vì khi chuyển từ track này sang track khác, ổ đĩa cần thời gian để định vị lại đầu đọc/ghi (ngay cả khi chỉ sang track liền kề). Nếu không có skew, khi đầu đọc/ghi được chuyển sang track tiếp theo, block mong muốn có thể đã quay qua mất, khiến ổ đĩa phải chờ gần như toàn bộ độ trễ quay để truy cập block tiếp theo.</p>
 <ul>
@@ -242,8 +244,8 @@ R_{I/O} = \frac{Size_{Transfer}}{T_{I/O}} \tag{37.2}
 <li><strong>Barracuda</strong> [S09a]: một ổ được thiết kế cho dung lượng lớn.</li>
 </ul>
 <p>Chi tiết của cả hai được thể hiện trong <strong>Hình 37.5</strong>.</p>
+<p><img src="img/fig37_5.PNG" alt="" /></p>
 <p><strong>Hình 37.5: Thông số ổ đĩa – SCSI so với SATA</strong></p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Như bạn có thể thấy, hai ổ đĩa có các đặc tính khá khác nhau, và theo nhiều cách, chúng tóm tắt khá rõ hai phân khúc quan trọng của thị trường ổ đĩa. Phân khúc thứ nhất là thị trường <strong>“high performance”</strong> (hiệu năng cao), nơi các ổ đĩa được thiết kế để quay nhanh nhất có thể, đạt thời gian seek thấp và truyền dữ liệu nhanh. Phân khúc thứ hai là thị trường <strong>“capacity”</strong> (dung lượng), nơi chi phí trên mỗi byte là yếu tố quan trọng nhất; do đó, các ổ đĩa này chậm hơn nhưng lưu trữ được nhiều bit nhất có thể trong không gian sẵn có.</p>
 <p>Từ các con số này, chúng ta có thể bắt đầu tính toán hiệu năng của các ổ đĩa dưới hai loại <strong>workload</strong> (khối lượng công việc) đã nêu ở trên. Hãy bắt đầu với <strong>random workload</strong>. Giả sử mỗi lần đọc 4 KB xảy ra tại một vị trí ngẫu nhiên trên đĩa, ta có thể tính thời gian cho mỗi lần đọc như vậy. Với ổ <strong>Cheetah</strong>:</p>
 <pre><code>Tseek = 4 ms, Trotation = 2 ms, Ttransfer = 30 microseconds
@@ -256,6 +258,7 @@ R_{I/O} = \frac{Size_{Transfer}}{T_{I/O}} \tag{37.2}
 <p><strong>TIP: SỬ DỤNG Ổ ĐĨA THEO TUẦN TỰ</strong><br />
 Khi có thể, hãy truyền dữ liệu tới và từ ổ đĩa theo cách tuần tự. Nếu không thể tuần tự, ít nhất hãy nghĩ đến việc truyền dữ liệu theo các khối lớn: càng lớn càng tốt. Nếu I/O được thực hiện thành các mảnh nhỏ ngẫu nhiên, hiệu năng I/O sẽ giảm nghiêm trọng. Người dùng sẽ chịu khổ. Và bạn cũng sẽ chịu khổ, khi biết rằng mình đã gây ra nỗi khổ đó với những thao tác I/O ngẫu nhiên bất cẩn.</p>
 </blockquote>
+<p><img src="img/fig37_6.PNG" alt="" /></p>
 <p><strong>Hình 37.6: Hiệu năng ổ đĩa – SCSI so với SATA</strong><br />
 |                   | Cheetah       | Barracuda |
 | :---------------- | :------------ | :-------- |
@@ -286,13 +289,13 @@ Trong nhiều sách và bài báo, bạn sẽ thấy thời gian seek trung bìn
 <p>Nhớ rằng ta vẫn phải chia cho tổng số seek ((N^2)) để tính khoảng cách seek trung bình: (((1/3)N^3) / N^2 = (1/3)N).<br />
 Do đó, khoảng cách seek trung bình trên một ổ đĩa, xét trên tất cả các seek có thể, là <strong>một phần ba khoảng cách toàn phần</strong>. Và bây giờ, khi nghe rằng seek trung bình bằng một phần ba seek toàn phần, bạn sẽ biết nó đến từ đâu.</p>
 </blockquote>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h2 id="375-lập-lịch-đĩa-disk-scheduling"><a class="header" href="#375-lập-lịch-đĩa-disk-scheduling">37.5 Lập lịch đĩa (Disk Scheduling)</a></h2>
 <p>Do chi phí I/O cao, hệ điều hành (OS) từ trước đến nay luôn đóng vai trò trong việc quyết định thứ tự các yêu cầu I/O được gửi tới ổ đĩa. Cụ thể hơn, khi có một tập hợp các yêu cầu I/O, <strong>disk scheduler</strong> (bộ lập lịch đĩa) sẽ xem xét các yêu cầu và quyết định yêu cầu nào sẽ được lập lịch tiếp theo [SCO90, JW91].</p>
 <p>Không giống như <strong>job scheduling</strong> (lập lịch công việc), nơi thời lượng của mỗi job thường không được biết trước, với <strong>disk scheduling</strong>, ta có thể ước lượng khá tốt thời gian một “job” (tức là một yêu cầu đĩa) sẽ mất. Bằng cách ước lượng <strong>seek time</strong> (thời gian tìm kiếm) và <strong>rotational delay</strong> (độ trễ quay) có thể xảy ra của một yêu cầu, disk scheduler có thể biết mỗi yêu cầu sẽ mất bao lâu, và do đó (theo cách tham lam) chọn yêu cầu mất ít thời gian nhất để phục vụ trước. Vì vậy, disk scheduler sẽ cố gắng tuân theo nguyên tắc <strong>SJF</strong> (shortest job first – công việc ngắn nhất trước) trong hoạt động của mình.</p>
 <h3 id="sstf-shortest-seek-time-first"><a class="header" href="#sstf-shortest-seek-time-first">SSTF: Shortest Seek Time First</a></h3>
 <p>Một phương pháp lập lịch đĩa sớm được biết đến là <strong>shortest-seek-time-first</strong> (SSTF) (còn gọi là <strong>shortest-seek-first</strong> hoặc <strong>SSF</strong>). SSTF sắp xếp hàng đợi các yêu cầu I/O theo track, chọn các yêu cầu trên track gần nhất để hoàn thành trước.<br />
 Ví dụ: giả sử vị trí hiện tại của đầu đọc/ghi (head) đang ở track trong cùng, và chúng ta có các yêu cầu cho sector 21 (track giữa) và sector 2 (track ngoài cùng), khi đó ta sẽ xử lý yêu cầu tới sector 21 trước, chờ hoàn tất, rồi mới xử lý yêu cầu tới sector 2 (<strong>Hình 37.7</strong>).</p>
+<p><img src="img/fig37_7.PNG" alt="" /></p>
 <p><strong>Hình 37.7: SSTF – Lập lịch các yêu cầu 21 và 2</strong></p>
 <p>SSTF hoạt động tốt trong ví dụ này, tìm tới track giữa trước rồi tới track ngoài cùng. Tuy nhiên, SSTF không phải là “thuốc chữa bách bệnh”, vì các lý do sau:</p>
 <ul>
@@ -318,6 +321,7 @@ Làm thế nào để triển khai một thuật toán gần với SJF hơn bằ
 <p>Trong ví dụ, head hiện đang ở sector 30 trên track trong cùng. Bộ lập lịch phải quyết định: nên lập lịch sector 16 (trên track giữa) hay sector 8 (trên track ngoài cùng) cho yêu cầu tiếp theo? Vậy nên phục vụ yêu cầu nào trước?</p>
 <p>Câu trả lời, tất nhiên, là <strong>“còn tùy”</strong>. Trong kỹ thuật, “còn tùy” gần như luôn là câu trả lời, phản ánh rằng các đánh đổi (trade-off) là một phần tất yếu trong công việc của kỹ sư; đây cũng là một câu trả lời “an toàn” khi bạn chưa biết câu trả lời cho câu hỏi của sếp. Tuy nhiên, gần như luôn tốt hơn nếu biết <strong>tại sao</strong> lại “còn tùy”, và đó là điều chúng ta sẽ bàn ở đây.</p>
 <p>Điều mà nó “tùy” ở đây là <strong>tương quan giữa thời gian seek và thời gian quay</strong>. Nếu, trong ví dụ này, thời gian seek lớn hơn nhiều so với độ trễ quay, thì SSTF (và các biến thể) là đủ tốt. Tuy nhiên, hãy tưởng tượng nếu seek nhanh hơn đáng kể so với rotation. Khi đó, trong ví dụ này, sẽ hợp lý hơn nếu seek xa hơn để phục vụ yêu cầu 8 trên track ngoài cùng, thay vì thực hiện seek ngắn hơn tới track giữa để phục vụ yêu cầu 16, vốn phải quay gần như cả vòng mới đi qua dưới đầu đọc/ghi.</p>
+<p><img src="img/fig37_8.PNG" alt="" /></p>
 <p><strong>Hình 37.8: SSTF – Đôi khi là chưa đủ tốt</strong></p>
 <blockquote>
 <p><strong>TIP: LUÔN LUÔN “CÒN TÙY” (ĐỊNH LUẬT CỦA LIVNY)</strong><br />

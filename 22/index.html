@@ -134,7 +134,80 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p><strong>Hình 22.1: Truy vết thuật toán thay thế tối ưu (Tracing The Optimal Policy)</strong></p>
+                        <h1 id="22-vượt-ra-ngoài-physical-memory-các-chính-sách"><a class="header" href="#22-vượt-ra-ngoài-physical-memory-các-chính-sách">22. Vượt ra ngoài Physical Memory: Các chính sách</a></h1>
+<p>Trong một <strong>virtual memory manager</strong> (bộ quản lý bộ nhớ ảo), mọi thứ trở nên đơn giản khi hệ thống có nhiều bộ nhớ trống. Khi xảy ra <strong>page fault</strong> (lỗi trang), hệ điều hành tìm một <strong>free page</strong> (trang trống) trong danh sách các trang trống và gán nó cho trang gây lỗi. Chúc mừng nhé, <strong>Operating System</strong> (hệ điều hành), bạn lại xử lý thành công rồi.</p>
+<p>Tuy nhiên, mọi thứ trở nên thú vị hơn khi bộ nhớ trống còn rất ít. Trong trường hợp này, áp lực bộ nhớ (<strong>memory pressure</strong>) buộc <strong>OS</strong> phải bắt đầu <strong>paging out</strong> (ghi ra đĩa) một số trang để giải phóng chỗ cho các trang đang được sử dụng tích cực. Việc quyết định trang nào (hoặc các trang nào) sẽ bị loại bỏ (<strong>evict</strong>) được gói gọn trong <strong>replacement policy</strong> (chính sách thay thế) của OS; về mặt lịch sử, đây là một trong những quyết định quan trọng nhất mà các hệ thống virtual memory đời đầu phải đưa ra, vì các hệ thống cũ thường có rất ít <strong>physical memory</strong> (bộ nhớ vật lý). Ít nhất, đây là một tập hợp các chính sách thú vị mà chúng ta nên tìm hiểu kỹ hơn. Và do đó, vấn đề đặt ra là:</p>
+<blockquote>
+<p><strong>THE CRUX: LÀM THẾ NÀO ĐỂ QUYẾT ĐỊNH TRANG NÀO SẼ BỊ LOẠI BỎ</strong></p>
+<p>Làm thế nào để OS quyết định trang nào (hoặc các trang nào) sẽ bị loại khỏi bộ nhớ? Quyết định này được thực hiện bởi <strong>replacement policy</strong> của hệ thống, thường tuân theo một số nguyên tắc chung (sẽ được thảo luận bên dưới) nhưng cũng bao gồm một số tinh chỉnh để tránh các hành vi bất thường trong các trường hợp đặc biệt (<strong>corner-case behaviors</strong>).</p>
+</blockquote>
+<h2 id="221-quản-lý-cache"><a class="header" href="#221-quản-lý-cache">22.1 Quản lý Cache</a></h2>
+<p>Trước khi đi sâu vào các chính sách, chúng ta cần mô tả chi tiết hơn vấn đề cần giải quyết. Vì <strong>main memory</strong> (bộ nhớ chính) chỉ chứa một tập con của tất cả các trang trong hệ thống, nên có thể coi nó như một <strong>cache</strong> cho các trang của virtual memory. Do đó, mục tiêu của chúng ta khi chọn một <strong>replacement policy</strong> cho cache này là <strong>giảm thiểu số lượng cache miss</strong>, tức là giảm số lần phải nạp một trang từ đĩa. Ngược lại, cũng có thể coi mục tiêu là <strong>tối đa hóa số lượng cache hit</strong>, tức là số lần một trang được truy cập và tìm thấy ngay trong bộ nhớ.</p>
+<p>Biết được số lượng <strong>cache hit</strong> và <strong>cache miss</strong> cho phép chúng ta tính <strong>average memory access time (AMAT)</strong> — thời gian truy cập bộ nhớ trung bình — cho một chương trình (một chỉ số mà các kiến trúc sư máy tính thường tính cho <strong>hardware cache</strong> [HP06]). Cụ thể, với các giá trị này, ta có thể tính AMAT của một chương trình như sau:</p>
+<p>$$ \text{AMAT} = T_M + (P_{Miss} \cdot T_D) $$</p>
+<p>(22.1)</p>
+<p>Trong đó:</p>
+<ul>
+<li>$T_M$ là chi phí truy cập bộ nhớ</li>
+<li>$T_D$ là chi phí truy cập đĩa</li>
+<li>$P_{Miss}$ là xác suất không tìm thấy dữ liệu trong cache (<strong>miss</strong>).</li>
+</ul>
+<p>Giá trị $P_{Miss}$ nằm trong khoảng từ 0.0 đến 1.0, và đôi khi chúng ta dùng tỷ lệ phần trăm miss thay vì xác suất (ví dụ: tỷ lệ miss 10% nghĩa là $P_{Miss} = 0.10$). Lưu ý rằng bạn <strong>luôn</strong> phải trả chi phí truy cập dữ liệu trong bộ nhớ; tuy nhiên, khi bị miss, bạn phải trả thêm chi phí nạp dữ liệu từ đĩa.</p>
+<p><strong>Ví dụ:</strong><br />
+Giả sử chúng ta có một máy với <strong>address space</strong> (không gian địa chỉ) rất nhỏ: 4KB, với kích thước trang (<strong>page size</strong>) là 256 byte. Khi đó, một <strong>virtual address</strong> (địa chỉ ảo) sẽ có hai thành phần:</p>
+<ul>
+<li><strong>VPN</strong> (Virtual Page Number – số trang ảo) 4 bit (các bit có trọng số cao nhất)</li>
+<li><strong>Offset</strong> 8 bit (các bit có trọng số thấp nhất).</li>
+</ul>
+<p>Như vậy, một <strong>process</strong> (tiến trình) trong ví dụ này có thể truy cập $2^4 = 16$ trang ảo. Giả sử tiến trình này tạo ra chuỗi các truy cập bộ nhớ (<strong>memory references</strong>) như sau (theo dạng địa chỉ ảo):</p>
+<pre><code>0x000, 0x100, 0x200, 0x300, 0x400, 0x500, 0x600, 0x700, 0x800, 0x900
+</code></pre>
+<p>Các địa chỉ ảo này trỏ đến byte đầu tiên của mỗi trang trong 10 trang đầu tiên của không gian địa chỉ (số trang chính là chữ số hex đầu tiên của địa chỉ ảo).</p>
+<p>Giả sử thêm rằng mọi trang ngoại trừ <strong>virtual page 3</strong> đã có sẵn trong bộ nhớ. Khi đó, chuỗi truy cập bộ nhớ sẽ có hành vi:</p>
+<pre><code>hit, hit, hit, miss, hit, hit, hit, hit, hit, hit
+</code></pre>
+<p>Ta có thể tính <strong>hit rate</strong> (tỷ lệ hit) là 90%, vì 9 trên 10 lần truy cập tìm thấy dữ liệu trong bộ nhớ. <strong>Miss rate</strong> do đó là 10% ($P_{Miss} = 0.1$). Nói chung, $P_{Hit} + P_{Miss} = 1.0$; tỷ lệ hit cộng tỷ lệ miss luôn bằng 100%.</p>
+<p><strong>Tính AMAT:</strong><br />
+Giả sử chi phí truy cập bộ nhớ ($T_M$) là khoảng 100 nanosecond, và chi phí truy cập đĩa ($T_D$) là khoảng 10 millisecond. Khi đó:</p>
+<p>$$
+\text{AMAT} = 100\text{ns} + 0.1 \cdot 10\text{ms}<br />
+= 100\text{ns} + 1\text{ms}<br />
+= 1.0001\ \text{ms} \ (\approx 1\ \text{millisecond})
+$$</p>
+<p>Nếu tỷ lệ hit là 99.9% ($P_{Miss} = 0.001$), kết quả sẽ khác hẳn:</p>
+<p>$$
+\text{AMAT} = 100\text{ns} + 0.001 \cdot 10\text{ms}<br />
+= 100\text{ns} + 10\ \mu\text{s}<br />
+\approx 10.1\ \mu\text{s}
+$$</p>
+<p>Tức là nhanh hơn khoảng 100 lần. Khi tỷ lệ hit tiến gần 100%, AMAT tiến gần đến 100 nanosecond.</p>
+<p>Rõ ràng, như bạn thấy trong ví dụ này, chi phí truy cập đĩa trong các hệ thống hiện đại là rất lớn, đến mức chỉ cần một tỷ lệ miss rất nhỏ cũng sẽ nhanh chóng chi phối toàn bộ AMAT của chương trình. Vì vậy, chúng ta cần tránh càng nhiều miss càng tốt, nếu không tốc độ sẽ bị giới hạn bởi tốc độ của đĩa. Một cách để cải thiện là phát triển một <strong>replacement policy</strong> thông minh — và đó chính là điều chúng ta sẽ làm tiếp theo.</p>
+<h2 id="222-chính-sách-thay-thế-tối-ưu-optimal-replacement-policy"><a class="header" href="#222-chính-sách-thay-thế-tối-ưu-optimal-replacement-policy">22.2 Chính sách thay thế tối ưu (Optimal Replacement Policy)</a></h2>
+<p>Để hiểu rõ hơn cách một <strong>replacement policy</strong> (chính sách thay thế) cụ thể hoạt động, sẽ rất hữu ích nếu so sánh nó với <strong>replacement policy</strong> tốt nhất có thể. Thật vậy, một chính sách tối ưu như vậy đã được Belady phát triển từ nhiều năm trước [B66] (ông ban đầu gọi nó là <strong>MIN</strong>). <strong>Optimal replacement policy</strong> (chính sách thay thế tối ưu) dẫn đến số lượng <strong>miss</strong> (lỗi cache) ít nhất có thể. Belady đã chỉ ra rằng một cách tiếp cận đơn giản (nhưng thật không may là rất khó triển khai!) — thay thế trang sẽ được truy cập xa nhất trong tương lai — chính là chính sách tối ưu, giúp giảm thiểu tối đa số lượng cache miss.</p>
+<blockquote>
+<p><strong>TIP: SO SÁNH VỚI CHÍNH SÁCH TỐI ƯU LÀ HỮU ÍCH</strong></p>
+<p>Mặc dù chính sách tối ưu không thực tế để áp dụng trực tiếp trong hệ thống thật, nhưng nó cực kỳ hữu ích như một điểm tham chiếu trong mô phỏng hoặc các nghiên cứu khác. Việc nói rằng thuật toán mới của bạn đạt <strong>hit rate</strong> (tỷ lệ hit) 80% sẽ không có nhiều ý nghĩa nếu đứng riêng lẻ; nhưng nếu nói rằng chính sách tối ưu đạt 82% hit rate (và do đó cách tiếp cận mới của bạn khá gần với tối ưu) thì kết quả sẽ có ý nghĩa hơn và có ngữ cảnh rõ ràng. Vì vậy, trong bất kỳ nghiên cứu nào, việc biết được giá trị tối ưu cho phép bạn so sánh tốt hơn, chỉ ra mức cải thiện vẫn còn khả thi, và cũng giúp bạn biết khi nào nên dừng tối ưu hóa chính sách của mình vì nó đã đủ gần với lý tưởng [AD03].</p>
+</blockquote>
+<p>Hy vọng rằng trực giác đằng sau chính sách tối ưu là dễ hiểu. Hãy nghĩ như thế này: nếu bạn buộc phải loại bỏ một trang, tại sao không loại bỏ trang mà bạn sẽ cần đến muộn nhất trong tương lai? Bằng cách làm như vậy, bạn đang ngầm khẳng định rằng tất cả các trang khác trong cache đều quan trọng hơn trang ở xa nhất đó. Lý do điều này đúng rất đơn giản: bạn sẽ truy cập các trang khác trước khi truy cập trang ở xa nhất.</p>
+<p>Hãy cùng theo dõi một ví dụ đơn giản để hiểu các quyết định mà chính sách tối ưu đưa ra. Giả sử một chương trình truy cập chuỗi các <strong>virtual page</strong> (trang ảo) như sau:</p>
+<pre><code>0, 1, 2, 0, 1, 3, 0, 3, 1, 2, 1
+</code></pre>
+<p><strong>Figure 22.1</strong> dưới đây minh họa hành vi của chính sách tối ưu, giả sử cache có thể chứa tối đa 3 trang.</p>
+<div class="table-wrapper"><table><thead><tr><th>Access</th><th>Hit/Miss?</th><th>Evict</th><th>Resulting Cache State</th></tr></thead><tbody>
+<tr><td>0</td><td>Miss</td><td></td><td>0</td></tr>
+<tr><td>1</td><td>Miss</td><td></td><td>0, 1</td></tr>
+<tr><td>2</td><td>Miss</td><td></td><td>0, 1, 2</td></tr>
+<tr><td>0</td><td>Hit</td><td></td><td>0, 1, 2</td></tr>
+<tr><td>1</td><td>Hit</td><td></td><td>0, 1, 2</td></tr>
+<tr><td>3</td><td>Miss</td><td>2</td><td>0, 1, 3</td></tr>
+<tr><td>0</td><td>Hit</td><td></td><td>0, 1, 3</td></tr>
+<tr><td>3</td><td>Hit</td><td></td><td>0, 1, 3</td></tr>
+<tr><td>1</td><td>Hit</td><td></td><td>0, 1, 3</td></tr>
+<tr><td>2</td><td>Miss</td><td>3</td><td>0, 1, 2</td></tr>
+<tr><td>1</td><td>Hit</td><td></td><td>0, 1, 2</td></tr>
+</tbody></table>
+</div>
+<p><strong>Hình 22.1: Truy vết thuật toán thay thế tối ưu (Tracing The Optimal Policy)</strong></p>
 <p>Trong hình, bạn có thể thấy các hành động sau. Không có gì ngạc nhiên, ba lần truy cập đầu tiên đều là <strong>miss</strong> (trượt), vì cache bắt đầu ở trạng thái rỗng; loại miss này đôi khi được gọi là <strong>cold-start miss</strong> (miss khởi động lạnh) hoặc <strong>compulsory miss</strong> (miss bắt buộc). Sau đó, chúng ta lại truy cập các page 0 và 1, cả hai đều <strong>hit</strong> (trúng) trong cache. Cuối cùng, chúng ta gặp một miss khác (với page 3), nhưng lần này cache đã đầy; cần phải thay thế một page! Câu hỏi đặt ra: nên thay thế page nào?</p>
 <p>Với <strong>optimal policy</strong> (chính sách tối ưu), ta sẽ xem xét tương lai của từng page hiện có trong cache (0, 1 và 2), và thấy rằng page 0 sẽ được truy cập gần như ngay lập tức, page 1 được truy cập muộn hơn một chút, và page 2 được truy cập xa nhất trong tương lai. Do đó, optimal policy có lựa chọn dễ dàng: <strong>evict</strong> (loại bỏ) page 2, dẫn đến cache chứa các page 0, 1 và 3. Ba lần truy cập tiếp theo đều là hit, nhưng sau đó chúng ta truy cập page 2 (đã bị loại bỏ từ lâu) và gặp một miss khác.</p>
 <p>Tại đây, optimal policy lại xem xét tương lai của từng page trong cache (0, 1 và 3), và nhận thấy rằng miễn là không loại bỏ page 1 (sắp được truy cập), thì sẽ ổn. Ví dụ minh họa cho thấy page 3 bị loại bỏ, mặc dù page 0 cũng là một lựa chọn hợp lý. Cuối cùng, ta hit vào page 1 và kết thúc chuỗi truy vết.</p>
@@ -160,6 +233,7 @@ Trong lĩnh vực <strong>computer architecture</strong> (kiến trúc máy tín
 <p>Nhiều hệ thống đời đầu đã tránh sự phức tạp của việc cố gắng tiếp cận optimal và sử dụng các <strong>replacement policy</strong> (chính sách thay thế) rất đơn giản. Ví dụ, một số hệ thống sử dụng <strong>FIFO</strong> (first-in, first-out — vào trước, ra trước), trong đó các page được đưa vào một <strong>queue</strong> (hàng đợi) khi chúng vào hệ thống; khi cần thay thế, page ở <strong>đuôi hàng đợi</strong> (page “first-in”) sẽ bị loại bỏ. FIFO có một ưu điểm lớn: rất dễ triển khai.</p>
 <p>Hãy xem FIFO hoạt động thế nào với chuỗi truy cập ví dụ của chúng ta (<em>Figure 22.2</em>, trang 5). Chúng ta lại bắt đầu với ba compulsory miss cho các page 0, 1 và 2, sau đó hit vào cả 0 và 1. Tiếp theo, page 3 được truy cập, gây ra một miss; quyết định thay thế với FIFO rất dễ: chọn page “first-in” (trạng thái cache trong hình được giữ theo thứ tự FIFO, với page vào trước nằm bên trái), đó là page 0.</p>
 <p>Không may, lần truy cập tiếp theo là page 0, gây ra một miss khác và thay thế (loại bỏ page 1). Sau đó, chúng ta hit vào page 3, nhưng miss ở page 1 và 2, và cuối cùng hit vào page 1.</p>
+<p><img src="img/fig22_2.PNG" alt="" /></p>
 <p><strong>Hình 22.2: Truy vết chính sách FIFO (Tracing The FIFO Policy)</strong></p>
 <p>So sánh FIFO với <strong>optimal</strong>, FIFO hoạt động kém hơn đáng kể: <strong>hit rate</strong> (tỉ lệ trúng) chỉ đạt 36,4% (hoặc 57,1% nếu loại trừ <strong>compulsory misses</strong> — các miss bắt buộc). FIFO hoàn toàn không thể xác định tầm quan trọng của các block: ngay cả khi page 0 đã được truy cập nhiều lần, FIFO vẫn loại bỏ nó, chỉ vì đó là page được đưa vào bộ nhớ đầu tiên.</p>
 <blockquote>
@@ -174,8 +248,10 @@ Belady (tác giả của optimal policy) và các đồng nghiệp đã tìm ra 
 <h2 id="224-another-simple-policy-random"><a class="header" href="#224-another-simple-policy-random">22.4 Another Simple Policy: Random</a></h2>
 <p>(Một chính sách đơn giản khác: Random)</p>
 <p>Một chính sách thay thế tương tự là <strong>Random</strong>, chính sách này đơn giản chọn ngẫu nhiên một page để thay thế khi bộ nhớ bị áp lực. Random có các đặc điểm tương tự FIFO: dễ triển khai, nhưng không thực sự cố gắng thông minh trong việc chọn block để loại bỏ. Hãy xem Random hoạt động thế nào với chuỗi tham chiếu ví dụ nổi tiếng của chúng ta (<em>Figure 22.3</em>).</p>
+<p><img src="img/fig22_3.PNG" alt="" /></p>
 <p><strong>Hình 22.3: Truy vết chính sách Random (Tracing The Random Policy)</strong></p>
 <p>Tất nhiên, hiệu quả của Random phụ thuộc hoàn toàn vào việc nó may mắn (hoặc xui xẻo) thế nào khi chọn. Trong ví dụ trên, Random hoạt động tốt hơn một chút so với FIFO, và kém hơn một chút so với optimal. Thực tế, chúng ta có thể chạy thử nghiệm Random hàng nghìn lần và xác định hiệu quả trung bình của nó.</p>
+<p><img src="img/fig22_4.PNG" alt="" /></p>
 <p><strong>Hình 22.4: Hiệu năng của Random qua 10.000 lần thử (Random Performance Over 10,000 Trials)</strong></p>
 <p>Như bạn thấy, đôi khi (hơn 40% số lần), Random tốt ngang optimal, đạt 6 hit trên chuỗi truy vết ví dụ; đôi khi nó tệ hơn nhiều, chỉ đạt 2 hit hoặc ít hơn. Hiệu quả của Random phụ thuộc vào “vận may” khi chọn.</p>
 <h2 id="225-using-history-lru"><a class="header" href="#225-using-history-lru">22.5 Using History: LRU</a></h2>
@@ -194,6 +270,7 @@ Belady (tác giả của optimal policy) và các đồng nghiệp đã tìm ra 
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
 <p>Trong trường hợp này, LRU đạt hiệu năng tối đa vì chuỗi truy cập phù hợp với giả định của nguyên lý địa phương.</p>
 </div>
+<p><img src="img/fig22_5.PNG" alt="" /></p>
 <p><strong>Hình 22.5: Truy vết chính sách LRU (Tracing The LRU Policy)</strong></p>
 <blockquote>
 <p><strong>ASIDE: TYPES OF LOCALITY</strong><br />
@@ -214,6 +291,7 @@ Có hai loại <strong>locality</strong> (tính cục bộ) mà các chương tr
 <p>(Các ví dụ về khối lượng công việc)</p>
 <p>Hãy xem một vài ví dụ nữa để hiểu rõ hơn cách một số chính sách này hoạt động. Ở đây, chúng ta sẽ xem xét các <strong>workload</strong> (khối lượng công việc) phức tạp hơn thay vì các chuỗi truy vết nhỏ. Tuy nhiên, ngay cả các workload này cũng đã được đơn giản hóa rất nhiều; một nghiên cứu tốt hơn sẽ bao gồm các <strong>application trace</strong> (truy vết ứng dụng) thực tế.</p>
 <p><strong>Workload</strong> đầu tiên của chúng ta <strong>không có locality</strong>, nghĩa là mỗi tham chiếu là tới một page ngẫu nhiên trong tập các page được truy cập. Trong ví dụ đơn giản này, workload truy cập 100 page duy nhất theo thời gian, chọn page tiếp theo để tham chiếu một cách ngẫu nhiên; tổng cộng có 10.000 lượt truy cập page. Trong thí nghiệm, chúng ta thay đổi kích thước cache từ rất nhỏ (1 page) đến đủ để chứa tất cả các page duy nhất (100 page), nhằm xem mỗi chính sách hoạt động thế nào trên dải kích thước cache này.</p>
+<p><img src="img/fig22_6.PNG" alt="" /></p>
 <p><strong>Hình 22.6: Workload không có locality (The No-Locality Workload)</strong></p>
 <p>Hình 22.6 biểu diễn kết quả thí nghiệm cho <strong>optimal</strong>, <strong>LRU</strong>, <strong>Random</strong>, và <strong>FIFO</strong>. Trục y của hình cho thấy hit rate mà mỗi chính sách đạt được; trục x thay đổi kích thước cache như mô tả ở trên.</p>
 <p>Từ biểu đồ, chúng ta có thể rút ra một số kết luận:</p>
@@ -223,14 +301,15 @@ Có hai loại <strong>locality</strong> (tính cục bộ) mà các chương tr
 <li>Cuối cùng, bạn có thể thấy optimal hoạt động tốt hơn đáng kể so với các chính sách thực tế; nếu có thể “nhìn trước tương lai”, việc thay thế sẽ hiệu quả hơn nhiều.</li>
 </ol>
 <p>Workload tiếp theo được gọi là <strong>“80-20” workload</strong>, thể hiện locality: 80% số lần tham chiếu là tới 20% số page (“hot” pages — page nóng); 20% số lần tham chiếu còn lại là tới 80% số page còn lại (“cold” pages — page lạnh). Trong workload này, tổng số page duy nhất vẫn là 100; do đó, hot pages được tham chiếu hầu hết thời gian, và cold pages chiếm phần còn lại. <strong>Hình 22.7</strong> (trang 10) cho thấy các chính sách hoạt động thế nào với workload này.</p>
+<p><img src="img/fig22_7.PNG" alt="" /></p>
 <p><strong>Hình 22.7: Workload 80-20 (The 80-20 Workload)</strong></p>
 <p>Như bạn thấy từ hình, mặc dù cả Random và FIFO đều hoạt động khá tốt, LRU làm tốt hơn, vì nó có xu hướng giữ lại các hot pages; do các page này đã được tham chiếu thường xuyên trong quá khứ, chúng có khả năng sẽ được tham chiếu lại trong tương lai gần. Optimal một lần nữa hoạt động tốt hơn, cho thấy thông tin lịch sử của LRU không hoàn hảo.</p>
 <p>Lúc này, bạn có thể tự hỏi: liệu sự cải thiện của LRU so với Random và FIFO có thực sự đáng kể? Câu trả lời, như thường lệ, là “còn tùy”. Nếu mỗi miss là rất tốn kém (điều này không hiếm), thì ngay cả một mức tăng nhỏ trong hit rate (giảm miss rate) cũng có thể tạo ra sự khác biệt lớn về hiệu năng. Nếu miss không quá tốn kém, thì lợi ích tiềm năng của LRU tất nhiên sẽ không quan trọng đến vậy.</p>
 <p>Hãy xem một workload cuối cùng. Chúng tôi gọi nó là <strong>“looping sequential” workload</strong> (workload tuần tự lặp), trong đó chúng ta tham chiếu 50 page theo thứ tự, bắt đầu từ 0, sau đó 1, ..., đến page 49, rồi lặp lại, lặp đi lặp lại các truy cập này, tổng cộng 10.000 lượt truy cập tới 50 page duy nhất. Biểu đồ cuối trong <strong>Hình 22.8</strong> cho thấy hành vi của các chính sách với workload này.</p>
+<p><img src="img/fig22_8.PNG" alt="" /></p>
 <p><strong>Hình 22.8: Workload tuần tự lặp (The Looping Workload)</strong></p>
 <p>Workload này, phổ biến trong nhiều ứng dụng (bao gồm cả các ứng dụng thương mại quan trọng như <strong>database</strong> [CD85]), là trường hợp xấu nhất cho cả LRU và FIFO. Các thuật toán này, dưới workload tuần tự lặp, loại bỏ các page cũ hơn; không may, do tính chất lặp của workload, các page cũ này sẽ được truy cập sớm hơn so với các page mà chính sách ưu tiên giữ lại trong cache. Thực tế, ngay cả với cache kích thước 49, một workload tuần tự lặp gồm 50 page vẫn dẫn đến hit rate 0%.</p>
 <p>Điều thú vị là Random hoạt động tốt hơn đáng kể, dù không đạt tới optimal, nhưng ít nhất đạt được hit rate khác 0. Hóa ra Random có một số đặc tính thú vị; một trong số đó là không gặp các hành vi bất thường ở các trường hợp đặc biệt (corner-case) khó chịu.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, giữ nguyên các thuật ngữ chuyên ngành, bổ sung giải thích khi cần, và trình bày theo phong cách học thuật như các phần trước.</p>
 <h2 id="227-implementing-historical-algorithms"><a class="header" href="#227-implementing-historical-algorithms">22.7 Implementing Historical Algorithms</a></h2>
 <p>(Triển khai các thuật toán dựa trên lịch sử)</p>
 <p>Như bạn thấy, một thuật toán như <strong>LRU</strong> (Least Recently Used — loại bỏ trang ít được sử dụng gần đây nhất) thường có thể làm tốt hơn các chính sách đơn giản như <strong>FIFO</strong> hoặc <strong>Random</strong>, vốn có thể loại bỏ các page quan trọng. Tuy nhiên, các chính sách dựa trên lịch sử lại đặt ra một thách thức mới: <strong>làm thế nào để triển khai chúng?</strong></p>
@@ -247,6 +326,7 @@ Vì việc triển khai LRU hoàn hảo là tốn kém, liệu chúng ta có th�
 <p>Câu trả lời là <strong>có</strong>: việc xấp xỉ LRU khả thi hơn nhiều về mặt chi phí tính toán, và thực tế đây là cách mà nhiều hệ thống hiện đại áp dụng. Ý tưởng này cần một chút hỗ trợ phần cứng, dưới dạng <strong>use bit</strong> (bit sử dụng, đôi khi gọi là <strong>reference bit</strong> — bit tham chiếu), lần đầu được triển khai trong hệ thống có phân trang đầu tiên, <strong>Atlas one-level store</strong> [KE+62]. Mỗi page trong hệ thống có một use bit, và các bit này được lưu ở đâu đó trong bộ nhớ (có thể trong page table của từng process, hoặc trong một mảng riêng). Mỗi khi một page được tham chiếu (đọc hoặc ghi), use bit sẽ được phần cứng đặt thành 1. Phần cứng <strong>không bao giờ</strong> tự xóa bit này (đặt về 0); đó là trách nhiệm của OS.</p>
 <p>OS sử dụng use bit để xấp xỉ LRU như thế nào? Có nhiều cách, nhưng <strong>clock algorithm</strong> [C69] là một cách tiếp cận đơn giản. Hãy tưởng tượng tất cả các page của hệ thống được sắp xếp thành một danh sách vòng tròn. Một “kim đồng hồ” trỏ tới một page bất kỳ để bắt đầu (không quan trọng là page nào). Khi cần thay thế, OS kiểm tra page P mà kim đang trỏ có use bit bằng 1 hay 0. Nếu bằng 1, điều này nghĩa là page P vừa được sử dụng gần đây và không phải ứng viên tốt để thay thế. OS sẽ xóa use bit của P (đặt về 0) và di chuyển kim sang page tiếp theo (P+1). Thuật toán tiếp tục cho đến khi tìm thấy một page có use bit bằng 0, nghĩa là page này không được sử dụng gần đây (hoặc, trong trường hợp xấu nhất, tất cả page đều đã được sử dụng và chúng ta đã quét hết, xóa tất cả bit).</p>
 <p>Lưu ý rằng đây không phải là cách duy nhất dùng use bit để xấp xỉ LRU. Bất kỳ cách nào định kỳ xóa use bit và phân biệt page có use bit = 1 và = 0 để quyết định thay thế đều được. Thuật toán clock của Corbató chỉ là một cách tiếp cận sớm và thành công, với ưu điểm là không phải quét toàn bộ bộ nhớ nhiều lần để tìm page không sử dụng.</p>
+<p><img src="img/fig22_9.PNG" alt="" /></p>
 <p><strong>Hình 22.9: Workload 80-20 với Clock</strong></p>
 <p>Biểu đồ trong Hình 22.9 cho thấy hành vi của một biến thể clock algorithm. Biến thể này quét ngẫu nhiên các page khi thay thế; khi gặp page có reference bit = 1, nó xóa bit (đặt về 0); khi gặp page có reference bit = 0, nó chọn page đó làm <strong>victim</strong> (nạn nhân). Như bạn thấy, mặc dù không tốt bằng LRU hoàn hảo, nó vẫn tốt hơn các cách không xét đến lịch sử.</p>
 <h2 id="229-considering-dirty-pages"><a class="header" href="#229-considering-dirty-pages">22.9 Considering Dirty Pages</a></h2>

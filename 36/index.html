@@ -134,8 +134,7 @@
 
                 <div id="content" class="content">
                     <main>
-                        <p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
-<h1 id="36-thiết-bị-io-io-devices"><a class="header" href="#36-thiết-bị-io-io-devices">36 Thiết bị I/O (I/O Devices)</a></h1>
+                        <h1 id="36-thiết-bị-io-io-devices"><a class="header" href="#36-thiết-bị-io-io-devices">36 Thiết bị I/O (I/O Devices)</a></h1>
 <p>Trước khi đi sâu vào nội dung chính của phần này (về <strong>persistence</strong> – tính bền vững dữ liệu), trước hết chúng ta sẽ giới thiệu khái niệm <strong>thiết bị nhập/xuất</strong> (input/output – I/O device) và xem hệ điều hành (operating system) có thể tương tác với thực thể này như thế nào.<br />
 I/O tất nhiên là cực kỳ quan trọng đối với hệ thống máy tính; hãy tưởng tượng một chương trình không có bất kỳ <strong>input</strong> nào (nó sẽ cho ra cùng một kết quả mỗi lần chạy); giờ hãy tưởng tượng một chương trình không có <strong>output</strong> (vậy mục đích chạy nó là gì?). Rõ ràng, để hệ thống máy tính trở nên hữu ích, cả input và output đều là cần thiết. Và do đó, chúng ta có vấn đề tổng quát sau:</p>
 <blockquote>
@@ -144,9 +143,11 @@ Làm thế nào để tích hợp I/O vào hệ thống? Các cơ chế tổng q
 </blockquote>
 <h2 id="361-kiến-trúc-hệ-thống-system-architecture"><a class="header" href="#361-kiến-trúc-hệ-thống-system-architecture">36.1 Kiến trúc hệ thống (System Architecture)</a></h2>
 <p>Để bắt đầu, hãy xem một sơ đồ “kinh điển” của một hệ thống điển hình (<strong>Hình 36.1</strong>). Sơ đồ cho thấy một CPU đơn được kết nối với bộ nhớ chính (main memory) của hệ thống thông qua một loại <strong>memory bus</strong> hoặc <strong>interconnect</strong> nào đó. Một số thiết bị được kết nối với hệ thống thông qua một <strong>I/O bus</strong> tổng quát, mà trong nhiều hệ thống hiện đại sẽ là <strong>PCI</strong> (hoặc một trong nhiều biến thể của nó); card đồ họa và một số thiết bị I/O hiệu năng cao khác thường nằm ở đây. Cuối cùng, ở mức thấp hơn là một hoặc nhiều <strong>peripheral bus</strong> (bus ngoại vi), chẳng hạn như <strong>SCSI</strong>, <strong>SATA</strong> hoặc <strong>USB</strong>. Các bus này kết nối các thiết bị chậm với hệ thống, bao gồm đĩa cứng, chuột và bàn phím.</p>
+<p><img src="img/fig36_1.PNG" alt="" /></p>
 <p><strong>Hình 36.1: Kiến trúc hệ thống nguyên mẫu (Prototypical System Architecture)</strong></p>
 <p>Một câu hỏi đặt ra: tại sao chúng ta cần một cấu trúc phân cấp như vậy? Nói ngắn gọn: <strong>vật lý</strong> và <strong>chi phí</strong>. Bus càng nhanh thì chiều dài của nó càng phải ngắn; do đó, một <strong>memory bus</strong> hiệu năng cao không có nhiều chỗ để cắm thêm thiết bị. Ngoài ra, việc thiết kế một bus hiệu năng cao là rất tốn kém. Vì vậy, các nhà thiết kế hệ thống đã áp dụng cách tiếp cận phân cấp này, trong đó các thành phần đòi hỏi hiệu năng cao (như card đồ họa) được đặt gần CPU hơn. Các thành phần hiệu năng thấp hơn được đặt xa hơn. Lợi ích của việc đặt đĩa và các thiết bị chậm khác trên <strong>peripheral bus</strong> là rất nhiều; đặc biệt, bạn có thể kết nối số lượng lớn thiết bị vào đó.</p>
 <p>Tất nhiên, các hệ thống hiện đại ngày càng sử dụng <strong>chipset</strong> chuyên dụng và các kết nối <strong>point-to-point</strong> nhanh hơn để cải thiện hiệu năng. <strong>Hình 36.2</strong> cho thấy sơ đồ gần đúng của <strong>Intel Z270 Chipset</strong> [H17]. Ở phía trên, CPU kết nối trực tiếp nhất với hệ thống bộ nhớ, nhưng cũng có một kết nối hiệu năng cao tới card đồ họa (và do đó là màn hình) để hỗ trợ chơi game (ồ, thật khủng khiếp!) và các ứng dụng đòi hỏi đồ họa cao.</p>
+<p><img src="img/fig36_2.PNG" alt="" /></p>
 <p><strong>Hình 36.2: Kiến trúc hệ thống hiện đại (Modern System Architecture)</strong></p>
 <p>CPU kết nối với một chip I/O thông qua <strong>DMI</strong> (Direct Media Interface) độc quyền của Intel, và phần còn lại của các thiết bị kết nối với chip này thông qua nhiều loại <strong>interconnect</strong> khác nhau. Ở bên phải, một hoặc nhiều ổ cứng kết nối với hệ thống qua giao diện <strong>eSATA</strong>; <strong>ATA</strong> (AT Attachment – kết nối cho máy IBM PC AT), sau đó là <strong>SATA</strong> (Serial ATA), và hiện nay là <strong>eSATA</strong> (external SATA) thể hiện sự tiến hóa của các giao diện lưu trữ trong nhiều thập kỷ qua, với mỗi bước tiến đều tăng hiệu năng để bắt kịp với các thiết bị lưu trữ hiện đại. Bên dưới chip I/O là một số kết nối <strong>USB</strong> (Universal Serial Bus), trong sơ đồ này dùng để kết nối bàn phím và chuột với máy tính. Trong nhiều hệ thống hiện đại, USB được dùng cho các thiết bị hiệu năng thấp như vậy. Cuối cùng, ở bên trái, các thiết bị hiệu năng cao khác có thể được kết nối với hệ thống qua <strong>PCIe</strong> (Peripheral Component Interconnect Express). Trong sơ đồ này, một <strong>network interface</strong> (giao diện mạng) được kết nối tại đây; các thiết bị lưu trữ hiệu năng cao hơn (như thiết bị lưu trữ bền vững NVMe) cũng thường được kết nối tại đây.</p>
 <h2 id="362-một-thiết-bị-chuẩn-a-canonical-device"><a class="header" href="#362-một-thiết-bị-chuẩn-a-canonical-device">36.2 Một thiết bị chuẩn (A Canonical Device)</a></h2>
@@ -154,6 +155,7 @@ Làm thế nào để tích hợp I/O vào hệ thống? Các cơ chế tổng q
 <ol>
 <li><strong>Giao diện phần cứng</strong> (hardware interface) mà nó cung cấp cho phần còn lại của hệ thống. Giống như một phần mềm, phần cứng cũng phải cung cấp một loại giao diện nào đó cho phép phần mềm hệ thống điều khiển hoạt động của nó. Do đó, tất cả các thiết bị đều có một giao diện và giao thức (protocol) được xác định để tương tác điển hình.</li>
 </ol>
+<p><img src="img/fig36_3.PNG" alt="" /></p>
 <p><strong>Hình 36.3: Một thiết bị chuẩn (A Canonical Device)</strong></p>
 <ol start="2">
 <li><strong>Cấu trúc bên trong</strong> (internal structure) của thiết bị. Phần này phụ thuộc vào cách triển khai và chịu trách nhiệm hiện thực hóa <strong>abstraction</strong> (sự trừu tượng hóa) mà thiết bị cung cấp cho hệ thống. Các thiết bị rất đơn giản sẽ chỉ có một hoặc vài chip phần cứng để thực hiện chức năng của chúng; các thiết bị phức tạp hơn sẽ bao gồm một CPU đơn giản, một số bộ nhớ đa dụng (general purpose memory), và các chip chuyên biệt khác để hoàn thành công việc. Ví dụ, các bộ điều khiển RAID hiện đại có thể bao gồm hàng trăm nghìn dòng <strong>firmware</strong> (phần mềm nằm trong thiết bị phần cứng) để thực hiện chức năng của chúng.</li>
@@ -166,7 +168,6 @@ Làm thế nào để tích hợp I/O vào hệ thống? Các cơ chế tổng q
 <li><strong>Data register</strong>: dùng để truyền dữ liệu tới thiết bị hoặc nhận dữ liệu từ thiết bị.</li>
 </ul>
 <p>Bằng cách đọc và ghi vào các register này, hệ điều hành có thể điều khiển hành vi của thiết bị.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Bây giờ, hãy mô tả một tương tác điển hình mà <strong>hệ điều hành</strong> (OS) có thể thực hiện với thiết bị để yêu cầu thiết bị làm một việc nào đó thay cho nó. <strong>Giao thức</strong> (protocol) như sau:</p>
 <pre><code>While (STATUS == BUSY)
   ; // chờ cho đến khi thiết bị không bận
@@ -191,7 +192,7 @@ Làm thế nào để OS kiểm tra trạng thái thiết bị mà không cần 
 <h2 id="364-giảm-tải-cpu-bằng-interrupts"><a class="header" href="#364-giảm-tải-cpu-bằng-interrupts">36.4 Giảm tải CPU bằng Interrupts</a></h2>
 <p>Phát minh mà nhiều kỹ sư đã tìm ra từ nhiều năm trước để cải thiện tương tác này là một thứ mà chúng ta đã gặp: <strong>interrupt</strong> (ngắt).<br />
 Thay vì polling thiết bị liên tục, OS có thể gửi yêu cầu, đưa <strong>process</strong> gọi I/O vào trạng thái ngủ (<strong>sleep</strong>), và <strong>context switch</strong> sang một tác vụ khác. Khi thiết bị hoàn tất thao tác, nó sẽ phát ra một <strong>hardware interrupt</strong> (ngắt phần cứng), khiến CPU nhảy vào OS tại một <strong>interrupt service routine</strong> (ISR) – hay đơn giản hơn là <strong>interrupt handler</strong>.<br />
-Interrupt handler chỉ là một đoạn mã trong hệ điều hành, có nhiệm vụ hoàn tất yêu cầu (ví dụ: đọc dữ liệu và có thể cả mã lỗi từ thiết bị) và đánh thức process đang chờ I/O, để nó tiếp tục thực thi.</p>
+Interrupt handler chỉ là một đoạn code trong hệ điều hành, có nhiệm vụ hoàn tất yêu cầu (ví dụ: đọc dữ liệu và có thể cả mã lỗi từ thiết bị) và đánh thức process đang chờ I/O, để nó tiếp tục thực thi.</p>
 <p>Interrupts cho phép <strong>chồng lấp</strong> (overlap) giữa tính toán và I/O, đây là yếu tố then chốt để cải thiện mức sử dụng tài nguyên. Dưới đây là sơ đồ thời gian minh họa vấn đề:</p>
 <pre><code>CPU:  1 1 1 1 1 p p p p p 1 1 1 1 1
 Disk: -----------------------------
@@ -208,7 +209,6 @@ Vì vậy, nếu thiết bị <strong>nhanh</strong>, tốt nhất là polling; 
 <p><strong>TIP: INTERRUPTS KHÔNG PHẢI LÚC NÀO CŨNG TỐT HƠN POLLING</strong><br />
 Mặc dù interrupts cho phép chồng lấp giữa tính toán và I/O, chúng chỉ thực sự hợp lý cho các thiết bị chậm. Nếu không, chi phí xử lý interrupt và context switch có thể lớn hơn lợi ích mà interrupts mang lại. Cũng có những trường hợp một lượng lớn interrupts có thể làm quá tải hệ thống và dẫn đến <strong>livelock</strong> [MR96]; trong những trường hợp như vậy, polling mang lại cho OS khả năng kiểm soát tốt hơn trong việc lập lịch, và do đó lại trở nên hữu ích.</p>
 </blockquote>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <p>Một lý do khác để <strong>không</strong> sử dụng <strong>interrupts</strong> (ngắt) xuất hiện trong lĩnh vực <strong>mạng máy tính</strong> [MR96]. Khi một luồng lớn các gói tin (packet) đến, và mỗi gói đều tạo ra một interrupt, hệ điều hành (OS) có thể rơi vào trạng thái <strong>livelock</strong> — tức là chỉ xử lý các interrupt mà không bao giờ cho phép một <strong>process</strong> (tiến trình) ở mức người dùng chạy để thực sự phục vụ các yêu cầu.<br />
 Ví dụ, hãy tưởng tượng một <strong>web server</strong> gặp một đợt tải tăng đột biến vì nó trở thành mục tin đứng đầu trên <em>Hacker News</em> [H18]. Trong trường hợp này, thỉnh thoảng sử dụng <strong>polling</strong> sẽ tốt hơn để kiểm soát tốt hơn những gì đang diễn ra trong hệ thống, và cho phép web server xử lý một số yêu cầu trước khi quay lại thiết bị để kiểm tra các gói tin mới đến.</p>
 <p>Một tối ưu hóa khác dựa trên interrupt là <strong>coalescing</strong> (gộp ngắt). Trong thiết lập này, một thiết bị cần phát ra interrupt sẽ chờ một chút trước khi gửi interrupt tới CPU. Trong khi chờ, các yêu cầu khác có thể sớm hoàn thành, và do đó nhiều interrupt có thể được gộp lại thành một lần gửi interrupt duy nhất, giúp giảm chi phí xử lý interrupt. Tất nhiên, chờ quá lâu sẽ làm tăng <strong>latency</strong> (độ trễ) của yêu cầu — đây là một sự đánh đổi phổ biến trong hệ thống. Xem Ahmad et al. [A+11] để có bản tóm tắt xuất sắc về chủ đề này.</p>
@@ -247,7 +247,6 @@ Ví dụ, trên kiến trúc x86, các lệnh <code>in</code> và <code>out</cod
 </li>
 </ol>
 <p>Không có ưu thế vượt trội tuyệt đối giữa hai phương pháp. <strong>Memory-mapped I/O</strong> có ưu điểm là không cần thêm lệnh mới để hỗ trợ, nhưng cả hai phương pháp vẫn đang được sử dụng song song cho đến ngày nay.</p>
-<p>Dưới đây là bản dịch tiếng Việt hoàn chỉnh, tuân thủ đầy đủ các yêu cầu bạn đưa ra:</p>
 <h2 id="367-tích-hợp-vào-hệ-điều-hành-device-driver"><a class="header" href="#367-tích-hợp-vào-hệ-điều-hành-device-driver">36.7 Tích hợp vào Hệ điều hành: Device Driver</a></h2>
 <p>Một vấn đề cuối cùng chúng ta sẽ thảo luận: làm thế nào để tích hợp các thiết bị — mỗi thiết bị có giao diện (interface) rất riêng biệt — vào hệ điều hành (OS), trong khi chúng ta muốn giữ cho OS càng tổng quát càng tốt.<br />
 Ví dụ, hãy xem xét một <strong>file system</strong> (hệ thống tệp). Chúng ta muốn xây dựng một file system có thể hoạt động trên nhiều loại ổ đĩa khác nhau như <strong>SCSI disk</strong>, <strong>IDE disk</strong>, <strong>USB keychain drive</strong>, v.v… và muốn file system này hầu như không cần quan tâm đến chi tiết cách gửi yêu cầu đọc (read) hoặc ghi (write) tới các loại ổ đĩa khác nhau. Do đó, vấn đề đặt ra:</p>
@@ -257,6 +256,7 @@ Làm thế nào để giữ cho phần lớn OS trung lập với thiết bị, 
 </blockquote>
 <p>Vấn đề này được giải quyết bằng kỹ thuật lâu đời: <strong>abstraction</strong> (trừu tượng hóa). Ở mức thấp nhất, một phần mềm trong OS phải biết chi tiết cách hoạt động của thiết bị. Phần mềm này được gọi là <strong>device driver</strong> (trình điều khiển thiết bị), và mọi chi tiết tương tác với thiết bị đều được đóng gói (encapsulated) bên trong nó.</p>
 <p>Hãy xem abstraction này giúp ích cho thiết kế và triển khai OS như thế nào bằng cách xem xét <strong>ngăn xếp phần mềm file system</strong> của Linux. <strong>Hình 36.4</strong> là một mô tả gần đúng về tổ chức phần mềm của Linux.</p>
+<p><img src="img/fig36_4.PNG" alt="" /></p>
 <p><strong>Hình 36.4: Ngăn xếp file system (The File System Stack)</strong></p>
 <p>Như bạn thấy từ sơ đồ, một file system (và chắc chắn là cả ứng dụng ở tầng trên) hoàn toàn không cần biết nó đang sử dụng loại ổ đĩa nào; nó chỉ đơn giản gửi các yêu cầu đọc/ghi block tới <strong>generic block layer</strong> (lớp khối tổng quát), lớp này sẽ định tuyến chúng tới <strong>device driver</strong> phù hợp, driver này sẽ xử lý chi tiết việc gửi yêu cầu cụ thể. Mặc dù sơ đồ đã được đơn giản hóa, nó cho thấy cách mà các chi tiết có thể được ẩn khỏi phần lớn OS.</p>
 <p>Sơ đồ cũng cho thấy một <strong>raw interface</strong> (giao diện thô) tới thiết bị, cho phép các ứng dụng đặc biệt (như <strong>file-system checker</strong> – công cụ kiểm tra hệ thống tệp, sẽ được mô tả sau [AD14], hoặc công cụ chống phân mảnh đĩa) đọc và ghi trực tiếp các block mà không cần sử dụng abstraction của file. Hầu hết các hệ thống đều cung cấp loại giao diện này để hỗ trợ các ứng dụng quản lý lưu trữ cấp thấp.</p>
@@ -264,6 +264,7 @@ Làm thế nào để giữ cho phần lớn OS trung lập với thiết bị, 
 <p>Điều thú vị là, vì device driver cần thiết cho bất kỳ thiết bị nào bạn cắm vào hệ thống, theo thời gian chúng đã chiếm một tỷ lệ rất lớn trong mã nguồn kernel. Các nghiên cứu về Linux kernel cho thấy hơn 70% mã nguồn OS nằm trong device driver [C01]; với các hệ thống Windows, con số này cũng có khả năng rất cao. Do đó, khi ai đó nói rằng OS có hàng triệu dòng mã, thực chất họ đang nói rằng OS có hàng triệu dòng mã device driver. Tất nhiên, với mỗi cài đặt cụ thể, phần lớn mã này có thể không hoạt động (tức là chỉ một vài thiết bị được kết nối với hệ thống tại một thời điểm). Đáng buồn hơn, vì driver thường được viết bởi “nghiệp dư” (thay vì lập trình viên kernel toàn thời gian), chúng thường có nhiều lỗi hơn và là nguyên nhân chính gây ra <strong>kernel crash</strong> (sập kernel) [S03].</p>
 <h2 id="368-nghiên-cứu-tình-huống-một-ide-disk-driver-đơn-giản"><a class="header" href="#368-nghiên-cứu-tình-huống-một-ide-disk-driver-đơn-giản">36.8 Nghiên cứu tình huống: Một IDE Disk Driver đơn giản</a></h2>
 <p>Để tìm hiểu sâu hơn, hãy xem nhanh một thiết bị thực: <strong>IDE disk drive</strong> [L94]. Chúng ta sẽ tóm tắt giao thức như được mô tả trong tài liệu [W10]; đồng thời xem qua mã nguồn <strong>xv6</strong> để có ví dụ đơn giản về một IDE driver hoạt động [CK+08].</p>
+<p><img src="img/fig36_5.PNG" alt="" /></p>
 <p><strong>Hình 36.5: Giao diện IDE (The IDE Interface)</strong></p>
 <p>Một IDE disk cung cấp một giao diện đơn giản cho hệ thống, bao gồm bốn loại <strong>register</strong>: control, command block, status, và error. Các register này có thể được truy cập bằng cách đọc hoặc ghi vào các “I/O address” cụ thể (ví dụ: 0x3F6) bằng cách sử dụng (trên x86) các lệnh I/O <code>in</code> và <code>out</code>.</p>
 <p><strong>Giao thức cơ bản</strong> để tương tác với thiết bị như sau (giả sử thiết bị đã được khởi tạo):</p>
@@ -282,6 +283,7 @@ Làm thế nào để giữ cho phần lớn OS trung lập với thiết bị, 
 <li><strong><code>ide_wait_ready()</code></strong>: Được <code>start_request</code> sử dụng để đảm bảo ổ đĩa sẵn sàng trước khi gửi yêu cầu.</li>
 <li><strong><code>ide_intr()</code></strong>: Được gọi khi xảy ra interrupt; đọc dữ liệu từ thiết bị (nếu yêu cầu là đọc), đánh thức process đang chờ I/O hoàn tất, và nếu còn yêu cầu trong hàng đợi I/O, sẽ khởi động yêu cầu tiếp theo thông qua <code>ide_start_request()</code>.</li>
 </ol>
+<p><img src="img/fig36_6.PNG" alt="" /></p>
 <p><strong>Hình 36.6: Trình điều khiển đĩa IDE trong xv6 (đơn giản hóa)</strong></p>
 <h2 id="369-ghi-chú-lịch-sử-historical-notes"><a class="header" href="#369-ghi-chú-lịch-sử-historical-notes">36.9 Ghi chú lịch sử (Historical Notes)</a></h2>
 <p>Trước khi kết thúc, chúng ta sẽ điểm qua một ghi chú lịch sử ngắn gọn về nguồn gốc của một số ý tưởng nền tảng này. Nếu bạn muốn tìm hiểu sâu hơn, hãy đọc bản tóm tắt xuất sắc của Smotherman [S08].</p>

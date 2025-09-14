@@ -152,6 +152,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 </code></pre>
+<p><img src="img/fig30_1.PNG" alt="" /></p>
 <p><strong>Hình 30.1: Parent chờ Child</strong></p>
 <p>Điều chúng ta muốn thấy ở đây là kết quả sau:</p>
 <pre><code>parent: begin
@@ -177,6 +178,7 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 </code></pre>
+<p><img src="img/fig30_2.PNG" alt="" /></p>
 <p><strong>Hình 30.2: Parent chờ Child – Cách tiếp cận Spin-based</strong></p>
 <blockquote>
 <p><strong>THE CRUX: HOW TO WAIT FOR A CONDITION</strong><br />
@@ -193,13 +195,14 @@ Trong các chương trình đa luồng, việc một thread chờ cho đến khi
 <li>Lời gọi <code>wait()</code> được thực thi khi một thread muốn tự đưa mình vào trạng thái ngủ.</li>
 <li>Lời gọi <code>signal()</code> được thực thi khi một thread đã thay đổi điều gì đó trong chương trình và muốn đánh thức một thread đang ngủ chờ trên condition này.</li>
 </ul>
-<p>Cụ thể, các lời gọi POSIX trông như sau:</p>
+<p>Cụ thể, các call POSIX trông như sau:</p>
 <pre><code class="language-c">pthread_cond_wait(pthread_cond_t *c, pthread_mutex_t *m);
 pthread_cond_signal(pthread_cond_t *c);
 </code></pre>
 <p>Chúng ta thường gọi tắt là <code>wait()</code> và <code>signal</code> cho đơn giản. Một điều bạn có thể nhận thấy về <code>wait()</code> là nó cũng nhận một <strong>mutex</strong> làm tham số; nó giả định rằng mutex này đang được <strong>lock</strong> khi <code>wait()</code> được gọi.</p>
 <p>Nhiệm vụ của <code>wait()</code> là <strong>release</strong> (nhả) lock và đưa thread gọi hàm vào trạng thái ngủ (<strong>atomically</strong> – nguyên tử); khi thread được đánh thức (sau khi một thread khác signal nó), nó phải <strong>re-acquire</strong> (lấy lại) lock trước khi trả quyền điều khiển về cho caller. Sự phức tạp này xuất phát từ mong muốn ngăn chặn một số <strong>race condition</strong> xảy ra khi một thread đang cố tự đưa mình vào trạng thái ngủ.</p>
 <p>Hãy xem giải pháp cho bài toán join (<strong>Hình 30.3</strong>) để hiểu rõ hơn.</p>
+<p><img src="img/fig30_3.PNG" alt="" /></p>
 <p><strong>Hình 30.3: Parent chờ Child – Sử dụng Condition Variable</strong></p>
 <p>Có hai trường hợp cần xem xét:</p>
 <ol>
@@ -212,6 +215,7 @@ pthread_cond_signal(pthread_cond_t *c);
 </ol>
 <p>Một lưu ý cuối: bạn có thể thấy parent dùng vòng lặp <code>while</code> thay vì chỉ <code>if</code> khi quyết định có chờ trên condition hay không. Mặc dù theo logic chương trình thì điều này có vẻ không bắt buộc, nhưng đây luôn là một ý tưởng tốt, như chúng ta sẽ thấy ở phần sau.</p>
 <p>Để đảm bảo bạn hiểu tầm quan trọng của từng phần trong code <code>thr_exit()</code> và <code>thr_join()</code>, hãy thử một vài cách triển khai thay thế. Đầu tiên, bạn có thể tự hỏi liệu chúng ta có cần biến trạng thái <code>done</code> hay không. Điều gì sẽ xảy ra nếu code trông như ví dụ dưới đây? (<strong>Hình 30.4</strong>)</p>
+<p><img src="img/fig30_4.PNG" alt="" /></p>
 <p><strong>Hình 30.4: Parent Waiting – Không có biến trạng thái</strong></p>
 <p>Đáng tiếc, cách tiếp cận này <strong>bị lỗi</strong>. Hãy tưởng tượng trường hợp child chạy ngay lập tức và gọi <code>thr_exit()</code> ngay lập tức; trong trường hợp này, child sẽ thực hiện <strong>signal</strong>, nhưng không có thread nào đang ngủ trên condition. Khi parent chạy, nó sẽ chỉ đơn giản gọi <code>wait</code> và bị kẹt; sẽ không có thread nào đánh thức nó. Từ ví dụ này, bạn có thể thấy tầm quan trọng của biến trạng thái <code>done</code>; nó lưu trữ giá trị mà các thread quan tâm. Việc ngủ, đánh thức và khóa đều được xây dựng xoay quanh biến này.</p>
 <p>Dưới đây (<strong>Hình 30.5</strong>) là một cách triển khai kém khác. Trong ví dụ này, ta giả định rằng không cần giữ lock để thực hiện signal và wait. Vấn đề gì có thể xảy ra ở đây? Hãy suy nghĩ<sup class="footnote-reference"><a href="#1">1</a></sup>!</p>
@@ -225,11 +229,12 @@ void thr_join() {
     Pthread_cond_wait(&amp;c);
 }
 </code></pre>
+<p><img src="img/fig30_5.PNG" alt="" /></p>
 <p><strong>Hình 30.5: Parent Waiting – Không có lock</strong></p>
 <p>Vấn đề ở đây là một <strong>race condition</strong> tinh vi. Cụ thể, nếu parent gọi <code>thr_join()</code> và sau đó kiểm tra giá trị của <code>done</code>, nó sẽ thấy giá trị là 0 và do đó cố gắng đi ngủ. Nhưng ngay trước khi nó gọi <code>wait</code> để ngủ, parent bị <strong>interrupt</strong> (ngắt), và child chạy. Child thay đổi biến trạng thái <code>done</code> thành 1 và thực hiện signal, nhưng không có thread nào đang chờ nên không thread nào được đánh thức. Khi parent chạy lại, nó sẽ ngủ mãi mãi — thật đáng buồn.</p>
 <p>Hy vọng rằng, từ ví dụ join đơn giản này, bạn có thể thấy một số yêu cầu cơ bản để sử dụng condition variable một cách đúng đắn. Để đảm bảo bạn hiểu, chúng ta sẽ đi qua một ví dụ phức tạp hơn: bài toán <strong>producer/consumer</strong> hoặc <strong>bounded-buffer</strong>.</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
-<p>Lưu ý rằng ví dụ này không phải là code “thực”, vì lời gọi <code>pthread_cond_wait()</code> luôn yêu cầu một mutex cũng như một condition variable; ở đây, chúng ta chỉ giả định giao diện không yêu cầu mutex để minh họa ví dụ phản ví dụ.</p>
+<p>Lưu ý rằng ví dụ này không phải là code “thực”, vì call <code>pthread_cond_wait()</code> luôn yêu cầu một mutex cũng như một condition variable; ở đây, chúng ta chỉ giả định giao diện không yêu cầu mutex để minh họa ví dụ phản ví dụ.</p>
 </div>
 <blockquote>
 <p><strong>TIP: LUÔN GIỮ LOCK KHI SIGNAL</strong><br />
@@ -247,6 +252,7 @@ Ngược lại, việc giữ lock khi gọi <code>wait</code> không chỉ là m
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
 <p>Đây là lúc chúng ta dùng một chút tiếng Anh cổ điển, ở thể giả định (subjunctive form).</p>
 </div>
+<p><img src="img/fig30_6.PNG" alt="" /></p>
 <p><strong>Hình 30.6: Các hàm Put và Get (phiên bản 1)</strong></p>
 <p>Khá đơn giản, đúng không? Hàm <code>put()</code> giả định rằng buffer đang rỗng (và kiểm tra điều này bằng một <strong>assertion</strong>), sau đó đơn giản đặt một giá trị vào <strong>shared buffer</strong> (bộ đệm chia sẻ) và đánh dấu nó là đầy bằng cách đặt <code>count</code> thành 1. Hàm <code>get()</code> làm điều ngược lại: đặt buffer về trạng thái rỗng (tức là đặt <code>count</code> thành 0) và trả về giá trị. Đừng lo lắng việc buffer chia sẻ này chỉ có một ô; sau này, chúng ta sẽ tổng quát hóa nó thành một <strong>queue</strong> (hàng đợi) có thể chứa nhiều phần tử, và điều đó sẽ còn thú vị hơn bạn tưởng.</p>
 <p>Bây giờ, chúng ta cần viết một số hàm biết khi nào thì <strong>OK</strong> để truy cập buffer — hoặc để đặt dữ liệu vào, hoặc để lấy dữ liệu ra. Điều kiện cho việc này khá rõ ràng: chỉ đặt dữ liệu vào buffer khi <code>count</code> bằng 0 (tức là buffer rỗng), và chỉ lấy dữ liệu ra khi <code>count</code> bằng 1 (tức là buffer đầy). Nếu chúng ta viết code đồng bộ hóa mà để producer đặt dữ liệu vào một buffer đã đầy, hoặc consumer lấy dữ liệu từ một buffer rỗng, thì chúng ta đã làm sai (và trong code này, một assertion sẽ kích hoạt).</p>
@@ -266,6 +272,7 @@ void *consumer(void *arg) {
   }
 }
 </code></pre>
+<p><img src="img/fig30_7.PNG" alt="" /></p>
 <p><strong>Hình 30.7: Producer/Consumer Threads (phiên bản 1)</strong></p>
 <h3 id="một-giải-pháp-bị-lỗi-a-broken-solution"><a class="header" href="#một-giải-pháp-bị-lỗi-a-broken-solution">Một giải pháp bị lỗi (A Broken Solution)</a></h3>
 <p>Bây giờ, hãy tưởng tượng rằng chúng ta chỉ có một producer và một consumer. Rõ ràng, các hàm <code>put()</code> và <code>get()</code> có <strong>critical section</strong> (vùng tới hạn) bên trong, vì <code>put()</code> cập nhật buffer, và <code>get()</code> đọc từ nó. Tuy nhiên, chỉ đặt một lock bao quanh code là <strong>không đủ</strong>; chúng ta cần thêm thứ gì đó nữa. Không ngạc nhiên, thứ đó chính là <strong>condition variables</strong> (biến điều kiện). Trong lần thử đầu tiên (bị lỗi) này (<strong>Hình 30.8</strong>), chúng ta có một condition variable duy nhất <code>cond</code> và một lock <code>mutex</code> đi kèm.</p>
@@ -308,6 +315,7 @@ void *consumer(void *arg) {
   }
 }
 </code></pre>
+<p><img src="img/fig30_8.PNG" alt="" /></p>
 <p><strong>Hình 30.8: Producer/Consumer – Một CV duy nhất và câu lệnh If</strong></p>
 <p>Hãy phân tích logic <strong>signaling</strong> (báo hiệu) giữa producer và consumer. Khi một producer muốn điền dữ liệu vào buffer, nó sẽ chờ cho đến khi buffer rỗng (p1–p3). Consumer có logic tương tự, nhưng chờ một điều kiện khác: buffer đầy (c1–c3).</p>
 <p>Với chỉ một producer và một consumer, code trong <strong>Hình 30.8</strong> hoạt động. Tuy nhiên, nếu có nhiều hơn một thread thuộc mỗi loại (ví dụ: hai consumer), giải pháp này có <strong>hai vấn đề nghiêm trọng</strong>. Đó là gì? … (tạm dừng để suy nghĩ) …</p>
@@ -320,6 +328,7 @@ void *consumer(void *arg) {
 <p>Vấn đề xảy ra ở đây: một consumer khác (Tc2) chen vào và tiêu thụ giá trị duy nhất trong buffer (c1, c2, c4, c5, c6), bỏ qua bước chờ ở c3 vì buffer đang đầy.</p>
 <p>Bây giờ, giả sử Tc1 chạy; ngay trước khi trở về từ <code>wait</code>, nó re-acquire lock và sau đó return. Nó gọi <code>get()</code> (c4), nhưng <strong>không còn dữ liệu nào trong buffer để tiêu thụ</strong>! Một assertion sẽ kích hoạt, và code không hoạt động như mong muốn.</p>
 <p>Rõ ràng, chúng ta cần phải ngăn Tc1 cố gắng tiêu thụ khi Tc2 đã “lén” tiêu thụ giá trị duy nhất trong buffer mà producer vừa tạo ra. <strong>Hình 30.9</strong> sẽ minh họa hành động của từng thread, cũng như trạng thái của chúng trong scheduler (<strong>Ready</strong>, <strong>Running</strong>, hoặc <strong>Sleeping</strong>) theo thời gian.</p>
+<p><img src="img/fig30_9.PNG" alt="" /></p>
 <p><strong>Hình 30.9: Vết vạch luồng: Lời giải bị lỗi (phiên bản 1)</strong>
 <img src="" alt="Figure 30.9: Thread Trace: Broken Solution (v1)" /></p>
 <p>Vấn đề phát sinh vì một lý do đơn giản: sau khi producer đánh thức Tc1, nhưng trước khi Tc1 thực sự chạy, trạng thái của bounded buffer đã thay đổi (nhờ Tc2). Việc signal một thread chỉ đơn thuần đánh thức nó; đó là một gợi ý rằng trạng thái hệ thống đã thay đổi (trong trường hợp này là đã có một giá trị được đặt vào buffer), nhưng không có gì đảm bảo rằng khi thread được đánh thức chạy, trạng thái vẫn còn như mong muốn. Cách diễn giải ý nghĩa của signal này thường được gọi là ngữ nghĩa Mesa (Mesa semantics), theo công trình nghiên cứu đầu tiên xây dựng condition variable theo cách như vậy [LR80]; ngược lại là ngữ nghĩa Hoare (Hoare semantics), khó xây dựng hơn nhưng đưa ra bảo đảm mạnh hơn rằng thread được đánh thức sẽ chạy ngay lập tức khi được đánh thức [H74]. Hầu như mọi hệ thống từng được xây dựng đều sử dụng ngữ nghĩa Mesa.</p>
@@ -364,10 +373,12 @@ void *consumer(void *arg) {
   }
 }
 </code></pre>
+<p><img src="img/fig30_10.PNG" alt="" /></p>
 <p><strong>Hình 30.10: Producer/Consumer — Một CV duy nhất và dùng While</strong>
 <img src="" alt="Figure 30.10: Producer/Consumer: Single CV And While" /></p>
 <p>Nhờ ngữ nghĩa Mesa, một quy tắc đơn giản cần ghi nhớ khi dùng condition variable là luôn dùng vòng lặp <code>while</code>. Đôi khi bạn không cần kiểm tra lại điều kiện, nhưng việc kiểm tra lại luôn an toàn; cứ làm vậy và yên tâm.</p>
 <p>Tuy nhiên, đoạn code này vẫn còn một lỗi — lỗi thứ hai trong hai vấn đề đã nêu. Bạn thấy được không? Nó liên quan đến việc chỉ có một condition variable. Hãy thử tìm ra vấn đề trước khi đọc tiếp. LÀM ĐI! (tạm dừng để bạn suy nghĩ, hoặc nhắm mắt lại...)</p>
+<p><img src="img/fig30_11.PNG" alt="" /></p>
 <p><strong>Hình 30.11: Vết vạch luồng: Lời giải bị lỗi (phiên bản 2)</strong>
 <img src="" alt="Figure 30.11: Thread Trace: Broken Solution (v2)" /></p>
 <p>Hãy xác nhận rằng bạn đã tìm ra đúng (hoặc ít nhất là bạn đang tỉnh táo và đọc phần này của sách). Vấn đề xảy ra khi hai consumer chạy trước (Tc1 và Tc2) và cả hai đều đi ngủ (c3). Sau đó, producer chạy, đặt một giá trị vào buffer, và đánh thức một trong các consumer (giả sử Tc1). Producer sau đó lặp lại (giải phóng và acquire lại lock trong quá trình) và cố đặt thêm dữ liệu vào buffer; vì buffer đầy, producer thay vào đó chờ trên condition (đi ngủ). Lúc này, một consumer sẵn sàng chạy (Tc1), và hai thread đang ngủ trên condition (Tc2 và Tp). Chúng ta sắp gây ra một vấn đề: mọi thứ đang trở nên “hấp dẫn”!</p>
@@ -375,17 +386,20 @@ void *consumer(void *arg) {
 <h3 id="lời-giải-cho-producerconsumer-với-bộ-đệm-đơn-the-single-buffer-producerconsumer-solution"><a class="header" href="#lời-giải-cho-producerconsumer-với-bộ-đệm-đơn-the-single-buffer-producerconsumer-solution">Lời giải cho producer/consumer với bộ đệm đơn (The Single Buffer Producer/Consumer Solution)</a></h3>
 <p>Lời giải ở đây một lần nữa rất nhỏ gọn: dùng hai condition variable thay vì một, để signal đúng kiểu thread cần được đánh thức khi trạng thái hệ thống thay đổi. <strong>Hình 30.12</strong> cho thấy đoạn code kết quả.
 <img src="" alt="Figure 30.12: Single-Buffer Producer/Consumer Solution with Two Condition Variables" /></p>
+<p><img src="img/fig30_12.PNG" alt="" /></p>
 <p><strong>Hình 30.12: Producer/Consumer – Hai Condition Variable và While</strong></p>
 <p>Trong đoạn code này, <strong>producer thread</strong> sẽ <strong>wait</strong> trên condition <code>empty</code> và <strong>signal</strong> <code>fill</code>. Ngược lại, <strong>consumer thread</strong> sẽ <strong>wait</strong> trên <code>fill</code> và <strong>signal</strong> <code>empty</code>. Bằng cách này, vấn đề thứ hai đã nêu ở trên được loại bỏ ngay từ thiết kế: một consumer sẽ không bao giờ vô tình đánh thức một consumer khác, và một producer cũng sẽ không bao giờ vô tình đánh thức một producer khác.</p>
 <h3 id="giải-pháp-producerconsumer-đúng"><a class="header" href="#giải-pháp-producerconsumer-đúng">Giải pháp Producer/Consumer đúng</a></h3>
 <p>Giờ đây, chúng ta đã có một giải pháp producer/consumer hoạt động, dù chưa phải là tổng quát hoàn toàn. Thay đổi cuối cùng chúng ta thực hiện là cho phép <strong>tăng concurrency</strong> (tính đồng thời) và <strong>hiệu suất</strong>; cụ thể, chúng ta thêm nhiều <strong>buffer slot</strong> (ô đệm) hơn, để có thể sản xuất nhiều giá trị trước khi phải ngủ, và tương tự, có thể tiêu thụ nhiều giá trị trước khi phải ngủ.</p>
 <p>Với chỉ một producer và một consumer, cách tiếp cận này hiệu quả hơn vì giảm số lần <strong>context switch</strong>; với nhiều producer hoặc consumer (hoặc cả hai), nó thậm chí cho phép nhiều hoạt động sản xuất hoặc tiêu thụ diễn ra đồng thời, từ đó tăng concurrency. May mắn thay, đây chỉ là một thay đổi nhỏ so với giải pháp hiện tại.</p>
+<p><img src="img/fig30_13.PNG" alt="" /></p>
 <p><strong>Hình 30.13: Các hàm Put và Get đúng</strong></p>
 <blockquote>
 <p><strong>TIP: DÙNG WHILE (KHÔNG PHẢI IF) CHO CÁC ĐIỀU KIỆN</strong><br />
 Khi kiểm tra một điều kiện trong chương trình đa luồng, dùng vòng lặp <code>while</code> luôn đúng; dùng câu lệnh <code>if</code> thì <strong>có thể</strong> đúng, tùy thuộc vào ngữ nghĩa của signaling. Vì vậy, hãy luôn dùng <code>while</code> và code của bạn sẽ hoạt động như mong đợi.</p>
 <p>Việc dùng <code>while</code> bao quanh các kiểm tra điều kiện cũng xử lý được trường hợp <strong>spurious wakeup</strong> (đánh thức giả). Trong một số thư viện thread, do chi tiết triển khai, có thể xảy ra tình huống hai thread được đánh thức dù chỉ có một signal diễn ra [L11]. Spurious wakeup là một lý do nữa để luôn kiểm tra lại điều kiện mà thread đang chờ.</p>
 </blockquote>
+<p><img src="img/fig30_14.PNG" alt="" /></p>
 <p><strong>Hình 30.14: Đồng bộ hóa Producer/Consumer đúng</strong></p>
 <p>Thay đổi đầu tiên cho giải pháp đúng này nằm trong chính cấu trúc buffer và các hàm <code>put()</code> và <code>get()</code> tương ứng (<strong>Hình 30.13</strong>). Chúng ta cũng thay đổi nhẹ các điều kiện mà producer và consumer kiểm tra để quyết định có nên ngủ hay không. Đồng thời, chúng ta cũng thể hiện logic <strong>wait</strong> và <strong>signal</strong> đúng (<strong>Hình 30.14</strong>).</p>
 <ul>
@@ -396,6 +410,7 @@ Khi kiểm tra một điều kiện trong chương trình đa luồng, dùng vò
 <h2 id="303-covering-conditions"><a class="header" href="#303-covering-conditions">30.3 Covering Conditions</a></h2>
 <p>Bây giờ, chúng ta sẽ xem thêm một ví dụ nữa về cách sử dụng <strong>condition variable</strong>. Nghiên cứu mã nguồn này được trích từ bài báo của <strong>Lampson và Redell</strong> về hệ điều hành <strong>Pilot</strong> [LR80], cùng nhóm tác giả đã triển khai ngữ nghĩa Mesa được mô tả ở trên (ngôn ngữ họ dùng là Mesa, do đó có tên gọi này).</p>
 <p>Vấn đề họ gặp phải được minh họa rõ nhất qua một ví dụ đơn giản: một thư viện <strong>multi-threaded memory allocation</strong> (cấp phát bộ nhớ đa luồng) đơn giản. <strong>Hình 30.15</strong> cho thấy một đoạn code minh họa vấn đề.</p>
+<p><img src="img/fig30_15.PNG" alt="" /></p>
 <p><strong>Hình 30.15: Covering Conditions – Một ví dụ</strong></p>
 <p>Như bạn có thể thấy trong code, khi một thread gọi vào hàm cấp phát bộ nhớ, nó có thể phải chờ cho đến khi có thêm bộ nhớ được giải phóng. Ngược lại, khi một thread giải phóng bộ nhớ, nó sẽ signal rằng đã có thêm bộ nhớ trống.</p>
 <p>Tuy nhiên, code trên có một vấn đề: <strong>thread nào</strong> (trong số nhiều thread có thể đang chờ) sẽ được đánh thức?</p>
@@ -406,7 +421,7 @@ Khi kiểm tra một điều kiện trong chương trình đa luồng, dùng vò
 </ul>
 <p>Tại thời điểm đó, giả sử một thread thứ ba, <strong>Tc</strong>, gọi <code>free(50)</code>. Đáng tiếc, khi nó gọi <code>signal</code> để đánh thức một thread đang chờ, nó <strong>có thể không đánh thức đúng thread</strong> — cụ thể là Tb, thread chỉ cần 10 byte; trong khi Ta vẫn nên tiếp tục chờ vì chưa đủ bộ nhớ trống.</p>
 <p>Do đó, code trong hình <strong>không hoạt động đúng</strong>, vì thread đánh thức các thread khác <strong>không biết</strong> thread nào (hoặc những thread nào) cần được đánh thức.</p>
-<p>Giải pháp mà Lampson và Redell đề xuất khá đơn giản: thay lời gọi <code>pthread_cond_signal()</code> trong code trên bằng <code>pthread_cond_broadcast()</code>, lệnh này sẽ đánh thức <strong>tất cả</strong> các thread đang chờ. Bằng cách này, chúng ta đảm bảo rằng mọi thread cần được đánh thức sẽ được đánh thức.</p>
+<p>Giải pháp mà Lampson và Redell đề xuất khá đơn giản: thay call <code>pthread_cond_signal()</code> trong code trên bằng <code>pthread_cond_broadcast()</code>, lệnh này sẽ đánh thức <strong>tất cả</strong> các thread đang chờ. Bằng cách này, chúng ta đảm bảo rằng mọi thread cần được đánh thức sẽ được đánh thức.</p>
 <p>Nhược điểm, tất nhiên, là <strong>ảnh hưởng hiệu năng tiêu cực</strong>, vì có thể chúng ta sẽ đánh thức không cần thiết nhiều thread chưa nên thức. Những thread này sẽ chỉ đơn giản thức dậy, kiểm tra lại điều kiện, rồi lập tức quay lại ngủ.</p>
 <p>Lampson và Redell gọi loại condition này là <strong>covering condition</strong>, vì nó bao quát tất cả các trường hợp mà một thread cần được đánh thức (theo hướng bảo thủ); cái giá phải trả, như đã nói, là có thể đánh thức quá nhiều thread.</p>
 <p>Người đọc tinh ý có thể nhận ra rằng chúng ta <strong>có thể</strong> đã dùng cách tiếp cận này trước đó (xem bài toán producer/consumer với chỉ một condition variable). Tuy nhiên, trong trường hợp đó, chúng ta có một giải pháp tốt hơn, nên đã sử dụng nó.</p>

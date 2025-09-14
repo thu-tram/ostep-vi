@@ -266,6 +266,7 @@ Vì một lý do nào đó, dường như chưa có một nghiên cứu tốt n�
 Ví dụ: nếu file <code>f</code> được mở, và sau đó lại được mở tiếp ngay trong trace (trước khi bất kỳ file nào khác được mở), thì khoảng cách giữa hai lần mở này trong cây thư mục là <strong>0</strong> (vì chúng là cùng một file).<br />
 Nếu một file <code>f</code> trong thư mục <code>dir</code> (tức <code>dir/f</code>) được mở, và tiếp theo là mở file <code>g</code> trong cùng thư mục (tức <code>dir/g</code>), thì khoảng cách giữa hai lần truy cập file này là <strong>1</strong>, vì chúng cùng thư mục nhưng không phải cùng file.</p>
 <p>Nói cách khác, <strong>metric khoảng cách</strong> của chúng ta đo xem phải đi lên bao nhiêu cấp trong cây thư mục để tìm <strong>tổ tiên chung</strong> của hai file; chúng càng gần nhau trong cây, metric này càng nhỏ.</p>
+<p><img src="img/fig41_1.PNG" alt="" /></p>
 <p><strong>Hình 41.1: Tính cục bộ của FFS đối với SEER traces</strong></p>
 <p>Hình 41.1 cho thấy tính cục bộ quan sát được trong SEER traces trên tất cả các workstation trong cụm SEER, xét trên toàn bộ các trace.<br />
 Biểu đồ vẽ <strong>metric khoảng cách</strong> trên trục hoành (x-axis) và hiển thị <strong>tỷ lệ tích lũy</strong> của các lần mở file có khoảng cách đó trên trục tung (y-axis).</p>
@@ -316,6 +317,7 @@ Rất đơn giản, chỉ cần dùng toán học, cụ thể là <strong>phân 
 <p>Về cơ bản, phương trình này nói rằng: nếu bạn truyền dữ liệu với tốc độ <strong>40 MB/s</strong>, bạn chỉ cần truyền <strong>409,6 KB</strong> mỗi lần seek để dành <strong>một nửa thời gian cho seek</strong> và <strong>một nửa thời gian cho truyền dữ liệu</strong>.<br />
 Tương tự, bạn có thể tính kích thước <strong>chunk</strong> (phần dữ liệu) cần thiết để đạt <strong>90% băng thông cực đại</strong> (kết quả khoảng <strong>3,6 MB</strong>), hoặc thậm chí <strong>99% băng thông cực đại</strong> (<strong>39,6 MB</strong>!).<br />
 Như bạn thấy, càng muốn tiến gần đến mức cực đại, kích thước chunk càng phải lớn (xem <strong>Hình 41.2</strong> để thấy đồ thị các giá trị này).</p>
+<p><img src="img/fig41_2.PNG" alt="" /></p>
 <p><strong>Hình 41.2: Amortization – Chunk phải lớn đến mức nào? (Amortization: How Big Do Chunks Have To Be?)</strong></p>
 <p>Tuy nhiên, <strong>FFS</strong> không sử dụng kiểu tính toán này để phân tán các file lớn ra nhiều group.<br />
 Thay vào đó, nó áp dụng một cách tiếp cận đơn giản, dựa trên <strong>cấu trúc của inode</strong>.<br />
@@ -336,6 +338,7 @@ Họ quyết định giới thiệu <strong>sub-block</strong> – các block nh
 Nhờ đó, nếu bạn tạo một file nhỏ (ví dụ: 1 KB), nó sẽ chỉ chiếm <strong>hai sub-block</strong> và không lãng phí cả block 4 KB.<br />
 Khi file lớn dần, hệ thống tệp sẽ tiếp tục cấp phát các block 512 byte cho đến khi đạt đủ 4 KB dữ liệu.<br />
 Tại thời điểm đó, FFS sẽ tìm một block 4 KB, <strong>sao chép các sub-block vào đó</strong>, và giải phóng các sub-block để tái sử dụng.</p>
+<p><img src="img/fig41_3.PNG" alt="" /></p>
 <p><strong>Hình 41.3: FFS – So sánh bố trí chuẩn và bố trí tham số hóa (Standard Versus Parameterized Placement)</strong></p>
 <p>Bạn có thể nhận thấy rằng quá trình này <strong>không hiệu quả</strong>, vì yêu cầu nhiều công việc bổ sung cho hệ thống tệp (đặc biệt là nhiều thao tác I/O để thực hiện việc sao chép).<br />
 Và bạn lại đúng!<br />

@@ -137,13 +137,13 @@
                         <h1 id="5-phần-xen-kẽ-process-api"><a class="header" href="#5-phần-xen-kẽ-process-api">5. Phần xen kẽ: Process API</a></h1>
 <p><strong>GHI CHÚ: VỀ CÁC PHẦN XEN KẼ</strong><br />
 Các phần xen kẽ (interlude) sẽ đề cập đến những khía cạnh thực tiễn hơn của hệ thống, đặc biệt tập trung vào các API (Application Programming Interface – interface lập trình ứng dụng) của hệ điều hành và cách sử dụng chúng. Nếu bạn không thích các vấn đề mang tính thực hành, bạn có thể bỏ qua các phần này. Tuy nhiên, bạn <strong>nên</strong> quan tâm đến chúng, vì chúng thường rất hữu ích trong thực tế; ví dụ, các công ty thường không tuyển dụng bạn chỉ vì những kỹ năng “phi thực tế”.</p>
-<p>Trong phần xen kẽ này, chúng ta sẽ thảo luận về việc tạo process (process) trong các hệ thống UNIX. UNIX cung cấp một trong những cách thú vị nhất để tạo process mới thông qua một cặp system call (lời gọi hệ thống): <code>fork()</code> và <code>exec()</code>. Một thủ tục thứ ba, <code>wait()</code>, có thể được một process sử dụng khi muốn chờ process mà nó đã tạo hoàn thành. Chúng ta sẽ trình bày chi tiết các interface này, kèm theo một số ví dụ đơn giản để minh họa. Và đây là vấn đề đặt ra:</p>
+<p>Trong phần xen kẽ này, chúng ta sẽ thảo luận về việc tạo process (process) trong các hệ thống UNIX. UNIX cung cấp một trong những cách thú vị nhất để tạo process mới thông qua một cặp system call (call hệ thống): <code>fork()</code> và <code>exec()</code>. Một thủ tục thứ ba, <code>wait()</code>, có thể được một process sử dụng khi muốn chờ process mà nó đã tạo hoàn thành. Chúng ta sẽ trình bày chi tiết các interface này, kèm theo một số ví dụ đơn giản để minh họa. Và đây là vấn đề đặt ra:</p>
 <blockquote>
 <p><strong>Cốt lõi: Làm thế nào để tạo và điều khiển process</strong><br />
 Hệ điều hành nên cung cấp những interface nào để tạo và điều khiển process? Các interface này nên được thiết kế ra sao để vừa mạnh mẽ, dễ sử dụng, vừa đạt hiệu năng cao?</p>
 </blockquote>
 <h2 id="51-lời-gọi-hệ-thống-fork"><a class="header" href="#51-lời-gọi-hệ-thống-fork">5.1 Lời gọi hệ thống fork()</a></h2>
-<p>Lời gọi hệ thống <code>fork()</code> được sử dụng để tạo một process mới [C63]. Tuy nhiên, hãy lưu ý: đây chắc chắn là một trong những thủ tục kỳ lạ nhất mà bạn từng gọi<sup class="footnote-reference"><a href="#1">1</a></sup>. Cụ thể hơn, giả sử bạn có một chương trình đang chạy với đoạn mã như trong Hình 5.1; hãy xem xét đoạn mã đó, hoặc tốt hơn, hãy gõ và chạy nó để tự mình trải nghiệm.</p>
+<p>Lời gọi hệ thống <code>fork()</code> được sử dụng để tạo một process mới [C63]. Tuy nhiên, hãy lưu ý: đây chắc chắn là một trong những thủ tục kỳ lạ nhất mà bạn từng gọi<sup class="footnote-reference"><a href="#1">1</a></sup>. Cụ thể hơn, giả sử bạn có một chương trình đang chạy với đoạn code như trong Hình 5.1; hãy xem xét đoạn code đó, hoặc tốt hơn, hãy gõ và chạy nó để tự mình trải nghiệm.</p>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>Thực ra, chúng tôi không thể khẳng định chắc chắn điều này; ai biết được bạn gọi những thủ tục gì khi không ai để ý? Nhưng <code>fork()</code> thực sự rất khác thường, bất kể thói quen gọi hàm của bạn ra sao.</p>
 </div>
@@ -151,22 +151,22 @@ Hệ điều hành nên cung cấp những interface nào để tạo và điề
 #include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 
-int main(int argc, char *argv[]) {
-printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
-int rc = fork();
-if (rc &lt; 0) {
-// fork failed
-fprintf(stderr, &quot;fork failed\n&quot;);
-exit(1);
-} else if (rc == 0) {
-// child (new process)
-printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
-} else {
-// parent goes down this path (main)
-printf(&quot;parent of %d (pid:%d)\n&quot;,
-rc, (int) getpid());
-}
-return 0;
+int main(int argc, char * argv[]) {
+  printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+  int rc = fork();
+  if (rc &lt; 0) {
+    // fork failed
+    fprintf(stderr, &quot;fork failed\n&quot;);
+    exit(1);
+  } else if (rc == 0) {
+    // child (new process)
+    printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+  } else {
+    // parent goes down this path (main)
+    printf(&quot;parent of %d (pid:%d)\n&quot;,
+      rc, (int) getpid());
+  }
+  return 0;
 }
 
 </code></pre>
@@ -179,29 +179,29 @@ child (pid:29147)
 prompt&gt;
 </code></pre>
 <p>Hãy phân tích chi tiết hơn điều gì đã xảy ra trong <code>p1.c</code>. Khi bắt đầu chạy, process in ra một thông điệp “hello”; kèm theo đó là <strong>process identifier</strong> (PID – định danh process). Trong ví dụ, process có PID là 29146; trong hệ thống UNIX, PID được dùng để định danh process khi muốn thực hiện một thao tác nào đó với nó, chẳng hạn như dừng process. Đến đây thì mọi thứ vẫn bình thường.</p>
-<p>Phần thú vị bắt đầu khi process gọi lời gọi hệ thống <code>fork()</code>, mà OS cung cấp như một cách để tạo process mới. Điều kỳ lạ là: process được tạo ra gần như là <strong>bản sao</strong> của process gọi <code>fork()</code>. Điều này có nghĩa là, từ góc nhìn của OS, giờ đây có hai bản sao của chương trình <code>p1</code> đang chạy, và cả hai đều sắp <strong>trả về</strong> từ lời gọi <code>fork()</code>. Process mới được tạo (gọi là <strong>child process</strong> – process con, đối lập với <strong>parent process</strong> – process cha) <strong>không</strong> bắt đầu chạy từ <code>main()</code> như bạn có thể nghĩ (lưu ý, thông điệp “hello” chỉ được in ra một lần); thay vào đó, nó xuất hiện như thể chính nó vừa gọi <code>fork()</code>.</p>
+<p>Phần thú vị bắt đầu khi process gọi call hệ thống <code>fork()</code>, mà OS cung cấp như một cách để tạo process mới. Điều kỳ lạ là: process được tạo ra gần như là <strong>bản sao</strong> của process gọi <code>fork()</code>. Điều này có nghĩa là, từ góc nhìn của OS, giờ đây có hai bản sao của chương trình <code>p1</code> đang chạy, và cả hai đều sắp <strong>trả về</strong> từ call <code>fork()</code>. Process mới được tạo (gọi là <strong>child process</strong> – process con, đối lập với <strong>parent process</strong> – process cha) <strong>không</strong> bắt đầu chạy từ <code>main()</code> như bạn có thể nghĩ (lưu ý, thông điệp “hello” chỉ được in ra một lần); thay vào đó, nó xuất hiện như thể chính nó vừa gọi <code>fork()</code>.</p>
 <pre><code class="language-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;unistd.h&gt;
 #include &lt;sys/wait.h&gt;
 
 
-int main(int argc, char *argv[]) {
-printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
-int rc = fork();
-if (rc &lt; 0) {
-// fork failed; exit
-fprintf(stderr, &quot;fork failed\n&quot;);
-exit(1);
-} else if (rc == 0) { // child (new process)
-printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
-} else {
-// parent goes down this path
-int rc_wait = wait(NULL);
-printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
-rc, rc_wait, (int) getpid());
-}
-return 0;
+int main(int argc, char * argv[]) {
+  printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+  int rc = fork();
+  if (rc &lt; 0) {
+    // fork failed; exit
+    fprintf(stderr, &quot;fork failed\n&quot;);
+    exit(1);
+  } else if (rc == 0) { // child (new process)
+    printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+  } else {
+    // parent goes down this path
+    int rc_wait = wait(NULL);
+    printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
+      rc, rc_wait, (int) getpid());
+  }
+  return 0;
 }
 
 </code></pre>
@@ -216,9 +216,9 @@ prompt&gt;
 </code></pre>
 <p><strong>CPU scheduler</strong> (bộ lập lịch CPU – thành phần quyết định process nào chạy tại một thời điểm) sẽ quyết định process nào được chạy. Vì bộ lập lịch khá phức tạp, chúng ta thường không thể dự đoán chắc chắn nó sẽ chọn process nào, và do đó không thể biết process nào sẽ chạy trước. Tính <strong>bất định</strong> (nondeterminism) này sẽ dẫn đến nhiều vấn đề thú vị, đặc biệt trong các chương trình đa luồng (multi-threaded). Chúng ta sẽ gặp lại khái niệm này nhiều hơn khi nghiên cứu <strong>lập trình đồng thời</strong> (concurrency) ở phần sau của sách.</p>
 <h2 id="52-lời-gọi-hệ-thống-wait"><a class="header" href="#52-lời-gọi-hệ-thống-wait">5.2 Lời gọi hệ thống wait()</a></h2>
-<p>Cho đến giờ, chúng ta mới chỉ tạo một process con in ra thông điệp rồi thoát. Trong nhiều trường hợp, process cha cần <strong>chờ</strong> process con hoàn thành công việc. Nhiệm vụ này được thực hiện bằng lời gọi hệ thống <code>wait()</code> (hoặc phiên bản đầy đủ hơn là <code>waitpid()</code>); xem Hình 5.2 để biết chi tiết.</p>
+<p>Cho đến giờ, chúng ta mới chỉ tạo một process con in ra thông điệp rồi thoát. Trong nhiều trường hợp, process cha cần <strong>chờ</strong> process con hoàn thành công việc. Nhiệm vụ này được thực hiện bằng call hệ thống <code>wait()</code> (hoặc phiên bản đầy đủ hơn là <code>waitpid()</code>); xem Hình 5.2 để biết chi tiết.</p>
 <p>Trong ví dụ (<code>p2.c</code>), process cha gọi <code>wait()</code> để tạm dừng excecute cho đến khi process con kết thúc. Khi process con hoàn tất, <code>wait()</code> trả quyền điều khiển lại cho process cha.</p>
-<p>Việc thêm lời gọi <code>wait()</code> vào đoạn mã trên khiến kết quả trở nên <strong>xác định</strong> (deterministic). Bạn có biết tại sao không? Hãy thử suy nghĩ một chút.<br />
+<p>Việc thêm call <code>wait()</code> vào đoạn code trên khiến kết quả trở nên <strong>xác định</strong> (deterministic). Bạn có biết tại sao không? Hãy thử suy nghĩ một chút.<br />
 (… chờ bạn suy nghĩ … xong)<br />
 Và đây là kết quả:</p>
 <pre><code>prompt&gt; ./p2
@@ -227,16 +227,16 @@ child (pid:29267)
 parent of 29267 (rc_wait:29267) (pid:29266)
 prompt&gt;
 </code></pre>
-<p>Với đoạn mã này, chúng ta <strong>luôn</strong> biết rằng process con sẽ in ra trước. Tại sao? Bởi vì:</p>
+<p>Với đoạn code này, chúng ta <strong>luôn</strong> biết rằng process con sẽ in ra trước. Tại sao? Bởi vì:</p>
 <ul>
 <li>Nếu process con chạy trước, nó sẽ in thông điệp trước process cha.</li>
-<li>Nếu process cha chạy trước, nó sẽ lập tức gọi <code>wait()</code>; lời gọi này sẽ <strong>không trả về</strong> cho đến khi process con chạy và thoát<sup class="footnote-reference"><a href="#2">2</a></sup>. Do đó, ngay cả khi cha chạy trước, nó vẫn “lịch sự” chờ con hoàn thành, rồi mới in thông điệp của mình.</li>
+<li>Nếu process cha chạy trước, nó sẽ lập tức gọi <code>wait()</code>; call này sẽ <strong>không trả về</strong> cho đến khi process con chạy và thoát<sup class="footnote-reference"><a href="#2">2</a></sup>. Do đó, ngay cả khi cha chạy trước, nó vẫn “lịch sự” chờ con hoàn thành, rồi mới in thông điệp của mình.</li>
 </ul>
 <div class="footnote-definition" id="2"><sup class="footnote-definition-label">2</sup>
 <p>Có một số trường hợp <code>wait()</code> trả về trước khi process con thoát; hãy đọc trang hướng dẫn <code>man</code> để biết thêm chi tiết. Và hãy cảnh giác với những phát biểu tuyệt đối như “process con luôn in trước” hoặc “UNIX là thứ tuyệt vời nhất trên đời, còn hơn cả kem”.</p>
 </div>
-<h2 id="53-cuối-cùng-lời-gọi-hệ-thống-exec"><a class="header" href="#53-cuối-cùng-lời-gọi-hệ-thống-exec">5.3 Cuối cùng, lời gọi hệ thống exec()</a></h2>
-<p>Một thành phần cuối cùng và quan trọng của <strong>process creation API</strong> (API tạo process) là lời gọi hệ thống <code>exec()</code><sup class="footnote-reference"><a href="#3">3</a></sup>. Lời gọi này hữu ích khi bạn muốn chạy một chương trình <strong>khác</strong> với chương trình đang gọi nó. Ví dụ, gọi <code>fork()</code>…</p>
+<h2 id="53-cuối-cùng-call-hệ-thống-exec"><a class="header" href="#53-cuối-cùng-call-hệ-thống-exec">5.3 Cuối cùng, call hệ thống exec()</a></h2>
+<p>Một thành phần cuối cùng và quan trọng của <strong>process creation API</strong> (API tạo process) là call hệ thống <code>exec()</code><sup class="footnote-reference"><a href="#3">3</a></sup>. Lời gọi này hữu ích khi bạn muốn chạy một chương trình <strong>khác</strong> với chương trình đang gọi nó. Ví dụ, gọi <code>fork()</code>…</p>
 <div class="footnote-definition" id="3"><sup class="footnote-definition-label">3</sup>
 <p>Trên Linux, có sáu biến thể của <code>exec()</code>: <code>execl()</code>, <code>execlp()</code>, <code>execle()</code>, <code>execv()</code>, <code>execvp()</code>, và <code>execvpe()</code>. Hãy đọc trang hướng dẫn <code>man</code> để tìm hiểu thêm.</p>
 </div>
@@ -246,32 +246,31 @@ prompt&gt;
 #include &lt;string.h&gt;
 #include &lt;sys/wait.h&gt;
 
-int main(int argc, char *argv[]) {
-printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
-int rc = fork();
-if (rc &lt; 0) {
-// fork failed; exit
-fprintf(stderr, &quot;fork failed\n&quot;);
-exit(1);
-} else if (rc == 0) { // child (new process)
-printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
-char *myargs[3];
-myargs[0] = strdup(&quot;wc&quot;);
-// program: &quot;wc&quot;
-myargs[1] = strdup(&quot;p3.c&quot;); // arg: input file
-myargs[2] = NULL;
-// mark end of array
-execvp(myargs[0], myargs); // runs word count
-printf(&quot;this shouldn’t print out&quot;);
-} else {
-// parent goes down this path
-int rc_wait = wait(NULL);
-printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
-rc, rc_wait, (int) getpid());
+int main(int argc, char * argv[]) {
+  printf(&quot;hello (pid:%d)\n&quot;, (int) getpid());
+  int rc = fork();
+  if (rc &lt; 0) {
+    // fork failed; exit
+    fprintf(stderr, &quot;fork failed\n&quot;);
+    exit(1);
+  } else if (rc == 0) { // child (new process)
+    printf(&quot;child (pid:%d)\n&quot;, (int) getpid());
+    char * myargs[3];
+    myargs[0] = strdup(&quot;wc&quot;);
+    // program: &quot;wc&quot;
+    myargs[1] = strdup(&quot;p3.c&quot;); // arg: input file
+    myargs[2] = NULL;
+    // mark end of array
+    execvp(myargs[0], myargs); // runs word count
+    printf(&quot;this shouldn’t print out&quot;);
+  } else {
+    // parent goes down this path
+    int rc_wait = wait(NULL);
+    printf(&quot;parent of %d (rc_wait:%d) (pid:%d)\n&quot;,
+      rc, rc_wait, (int) getpid());
+  }
+  return 0;
 }
-return 0;
-}
-
 </code></pre>
 <p><strong>Hình 5.3: Gọi fork(), wait() và exec() (p3.c)</strong></p>
 <p>Trong <code>p2.c</code>, việc sử dụng chỉ hữu ích nếu bạn muốn tiếp tục chạy các bản sao của <strong>cùng một chương trình</strong>. Tuy nhiên, trong nhiều trường hợp, bạn muốn chạy <strong>một chương trình khác</strong>; <code>exec()</code> chính là công cụ để làm điều đó (Hình 5.3).</p>
@@ -285,8 +284,8 @@ child (pid:29384)
 parent of 29384 (rc_wait:29384) (pid:29383)
 prompt&gt;
 </code></pre>
-<p>Lời gọi hệ thống (system call) <code>fork()</code> vốn đã kỳ lạ; “đồng phạm” của nó, <code>exec()</code>, cũng không hề bình thường. Cách hoạt động của <code>exec()</code> như sau: khi được cung cấp tên của một <strong>tệp excecute</strong> (executable) – ví dụ <code>wc</code> – và một số đối số (arguments) – ví dụ <code>p3.c</code> – nó sẽ nạp (load) mã lệnh (code) và static data (static data) từ tệp excecute đó, <strong>ghi đè</strong> lên phân đoạn mã (code segment) và static data hiện tại của process; vùng heap, stack và các phần khác của không gian bộ nhớ (memory space) của chương trình sẽ được khởi tạo lại. Sau đó, hệ điều hành chỉ đơn giản chạy chương trình mới này, truyền các đối số vào dưới dạng <code>argv</code> của process.</p>
-<p>Điểm quan trọng: <code>exec()</code> <strong>không tạo ra process mới</strong>; thay vào đó, nó <strong>biến đổi</strong> process hiện tại (trước đó là <code>p3</code>) thành một chương trình khác đang chạy (<code>wc</code>). Sau khi <code>exec()</code> được gọi trong process con, gần như <code>p3.c</code> chưa từng chạy; một lời gọi <code>exec()</code> thành công sẽ <strong>không bao giờ trả về</strong>.</p>
+<p>Lời gọi hệ thống (system call) <code>fork()</code> vốn đã kỳ lạ; “đồng phạm” của nó, <code>exec()</code>, cũng không hề bình thường. Cách hoạt động của <code>exec()</code> như sau: khi được cung cấp tên của một <strong>tệp excecute</strong> (executable) – ví dụ <code>wc</code> – và một số đối số (arguments) – ví dụ <code>p3.c</code> – nó sẽ nạp (load) mã lệnh (code) và static data (static data) từ tệp excecute đó, <strong>ghi đè</strong> lên phân đoạn code (code segment) và static data hiện tại của process; vùng heap, stack và các phần khác của không gian bộ nhớ (memory space) của chương trình sẽ được khởi tạo lại. Sau đó, hệ điều hành chỉ đơn giản chạy chương trình mới này, truyền các đối số vào dưới dạng <code>argv</code> của process.</p>
+<p>Điểm quan trọng: <code>exec()</code> <strong>không tạo ra process mới</strong>; thay vào đó, nó <strong>biến đổi</strong> process hiện tại (trước đó là <code>p3</code>) thành một chương trình khác đang chạy (<code>wc</code>). Sau khi <code>exec()</code> được gọi trong process con, gần như <code>p3.c</code> chưa từng chạy; một call <code>exec()</code> thành công sẽ <strong>không bao giờ trả về</strong>.</p>
 <blockquote>
 <p><strong>Mẹo: Làm đúng ngay từ đầu (Lampson’s Law)</strong><br />
 Như Lampson đã nói trong bài viết nổi tiếng <em>Hints for Computer Systems Design</em> [L83]:<br />
@@ -295,7 +294,7 @@ Như Lampson đã nói trong bài viết nổi tiếng <em>Hints for Computer Sy
 </blockquote>
 <h2 id="54-tại-sao-Động-cơ-thiết-kế-api"><a class="header" href="#54-tại-sao-Động-cơ-thiết-kế-api">5.4 Tại sao? Động cơ thiết kế API</a></h2>
 <p>Một câu hỏi lớn có thể xuất hiện: <strong>Tại sao</strong> chúng ta lại xây dựng một interface kỳ lạ như vậy cho một hành động tưởng chừng đơn giản là tạo process mới?</p>
-<p>Câu trả lời: việc tách biệt <code>fork()</code> và <code>exec()</code> là <strong>thiết yếu</strong> trong việc xây dựng một <strong>UNIX shell</strong>, vì nó cho phép shell chạy một đoạn mã <strong>sau</strong> khi gọi <code>fork()</code> nhưng <strong>trước</strong> khi gọi <code>exec()</code>. Đoạn mã này có thể thay đổi môi trường (environment) của chương trình sắp chạy, từ đó cho phép xây dựng nhiều tính năng thú vị một cách dễ dàng.</p>
+<p>Câu trả lời: việc tách biệt <code>fork()</code> và <code>exec()</code> là <strong>thiết yếu</strong> trong việc xây dựng một <strong>UNIX shell</strong>, vì nó cho phép shell chạy một đoạn code <strong>sau</strong> khi gọi <code>fork()</code> nhưng <strong>trước</strong> khi gọi <code>exec()</code>. Đoạn code này có thể thay đổi môi trường (environment) của chương trình sắp chạy, từ đó cho phép xây dựng nhiều tính năng thú vị một cách dễ dàng.</p>
 <p><strong>Shell</strong> thực chất chỉ là một chương trình người dùng (user program)<sup class="footnote-reference"><a href="#4">4</a></sup>. Nó hiển thị một dấu nhắc lệnh (prompt) và chờ bạn nhập vào. Bạn gõ một lệnh (tức tên của một chương trình excecute kèm các đối số) vào; trong hầu hết các trường hợp, shell sẽ:</p>
 <ol>
 <li>Xác định vị trí của tệp excecute trong hệ thống tệp (file system).</li>
@@ -310,8 +309,8 @@ Như Lampson đã nói trong bài viết nổi tiếng <em>Hints for Computer Sy
 <div class="footnote-definition" id="4"><sup class="footnote-definition-label">4</sup>
 <p>Có rất nhiều loại shell: <code>tcsh</code>, <code>bash</code>, <code>zsh</code>… Bạn nên chọn một loại, đọc trang hướng dẫn (<code>man page</code>) và tìm hiểu thêm; tất cả chuyên gia UNIX đều làm vậy.</p>
 </div>
-<p>Trong ví dụ trên, đầu ra của chương trình <code>wc</code> được <strong>chuyển hướng</strong> (redirect) vào tệp <code>newfile.txt</code> (dấu <code>&gt;</code> thể hiện việc chuyển hướng). Cách shell thực hiện rất đơn giản: khi process con được tạo, <strong>trước</strong> khi gọi <code>exec()</code>, shell (cụ thể là đoạn mã chạy trong process con) đóng luồng xuất chuẩn (standard output) và mở tệp <code>newfile.txt</code>.</p>
-<p>Bằng cách này, mọi dữ liệu xuất ra từ chương trình <code>wc</code> sắp chạy sẽ được ghi vào tệp thay vì hiển thị trên màn hình. (Các <strong>file descriptor</strong> đang mở sẽ vẫn được giữ nguyên qua lời gọi <code>exec()</code>, cho phép hành vi này [SR05]).</p>
+<p>Trong ví dụ trên, đầu ra của chương trình <code>wc</code> được <strong>chuyển hướng</strong> (redirect) vào tệp <code>newfile.txt</code> (dấu <code>&gt;</code> thể hiện việc chuyển hướng). Cách shell thực hiện rất đơn giản: khi process con được tạo, <strong>trước</strong> khi gọi <code>exec()</code>, shell (cụ thể là đoạn code chạy trong process con) đóng luồng xuất chuẩn (standard output) và mở tệp <code>newfile.txt</code>.</p>
+<p>Bằng cách này, mọi dữ liệu xuất ra từ chương trình <code>wc</code> sắp chạy sẽ được ghi vào tệp thay vì hiển thị trên màn hình. (Các <strong>file descriptor</strong> đang mở sẽ vẫn được giữ nguyên qua call <code>exec()</code>, cho phép hành vi này [SR05]).</p>
 <p>Hình 5.4 (trang 8) minh họa một chương trình thực hiện chính xác điều này. Nguyên nhân việc chuyển hướng hoạt động được là nhờ giả định về cách hệ điều hành quản lý file descriptor: trong UNIX, hệ thống bắt đầu tìm file descriptor trống từ số 0. Trong trường hợp này, <code>STDOUT_FILENO</code> sẽ là file descriptor trống đầu tiên và được gán khi <code>open()</code> được gọi. Các lệnh ghi (write) tiếp theo của process con tới file descriptor xuất chuẩn – ví dụ qua <code>printf()</code> – sẽ được ghi vào tệp mới mở thay vì màn hình.</p>
 <p>Kết quả chạy chương trình <code>p4.c</code> như sau:</p>
 <pre><code>prompt&gt; ./p4
@@ -326,7 +325,7 @@ prompt&gt;
 <li>Khi chạy <code>p4</code>, có vẻ như không có gì xảy ra; shell chỉ in dấu nhắc lệnh và sẵn sàng cho lệnh tiếp theo. Nhưng thực tế, <code>p4</code> đã gọi <code>fork()</code> để tạo process con, sau đó chạy chương trình <code>wc</code> qua <code>execvp()</code>. Bạn không thấy kết quả trên màn hình vì nó đã được chuyển hướng vào tệp <code>p4.output</code>.</li>
 <li>Khi dùng <code>cat</code> để xem nội dung tệp <code>p4.output</code>, toàn bộ kết quả mong đợi từ <code>wc</code> đều có ở đó.</li>
 </ol>
-<p><strong>UNIX pipes</strong> (đường ống) được triển khai tương tự, nhưng sử dụng lời gọi hệ thống <code>pipe()</code>. Trong trường hợp này, đầu ra của một process được kết nối tới một <strong>in-kernel pipe</strong> (hàng đợi trong nhân hệ điều hành), và đầu vào của process khác được kết nối tới cùng pipe đó. Nhờ vậy, đầu ra của process này trở thành đầu vào của process kia một cách liền mạch, cho phép ghép chuỗi nhiều lệnh hữu ích.</p>
+<p><strong>UNIX pipes</strong> (đường ống) được triển khai tương tự, nhưng sử dụng call hệ thống <code>pipe()</code>. Trong trường hợp này, đầu ra của một process được kết nối tới một <strong>in-kernel pipe</strong> (hàng đợi trong nhân hệ điều hành), và đầu vào của process khác được kết nối tới cùng pipe đó. Nhờ vậy, đầu ra của process này trở thành đầu vào của process kia một cách liền mạch, cho phép ghép chuỗi nhiều lệnh hữu ích.</p>
 <p>Ví dụ đơn giản: tìm một từ trong tệp và đếm số lần từ đó xuất hiện. Với pipe và các tiện ích <code>grep</code> và <code>wc</code>, việc này rất dễ:</p>
 <pre><code>grep -o foo file | wc -l
 </code></pre>
@@ -339,37 +338,35 @@ prompt&gt;
 #include &lt;fcntl.h&gt;
 #include &lt;sys/wait.h&gt;
 
-
-int main(int argc, char *argv[]) {
-int rc = fork();
-if (rc &lt; 0) {
-// fork failed
-fprintf(stderr, &quot;fork failed\n&quot;);
-exit(1);
-} else if (rc == 0) {
-// child: redirect standard output to a file
-close(STDOUT_FILENO);
-open(&quot;./p4.output&quot;, O_CREAT|O_WRONLY|O_TRUNC,
-S_IRWXU);
-// now exec &quot;wc&quot;...
-char *myargs[3];
-myargs[0] = strdup(&quot;wc&quot;);
-// program: wc
-myargs[1] = strdup(&quot;p4.c&quot;); // arg: file to count
-myargs[2] = NULL;
-// mark end of array
-execvp(myargs[0], myargs); // runs word count
-} else {
-// parent goes down this path (main)
-int rc_wait = wait(NULL);
+int main(int argc, char * argv[]) {
+  int rc = fork();
+  if (rc &lt; 0) {
+    // fork failed
+    fprintf(stderr, &quot;fork failed\n&quot;);
+    exit(1);
+  } else if (rc == 0) {
+    // child: redirect standard output to a file
+    close(STDOUT_FILENO);
+    open(&quot;./p4.output&quot;, O_CREAT | O_WRONLY | O_TRUNC,
+      S_IRWXU);
+    // now exec &quot;wc&quot;...
+    char * myargs[3];
+    myargs[0] = strdup(&quot;wc&quot;);
+    // program: wc
+    myargs[1] = strdup(&quot;p4.c&quot;); // arg: file to count
+    myargs[2] = NULL;
+    // mark end of array
+    execvp(myargs[0], myargs); // runs word count
+  } else {
+    // parent goes down this path (main)
+    int rc_wait = wait(NULL);
+  }
+  return 0;
 }
-return 0;
-}
-
 </code></pre>
 <p>Figure 5.4: All Of The Above With Redirection (p4.c)</p>
 <h2 id="55-Điều-khiển-process-process-control-và-người-dùng-users"><a class="header" href="#55-Điều-khiển-process-process-control-và-người-dùng-users">5.5 Điều khiển process (Process Control) và Người dùng (Users)</a></h2>
-<p>Ngoài <code>fork()</code>, <code>exec()</code> và <code>wait()</code>, trong các hệ thống UNIX còn có nhiều interface khác để tương tác với <strong>process</strong> (process). Ví dụ, lời gọi hệ thống (system call) <code>kill()</code> được dùng để gửi <strong>signal</strong> (tín hiệu) tới một process, bao gồm các chỉ thị như tạm dừng (pause), kết thúc (die/terminate) và nhiều lệnh hữu ích khác.</p>
+<p>Ngoài <code>fork()</code>, <code>exec()</code> và <code>wait()</code>, trong các hệ thống UNIX còn có nhiều interface khác để tương tác với <strong>process</strong> (process). Ví dụ, call hệ thống (system call) <code>kill()</code> được dùng để gửi <strong>signal</strong> (tín hiệu) tới một process, bao gồm các chỉ thị như tạm dừng (pause), kết thúc (die/terminate) và nhiều lệnh hữu ích khác.</p>
 <p>Để thuận tiện, trong hầu hết các <strong>UNIX shell</strong>, một số tổ hợp phím được cấu hình để gửi một tín hiệu cụ thể tới process đang chạy. Ví dụ:</p>
 <ul>
 <li><code>Ctrl-C</code> gửi tín hiệu <strong>SIGINT</strong> (interrupt – ngắt) tới process (thường sẽ kết thúc process đó).</li>
@@ -380,7 +377,7 @@ return 0;
 <li>Cách để process nhận và xử lý các tín hiệu này.</li>
 <li>Cách gửi tín hiệu tới từng process hoặc cả nhóm process (process group).</li>
 </ul>
-<p>Để sử dụng hình thức giao tiếp này, một process có thể dùng lời gọi hệ thống <code>signal()</code> để “bắt” (catch) các tín hiệu khác nhau. Khi một tín hiệu cụ thể được gửi tới process, process sẽ tạm ngừng excecute bình thường và chạy một đoạn mã được chỉ định để xử lý tín hiệu đó. (Xem [SR05] để tìm hiểu sâu hơn về signals và các chi tiết phức tạp của chúng).</p>
+<p>Để sử dụng hình thức giao tiếp này, một process có thể dùng call hệ thống <code>signal()</code> để “bắt” (catch) các tín hiệu khác nhau. Khi một tín hiệu cụ thể được gửi tới process, process sẽ tạm ngừng excecute bình thường và chạy một đoạn code được chỉ định để xử lý tín hiệu đó. (Xem [SR05] để tìm hiểu sâu hơn về signals và các chi tiết phức tạp của chúng).</p>
 <p><strong>GHI CHÚ: RTFM — Read The Man Pages</strong></p>
 <p>Nhiều lần trong cuốn sách này, khi đề cập đến một system call hoặc library call cụ thể, chúng tôi sẽ khuyên bạn đọc <strong>man pages</strong> (manual pages – trang hướng dẫn). Đây là dạng tài liệu gốc tồn tại trên các hệ thống UNIX, được tạo ra <strong>trước khi</strong> có thứ gọi là “web”.</p>
 <p>Dành thời gian đọc man pages là một bước quan trọng trong quá trình trưởng thành của một lập trình viên hệ thống; có rất nhiều thông tin hữu ích ẩn trong đó. Một số man pages đặc biệt hữu ích gồm:</p>
@@ -419,7 +416,7 @@ return 0;
 <li>Mỗi <strong>process</strong> (process) có một tên; trong hầu hết các hệ thống, tên này là một số gọi là <strong>process ID</strong> (PID – định danh process).</li>
 <li>Lời gọi hệ thống <code>fork()</code> trong UNIX được dùng để tạo process mới. Process tạo ra gọi là <strong>parent</strong> (cha), process mới gọi là <strong>child</strong> (con). Giống như ngoài đời [J16], process con gần như là bản sao của process cha.</li>
 <li>Lời gọi hệ thống <code>wait()</code> cho phép process cha chờ process con hoàn tất excecute.</li>
-<li>Nhóm lời gọi hệ thống <code>exec()</code> cho phép process con thoát khỏi sự giống nhau với process cha và excecute một chương trình hoàn toàn mới.</li>
+<li>Nhóm call hệ thống <code>exec()</code> cho phép process con thoát khỏi sự giống nhau với process cha và excecute một chương trình hoàn toàn mới.</li>
 <li>Một UNIX shell thường dùng <code>fork()</code>, <code>wait()</code> và <code>exec()</code> để chạy lệnh của người dùng; việc tách <code>fork</code> và <code>exec</code> cho phép thực hiện các tính năng như chuyển hướng I/O (input/output redirection), <strong>pipes</strong> và nhiều tính năng khác mà không cần</li>
 </ul>
 <h2 id="tham-khảo"><a class="header" href="#tham-khảo">Tham khảo</a></h2>

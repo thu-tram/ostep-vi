@@ -142,7 +142,7 @@ Nếu không, cuốn sách này (và cả khóa học tương ứng) sẽ khá k
 <p>Như vậy, chúng ta vừa mô tả cơ bản của <strong>mô hình Von Neumann (Von Neumann model)</strong> trong tính toán <sup class="footnote-reference"><a href="#2">2</a></sup>. Nghe có vẻ đơn giản, đúng không? Nhưng trong khóa học này, chúng ta sẽ thấy rằng trong khi một chương trình chạy, có rất nhiều thứ phức tạp khác cũng đang diễn ra, với mục tiêu chính là làm cho hệ thống trở nên dễ sử dụng.</p>
 <p>Có một tập hợp phần mềm chịu trách nhiệm cho việc này: giúp chạy chương trình một cách thuận tiện (thậm chí cho phép bạn <em>có vẻ như</em> chạy nhiều chương trình cùng lúc), cho phép các chương trình chia sẻ bộ nhớ, hỗ trợ chúng tương tác với thiết bị, và nhiều thứ thú vị khác. Tập hợp phần mềm đó được gọi là <strong>hệ điều hành (Operating System, OS)</strong> <sup class="footnote-reference"><a href="#3">3</a></sup>, vì nó chịu trách nhiệm đảm bảo hệ thống hoạt động đúng, hiệu quả, và dễ sử dụng.</p>
 <p>Cách chủ yếu mà hệ điều hành làm điều đó là thông qua một kỹ thuật chung gọi là <strong>ảo hóa (virtualization)</strong>. Nói cách khác, OS lấy một tài nguyên vật lý (chẳng hạn như bộ xử lý, bộ nhớ, hay đĩa) và biến nó thành một dạng “ảo” tổng quát hơn, mạnh mẽ hơn và dễ dùng hơn. Chính vì thế, đôi khi chúng ta gọi hệ điều hành là một <strong>máy ảo (virtual machine)</strong>.</p>
-<p>Tất nhiên, để cho phép người dùng ra lệnh cho hệ điều hành (và nhờ đó sử dụng các tính năng của máy ảo — như chạy một chương trình, cấp phát bộ nhớ, hay truy cập tệp), OS cung cấp một số <strong>interface (API)</strong> mà bạn có thể gọi. Một hệ điều hành điển hình thực sự cung cấp vài trăm <strong>system call (lời gọi hệ thống)</strong> sẵn sàng cho ứng dụng sử dụng. Vì OS cung cấp các lời gọi này để chạy chương trình, truy cập bộ nhớ và thiết bị, và các thao tác liên quan khác, nên đôi khi ta cũng nói rằng OS cung cấp một <strong>thư viện chuẩn (standard library)</strong> cho ứng dụng.</p>
+<p>Tất nhiên, để cho phép người dùng ra lệnh cho hệ điều hành (và nhờ đó sử dụng các tính năng của máy ảo — như chạy một chương trình, cấp phát bộ nhớ, hay truy cập tệp), OS cung cấp một số <strong>interface (API)</strong> mà bạn có thể gọi. Một hệ điều hành điển hình thực sự cung cấp vài trăm <strong>system call (lời gọi hệ thống)</strong> sẵn sàng cho ứng dụng sử dụng. Vì OS cung cấp các call này để chạy chương trình, truy cập bộ nhớ và thiết bị, và các thao tác liên quan khác, nên đôi khi ta cũng nói rằng OS cung cấp một <strong>thư viện chuẩn (standard library)</strong> cho ứng dụng.</p>
 <p>Cuối cùng, vì ảo hóa cho phép nhiều chương trình chạy (chia sẻ CPU), nhiều chương trình đồng thời truy cập lệnh và dữ liệu riêng (chia sẻ bộ nhớ), và nhiều chương trình truy cập thiết bị (chia sẻ đĩa, v.v.), nên OS đôi khi còn được gọi là một <strong>bộ quản lý tài nguyên (resource manager)</strong>. CPU, bộ nhớ, và đĩa đều là tài nguyên của hệ thống; do đó vai trò của OS là quản lý những tài nguyên đó — một cách hiệu quả, công bằng, hay theo nhiều mục tiêu khác nhau. Để hiểu rõ hơn về vai trò của OS, hãy cùng xem qua một vài ví dụ.</p>
 <blockquote>
 <blockquote>
@@ -340,7 +340,7 @@ Final value  : 137298
 // what the??
 </code></pre>
 <p>Trong lần chạy này, khi ta truyền vào <code>loops = 100000</code>, thay vì nhận được kết quả đúng là <code>200000</code>, ta lại nhận giá trị <code>143012</code>. Khi chạy lại, không chỉ giá trị lại sai, mà còn khác với lần trước. Thực tế, nếu chạy chương trình nhiều lần với giá trị <code>loops</code> lớn, đôi khi bạn có thể nhận được kết quả đúng, nhưng hầu hết là sai. Vậy tại sao lại xảy ra hiện tượng này?</p>
-<p>Nguyên nhân nằm ở cách lệnh được excecute: từng lệnh một. Đoạn mã quan trọng trong chương trình trên — chỗ tăng biến counter chia sẻ — thực ra cần đến <strong>ba lệnh</strong>:</p>
+<p>Nguyên nhân nằm ở cách lệnh được excecute: từng lệnh một. Đoạn code quan trọng trong chương trình trên — chỗ tăng biến counter chia sẻ — thực ra cần đến <strong>ba lệnh</strong>:</p>
 <ol>
 <li>Nạp giá trị counter từ bộ nhớ vào một thanh ghi.</li>
 <li>Tăng giá trị đó.</li>
@@ -348,7 +348,7 @@ Final value  : 137298
 </ol>
 <p>Vì ba lệnh này <strong>không được excecute một cách nguyên tử (atomically, tức tất cả cùng một lúc)</strong>, nên có thể xảy ra xung đột, dẫn đến kết quả kỳ lạ. Chính vấn đề concurrency này sẽ được chúng ta nghiên cứu chi tiết trong phần thứ hai của cuốn sách.</p>
 <div class="footnote-definition" id="6"><sup class="footnote-definition-label">6</sup>
-<p>Lời gọi thực tế là <code>pthread_create()</code> viết thường; phiên bản viết hoa trong sách là một hàm bao (wrapper) của tác giả, gọi <code>pthread_create()</code> và kiểm tra mã trả về để chắc chắn rằng lời gọi đã thành công. Xem mã nguồn để biết chi tiết.</p>
+<p>Lời gọi thực tế là <code>pthread_create()</code> viết thường; phiên bản viết hoa trong sách là một hàm bao (wrapper) của tác giả, gọi <code>pthread_create()</code> và kiểm tra mã trả về để chắc chắn rằng call đã thành công. Xem mã nguồn để biết chi tiết.</p>
 </div>
 <blockquote>
 <p><strong>THE CRUX OF THE PROBLEM: HOW TO BUILD CORRECT CONCURRENT PROGRAMS</strong>
@@ -380,7 +380,7 @@ int main(int argc, char *argv[]) {
 }
 </code></pre>
 <p><strong>Hình 2.6: Một chương trình thực hiện I/O (io.c)</strong></p>
-<p>Để hiểu rõ hơn, hãy xem đoạn mã trên. Chương trình này tạo một file (<code>/tmp/file</code>) và ghi vào đó chuỗi <code>&quot;hello world&quot;</code>. Để thực hiện, chương trình gọi ba <strong>system call (lời gọi hệ thống)</strong>:</p>
+<p>Để hiểu rõ hơn, hãy xem đoạn code trên. Chương trình này tạo một file (<code>/tmp/file</code>) và ghi vào đó chuỗi <code>&quot;hello world&quot;</code>. Để thực hiện, chương trình gọi ba <strong>system call (lời gọi hệ thống)</strong>:</p>
 <ul>
 <li><code>open()</code> để mở và tạo file.</li>
 <li><code>write()</code> để ghi dữ liệu vào file.</li>
